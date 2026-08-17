@@ -1,6 +1,6 @@
 package com.kryox.view.Customer;
 
-import javafx.application.Application;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,12 +16,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-public class Customer_OTP extends Application {
 
-    @Override
-    public void start(Stage myStage) throws Exception {
+public class Customer_OTP {
+    private Scene otpScene;
+    Scene getotpScene(){
         Image mobileimage=new Image("assets\\logo\\mobileicon.png");
         ImageView imgView=new ImageView(mobileimage);
         imgView.setFitWidth(25);
@@ -80,6 +79,10 @@ public class Customer_OTP extends Application {
         Button btn = new Button("Verify Code");
         btn.setPrefSize(220,45);
         btn.setStyle("-fx-background-color:#D66A16;-fx-text-fill:white;-fx-font-size:16px;-fx-font-weight:bold;");
+        btn.setOnAction(event->{
+            Dashbord db=new Dashbord();
+            Homepage.HomepageStage.setScene(db.getDashbordScene());
+        });
         
         Text timer = new Text("Resend in 00:28");
         timer.setStyle("-fx-font-size:13px;");
@@ -127,13 +130,13 @@ vb.setEffect(shadow);
         root.setStyle("-fx-background-color: #eee5df");
         root.setTop(hb3);
         root.setCenter(vb);
-        Scene scene = new Scene(root,1500,900);
+        Scene scene = new Scene(root,1550,830);
+        otpScene=scene;
         
-       
-        myStage.setScene(scene);
-        myStage.setMaximized(true);
-        
-        myStage.show();
+
+        return otpScene;
     }
+
+    
     
 }

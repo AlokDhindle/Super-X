@@ -1,14 +1,11 @@
 package com.kryox.view.Customer;
 
-
+import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -20,37 +17,25 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
-import java.net.URL;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+public class Dashbord  {
+       
+        private Scene Dashbordscene;
 
-public class DealsDB  {
-
-    private Image loadImage(String path) {
-        URL url = getClass().getResource(path);
-
-        if (url == null) {
-            System.err.println("❌ Resource not found: " + path);
-            return new Image(
-                "data:image/png;base64,"
-                + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
-            );
-        }
-
-        return new Image(url.toExternalForm());
-    }
-        private Scene dealsScene;
-        Scene getDealScene(Runnable callbacktodashboar){
-                
-        // =====================================================
+        Scene getDashbordScene(){
+                 // =====================================================
         // SHADOWS
         // =====================================================
-
+        
         DropShadow shadow = new DropShadow();
         shadow.setRadius(18);
         shadow.setSpread(0.05);
@@ -119,7 +104,7 @@ public class DealsDB  {
         // DASHBOARD
         // =====================================================
 
-        Image di = loadImage("/assets/images/Dashbord/dashboard.png");
+        Image di = new Image("/assets/images/Dashbord/dashboard.png");
         ImageView div = new ImageView(di);
         div.setFitHeight(21);
         div.setFitWidth(21);
@@ -139,10 +124,6 @@ public class DealsDB  {
                 "-fx-alignment: CENTER_LEFT;" +
                 "-fx-cursor: hand;"
         );
-        lefButton1.setOnAction(event->{
-                callbacktodashboar.run();
-                
-        });
 
         HBox hbInDashboard = new HBox(17, div, lefButton1);
         hbInDashboard.setPrefWidth(205);
@@ -190,7 +171,7 @@ public class DealsDB  {
         // NEARBY SHOPS
         // =====================================================
 
-        Image di2 = loadImage("/assets/images/store.png");
+        Image di2 = new Image("/assets/images/store.png");
         ImageView div2 = new ImageView(di2);
         div2.setFitHeight(23);
         div2.setFitWidth(23);
@@ -210,6 +191,17 @@ public class DealsDB  {
                 "-fx-alignment: CENTER_LEFT;" +
                 "-fx-cursor: hand;"
         );
+
+        lefButton2.setOnAction(event->{
+                neaby_shope ns=new neaby_shope();
+                Runnable callbackDashbord=new Runnable() {
+                       public void run(){
+                        backTodashbord();
+
+                       } 
+                };
+                Homepage.HomepageStage.setScene(ns.getNearby_shopes(callbackDashbord));
+        });
 
         HBox hbInDashboard2 = new HBox(17, div2, lefButton2);
         hbInDashboard2.setPrefWidth(205);
@@ -256,7 +248,7 @@ public class DealsDB  {
         // DEALS
         // =====================================================
 
-        Image di3 = loadImage("/assets/images/Dashbord/hot-sale.png");
+        Image di3 = new Image("/assets/images/Dashbord/hot-sale.png");
         ImageView div3 = new ImageView(di3);
         div3.setFitHeight(23);
         div3.setFitWidth(23);
@@ -276,6 +268,16 @@ public class DealsDB  {
                 "-fx-alignment: CENTER_LEFT;" +
                 "-fx-cursor: hand;"
         );
+        lefButton3.setOnAction(event->{
+                DealsDB d=new DealsDB();
+                Runnable rn=new Runnable() {
+                        public void run(){
+                                backTodashbord();
+                        }
+                };
+                Homepage.HomepageStage.setScene(d.getDealScene(rn));
+
+        });
 
         HBox hbInDashboard3 = new HBox(17, div3, lefButton3);
         hbInDashboard3.setPrefWidth(205);
@@ -322,7 +324,7 @@ public class DealsDB  {
         // MY ORDERS
         // =====================================================
 
-        Image di4 = loadImage("/assets/images/Dashbord/package.png");
+        Image di4 = new Image("/assets/images/Dashbord/package.png");
         ImageView div4 = new ImageView(di4);
         div4.setFitHeight(23);
         div4.setFitWidth(23);
@@ -343,8 +345,8 @@ public class DealsDB  {
                 "-fx-cursor: hand;"
         );
         lefButton4.setOnAction(event->{
-                My_orderAllorder my=new My_orderAllorder();
-                Homepage.HomepageStage.setScene(my.getAllorderScene());
+                My_orderAllorder moa=new My_orderAllorder();
+                Homepage.HomepageStage.setScene(moa.getAllorderScene());
         });
 
         HBox hbInDashboard4 = new HBox(17, div4, lefButton4);
@@ -392,7 +394,7 @@ public class DealsDB  {
         // ANALYTICS
         // =====================================================
 
-        Image di5 = loadImage("/assets/images/Dashbord/line-chart.png");
+        Image di5 = new Image("/assets/images/Dashbord/line-chart.png");
         ImageView div5 = new ImageView(di5);
         div5.setFitHeight(23);
         div5.setFitWidth(23);
@@ -412,9 +414,15 @@ public class DealsDB  {
                 "-fx-alignment: CENTER_LEFT;" +
                 "-fx-cursor: hand;"
         );
-        lefButton5.setOnAction(e->{
-                Analytics as=new Analytics();
-                Homepage.HomepageStage.setScene(as.getAnalyticscene(callbacktodashboar));
+        lefButton5.setOnAction(event->{
+                Analytics an=new Analytics();
+                Runnable rnA=new Runnable() {
+                        public void run(){
+                                backTodashbord();
+                        }
+                        
+                };
+                Homepage.HomepageStage.setScene(an.getAnalyticscene(rnA));
         });
 
         HBox hbInDashboard5 = new HBox(17, div5, lefButton5);
@@ -518,7 +526,7 @@ public class DealsDB  {
         // SETTINGS
         // =====================================================
 
-        Image di6 = loadImage("/assets/images/Dashbord/category.png");
+        Image di6 = new Image("/assets/images/Dashbord/category.png");
         ImageView div6 = new ImageView(di6);
         div6.setFitHeight(19);
         div6.setFitWidth(19);
@@ -537,6 +545,15 @@ public class DealsDB  {
                 "-fx-alignment: CENTER_LEFT;" +
                 "-fx-cursor: hand;"
         );
+        lefButton6.setOnAction(event->{
+                Seting se=new Seting();
+                Runnable callbacktoDashborad=new Runnable() {
+                        public void run(){
+                                backTodashbord();
+                        }
+                };
+                Homepage.HomepageStage.setScene(se.getSetingscene(callbacktoDashborad));
+        });
 
         HBox hbInDashboard6 = new HBox(10, div6, lefButton6);
         hbInDashboard6.setPrefWidth(205);
@@ -550,7 +567,7 @@ public class DealsDB  {
         // HELP
         // =====================================================
 
-        Image di7 = loadImage("/assets/images/Dashbord/question.png");
+        Image di7 = new Image("/assets/images/Dashbord/question.png");
         ImageView div7 = new ImageView(di7);
         div7.setFitHeight(19);
         div7.setFitWidth(19);
@@ -589,7 +606,7 @@ public class DealsDB  {
         leftBox.setPrefHeight(800);
         leftBox.setAlignment(Pos.TOP_CENTER);
         leftBox.setPadding(new Insets(27, 20, 20, 20));
-        leftBox.setStyle("-fx-background-color: #ebccb7");
+        leftBox.setStyle("-fx-background-color: #ebccb7;");
         leftBox.setEffect(shadow);
 
         Region sidebarSpacer = new Region();
@@ -687,6 +704,7 @@ public class DealsDB  {
                 "-fx-text-fill: #444444;" +
                 "-fx-prompt-text-fill: #999999;"
         );
+        searchBox.setTranslateX(-200);
 
         // =====================================================
         // LOCATION
@@ -702,6 +720,7 @@ public class DealsDB  {
 
         HBox locationBox = new HBox(4, locationIcon, locationText);
         locationBox.setAlignment(Pos.CENTER_LEFT);
+        //locationBox.setTranslateX();
 
         // =====================================================
         // ACTIONS
@@ -748,8 +767,9 @@ public class DealsDB  {
         b3.setOnMouseEntered(e -> b3.setStyle(actionHoverStyle));
         b3.setOnMouseExited(e -> b3.setStyle(actionStyle));
 
-        HBox actionBox = new HBox(7, b1, b2, b3);
+        HBox actionBox = new HBox(10, b1, b2, b3);
         actionBox.setAlignment(Pos.CENTER_RIGHT);
+        actionBox.setTranslateX(-400);
 
         // =====================================================
         // NAVIGATION SPACERS
@@ -762,12 +782,9 @@ public class DealsDB  {
 
         // =====================================================
         // NAV BOX
-        // ====================================================
+        // =====================================================
 
         HBox navBox = new HBox(12, topLinks, navSpacer1, searchBox, navSpacer2, locationBox, actionBox);
-        navBox.setMaxWidth(Double.MAX_VALUE);
-        HBox.setHgrow(searchBox, Priority.ALWAYS);
-        searchBox.setMaxWidth(Double.MAX_VALUE);
         navBox.setPrefHeight(68);
         navBox.setPadding(new Insets(12, 24, 12, 24));
         navBox.setAlignment(Pos.CENTER_LEFT);
@@ -776,29 +793,323 @@ public class DealsDB  {
                 "-fx-background-color: #ebccb7;" +
                 "-fx-border-width: 0 0 1 0;"
         );
-        navBox.setTranslateX(0);
-        navBox.setStyle(
-        "-fx-background-color:#ebccb7;" +
-        "-fx-border-width:0;"
-        );
+        navBox.setTranslateX(-28);
 
-        navBox.setPrefHeight(68);
-        navBox.setMaxWidth(Double.MAX_VALUE);
-                
         // =====================================================
         // HERO BOX
         // =====================================================
 
-        
-        BorderPane topPane = new BorderPane();
-        topPane.setTop(navBox);
-        topPane.setStyle("-fx-background-color:#ebccb7;");
-        topPane.setPrefHeight(68);
+        HBox hbright = new HBox(35);
+        hbright.setPrefWidth(1200);
+        hbright.setPrefHeight(315);
+        hbright.setPadding(new Insets(34, 40, 34, 40));
+        hbright.setAlignment(Pos.CENTER_LEFT);
 
-        VBox Rightvbox = new VBox();
-        Rightvbox.setFillWidth(true);
-        Rightvbox.setMaxWidth(Double.MAX_VALUE);
-        Rightvbox.getChildren().add(topPane);
+        LinearGradient darkGradient = new LinearGradient(
+                0, 0, 1, 0, true,
+                CycleMethod.NO_CYCLE,
+                new Stop(0.0, Color.web("#242529")),
+                new Stop(0.55, Color.web("#303136")),
+                new Stop(1.0, Color.web("#563A2B"))
+        );
+
+        hbright.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                darkGradient,
+                                new CornerRadii(22),
+                                Insets.EMPTY
+                        )
+                )
+        );
+        hbright.setEffect(cardShadow);
+
+        // =====================================================
+        // HERO LEFT CONTENT
+        // =====================================================
+
+        VBox leftContent = new VBox(13);
+        leftContent.setPrefWidth(600);
+        leftContent.setAlignment(Pos.CENTER_LEFT);
+
+        Label badge = new Label("✦  NEXT-GEN INTELLIGENCE");
+        badge.setStyle(
+                "-fx-background-color: #503629;" +
+                "-fx-text-fill: #FF9D67;" +
+                "-fx-font-size: 8px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 20;" +
+                "-fx-padding: 7 13 7 13;"
+        );
+
+        Text heading = new Text("What are you\nlooking for today?");
+        heading.setStyle(
+                "-fx-fill: white;" +
+                "-fx-font-family: 'Montserrat';" +
+                "-fx-font-size: 30px;" +
+                "-fx-font-weight: 900;"
+        );
+
+        Text description = new Text(
+                "Your hyper-local AI is ready to source, compare,\n" +
+                "and deliver from your favorite downtown spots."
+        );
+        description.setStyle(
+                "-fx-fill: #C9C9C9;" +
+                "-fx-font-size: 11px;"
+        );
+
+        Button groceries = new Button("♧  Combine Groceries");
+        groceries.setPrefHeight(42);
+        groceries.setStyle(
+                "-fx-background-color: #45464B;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 9px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 11;" +
+                "-fx-padding: 10 16 10 16;" +
+                "-fx-cursor: hand;"
+        );
+        
+
+        Button bestPrice = new Button("⌁  Find Best Price");
+        bestPrice.setPrefHeight(42);
+        bestPrice.setStyle(
+                "-fx-background-color: #FF6900;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 9px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 11;" +
+                "-fx-padding: 10 17 10 17;" +
+                "-fx-cursor: hand;"
+        );
+
+        HBox buttons = new HBox(10, groceries, bestPrice);
+        leftContent.getChildren().addAll(badge, heading, description, buttons);
+
+        // =====================================================
+        // AI RECOMMENDATION CARD
+        // =====================================================
+
+        VBox notification = new VBox(13);
+        notification.setPrefWidth(300);
+        notification.setMinWidth(300);
+        notification.setMaxWidth(300);
+        notification.setPrefHeight(245);
+        notification.setPadding(new Insets(20));
+        notification.setAlignment(Pos.TOP_LEFT);
+        notification.setStyle(
+                "-fx-background-color: #ECEAE9;" +
+                "-fx-background-radius: 18;" +
+                "-fx-border-color: rgba(255,255,255,0.35);" +
+                "-fx-border-radius: 18;" +
+                "-fx-border-width: 1;"
+        );
+        notification.setEffect(cardShadow);
+        
+
+        Label aiCircle = new Label("✦");
+        aiCircle.setPrefSize(38, 38);
+        aiCircle.setAlignment(Pos.CENTER);
+        aiCircle.setStyle(
+                "-fx-background-color: #FF6900;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 14px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 50%;"
+        );
+
+        VBox aiHeading = new VBox(2);
+        Label aiTitle = new Label("AI Recommendation");
+        aiTitle.setStyle(
+                "-fx-font-size: 11px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #333333;"
+        );
+
+        Label aiStatus = new Label("PERSONALIZED FOR YOU");
+        aiStatus.setStyle(
+                "-fx-font-size: 7px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #FF6900;"
+        );
+
+        aiHeading.getChildren().addAll(aiTitle, aiStatus);
+
+        HBox aiHeader = new HBox(10, aiCircle, aiHeading);
+        aiHeader.setAlignment(Pos.CENTER_LEFT);
+
+        Text notificationText = new Text(
+                "You usually order coffee beans on Tuesdays.\n\n" +
+                "Artisan Pantry has your favorite\n" +
+                "brand in stock today."
+        );
+        notificationText.setStyle(
+                "-fx-fill: #444444;" +
+                "-fx-font-size: 10px;" +
+                "-fx-font-weight: bold;"
+        );
+
+        Region notificationSpacer = new Region();
+        VBox.setVgrow(notificationSpacer, Priority.ALWAYS);
+
+        Button dismiss = new Button("Dismiss");
+        dismiss.setStyle(
+                "-fx-background-color: transparent;" +
+                "-fx-text-fill: #777777;" +
+                "-fx-font-size: 9px;" +
+                "-fx-cursor: hand;"
+        );
+
+        Button checkStock = new Button("Check Stock");
+        checkStock.setStyle(
+                "-fx-background-color: #FF6900;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 9px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 10;" +
+                "-fx-padding: 8 13 8 13;" +
+                "-fx-cursor: hand;"
+        );
+
+        HBox notificationButtons = new HBox(8, dismiss, checkStock);
+        notificationButtons.setAlignment(Pos.CENTER_RIGHT);
+
+        notification.getChildren().addAll(
+                aiHeader,
+                notificationText,
+                notificationSpacer,
+                notificationButtons
+        );
+
+        hbright.getChildren().addAll(leftContent, notification);
+
+        // =====================================================
+        // CATEGORY TITLE
+        // =====================================================
+
+        HBox categoryHeader = new HBox();
+        categoryHeader.setAlignment(Pos.CENTER_LEFT);
+
+        Label categoryTitle = new Label("Browse by Category");
+        categoryTitle.setStyle(
+                "-fx-font-size: 17px;" +
+                "-fx-font-weight: 800;" +
+                "-fx-text-fill: #222222;"
+        );
+
+        Label viewAll = new Label("View all  →");
+        viewAll.setStyle(
+                "-fx-font-size: 9px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #FF6900;" +
+                "-fx-cursor: hand;"
+        );
+
+        Region categorySpacer = new Region();
+        HBox.setHgrow(categorySpacer, Priority.ALWAYS);
+
+        categoryHeader.getChildren().addAll(categoryTitle, categorySpacer, viewAll);
+
+        // =====================================================
+        // CATEGORY BUTTONS
+        // =====================================================
+
+        Button grocerie = new Button("🛒\nGroceries");
+        grocerie.setOnAction(event->{
+                Grocries gr=new Grocries();
+                Runnable callbacToDashbord=new Runnable() {
+                        public void run(){
+                                backTodashbord();
+                        }
+                };
+               Homepage.HomepageStage.setScene(gr.getGrocriescene(callbacToDashbord));
+        });
+        
+        Button electronics = new Button("▣\nElectronics");
+        electronics.setOnAction(event->{
+                Electronics es=new Electronics();
+                Homepage.HomepageStage.setScene(es.getElectrScene());
+        });
+        Button fashion = new Button("♧\nFashion");
+        Button health = new Button("✚\nHealth");
+        Button home = new Button("⌂\nHome");
+        Button gifts = new Button("♧\nGifts");
+        Button beauty = new Button("✦\nBeauty");
+        Button pharmacy = new Button("✚\nPharmacy");
+        Button sports = new Button("⚽\nSports");
+        Button furniture = new Button("⌂\nFurniture");
+        Button toys = new Button("♟\nToys");
+        Button stationery = new Button("✎\nStationery");
+
+        String categoryStyle = "-fx-background-color: white;" +
+                "-fx-text-fill: #D94F0B;" +
+                "-fx-font-size: 9px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 15;" +
+                "-fx-border-color: #E8E3EA;" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 15;" +
+                "-fx-padding: 10;" +
+                "-fx-cursor: hand;";
+
+        String categoryHoverStyle = "-fx-background-color: #FFF2E9;" +
+                "-fx-text-fill: #FF6900;" +
+                "-fx-font-size: 9px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 15;" +
+                "-fx-border-color: #FFB889;" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 15;" +
+                "-fx-padding: 10;" +
+                "-fx-cursor: hand;";
+
+        Button[] categoryButtons = {
+                grocerie, electronics, fashion, health, home, gifts,
+                beauty, pharmacy, sports, furniture, toys, stationery
+        };
+
+        for (Button button : categoryButtons) {
+            button.setPrefWidth(105);
+            button.setPrefHeight(78);
+            button.setMinWidth(105);
+            button.setMinHeight(78);
+            button.setMaxWidth(105);
+            button.setMaxHeight(78);
+            button.setStyle(categoryStyle);
+
+            button.setOnMouseEntered(e -> button.setStyle(categoryHoverStyle));
+            button.setOnMouseExited(e -> button.setStyle(categoryStyle));
+        }
+
+        // =====================================================
+        // CATEGORY ROWS
+        // =====================================================
+
+        HBox categoriesRow1 = new HBox(12, grocerie, electronics, fashion, health, home, gifts);
+        categoriesRow1.setAlignment(Pos.CENTER_LEFT);
+
+        // =====================================================
+        // CATEGORY ROW 2
+        // =====================================================
+
+        HBox categoriesRow2 = new HBox(12, beauty, pharmacy, sports, furniture, toys, stationery);
+        categoriesRow2.setAlignment(Pos.CENTER_LEFT);
+
+        // =====================================================
+        // CATEGORY SECTION
+        // =====================================================
+
+        VBox categorySection = new VBox(13, categoryHeader, categoriesRow1, categoriesRow2);
+        categorySection.setPadding(new Insets(0, 8, 20, 8));
+
+        // =====================================================
+        // RIGHT VBOX
+        // =====================================================
+
+        VBox Rightvbox = new VBox(22, navBox, hbright, categorySection);
+        Rightvbox.setPadding(new Insets(0, 26, 20, 26));
+        Rightvbox.setStyle("-fx-background-color: #F7F5F8;");
 
         // =====================================================
         // SUBTLE ORANGE BACKGROUND GLOW
@@ -821,583 +1132,111 @@ public class DealsDB  {
                         )
                 )
         );
-        
 
         // =====================================================
         // BORDER PANE
         // =====================================================
-        BorderPane mainBox = new BorderPane();
 
+        BorderPane mainBox = new BorderPane();
         mainBox.setLeft(leftBox);
         mainBox.setCenter(Rightvbox);
-
-        BorderPane.setAlignment(leftBox, Pos.TOP_LEFT);
-        BorderPane.setAlignment(Rightvbox, Pos.TOP_LEFT);
-
-        BorderPane.setAlignment(Rightvbox, Pos.TOP_LEFT);
-
-        HBox mainContent = new HBox(24);
-        mainContent.setAlignment(Pos.TOP_LEFT);
-        mainContent.setPadding(new Insets(24));
-        mainContent.setFillHeight(true);
-        mainContent.setAlignment(Pos.TOP_LEFT);
-
-        Label filterTitle = new Label("Filters");
-
-        Separator separator1 = new Separator();
-        Separator separator2 = new Separator();
-        Separator separator3 = new Separator();
-
-        Label categoryLabel = new Label("Category");
-
-        CheckBox grocery = new CheckBox("Grocery");
-        CheckBox electronics = new CheckBox("Electronics");
-        CheckBox homeKitchen = new CheckBox("Home & Kitchen");
-        CheckBox fashion = new CheckBox("Fashion");
-
-        Label priceLabel = new Label("Price Range");
-
-        Slider slider = new Slider(0,1000,500);
-
-        Label discountLabel = new Label("Discount");
-
-        CheckBox tenPercent = new CheckBox("10% or more");
-        CheckBox thirtyPercent = new CheckBox("30% or more");
-        CheckBox fiftyPercent = new CheckBox("50% or more");
-
-        Button resetButton = new Button("Reset Filters");
-
-        VBox filterBox = new VBox(18);
-        VBox contentBox = new VBox(25);
-
-        mainContent.getChildren().addAll(filterBox, contentBox);
-        contentBox.setPrefWidth(920);
-        contentBox.setMinWidth(920);
-        contentBox.setMaxWidth(920);
-        contentBox.setSpacing(22);
-
-        contentBox.setSpacing(20);
-        filterBox.setPrefWidth(230);
-        filterBox.setMinWidth(230);
-        filterBox.setMaxWidth(230);
-
-        filterBox.setPrefHeight(500);
-        filterBox.setMinHeight(500);
-        filterBox.setMaxHeight(500);
-
-        filterBox.setPadding(new Insets(22, 20, 20, 20));
-        filterBox.setSpacing(14);
-
-        filterBox.setStyle(
-    "-fx-background-color: white;" +
-    "-fx-background-radius: 18;" +
-    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);"
-);
-
-
-       
-
-        // LEFT TEXT
-        VBox heroTextVBox = new VBox(5);
-        heroTextVBox.setPrefWidth(390);
-        heroTextVBox.setMinWidth(390);
-        heroTextVBox.setMaxWidth(390);
-
-        heroTextVBox.setAlignment(Pos.CENTER_LEFT);
-        heroTextVBox.setPadding(new Insets(20, 10, 20, 30));
-     
-
-        Label heroTitle = new Label("Premium\nOrganic\nGrocery\nBundle");
-        heroTitle.setStyle(
-        "-fx-font-size:34;" +
-        "-fx-font-weight:bold;" +
-        "-fx-text-fill:white;"
-        );
-        heroTitle.setStyle(
-    "-fx-font-size: 25px;" +
-    "-fx-font-weight: bold;" +
-    "-fx-text-fill: white;"
-);
-
-        Label heroDesc = new Label(
-        "Farm-fresh, hyper-local ingredients\n delivered to your door."
-        );
-        
-        heroDesc.setStyle(
-        "-fx-font-size:14;" +
-        "-fx-text-fill:white;"
-        );
-
-        heroTextVBox.getChildren().addAll(heroTitle, heroDesc);
-        HBox heroHBox = new HBox();
-
-        heroHBox.setPrefHeight(245);
-
-        heroHBox.setStyle(
-        "-fx-background-color:#D56E18;" +
-        "-fx-background-radius:18;"
-        );
-
-        Image heroImg = loadImage("/assets/images/image.png");
-
-        ImageView heroImageView = new ImageView(heroImg);
-        heroImageView.setFitWidth(530);
-        heroImageView.setFitHeight(210);
-        heroImageView.setPreserveRatio(true);
-        heroImageView.setSmooth(true);
-       
-                
-        heroHBox.setPrefWidth(920);
-        heroHBox.setMinWidth(920);
-        heroHBox.setMaxWidth(920);
-
-        heroHBox.setPrefHeight(210);
-        heroHBox.setMinHeight(210);
-        heroHBox.setMaxHeight(210);
-
-        heroHBox.setAlignment(Pos.CENTER_LEFT);
-        heroHBox.setPadding(new Insets(0));
-
-       filterBox.getChildren().addAll(
-
-    filterTitle,
-    separator1,
-
-    categoryLabel,
-    grocery,
-    electronics,
-    homeKitchen,
-    fashion,
-
-    separator2,
-
-    priceLabel,
-    slider,
-
-    separator3,
-
-    discountLabel,
-    tenPercent,
-    thirtyPercent,
-    fiftyPercent,
-
-    resetButton
-
-);
-        heroHBox.getChildren().addAll(
-
-        heroTextVBox,
-        heroImageView
-
-        );
-
-        contentBox.getChildren().add(heroHBox);
-
+        mainBox.setStyle("-fx-background-color: #F7F5F8;");
 
         // =====================================================
-        // TODAY'S BEST DISCOUNTS
+        // FLOATING CHATBOT BUTTON
         // =====================================================
 
-        HBox discountHeader = new HBox();
-        discountHeader.setAlignment(Pos.CENTER_LEFT);
-        discountHeader.setPrefWidth(920);
-        discountHeader.setMinWidth(920);
-        discountHeader.setMaxWidth(920);
-        
+        Image chatbotImage = new Image("/assets/images/chatbot (1).png");
+        ImageView chatbotView = new ImageView(chatbotImage);
 
-        Label discountTitle = new Label("Today's Best Discounts");
-        discountTitle.setStyle(
-                "-fx-font-size: 24px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #171717;"
-        );
-        discountTitle.setStyle(
-    "-fx-font-size: 21px;" +
-    "-fx-font-weight: bold;" +
-    "-fx-text-fill: #171717;"
-);
+        chatbotView.setFitWidth(32);
+        chatbotView.setFitHeight(32);
+        chatbotView.setPreserveRatio(true);
 
-        Region discountSpacer = new Region();
-        HBox.setHgrow(discountSpacer, Priority.ALWAYS);
 
-        Button viewAll = new Button("View All →");
-        viewAll.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 0;" +
+        Button chatbotButton = new Button();
+        chatbotButton.setGraphic(chatbotView);
+        chatbotButton.setPrefSize(50, 50);
+        chatbotButton.setMinSize(50, 50);
+        chatbotButton.setMaxSize(50, 50);
+        chatbotButton.setTranslateX(-400);
+
+        chatbotButton.setStyle(
+                "-fx-background-color: #FF6900;" +
+                "-fx-background-radius: 50%;" +
+                "-fx-border-color: white;" +
+                "-fx-border-width: 2;" +
+                "-fx-border-radius: 50%;" +
+                "-fx-padding: 8;" +
                 "-fx-cursor: hand;"
         );
+        
 
-        discountHeader.getChildren().addAll(
-                discountTitle,
-                discountSpacer,
-                viewAll
-        );
+        DropShadow chatbotShadow = new DropShadow();
+        chatbotShadow.setRadius(12);
+        chatbotShadow.setOffsetX(0);
+        chatbotShadow.setOffsetY(4);
+        chatbotShadow.setSpread(0.10);
+        chatbotShadow.setColor(Color.rgb(0, 0, 0, 0.25));
+        chatbotButton.setEffect(chatbotShadow);
 
+        chatbotButton.setOnMouseEntered(e -> {
+            chatbotButton.setStyle(
+                    "-fx-background-color: #FF8533;" +
+                    "-fx-background-radius: 50%;" +
+                    "-fx-border-color: white;" +
+                    "-fx-border-width: 2;" +
+                    "-fx-border-radius: 50%;" +
+                    "-fx-padding: 8;" +
+                    "-fx-cursor: hand;"
+            );
+            chatbotButton.setScaleX(1.08);
+            chatbotButton.setScaleY(1.08);
+        });
 
-        // =====================================================
-        // PRODUCT CARDS
-        // =====================================================
+        chatbotButton.setOnMouseExited(e -> {
+            chatbotButton.setStyle(
+                    "-fx-background-color: #FF6900;" +
+                    "-fx-background-radius: 50%;" +
+                    "-fx-border-color: white;" +
+                    "-fx-border-width: 2;" +
+                    "-fx-border-radius: 50%;" +
+                    "-fx-padding: 8;" +
+                    "-fx-cursor: hand;"
+            );
+            chatbotButton.setScaleX(1.0);
+            chatbotButton.setScaleY(1.0);
+        });
+        chatbotButton.setOnAction(event->{
+                SmartAssistantUI chAssistantUI=new SmartAssistantUI();
+                Homepage.HomepageStage.setScene(chAssistantUI.getSmartAssisstantui());
+        });
 
         
-        HBox productCards = new HBox(18);
-        productCards.setAlignment(Pos.TOP_LEFT);
-        productCards.setPrefWidth(920);
-        productCards.setMinWidth(920);
-        productCards.setMaxWidth(920);
-
 
         // =====================================================
-        // CARD 1 - ARTISAN SOURDOUGH
+        // ROOT STACKPANE
         // =====================================================
 
-        VBox card1 = new VBox(7);
-        card1.setPrefWidth(280);
-        card1.setMinWidth(280);
-        card1.setMaxWidth(280);
+        StackPane root = new StackPane();
+        root.getChildren().add(mainBox);
 
-        card1.setPrefHeight(300);
-        card1.setMinHeight(300);
-        card1.setMaxHeight(300);
+        StackPane.setAlignment(chatbotButton, Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(chatbotButton, new Insets(0, 25, 25, 0));
 
-        card1.setPadding(new Insets(7));
-        card1.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 10;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);"
-        );
-
-
-        // Image
-        Image productImg1 = loadImage("/assets/images/img1.png");
-
-        ImageView productView1 = new ImageView(productImg1);
-        productView1.setFitWidth(264);
-        productView1.setFitHeight(145);
-        productView1.setPreserveRatio(true);
-
-
-        // Discount label
-        Label discount1 = new Label("-40%");
-        discount1.setStyle(
-                "-fx-background-color: #FF6900;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 4 7 4 7;" +
-                "-fx-background-radius: 5;"
-        );
-
-        HBox discountBox1 = new HBox(discount1);
-        discountBox1.setTranslateX(-2);
-        discountBox1.setTranslateY(-108);
-
-
-        // Rating
-        Label rating1 = new Label("☆ 4.8 (124)");
-        rating1.setStyle(
-                "-fx-font-size: 9px;" +
-                "-fx-text-fill: #555555;"
-        );
-
-        Label productName1 = new Label("Artisan Sourdough...");
-        productName1.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #333333;"
-        );
-
-        Label productDesc1 = new Label("Freshly baked, local...");
-        productDesc1.setStyle(
-                "-fx-font-size: 8px;" +
-                "-fx-text-fill: #777777;"
-        );
-
-        HBox priceBox1 = new HBox(7);
-        priceBox1.setAlignment(Pos.CENTER_LEFT);
-
-        Label price1 = new Label("$5.99");
-        price1.setStyle(
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;"
-        );
-
-        Label oldPrice1 = new Label("$9.99");
-        oldPrice1.setStyle(
-                "-fx-font-size: 8px;" +
-                "-fx-text-fill: #777777;" +
-                "-fx-strikethrough: true;"
-        );
-
-        Label cart1 = new Label("🛒");
-        cart1.setStyle(
-                "-fx-background-color: #FFF0E7;" +
-                "-fx-background-radius: 50;" +
-                "-fx-padding: 5;" +
-                "-fx-font-size: 9px;"
-        );
-
-        Region priceSpacer1 = new Region();
-        HBox.setHgrow(priceSpacer1, Priority.ALWAYS);
-
-        priceBox1.getChildren().addAll(
-                price1,
-                oldPrice1,
-                priceSpacer1,
-                cart1
-        );
-
-        card1.getChildren().addAll(
-                productView1,
-                rating1,
-                productName1,
-                productDesc1,
-                priceBox1
-        );
-
-
-        // =====================================================
-        // CARD 2 - ORGANIC AVOCADO
-        // =====================================================
-
-        VBox card2 = new VBox(7);
-        card2.setPrefWidth(280);
-        card2.setMinWidth(280);
-        card2.setMaxWidth(280);
-
-        card2.setPrefHeight(300);
-        card2.setMinHeight(300);
-        card2.setMaxHeight(300);
-
-        card2.setPadding(new Insets(7));
-
-        card2.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 10;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);"
-        );
-
-        Image productImg2 = loadImage("/assets/images/avocado.png");
-
-        ImageView productView2 = new ImageView(productImg2);
-        productView2.setFitWidth(264);
-        productView2.setFitHeight(145);
-        productView2.setPreserveRatio(true);
-
-        Label discount2 = new Label("-25%");
-        discount2.setStyle(
-                "-fx-background-color: #FF6900;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 4 7 4 7;" +
-                "-fx-background-radius: 5;"
-        );
-
-        Label rating2 = new Label("☆ 4.9 (89)");
-        rating2.setStyle(
-                "-fx-font-size: 9px;" +
-                "-fx-text-fill: #555555;"
-        );
-
-        Label productName2 = new Label("Organic Hass...");
-        productName2.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #333333;"
-        );
-
-        Label productDesc2 = new Label("Pack of 4, Farm direct");
-        productDesc2.setStyle(
-                "-fx-font-size: 8px;" +
-                "-fx-text-fill: #777777;"
-        );
-
-        HBox priceBox2 = new HBox(7);
-        priceBox2.setAlignment(Pos.CENTER_LEFT);
-
-        Label price2 = new Label("$6.49");
-        price2.setStyle(
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;"
-        );
-
-        Label oldPrice2 = new Label("$8.65");
-        oldPrice2.setStyle(
-                "-fx-font-size: 8px;" +
-                "-fx-text-fill: #777777;" +
-                "-fx-strikethrough: true;"
-        );
-
-        Label cart2 = new Label("🛒");
-        cart2.setStyle(
-                "-fx-background-color: #FFF0E7;" +
-                "-fx-background-radius: 50;" +
-                "-fx-padding: 5;" +
-                "-fx-font-size: 9px;"
-        );
-
-        Region priceSpacer2 = new Region();
-        HBox.setHgrow(priceSpacer2, Priority.ALWAYS);
-
-        priceBox2.getChildren().addAll(
-                price2,
-                oldPrice2,
-                priceSpacer2,
-                cart2
-        );
-
-        card2.getChildren().addAll(
-                productView2,
-                rating2,
-                productName2,
-                productDesc2,
-                priceBox2
-        );
-
-
-        // =====================================================
-        // CARD 3 - SONICPRO WIRELESS
-        // =====================================================
-
-        VBox card3 = new VBox(7);
-        card3.setPrefWidth(280);
-        card3.setMinWidth(280);
-        card3.setMaxWidth(280);
-
-        card3.setPrefHeight(300);
-        card3.setMinHeight(300);
-        card3.setMaxHeight(300);
-
-        card3.setPadding(new Insets(7));
-                card3.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 10;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);"
-        );
-
-        Image productImg3 = loadImage("/assets/images/headphone.png");
-
-        ImageView productView3 = new ImageView(productImg3);
-        productView3.setFitWidth(264);
-        productView3.setFitHeight(145);
-        productView3.setPreserveRatio(true);
-
-        productView1.setSmooth(true);
-        productView2.setSmooth(true);
-        productView3.setSmooth(true);
-
-        Label discount3 = new Label("-55%");
-        discount3.setStyle(
-                "-fx-background-color: #FF6900;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 4 7 4 7;" +
-                "-fx-background-radius: 5;"
-        );
-
-        Label rating3 = new Label("☆ 4.6 (102)");
-        rating3.setStyle(
-                "-fx-font-size: 9px;" +
-                "-fx-text-fill: #555555;"
-        );
-
-        Label productName3 = new Label("SonicPro Wireless...");
-        productName3.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #333333;"
-        );
-
-        Label productDesc3 = new Label("Over-ear, 30h battery");
-        productDesc3.setStyle(
-                "-fx-font-size: 8px;" +
-                "-fx-text-fill: #777777;"
-        );
-
-        HBox priceBox3 = new HBox(7);
-        priceBox3.setAlignment(Pos.CENTER_LEFT);
-
-        Label price3 = new Label("$89.00");
-        price3.setStyle(
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;"
-        );
-
-        Label oldPrice3 = new Label("$199.00");
-        oldPrice3.setStyle(
-                "-fx-font-size: 8px;" +
-                "-fx-text-fill: #777777;" +
-                "-fx-strikethrough: true;"
-        );
-
-        Label cart3 = new Label("🛒");
-        cart3.setStyle(
-                "-fx-background-color: #FFF0E7;" +
-                "-fx-background-radius: 50;" +
-                "-fx-padding: 5;" +
-                "-fx-font-size: 9px;"
-        );
-
-        Region priceSpacer3 = new Region();
-        HBox.setHgrow(priceSpacer3, Priority.ALWAYS);
-
-        priceBox3.getChildren().addAll(
-                price3,
-                oldPrice3,
-                priceSpacer3,
-                cart3
-        );
-
-        card3.getChildren().addAll(
-                productView3,
-                rating3,
-                productName3,
-                productDesc3,
-                priceBox3
-        );
-
-
-        // =====================================================
-        // ADD CARDS
-        // =====================================================
-
-        productCards.getChildren().addAll(
-                card1,
-                card2,
-                card3
-        );
-
-
-        // =====================================================
-        // ADD DISCOUNTS SECTION TO CONTENT
-        // =====================================================
-
-        contentBox.getChildren().addAll(
-                discountHeader,
-                productCards
-        );
-
-
-             
-                
-
-       
+        root.getChildren().add(chatbotButton);
 
         // =====================================================
         // SCENE
         // =====================================================
 
-        Rightvbox.getChildren().add(mainContent);
-
-        dealsScene = new Scene(mainBox, 1500, 800);
-                return dealsScene;
+        Scene sc = new Scene(root, 1900, 800);
+                Dashbordscene=sc;
+                return Dashbordscene;
         }
 
+    
+    public void backTodashbord(){
+        Homepage.HomepageStage.setScene(Dashbordscene);
+    }
 }
