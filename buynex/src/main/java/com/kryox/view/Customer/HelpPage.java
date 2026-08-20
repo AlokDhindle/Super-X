@@ -1,4 +1,4 @@
-package com.c2w.view;
+package com.kryox.view.Customer;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -783,7 +783,7 @@ public class HelpPage extends Application {
 
         Scene scene = new Scene(
                 root,
-                1000,
+                1550,
                 850
         );
 
