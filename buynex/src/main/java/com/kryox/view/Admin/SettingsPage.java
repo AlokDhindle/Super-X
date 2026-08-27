@@ -1,0 +1,628 @@
+package com.kryox.view.Admin;
+
+import com.kryox.view.Customer.Homepage;
+
+import javafx.animation.ScaleTransition;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
+
+public class SettingsPage {
+
+    public Scene getUserScene() {
+
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color:#F9F7FB;");
+
+        VBox left = new VBox(25);
+        left.setPrefWidth(210);
+        left.setPadding(new Insets(30, 15, 20, 15));
+        left.setStyle("-fx-background-color:#F3E3D3;");
+
+        Text logo = new Text("Admin Panel");
+        logo.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+        logo.setFill(Color.web("#A83E00"));
+
+        Text subLogo = new Text("Marketplace Controller");
+        subLogo.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        subLogo.setFill(Color.web("#999999"));
+
+        VBox logoBox = new VBox(4);
+        logoBox.getChildren().addAll(logo, subLogo);
+
+        VBox menu = new VBox(4);
+
+        Image dashboardImage = new Image(getClass().getResource("/assets/images/admin/dashboard.png").toExternalForm());
+        ImageView dashboardIcon = new ImageView(dashboardImage);
+        Text dashboardText = new Text("Dashboard");
+        dashboardIcon.setFitWidth(18);
+        dashboardIcon.setFitHeight(18);
+        dashboardIcon.setPreserveRatio(true);
+        dashboardText.setFont(Font.font("Arial", 12));
+        HBox dashboard = new HBox(10);
+        dashboard.setAlignment(Pos.CENTER_LEFT);
+        dashboard.setPadding(new Insets(10, 12, 10, 12));
+        dashboard.setStyle("-fx-background-color:transparent;");
+        dashboard.getChildren().addAll(dashboardIcon, dashboardText);
+
+        Image usersImage = new Image(getClass().getResource("/assets/images/admin/admin logo.png").toExternalForm());
+        ImageView usersIcon = new ImageView(usersImage);
+        Text usersText = new Text("Users");
+        usersIcon.setFitWidth(18);
+        usersIcon.setFitHeight(18);
+        usersIcon.setPreserveRatio(true);
+        usersText.setFont(Font.font("Arial", 12));
+        HBox users = new HBox(10);
+        users.setAlignment(Pos.CENTER_LEFT);
+        users.setPadding(new Insets(10, 12, 10, 12));
+        users.setStyle("-fx-background-color:transparent;");
+        users.getChildren().addAll(usersIcon, usersText);
+
+        Image shopsImage = new Image(getClass().getResource("/assets/images/admin/shop.png").toExternalForm());
+        ImageView shopsIcon = new ImageView(shopsImage);
+        Text shopsText = new Text("Shops");
+        shopsIcon.setFitWidth(18);
+        shopsIcon.setFitHeight(18);
+        shopsIcon.setPreserveRatio(true);
+        shopsText.setFont(Font.font("Arial", 12));
+        HBox shops = new HBox(10);
+        shops.setAlignment(Pos.CENTER_LEFT);
+        shops.setPadding(new Insets(10, 12, 10, 12));
+        shops.setStyle("-fx-background-color:transparent;");
+        shops.getChildren().addAll(shopsIcon, shopsText);
+
+        Image offersImage = new Image(getClass().getResource("/assets/images/admin/tag.png").toExternalForm());
+        ImageView offersIcon = new ImageView(offersImage);
+        Text offersText = new Text("Offers");
+        offersIcon.setFitWidth(18);
+        offersIcon.setFitHeight(18);
+        offersIcon.setPreserveRatio(true);
+        offersText.setFont(Font.font("Arial", 12));
+        HBox offers = new HBox(10);
+        offers.setAlignment(Pos.CENTER_LEFT);
+        offers.setPadding(new Insets(10, 12, 10, 12));
+        offers.setStyle("-fx-background-color:transparent;");
+        offers.getChildren().addAll(offersIcon, offersText);
+
+        Image analyticsImage = new Image(getClass().getResource("/assets/images/admin/stats.png").toExternalForm());
+        ImageView analyticsIcon = new ImageView(analyticsImage);
+        Text analyticsText = new Text("Analytics");
+        analyticsIcon.setFitWidth(18);
+        analyticsIcon.setFitHeight(18);
+        analyticsIcon.setPreserveRatio(true);
+        analyticsText.setFont(Font.font("Arial", 12));
+        HBox analytics = new HBox(10);
+        analytics.setAlignment(Pos.CENTER_LEFT);
+        analytics.setPadding(new Insets(10, 12, 10, 12));
+        analytics.setStyle("-fx-background-color:transparent;");
+        analytics.getChildren().addAll(analyticsIcon, analyticsText);
+
+        Image settingsImage = new Image(getClass().getResource("/assets/images/admin/setting.png").toExternalForm());
+        ImageView settingsIcon = new ImageView(settingsImage);
+        Text settingsText = new Text("Settings");
+        settingsIcon.setFitWidth(18);
+        settingsIcon.setFitHeight(18);
+        settingsIcon.setPreserveRatio(true);
+        settingsText.setFont(Font.font("Arial", 12));
+        HBox settings = new HBox(10);
+        settings.setAlignment(Pos.CENTER_LEFT);
+        settings.setPadding(new Insets(10, 12, 10, 12));
+        settings.setStyle("-fx-background-color:#FF6500; -fx-background-radius:10;");
+        settings.getChildren().addAll(settingsIcon, settingsText);
+
+        menu.getChildren().addAll(dashboard, users, shops, offers, analytics, settings);
+
+        VBox bottomMenu = new VBox(4);
+        Image supportImage = new Image(getClass().getResource("/assets/images/admin/service-call.png").toExternalForm());
+        ImageView supportIcon = new ImageView(supportImage);
+        Text supportText = new Text("Support");
+        supportIcon.setFitWidth(18);
+        supportIcon.setFitHeight(18);
+        supportIcon.setPreserveRatio(true);
+        supportText.setFont(Font.font("Arial", 12));
+        HBox support = new HBox(10);
+        support.setAlignment(Pos.CENTER_LEFT);
+        support.setPadding(new Insets(10, 12, 10, 12));
+        support.setStyle("-fx-background-color:transparent;");
+        support.getChildren().addAll(supportIcon, supportText);
+        bottomMenu.getChildren().add(support);
+
+        dashboard.setOnMouseEntered(e -> {
+            dashboard.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
+            dashboardText.setFill(Color.WHITE);
+            dashboardText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+
+            ScaleTransition dashboardAnimation = new ScaleTransition(
+                    Duration.millis(120), dashboard);
+            dashboardAnimation.setToX(1.03);
+            dashboardAnimation.setToY(1.03);
+            dashboardAnimation.play();
+        });
+
+        dashboard.setOnMouseExited(e -> {
+            dashboard.setStyle("-fx-background-color:transparent;");
+            dashboardText.setFill(Color.web("#333333"));
+            dashboardText.setFont(Font.font("Arial", 12));
+
+            ScaleTransition dashboardAnimation = new ScaleTransition(
+                    Duration.millis(120), dashboard);
+            dashboardAnimation.setToX(1);
+            dashboardAnimation.setToY(1);
+            dashboardAnimation.play();
+        });
+
+        users.setOnMouseEntered(e -> {
+            users.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
+            usersText.setFill(Color.WHITE);
+            usersText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+
+            ScaleTransition usersAnimation = new ScaleTransition(
+                    Duration.millis(120), users);
+            usersAnimation.setToX(1.03);
+            usersAnimation.setToY(1.03);
+            usersAnimation.play();
+        });
+
+        users.setOnMouseExited(e -> {
+            users.setStyle("-fx-background-color:transparent;");
+            usersText.setFill(Color.web("#333333"));
+            usersText.setFont(Font.font("Arial", 12));
+
+            ScaleTransition usersAnimation = new ScaleTransition(
+                    Duration.millis(120), users);
+            usersAnimation.setToX(1);
+            usersAnimation.setToY(1);
+            usersAnimation.play();
+        });
+
+        shops.setOnMouseEntered(e -> {
+            shops.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
+            shopsText.setFill(Color.WHITE);
+            shopsText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+
+            ScaleTransition shopsAnimation = new ScaleTransition(
+                    Duration.millis(120), shops);
+            shopsAnimation.setToX(1.03);
+            shopsAnimation.setToY(1.03);
+            shopsAnimation.play();
+        });
+
+        shops.setOnMouseExited(e -> {
+            shops.setStyle("-fx-background-color:transparent;");
+            shopsText.setFill(Color.web("#333333"));
+            shopsText.setFont(Font.font("Arial", 12));
+
+            ScaleTransition shopsAnimation = new ScaleTransition(
+                    Duration.millis(120), shops);
+            shopsAnimation.setToX(1);
+            shopsAnimation.setToY(1);
+            shopsAnimation.play();
+        });
+
+        offers.setOnMouseEntered(e -> {
+            offers.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
+            offersText.setFill(Color.WHITE);
+            offersText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+
+            ScaleTransition offersAnimation = new ScaleTransition(
+                    Duration.millis(120), offers);
+            offersAnimation.setToX(1.03);
+            offersAnimation.setToY(1.03);
+            offersAnimation.play();
+        });
+
+        offers.setOnMouseExited(e -> {
+            offers.setStyle("-fx-background-color:transparent;");
+            offersText.setFill(Color.web("#333333"));
+            offersText.setFont(Font.font("Arial", 12));
+
+            ScaleTransition offersAnimation = new ScaleTransition(
+                    Duration.millis(120), offers);
+            offersAnimation.setToX(1);
+            offersAnimation.setToY(1);
+            offersAnimation.play();
+        });
+
+        analytics.setOnMouseEntered(e -> {
+            analytics.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
+            analyticsText.setFill(Color.WHITE);
+            analyticsText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+
+            ScaleTransition analyticsAnimation = new ScaleTransition(
+                    Duration.millis(120), analytics);
+            analyticsAnimation.setToX(1.03);
+            analyticsAnimation.setToY(1.03);
+            analyticsAnimation.play();
+        });
+
+        analytics.setOnMouseExited(e -> {
+            analytics.setStyle("-fx-background-color:transparent;");
+            analyticsText.setFill(Color.web("#333333"));
+            analyticsText.setFont(Font.font("Arial", 12));
+
+            ScaleTransition analyticsAnimation = new ScaleTransition(
+                    Duration.millis(120), analytics);
+            analyticsAnimation.setToX(1);
+            analyticsAnimation.setToY(1);
+            analyticsAnimation.play();
+        });
+
+        settings.setOnMouseEntered(e -> {
+            settings.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
+            settingsText.setFill(Color.WHITE);
+            settingsText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+
+            ScaleTransition settingsAnimation = new ScaleTransition(
+                    Duration.millis(120), settings);
+            settingsAnimation.setToX(1.03);
+            settingsAnimation.setToY(1.03);
+            settingsAnimation.play();
+        });
+
+        settings.setOnMouseExited(e -> {
+            settings.setStyle("-fx-background-color:#FF6500; -fx-background-radius:10;");
+            settingsText.setFill(Color.web("#333333"));
+            settingsText.setFont(Font.font("Arial", 12));
+
+            ScaleTransition settingsAnimation = new ScaleTransition(
+                    Duration.millis(120), settings);
+            settingsAnimation.setToX(1);
+            settingsAnimation.setToY(1);
+            settingsAnimation.play();
+        });
+
+        support.setOnMouseEntered(e -> {
+            support.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
+            supportText.setFill(Color.WHITE);
+            supportText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+
+            ScaleTransition supportAnimation = new ScaleTransition(
+                    Duration.millis(120), support);
+            supportAnimation.setToX(1.03);
+            supportAnimation.setToY(1.03);
+            supportAnimation.play();
+        });
+
+        support.setOnMouseExited(e -> {
+            support.setStyle("-fx-background-color:transparent;");
+            supportText.setFill(Color.web("#333333"));
+            supportText.setFont(Font.font("Arial", 12));
+
+            ScaleTransition supportAnimation = new ScaleTransition(
+                    Duration.millis(120), support);
+            supportAnimation.setToX(1);
+            supportAnimation.setToY(1);
+            supportAnimation.play();
+        });
+
+        dashboard.setOnMouseClicked(e -> {
+            AdminDashboardPage dashboardPage = new AdminDashboardPage();
+            Homepage.HomepageStage.setScene(dashboardPage.getUserScene());
+        });
+
+        users.setOnMouseClicked(e -> {
+            UserManagementPage userPage = new UserManagementPage();
+            Homepage.HomepageStage.setScene(userPage.getUserScene());
+        });
+
+        shops.setOnMouseClicked(e -> {
+            ShopVerificationPage shopPage = new ShopVerificationPage();
+            Homepage.HomepageStage.setScene(shopPage.getUserScene());
+        });
+
+        offers.setOnMouseClicked(e -> {
+            OfferPage offerPage = new OfferPage();
+            Homepage.HomepageStage.setScene(offerPage.getUserScene());
+        });
+
+        analytics.setOnMouseClicked(e -> {
+            AdminAnalyticsPage analyticsPage = new AdminAnalyticsPage();
+            Homepage.HomepageStage.setScene(analyticsPage.getUserScene());
+        });
+
+        settings.setOnMouseClicked(e -> {
+            SettingsPage settingsPage = new SettingsPage();
+            Homepage.HomepageStage.setScene(settingsPage.getUserScene());
+        });
+
+        Region leftGrow = new Region();
+        VBox.setVgrow(leftGrow, Priority.ALWAYS);
+
+        Text profile = new Text("Alex Rivera\nSuper Admin");
+        profile.setFont(Font.font("Arial", 11));
+
+        Separator leftSeparator = new Separator();
+        left.getChildren().addAll(logoBox, menu, leftSeparator, bottomMenu, leftGrow, profile);
+        root.setLeft(left);
+
+        VBox right = new VBox(20);
+        right.setPadding(new Insets(25));
+
+        HBox top = new HBox(20);
+        top.setAlignment(Pos.CENTER_LEFT);
+
+        TextField search = new TextField();
+        search.setPromptText("Search orders, shops, or users...");
+        search.setPrefSize(340, 38);
+        search.setStyle("-fx-background-color:#F2F0F5; -fx-background-radius:20;");
+
+        Region topGrow = new Region();
+        HBox.setHgrow(topGrow, Priority.ALWAYS);
+
+        Image messageImage = new Image(getClass().getResource("/assets/images/admin/message.png").toExternalForm());
+        ImageView message = new ImageView(messageImage);
+        message.setFitWidth(18);
+        message.setFitHeight(18);
+        message.setPreserveRatio(true);
+
+        Image bellImage = new Image(getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
+        ImageView bell = new ImageView(bellImage);
+        bell.setFitWidth(18);
+        bell.setFitHeight(18);
+        bell.setPreserveRatio(true);
+        Text admin = new Text("Admin Portal");
+        admin.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+
+        HBox topRight = new HBox(20, message, bell, admin);
+        topRight.setAlignment(Pos.CENTER_RIGHT);
+        top.getChildren().addAll(search, topGrow, topRight);
+
+        VBox content = new VBox(20);
+        content.setPadding(new Insets(5, 5, 25, 5));
+
+        Text title = new Text("Platform Configuration");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+
+        Text subtitle = new Text(
+                "Manage core system parameters, financial structures, and security protocols for the BuyNeX ecosystem.");
+        subtitle.setFont(Font.font("Arial", 14));
+        subtitle.setFill(Color.web("#666666"));
+
+        VBox heading = new VBox(6, title, subtitle);
+
+        HBox settingBoxes = new HBox(18);
+        settingBoxes.setAlignment(Pos.TOP_LEFT);
+
+        VBox settingMenu = new VBox(14);
+        settingMenu.setPrefWidth(220);
+        settingMenu.setPadding(new Insets(20));
+        settingMenu.setStyle("-fx-background-color:white; -fx-background-radius:15;"
+                + "-fx-border-color:#EEE5E0; -fx-border-radius:15;");
+        Button identityButton = new Button("▣  Platform Identity");
+        Button commissionButton = new Button("▣  Commission & Payouts  ›");
+        Button securityButton = new Button("⬟  Security");
+        Button apiButton = new Button("◆  API Integrations");
+        Button payoutButton = new Button("⟳  Payout Cycles");
+
+        identityButton.setMaxWidth(Double.MAX_VALUE);
+        identityButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
+
+        commissionButton.setMaxWidth(Double.MAX_VALUE);
+        commissionButton.setStyle("-fx-background-color:#F3F1F7; -fx-text-fill:#9B3100;"
+                + "-fx-font-weight:bold; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
+
+        securityButton.setMaxWidth(Double.MAX_VALUE);
+        securityButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
+
+        apiButton.setMaxWidth(Double.MAX_VALUE);
+        apiButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
+
+        payoutButton.setMaxWidth(Double.MAX_VALUE);
+        payoutButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
+
+        settingMenu.getChildren().addAll(
+                identityButton,
+                commissionButton,
+                securityButton,
+                apiButton,
+                payoutButton);
+
+        VBox centerBox = new VBox(18);
+        HBox.setHgrow(centerBox, Priority.ALWAYS);
+
+        VBox commissionCard = new VBox(14);
+        commissionCard.setPrefWidth(560);
+        commissionCard.setPadding(new Insets(20));
+        commissionCard.setStyle("-fx-background-color:white; -fx-background-radius:15;"
+                + "-fx-border-color:#EEE5E0; -fx-border-radius:15;");
+        Text commissionTitle = new Text("Category Commission Rates");
+        commissionTitle.setFont(Font.font("Arial", FontWeight.BOLD, 23));
+        Text commissionSub = new Text("Set the default percentage taken per transaction by category.");
+        commissionSub.setFill(Color.web("#666666"));
+        Text groceryIcon = new Text("◉");
+        Text groceryText = new Text("Grocery & Daily Essentials");
+        TextField groceryRate = new TextField("2.5  %");
+        Region groceryGrow = new Region();
+        HBox.setHgrow(groceryGrow, Priority.ALWAYS);
+        groceryRate.setPrefWidth(100);
+        groceryRate.setAlignment(Pos.CENTER_RIGHT);
+        groceryRate.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
+                + "-fx-border-radius:8; -fx-background-radius:8;");
+        HBox groceryBox = new HBox(12);
+        groceryBox.setAlignment(Pos.CENTER_LEFT);
+        groceryBox.setPadding(new Insets(12));
+        groceryBox.setStyle("-fx-background-color:#FAF9FC; -fx-background-radius:10;"
+                + "-fx-border-color:#E5CDC1; -fx-border-radius:10;");
+        groceryBox.getChildren().addAll(groceryIcon, groceryText, groceryGrow, groceryRate);
+
+        Text electronicsIcon = new Text("▣");
+        Text electronicsText = new Text("Electronics & Gadgets");
+        TextField electronicsRate = new TextField("4.0  %");
+        Region electronicsGrow = new Region();
+        HBox.setHgrow(electronicsGrow, Priority.ALWAYS);
+        electronicsRate.setPrefWidth(100);
+        electronicsRate.setAlignment(Pos.CENTER_RIGHT);
+        electronicsRate.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
+                + "-fx-border-radius:8; -fx-background-radius:8;");
+        HBox electronicsBox = new HBox(12);
+        electronicsBox.setAlignment(Pos.CENTER_LEFT);
+        electronicsBox.setPadding(new Insets(12));
+        electronicsBox.setStyle("-fx-background-color:#FAF9FC; -fx-background-radius:10;"
+                + "-fx-border-color:#E5CDC1; -fx-border-radius:10;");
+        electronicsBox.getChildren().addAll(
+                electronicsIcon, electronicsText, electronicsGrow, electronicsRate);
+
+        Text fashionIcon = new Text("♧");
+        Text fashionText = new Text("Fashion & Apparel");
+        TextField fashionRate = new TextField("5.5  %");
+        Region fashionGrow = new Region();
+        HBox.setHgrow(fashionGrow, Priority.ALWAYS);
+        fashionRate.setPrefWidth(100);
+        fashionRate.setAlignment(Pos.CENTER_RIGHT);
+        fashionRate.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
+                + "-fx-border-radius:8; -fx-background-radius:8;");
+        HBox fashionBox = new HBox(12);
+        fashionBox.setAlignment(Pos.CENTER_LEFT);
+        fashionBox.setPadding(new Insets(12));
+        fashionBox.setStyle("-fx-background-color:#FAF9FC; -fx-background-radius:10;"
+                + "-fx-border-color:#E5CDC1; -fx-border-radius:10;");
+        fashionBox.getChildren().addAll(fashionIcon, fashionText, fashionGrow, fashionRate);
+
+        commissionCard.getChildren().addAll(
+                commissionTitle,
+                commissionSub,
+                groceryBox,
+                electronicsBox,
+                fashionBox);
+
+        VBox financialCard = new VBox(14);
+        financialCard.setPrefWidth(560);
+        financialCard.setPadding(new Insets(20));
+        financialCard.setStyle("-fx-background-color:white; -fx-background-radius:15;"
+                + "-fx-border-color:#EEE5E0; -fx-border-radius:15;");
+        Text financialTitle = new Text("Financial Thresholds");
+        financialTitle.setFont(Font.font("Arial", FontWeight.BOLD, 22));
+
+        TextField payout = new TextField("$  50.00");
+        TextField fee = new TextField("$  0.30");
+        payout.setPrefHeight(45);
+        fee.setPrefHeight(45);
+        payout.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
+                + "-fx-border-radius:8; -fx-background-radius:8;");
+        fee.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
+                + "-fx-border-radius:8; -fx-background-radius:8;");
+
+        Text payoutLabel = new Text("Minimum Payout Threshold");
+        VBox payoutBox = new VBox(7);
+        payoutBox.getChildren().addAll(payoutLabel, payout);
+
+        Text feeLabel = new Text("Standard Platform Fee (Flat)");
+        VBox feeBox = new VBox(7);
+        feeBox.getChildren().addAll(feeLabel, fee);
+        HBox.setHgrow(payoutBox, Priority.ALWAYS);
+        HBox.setHgrow(feeBox, Priority.ALWAYS);
+        HBox fields = new HBox(18, payoutBox, feeBox);
+        financialCard.getChildren().addAll(financialTitle, fields);
+        centerBox.getChildren().addAll(commissionCard, financialCard);
+
+        VBox statusBox = new VBox(18);
+        statusBox.setPrefWidth(230);
+
+        VBox systemCard = new VBox(14);
+        systemCard.setPrefWidth(230);
+        systemCard.setPadding(new Insets(20));
+        systemCard.setStyle("-fx-background-color:white; -fx-background-radius:15;"
+                + "-fx-border-color:#EEE5E0; -fx-border-radius:15;");
+        Text systemTitle = new Text("●  System Status");
+        systemTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        systemTitle.setFill(Color.web("#9B3100"));
+        Text uptimeText = new Text("Server Uptime");
+        Text uptimeValue = new Text("99.99%");
+        uptimeValue.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        Region uptimeGrow = new Region();
+        HBox.setHgrow(uptimeGrow, Priority.ALWAYS);
+        HBox uptimeBox = new HBox();
+        uptimeBox.getChildren().addAll(uptimeText, uptimeGrow, uptimeValue);
+
+        Text sessionText = new Text("Active Sessions");
+        Text sessionValue = new Text("12");
+        sessionValue.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        Region sessionGrow = new Region();
+        HBox.setHgrow(sessionGrow, Priority.ALWAYS);
+        HBox sessionBox = new HBox();
+        sessionBox.getChildren().addAll(sessionText, sessionGrow, sessionValue);
+
+        Text latencyText = new Text("API Latency");
+        Text latencyValue = new Text("42ms");
+        latencyValue.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        Region latencyGrow = new Region();
+        HBox.setHgrow(latencyGrow, Priority.ALWAYS);
+        HBox latencyBox = new HBox();
+        latencyBox.getChildren().addAll(latencyText, latencyGrow, latencyValue);
+
+        Separator statusSeparator1 = new Separator();
+        Separator statusSeparator2 = new Separator();
+
+        systemCard.getChildren().addAll(
+                systemTitle,
+                uptimeBox,
+                statusSeparator1,
+                sessionBox,
+                statusSeparator2,
+                latencyBox);
+
+        VBox auditCard = new VBox(14);
+        auditCard.setPrefWidth(230);
+        auditCard.setPadding(new Insets(20));
+        auditCard.setStyle("-fx-background-color:white; -fx-background-radius:15;"
+                + "-fx-border-color:#EEE5E0; -fx-border-radius:15;");
+        Text auditTitle = new Text("Security Audit");
+        auditTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        Text score = new Text("98 / 100");
+        score.setFont(Font.font("Arial", FontWeight.BOLD, 35));
+        Button report = new Button("View Full Report");
+        report.setMaxWidth(Double.MAX_VALUE);
+        Text mfaText = new Text("⊙  MFA enforced for Admins");
+        Text encryptionText = new Text("⊙  Data encryption active");
+        Text apiPendingText = new Text("ⓘ  1 API key pending");
+
+        auditCard.getChildren().addAll(
+                auditTitle,
+                score,
+                mfaText,
+                encryptionText,
+                apiPendingText,
+                report);
+        statusBox.getChildren().addAll(systemCard, auditCard);
+
+        settingBoxes.getChildren().addAll(settingMenu, centerBox, statusBox);
+
+        Button discard = new Button("Discard Changes");
+        Button save = new Button("Save Configuration");
+        discard.setPrefSize(180, 45);
+        save.setPrefSize(200, 45);
+        save.setStyle("-fx-background-color:#D94F00; -fx-text-fill:white; -fx-font-weight:bold;");
+        HBox actions = new HBox(15, discard, save);
+        actions.setAlignment(Pos.CENTER);
+
+        content.getChildren().addAll(heading, settingBoxes, actions);
+
+        ScrollPane scroll = new ScrollPane(content);
+        scroll.setFitToWidth(true);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setStyle("-fx-background:#F9F7FB; -fx-border-color:transparent;");
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+
+        right.getChildren().addAll(top, scroll);
+        root.setCenter(right);
+
+        return new Scene(root, 1550, 850);
+    }
+
+}
