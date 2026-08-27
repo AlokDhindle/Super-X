@@ -3,6 +3,9 @@ package com.kryox.view.Customer;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.paint.CycleMethod;
+
+import com.kryox.view.Admin.AdminLoginPage;
+
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.util.Duration;
@@ -272,6 +275,12 @@ public class Homepage extends Application {
                 b3.setTranslateX(-290);
                 b3.setTranslateY(165);
                 b3.setMaxSize(50, 20);
+                b3.setOnAction(event->{
+                        AdminLoginPage adl=new AdminLoginPage();
+                        Homepage.HomepageStage.setScene(adl.getLoginScene());
+
+
+                });
 
                 Image i3 = new Image("assets/images/protection.png");
                 ImageView iv3 = new ImageView(i3);
