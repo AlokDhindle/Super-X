@@ -364,8 +364,9 @@ public class BookingSuccess {
 
         backButton.setOnAction(
                 e -> {
+                 
 
-                  Dashbord ds=new Dashbord();
+                  Dashbord ds=new Dashbord(null);
                   Homepage.HomepageStage.setScene(ds.getDashbordScene());
                 }
         );

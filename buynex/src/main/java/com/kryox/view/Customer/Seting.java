@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.time.LocalDate;
 
+import com.kryox.controller.Customer.Clodnarycontroller;
+import com.kryox.controller.Customer.Userstorecontroller;
+import com.kryox.controller.Customer.controler;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,10 +32,14 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class Seting  {
+public class Seting {
+        public String userId;
+        public Seting(String userId) {
+        this.userId = userId;
+    }
         private Scene setingSceene;
 
-        Scene getSetingscene(Runnable callbacktoDashboard){
+        Scene getSetingscene(Runnable callbacktoDashboard) {
                 // ================= PROFILE IMAGE =================
 
                 Image defaultImage = new Image(
@@ -62,14 +70,25 @@ public class Seting  {
                                                         "*.jpg",
                                                         "*.jpeg"));
 
-                        File file = fileChooser.showOpenDialog(Homepage.HomepageStage);
+                        File file = fileChooser.showOpenDialog(
+                                        Homepage.HomepageStage);
 
                         if (file != null) {
 
+                                // Immediately show selected image
                                 Image newImage = new Image(
                                                 file.toURI().toString());
 
                                 profileImage.setImage(newImage);
+
+                                System.out.println(
+                                                "Selected File: " + file.getAbsolutePath());
+
+                                // Upload image to Cloudinary
+                                String url = Clodnarycontroller.imageUpload(file);
+
+                                System.out.println(
+                                                "Cloudinary URL: " + url);
 
                                 // Cursor
                                 profileImage.setCursor(Cursor.HAND);
@@ -152,11 +171,7 @@ public class Seting  {
                                                 "-fx-padding: 0 0 0 14;" +
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
-                privacyBtn.setOnAction(event->{
-                        Privacy pc=new Privacy();
-                        Homepage.HomepageStage.setScene(pc.getPrivecyscene(callbacktoDashboard));
-                });
-
+                
                 // ================= NOTIFICATION BUTTON =================
 
                 Button notificationBtn = new Button("♧    Notifications");
@@ -296,6 +311,7 @@ public class Seting  {
                                                 "-fx-padding: 0 0 0 14;" +
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
+        
 
                 // ================= TERMS BUTTON =================
 
@@ -311,7 +327,7 @@ public class Seting  {
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
 
-                Button back=new Button("back");
+                Button back = new Button("back");
                 back.setPrefSize(200, 36);
                 back.setStyle(
                                 "-fx-background-color: transparent;" +
@@ -321,11 +337,11 @@ public class Seting  {
                                                 "-fx-padding: 0 0 0 14;" +
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
-                back.setOnAction(even->{
-                        callbacktoDashboard.run();
+                back.setOnAction(even -> {
+                        
+                        Dashbord ds=new Dashbord(userId);
+                       
                 });
-
-
 
                 // ================= MENU BOX =================
 
@@ -347,7 +363,7 @@ public class Seting  {
                                 accessibilityBtn,
                                 securityBtn,
                                 helpBtn,
-                                termsBtn,back);
+                                termsBtn, back);
                 menuBox.setStyle("-fx-background-color: #ebccb7;");
 
                 // ================= UPGRADE TO PRO =================
@@ -440,6 +456,22 @@ public class Seting  {
                         });
                 }
 
+                helpBtn.setOnAction(event -> {
+                        Helppage helppage = new Helppage(userId);
+
+                        Homepage.HomepageStage.setScene(helppage.getHelpScene());
+                });
+                privacyBtn.setOnAction(event -> {
+                        Privacy pc = new Privacy();
+                        Runnable rn = new Runnable() {
+                                public void run() {
+                                        backToseting();
+                                }
+                        };
+                        Homepage.HomepageStage.setScene(pc.getPrivecyscene(rn));
+                });
+
+
                 VBox leftVBox = new VBox(profileBox, menuBox, upgradeBox);
 
                 leftVBox.setStyle("-fx-background-color: #ffffff;");
@@ -476,215 +508,187 @@ public class Seting  {
                 // ================= PROFILE CARD =================
 
                 // ================= PROFILE CARD =================
-// ================= PROFILE CARD =================
+                // ================= PROFILE CARD =================
 
-HBox profileCard = new HBox();
+                HBox profileCard = new HBox();
 
-profileCard.setPrefWidth(600);
-profileCard.setMinWidth(600);
-profileCard.setMaxWidth(600);
+                profileCard.setPrefWidth(600);
+                profileCard.setMinWidth(600);
+                profileCard.setMaxWidth(600);
 
-profileCard.setPrefHeight(130);
-profileCard.setMinHeight(130);
-profileCard.setMaxHeight(130);
+                profileCard.setPrefHeight(130);
+                profileCard.setMinHeight(130);
+                profileCard.setMaxHeight(130);
 
-profileCard.setAlignment(Pos.CENTER_LEFT);
+                profileCard.setAlignment(Pos.CENTER_LEFT);
 
-profileCard.setPadding(
-        new Insets(15, 25, 15, 20)
-);
+                profileCard.setPadding(
+                                new Insets(15, 25, 15, 20));
 
-profileCard.setStyle(
-        "-fx-background-color: #ffffff;" +
-        "-fx-background-radius: 14;" +
-        "-fx-border-radius: 14;" +
-        "-fx-border-color: #eeeeee;" +
-        "-fx-border-width: 1;"
-);
+                profileCard.setStyle(
+                                "-fx-background-color: #ffffff;" +
+                                                "-fx-background-radius: 14;" +
+                                                "-fx-border-radius: 14;" +
+                                                "-fx-border-color: #eeeeee;" +
+                                                "-fx-border-width: 1;");
 
-profileCard.setTranslateX(50);
+                profileCard.setTranslateX(50);
 
+                // ================= CARD SHADOW =================
 
-// ================= CARD SHADOW =================
+                DropShadow cardShadow = new DropShadow();
 
-DropShadow cardShadow = new DropShadow();
+                cardShadow.setRadius(12);
+                cardShadow.setSpread(0.03);
 
-cardShadow.setRadius(12);
-cardShadow.setSpread(0.03);
+                cardShadow.setOffsetX(0);
+                cardShadow.setOffsetY(4);
 
-cardShadow.setOffsetX(0);
-cardShadow.setOffsetY(4);
+                cardShadow.setColor(
+                                Color.rgb(0, 0, 0, 0.10));
 
-cardShadow.setColor(
-        Color.rgb(0, 0, 0, 0.10)
-);
+                profileCard.setEffect(cardShadow);
 
-profileCard.setEffect(cardShadow);
+                // =====================================================
+                // PROFILE IMAGE
+                // =====================================================
 
+                Image profileImg = new Image(
+                                "file:C:/Users/YourName/Pictures/profile.jpg");
 
-// =====================================================
-//                  PROFILE IMAGE
-// =====================================================
+                ImageView profileImagevView = new ImageView(profileImg);
 
-Image profileImg = new Image(
-        "file:C:/Users/YourName/Pictures/profile.jpg"
-);
+                profileImagevView.setFitWidth(88);
+                profileImagevView.setFitHeight(88);
 
-ImageView profileImagevView= new ImageView(profileImg);
+                profileImagevView.setPreserveRatio(true);
 
-profileImagevView.setFitWidth(88);
-profileImagevView.setFitHeight(88);
+                // Circular Image
+                Circle imageClip = new Circle(44, 44, 44);
 
-profileImagevView.setPreserveRatio(true);
+                profileImagevView.setClip(imageClip);
 
+                // =====================================================
+                // EDIT BUTTON
+                // =====================================================
 
-// Circular Image
-Circle imageClip = new Circle(44, 44, 44);
+                Button editButton = new Button("✎");
 
-profileImagevView.setClip(imageClip);
+                editButton.setPrefWidth(28);
+                editButton.setPrefHeight(28);
 
+                editButton.setMinWidth(28);
+                editButton.setMinHeight(28);
 
-// =====================================================
-//                  EDIT BUTTON
-// =====================================================
+                editButton.setMaxWidth(28);
+                editButton.setMaxHeight(28);
 
-Button editButton = new Button("✎");
+                editButton.setAlignment(Pos.CENTER);
 
-editButton.setPrefWidth(28);
-editButton.setPrefHeight(28);
+                editButton.setStyle(
+                                "-fx-background-color: #ff7100;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-background-radius: 50%;" +
+                                                "-fx-font-size: 16px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-padding: 0;" +
+                                                "-fx-cursor: hand;");
 
-editButton.setMinWidth(28);
-editButton.setMinHeight(28);
+                // =====================================================
+                // IMAGE + EDIT BUTTON
+                // =====================================================
 
-editButton.setMaxWidth(28);
-editButton.setMaxHeight(28);
+                StackPane imageBox = new StackPane();
 
-editButton.setAlignment(Pos.CENTER);
+                imageBox.setPrefWidth(90);
+                imageBox.setPrefHeight(90);
 
-editButton.setStyle(
-        "-fx-background-color: #ff7100;" +
-        "-fx-text-fill: white;" +
-        "-fx-background-radius: 50%;" +
-        "-fx-font-size: 16px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-padding: 0;" +
-        "-fx-cursor: hand;"
-);
+                imageBox.setMinWidth(90);
+                imageBox.setMinHeight(90);
 
+                imageBox.setMaxWidth(90);
+                imageBox.setMaxHeight(90);
 
-// =====================================================
-//              IMAGE + EDIT BUTTON
-// =====================================================
+                imageBox.getChildren().addAll(
+                                profileImage,
+                                editButton);
 
-StackPane imageBox = new StackPane();
+                // Position edit button
+                StackPane.setAlignment(
+                                editButton,
+                                Pos.BOTTOM_RIGHT);
 
-imageBox.setPrefWidth(90);
-imageBox.setPrefHeight(90);
+                StackPane.setMargin(
+                                editButton,
+                                new Insets(0, -2, -2, 0));
 
-imageBox.setMinWidth(90);
-imageBox.setMinHeight(90);
+                // =====================================================
+                // NAME
+                // =====================================================
 
-imageBox.setMaxWidth(90);
-imageBox.setMaxHeight(90);
+                Label nameLabel = new Label("Alex Rivera");
 
-imageBox.getChildren().addAll(
-        profileImage,
-        editButton
-);
+                nameLabel.setStyle(
+                                "-fx-text-fill: #111111;" +
+                                                "-fx-font-size: 18px;" +
+                                                "-fx-font-weight: bold;");
 
+                // =====================================================
+                // PREMIUM BADGE
+                // =====================================================
 
+                Label premiumLabel = new Label("♙ Premium");
 
-// Position edit button
-StackPane.setAlignment(
-        editButton,
-        Pos.BOTTOM_RIGHT
-);
+                premiumLabel.setStyle(
+                                "-fx-background-color: #fff0e6;" +
+                                                "-fx-text-fill: #c85c13;" +
+                                                "-fx-background-radius: 12;" +
+                                                "-fx-padding: 4px 8px;" +
+                                                "-fx-font-size: 10px;" +
+                                                "-fx-font-weight: bold;");
 
-StackPane.setMargin(
-        editButton,
-        new Insets(0, -2, -2, 0)
-);
+                // =====================================================
+                // NAME + PREMIUM
+                // =====================================================
 
+                HBox nameRow = new HBox(7);
 
-// =====================================================
-//                    NAME
-// =====================================================
+                nameRow.setAlignment(Pos.CENTER_LEFT);
 
-Label nameLabel = new Label("Alex Rivera");
+                nameRow.getChildren().addAll(
+                                nameLabel,
+                                premiumLabel);
 
-nameLabel.setStyle(
-        "-fx-text-fill: #111111;" +
-        "-fx-font-size: 18px;" +
-        "-fx-font-weight: bold;"
-);
+                // =====================================================
+                // EMAIL
+                // =====================================================
 
+                Label emailLabel = new Label(
+                                "alex.rivera@example.com");
 
-// =====================================================
-//                 PREMIUM BADGE
-// =====================================================
+                emailLabel.setStyle(
+                                "-fx-text-fill: #666666;" +
+                                                "-fx-font-size: 12px;");
 
-Label premiumLabel = new Label("♙ Premium");
+                // =====================================================
+                // DETAILS BOX
+                // =====================================================
 
-premiumLabel.setStyle(
-        "-fx-background-color: #fff0e6;" +
-        "-fx-text-fill: #c85c13;" +
-        "-fx-background-radius: 12;" +
-        "-fx-padding: 4px 8px;" +
-        "-fx-font-size: 10px;" +
-        "-fx-font-weight: bold;"
-);
+                VBox detailsBox = new VBox(6);
 
+                detailsBox.setAlignment(Pos.CENTER_LEFT);
 
-// =====================================================
-//              NAME + PREMIUM
-// =====================================================
+                detailsBox.getChildren().addAll(
+                                nameRow,
+                                emailLabel);
 
-HBox nameRow = new HBox(7);
+                // =====================================================
+                // ADD TO PROFILE CARD
+                // =====================================================
 
-nameRow.setAlignment(Pos.CENTER_LEFT);
-
-nameRow.getChildren().addAll(
-        nameLabel,
-        premiumLabel
-);
-
-
-// =====================================================
-//                    EMAIL
-// =====================================================
-
-Label emailLabel = new Label(
-        "alex.rivera@example.com"
-);
-
-emailLabel.setStyle(
-        "-fx-text-fill: #666666;" +
-        "-fx-font-size: 12px;"
-);
-
-
-// =====================================================
-//                  DETAILS BOX
-// =====================================================
-
-VBox detailsBox = new VBox(6);
-
-detailsBox.setAlignment(Pos.CENTER_LEFT);
-
-detailsBox.getChildren().addAll(
-        nameRow,
-        emailLabel
-);
-
-
-// =====================================================
-//              ADD TO PROFILE CARD
-// =====================================================
-
-profileCard.getChildren().addAll(
-        imageBox,
-        detailsBox
-);
+                profileCard.getChildren().addAll(
+                                imageBox,
+                                detailsBox);
 
                 // ================= PERSONAL INFORMATION =================
 
@@ -774,7 +778,6 @@ profileCard.getChildren().addAll(
                                 "-fx-background-color: white;" +
                                                 "-fx-background-radius: 14;" +
                                                 "-fx-border-radius: 14;");
-                
 
                 // ================= ICON =================
 
@@ -915,14 +918,6 @@ profileCard.getChildren().addAll(
                 verificationBtn.setPrefWidth(180);
                 verificationBtn.setPrefHeight(30);
 
-                verificationBtn.setStyle(
-                                "-fx-background-color: #ebccb7;" +
-                                                "-fx-text-fill: #c85c13;" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-cursor: hand;" +
-                                                "-fx-padding: 5px;");
-
                 // ================= ADD EVERYTHING =================
 
                 verifiedBox.getChildren().addAll(
@@ -932,22 +927,20 @@ profileCard.getChildren().addAll(
                                 verificationBtn);
                 verifiedBox.setStyle("-fx-background-color: #ebccb7;");
 
-                //contentofpolicy
-
-                
+                // contentofpolicy
 
                 HBox mainBox = new HBox(leftVBox, contentBox, verifiedBox);
 
                 mainBox.setPrefSize(1500, 800);
 
                 Scene sc = new Scene(mainBox, 1500, 800);
-                setingSceene=sc;
-
-
+                setingSceene = sc;
 
                 return setingSceene;
         }
 
-        
+        public void backToseting() {
+                Homepage.HomepageStage.setScene(setingSceene);
+        }
 
 }
