@@ -30,10 +30,19 @@ import javafx.scene.paint.Stop;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.kryox.controller.Customer.CARTcontroller;
 import javafx.scene.text.Text;
 
 
+
 public class Grocries  {
+        public  String userId;
+         
+    public Grocries(String userId) {
+        this.userId = userId;
+    }
+
 
         private Scene GrocriesScene;
 
@@ -253,7 +262,7 @@ public class Grocries  {
                 "-fx-cursor: hand;"
         );
         lefButton2.setOnAction(event->{
-                neaby_shope bs=new neaby_shope();
+                neaby_shope bs=new neaby_shope(userId);
                 Homepage.HomepageStage.setScene(bs.getNearby_shopes(callbacktoRunnable));
         });
 
@@ -577,9 +586,10 @@ public class Grocries  {
                 "-fx-cursor: hand;"
         );
         lefButton6.setOnAction(event->{
-                 Seting se=new Seting();
+                 Seting se=new Seting(userId);
                 Runnable callbacktoDashborad=new Runnable() {
                         public void run(){
+                                
                                 
                         }
                 };
@@ -781,7 +791,7 @@ public class Grocries  {
 
         b2.setOnAction(e -> {
                 
-                ShoppingCartUI sp=new ShoppingCartUI();
+                ShoppingCartUI sp=new ShoppingCartUI(userId);
                 Homepage.HomepageStage.setScene(sp.getaddcartScene());
         });
 
@@ -1054,7 +1064,8 @@ public class Grocries  {
         Button grocerie = new Button("🛒\nGroceries");
         Button electronics = new Button("▣\nElectronics");
         electronics.setOnAction(event->{
-                Electronics gs=new Electronics();
+                Electronics gs=new Electronics(
+                        userId);
                 Homepage.HomepageStage.setScene(gs.getElectrScene());
         });
         Button fashion = new Button("♧\nFashion");
@@ -1240,14 +1251,20 @@ public class Grocries  {
 
         HBox priceRow1 = new HBox(8);
         priceRow1.setAlignment(Pos.CENTER_LEFT);
-
         Label price1 = new Label("$6.99");
-        price1.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 16px;" +
-                "-fx-font-weight: 800;" +
-                "-fx-text-fill: #222222;"
-        );
+
+price1.setStyle(
+    "-fx-font-family: 'Montserrat';" +
+    "-fx-font-size: 16px;" +
+    "-fx-font-weight: 800;" +
+    "-fx-text-fill: #222222;"
+);
+
+       double pricevalu1 = Double.parseDouble(
+    price1.getText().replace("$", "")
+);
+       
+        Label l1=new Label("p001");
 
         Label discount1 = new Label("20% OFF");
         discount1.setStyle(
@@ -1301,9 +1318,17 @@ public class Grocries  {
                     "-fx-cursor: hand;"
             );
         });
+        
 
         addToCart1.setOnAction(e -> {
-                addProductToCart(addToCart1, "Organic Hass Avocados", "$6.99");
+                 CARTcontroller cl=new CARTcontroller();
+                 cl. addTocart(
+            userId,
+            "Organic Hass Avocados",
+            pricevalu1,
+            "Green Grocer"
+    );
+
         });
 
         productRow1.getChildren().addAll(imagePlaceholder1, productDetails1, addToCart1);
@@ -1335,6 +1360,8 @@ public class Grocries  {
                     "-fx-border-width: 1;"
             );
             card1.setEffect(cardShadow3);
+           
+            
         });
 
         // =====================================================
@@ -1363,11 +1390,12 @@ public class Grocries  {
                 "/assets/images/products/milk.png",
                 "🥛"
         );
+        Text l2=new Text("p002");
 
         VBox productDetails2 = new VBox(3);
         productDetails2.setAlignment(Pos.CENTER);
 
-        Label name2 = new Label("Fresh Farm Whole Milk");
+        Text name2 = new Text("Fresh Farm Whole Milk");
         name2.setStyle(
                 "-fx-font-family: 'Montserrat';" +
                 "-fx-font-size: 14px;" +
@@ -1392,6 +1420,10 @@ public class Grocries  {
                 "-fx-font-weight: 800;" +
                 "-fx-text-fill: #222222;"
         );
+        double pricevalu2 = Double.parseDouble(
+    price2.getText().replace("$", "")
+);
+       
 
         priceRow2.getChildren().addAll(price2);
         productDetails2.getChildren().addAll(name2, desc2, priceRow2);
@@ -1430,7 +1462,10 @@ public class Grocries  {
         });
 
         addToCart2.setOnAction(e -> {
-                addProductToCart(addToCart2, "Fresh Farm Whole Milk", "$3.29");
+                CARTcontroller cl2=new CARTcontroller();
+                String n2=name2.getText();
+                String la2=l2.getText();
+                cl2.addTocart(userId,n2, pricevalu2, la2);
         });
 
         productRow2.getChildren().addAll(imagePlaceholder2, productDetails2, addToCart2);
@@ -1519,6 +1554,10 @@ public class Grocries  {
                 "-fx-font-weight: 800;" +
                 "-fx-text-fill: #222222;"
         );
+        double pricevalu3 = Double.parseDouble(
+    price3.getText().replace("$", "")
+);
+       
 
         priceRow3.getChildren().addAll(price3);
         productDetails3.getChildren().addAll(name3, desc3, priceRow3);
@@ -1555,9 +1594,13 @@ public class Grocries  {
                     "-fx-cursor: hand;"
             );
         });
+        Label l3=new Label("p003");
 
         addToCart3.setOnAction(e -> {
-                addProductToCart(addToCart3, "Artisan Sourdough Loaf", "$6.50");
+                CARTcontroller cl3=new CARTcontroller();
+                String n3=name3.getText();
+                String la3=l3.getText();
+                cl3.addTocart(userId,n3,pricevalu3,la3);
         });
 
         productRow3.getChildren().addAll(imagePlaceholder3, productDetails3, addToCart3);
@@ -1905,12 +1948,15 @@ public class Grocries  {
         // SCENE
         // =====================================================
 
-        Scene sc = new Scene(mainBox, 1500, 800);
+        Scene sc = new Scene(mainBox, 1530, 850);
 
         GrocriesScene=sc;
 
 
                 return GrocriesScene;
+        }
+        public void backtogrosary(){
+                Homepage.HomepageStage.setScene(GrocriesScene);
         }
 
    

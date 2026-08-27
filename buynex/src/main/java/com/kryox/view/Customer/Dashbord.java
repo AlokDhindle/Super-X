@@ -1,6 +1,5 @@
 package com.kryox.view.Customer;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,17 +24,21 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class Dashbord  {
-       
-        private Scene Dashbordscene;
+    private String userId;
 
-        Scene getDashbordScene(){
-                 // =====================================================
+    public Dashbord(String userId) {
+        this.userId = userId;
+    }
+
+    private Scene Dashbordscene;
+
+    Scene getDashbordScene(){
+        // =====================================================
         // SHADOWS
         // =====================================================
-        
+
         DropShadow shadow = new DropShadow();
         shadow.setRadius(18);
         shadow.setSpread(0.05);
@@ -55,10 +58,10 @@ public class Dashbord  {
 
         Label name = new Label("BuyNeX");
         name.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 28px;" +
-                "-fx-font-weight: 900;" +
-                "-fx-text-fill: #E87500;"
+        "-fx-font-family: 'Montserrat';" +
+        "-fx-font-size: 28px;" +
+        "-fx-font-weight: 900;" +
+        "-fx-text-fill: #E87500;"
         );
 
         // =====================================================
@@ -72,29 +75,29 @@ public class Dashbord  {
         premiumBox.setAlignment(Pos.CENTER_LEFT);
         premiumBox.setPadding(new Insets(8, 13, 8, 13));
         premiumBox.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #E9E2EA;" +
-                "-fx-border-width: 1;" +
-                "-fx-border-radius: 15;"
+        "-fx-background-color: #FFFFFF;" +
+        "-fx-background-radius: 15;" +
+        "-fx-border-color: #E9E2EA;" +
+        "-fx-border-width: 1;" +
+        "-fx-border-radius: 15;"
         );
         premiumBox.setEffect(cardShadow);
 
         VBox textBox = new VBox(3);
         Label title = new Label("Premium Shopper");
         title.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #222222;"
+        "-fx-font-family: 'Montserrat';" +
+        "-fx-font-size: 12px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-text-fill: #222222;"
         );
 
         Label subtitle = new Label("● AI Assistant Active");
         subtitle.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;"
+        "-fx-font-family: 'Montserrat';" +
+        "-fx-font-size: 9px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-text-fill: #FF6900;"
         );
 
         textBox.getChildren().addAll(title, subtitle);
@@ -114,15 +117,15 @@ public class Dashbord  {
         lefButton1.setPrefWidth(125);
         lefButton1.setPrefHeight(38);
         lefButton1.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #333333;" +
+        "-fx-font-size: 12px;" +
+        "-fx-font-family: 'Montserrat';" +
+        "-fx-font-weight: 500;" +
+        "-fx-border-width: 0;" +
+        "-fx-padding: 0;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;"
         );
 
         HBox hbInDashboard = new HBox(17, div, lefButton1);
@@ -140,30 +143,30 @@ public class Dashbord  {
         hbInDashboard.setOnMouseEntered(e -> {
             hbInDashboard.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
             lefButton1.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: bold;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
         hbInDashboard.setOnMouseExited(e -> {
             hbInDashboard.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
             lefButton1.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: #333333;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: 500;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
@@ -181,26 +184,26 @@ public class Dashbord  {
         lefButton2.setPrefWidth(125);
         lefButton2.setPrefHeight(38);
         lefButton2.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #333333;" +
+        "-fx-font-size: 12px;" +
+        "-fx-font-family: 'Montserrat';" +
+        "-fx-font-weight: 500;" +
+        "-fx-border-width: 0;" +
+        "-fx-padding: 0;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;"
         );
 
         lefButton2.setOnAction(event->{
-                neaby_shope ns=new neaby_shope();
-                Runnable callbackDashbord=new Runnable() {
-                       public void run(){
-                        backTodashbord();
+            neaby_shope ns=new neaby_shope(userId);
+            Runnable callbackDashbord=new Runnable() {
+                public void run(){
+                    backTodashbord();
 
-                       } 
-                };
-                Homepage.HomepageStage.setScene(ns.getNearby_shopes(callbackDashbord));
+                }
+            };
+            Homepage.HomepageStage.setScene(ns.getNearby_shopes(callbackDashbord));
         });
 
         HBox hbInDashboard2 = new HBox(17, div2, lefButton2);
@@ -217,30 +220,30 @@ public class Dashbord  {
         hbInDashboard2.setOnMouseEntered(e -> {
             hbInDashboard2.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
             lefButton2.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: bold;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
         hbInDashboard2.setOnMouseExited(e -> {
             hbInDashboard2.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
             lefButton2.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: #333333;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: 500;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
@@ -258,24 +261,24 @@ public class Dashbord  {
         lefButton3.setPrefWidth(125);
         lefButton3.setPrefHeight(38);
         lefButton3.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #333333;" +
+        "-fx-font-size: 12px;" +
+        "-fx-font-family: 'Montserrat';" +
+        "-fx-font-weight: 500;" +
+        "-fx-border-width: 0;" +
+        "-fx-padding: 0;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;"
         );
         lefButton3.setOnAction(event->{
-                DealsDB d=new DealsDB();
-                Runnable rn=new Runnable() {
-                        public void run(){
-                                backTodashbord();
-                        }
-                };
-                Homepage.HomepageStage.setScene(d.getDealScene(rn));
+            DealsDB d=new DealsDB(userId);
+            Runnable rn=new Runnable() {
+                public void run(){
+                    backTodashbord();
+                }
+            };
+            Homepage.HomepageStage.setScene(d.getDealScene(rn));
 
         });
 
@@ -293,30 +296,30 @@ public class Dashbord  {
         hbInDashboard3.setOnMouseEntered(e -> {
             hbInDashboard3.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
             lefButton3.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: bold;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
         hbInDashboard3.setOnMouseExited(e -> {
             hbInDashboard3.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
             lefButton3.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: #333333;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: 500;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
@@ -334,19 +337,19 @@ public class Dashbord  {
         lefButton4.setPrefWidth(125);
         lefButton4.setPrefHeight(38);
         lefButton4.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #333333;" +
+        "-fx-font-size: 12px;" +
+        "-fx-font-family: 'Montserrat';" +
+        "-fx-font-weight: 500;" +
+        "-fx-border-width: 0;" +
+        "-fx-padding: 0;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;"
         );
         lefButton4.setOnAction(event->{
-                My_orderAllorder moa=new My_orderAllorder();
-                Homepage.HomepageStage.setScene(moa.getAllorderScene());
+            My_orderAllorder moa=new My_orderAllorder(userId);
+            Homepage.HomepageStage.setScene(moa.getAllorderScene());
         });
 
         HBox hbInDashboard4 = new HBox(17, div4, lefButton4);
@@ -363,30 +366,30 @@ public class Dashbord  {
         hbInDashboard4.setOnMouseEntered(e -> {
             hbInDashboard4.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
             lefButton4.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: bold;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
         hbInDashboard4.setOnMouseExited(e -> {
             hbInDashboard4.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
             lefButton4.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: #333333;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: 500;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
@@ -404,25 +407,25 @@ public class Dashbord  {
         lefButton5.setPrefWidth(125);
         lefButton5.setPrefHeight(38);
         lefButton5.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #333333;" +
+        "-fx-font-size: 12px;" +
+        "-fx-font-family: 'Montserrat';" +
+        "-fx-font-weight: 500;" +
+        "-fx-border-width: 0;" +
+        "-fx-padding: 0;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;"
         );
         lefButton5.setOnAction(event->{
-                Analytics an=new Analytics();
-                Runnable rnA=new Runnable() {
-                        public void run(){
-                                backTodashbord();
-                        }
-                        
-                };
-                Homepage.HomepageStage.setScene(an.getAnalyticscene(rnA));
+            Analytics an=new Analytics(userId);
+            Runnable rnA=new Runnable() {
+                public void run(){
+                    backTodashbord();
+                }
+
+            };
+            Homepage.HomepageStage.setScene(an.getAnalyticscene(rnA));
         });
 
         HBox hbInDashboard5 = new HBox(17, div5, lefButton5);
@@ -439,30 +442,30 @@ public class Dashbord  {
         hbInDashboard5.setOnMouseEntered(e -> {
             hbInDashboard5.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
             lefButton5.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: bold;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
         hbInDashboard5.setOnMouseExited(e -> {
             hbInDashboard5.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
             lefButton5.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: #333333;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-family: 'Montserrat';" +
+            "-fx-font-weight: 500;" +
+            "-fx-border-width: 0;" +
+            "-fx-padding: 0;" +
+            "-fx-alignment: CENTER_LEFT;" +
+            "-fx-cursor: hand;"
             );
         });
 
@@ -479,45 +482,45 @@ public class Dashbord  {
         upgradeCard.setAlignment(Pos.CENTER_LEFT);
 
         LinearGradient upgradeGradient = new LinearGradient(
-                0, 0, 1, 1, true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0, Color.web("#25262A")),
-                new Stop(1, Color.web("#45474D"))
+        0, 0, 1, 1, true,
+        CycleMethod.NO_CYCLE,
+        new Stop(0, Color.web("#25262A")),
+        new Stop(1, Color.web("#45474D"))
         );
 
         upgradeCard.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                upgradeGradient,
-                                new CornerRadii(17),
-                                Insets.EMPTY
-                        )
-                )
+        new Background(
+        new BackgroundFill(
+        upgradeGradient,
+        new CornerRadii(17),
+        Insets.EMPTY
+        )
+        )
         );
 
         Label upgradeTitle = new Label("Unlock Gold");
         upgradeTitle.setStyle(
-                "-fx-font-size: 12px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;"
+        "-fx-font-size: 12px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-text-fill: white;"
         );
 
         Label upgradeText = new Label("Smarter deals & exclusive rewards");
         upgradeText.setStyle(
-                "-fx-font-size: 8px;" +
-                "-fx-text-fill: #BEBFC3;"
+        "-fx-font-size: 8px;" +
+        "-fx-text-fill: #BEBFC3;"
         );
 
         Button upgradeGold = new Button("Upgrade to Gold");
         upgradeGold.setPrefWidth(175);
         upgradeGold.setPrefHeight(30);
         upgradeGold.setStyle(
-                "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 10;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
+        "-fx-text-fill: white;" +
+        "-fx-font-size: 10px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-background-radius: 10;" +
+        "-fx-cursor: hand;"
         );
 
         upgradeCard.getChildren().addAll(upgradeTitle, upgradeText, upgradeGold);
@@ -536,23 +539,23 @@ public class Dashbord  {
         lefButton6.setPrefWidth(135);
         lefButton6.setPrefHeight(34);
         lefButton6.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #666666;" +
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #666666;" +
+        "-fx-font-size: 11px;" +
+        "-fx-font-weight: 500;" +
+        "-fx-border-width: 0;" +
+        "-fx-padding: 0;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;"
         );
         lefButton6.setOnAction(event->{
-                Seting se=new Seting();
-                Runnable callbacktoDashborad=new Runnable() {
-                        public void run(){
-                                backTodashbord();
-                        }
-                };
-                Homepage.HomepageStage.setScene(se.getSetingscene(callbacktoDashborad));
+            Seting se=new Seting(userId);
+            Runnable callbacktoDashborad=new Runnable() {
+                public void run(){
+                    backTodashbord();
+                }
+            };
+            Homepage.HomepageStage.setScene(se.getSetingscene(callbacktoDashborad));
         });
 
         HBox hbInDashboard6 = new HBox(10, div6, lefButton6);
@@ -577,14 +580,14 @@ public class Dashbord  {
         lefButton7.setPrefWidth(135);
         lefButton7.setPrefHeight(34);
         lefButton7.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #666666;" +
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #666666;" +
+        "-fx-font-size: 11px;" +
+        "-fx-font-weight: 500;" +
+        "-fx-border-width: 0;" +
+        "-fx-padding: 0;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;"
         );
 
         HBox hbInDashboard7 = new HBox(10, div7, lefButton7);
@@ -613,17 +616,17 @@ public class Dashbord  {
         VBox.setVgrow(sidebarSpacer, Priority.ALWAYS);
 
         leftBox.getChildren().addAll(
-                name,
-                premiumBox,
-                hbInDashboard,
-                hbInDashboard2,
-                hbInDashboard3,
-                hbInDashboard4,
-                hbInDashboard5,
-                sidebarSpacer,
-                upgradeCard,
-                hbInDashboard6,
-                hbInDashboard7
+        name,
+        premiumBox,
+        hbInDashboard,
+        hbInDashboard2,
+        hbInDashboard3,
+        hbInDashboard4,
+        hbInDashboard5,
+        sidebarSpacer,
+        upgradeCard,
+        hbInDashboard6,
+        hbInDashboard7
         );
 
         // =====================================================
@@ -635,49 +638,49 @@ public class Dashbord  {
         Button t3 = new Button("Support");
 
         String topButtonStyle = "-fx-background-color: transparent;" +
-                "-fx-text-fill: #666666;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 6 8 6 8;" +
-                "-fx-border-width: 0;" +
-                "-fx-cursor: hand;";
+        "-fx-text-fill: #666666;" +
+        "-fx-font-size: 10px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-padding: 6 8 6 8;" +
+        "-fx-border-width: 0;" +
+        "-fx-cursor: hand;";
 
         t1.setStyle(topButtonStyle);
         t2.setStyle(topButtonStyle);
         t3.setStyle(topButtonStyle);
 
         t1.setOnMouseEntered(e -> t1.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 6 8 6 8;" +
-                "-fx-border-width: 0;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #FF6900;" +
+        "-fx-font-size: 10px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-padding: 6 8 6 8;" +
+        "-fx-border-width: 0;" +
+        "-fx-cursor: hand;"
         ));
 
         t1.setOnMouseExited(e -> t1.setStyle(topButtonStyle));
 
         t2.setOnMouseEntered(e -> t2.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 6 8 6 8;" +
-                "-fx-border-width: 0;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #FF6900;" +
+        "-fx-font-size: 10px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-padding: 6 8 6 8;" +
+        "-fx-border-width: 0;" +
+        "-fx-cursor: hand;"
         ));
 
         t2.setOnMouseExited(e -> t2.setStyle(topButtonStyle));
 
         t3.setOnMouseEntered(e -> t3.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 6 8 6 8;" +
-                "-fx-border-width: 0;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #FF6900;" +
+        "-fx-font-size: 10px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-padding: 6 8 6 8;" +
+        "-fx-border-width: 0;" +
+        "-fx-cursor: hand;"
         ));
 
         t3.setOnMouseExited(e -> t3.setStyle(topButtonStyle));
@@ -694,15 +697,15 @@ public class Dashbord  {
         searchBox.setPrefWidth(310);
         searchBox.setPrefHeight(39);
         searchBox.setStyle(
-                "-fx-background-color: #F8F7FA;" +
-                "-fx-background-radius: 20;" +
-                "-fx-border-color: #E5E1E8;" +
-                "-fx-border-radius: 20;" +
-                "-fx-border-width: 1;" +
-                "-fx-padding: 0 16 0 16;" +
-                "-fx-font-size: 10px;" +
-                "-fx-text-fill: #444444;" +
-                "-fx-prompt-text-fill: #999999;"
+        "-fx-background-color: #F8F7FA;" +
+        "-fx-background-radius: 20;" +
+        "-fx-border-color: #E5E1E8;" +
+        "-fx-border-radius: 20;" +
+        "-fx-border-width: 1;" +
+        "-fx-padding: 0 16 0 16;" +
+        "-fx-font-size: 10px;" +
+        "-fx-text-fill: #444444;" +
+        "-fx-prompt-text-fill: #999999;"
         );
         searchBox.setTranslateX(-200);
 
@@ -713,9 +716,9 @@ public class Dashbord  {
         Label locationIcon = new Label("📍");
         Label locationText = new Label("Downtown Manhattan⌄");
         locationText.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #555555;"
+        "-fx-font-size: 10px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-text-fill: #555555;"
         );
 
         HBox locationBox = new HBox(4, locationIcon, locationText);
@@ -731,14 +734,14 @@ public class Dashbord  {
         Button b3 = new Button("●");
 
         String actionStyle = "-fx-background-color: white;" +
-                "-fx-text-fill: #555555;" +
-                "-fx-font-size: 13px;" +
-                "-fx-background-radius: 11;" +
-                "-fx-border-color: #E7E2E9;" +
-                "-fx-border-radius: 11;" +
-                "-fx-border-width: 1;" +
-                "-fx-padding: 0;" +
-                "-fx-cursor: hand;";
+        "-fx-text-fill: #555555;" +
+        "-fx-font-size: 13px;" +
+        "-fx-background-radius: 11;" +
+        "-fx-border-color: #E7E2E9;" +
+        "-fx-border-radius: 11;" +
+        "-fx-border-width: 1;" +
+        "-fx-padding: 0;" +
+        "-fx-cursor: hand;";
 
         b1.setPrefSize(37, 37);
         b2.setPrefSize(37, 37);
@@ -749,14 +752,14 @@ public class Dashbord  {
         b3.setStyle(actionStyle);
 
         String actionHoverStyle = "-fx-background-color: #FFF2E9;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 13px;" +
-                "-fx-background-radius: 11;" +
-                "-fx-border-color: #FFBD95;" +
-                "-fx-border-radius: 11;" +
-                "-fx-border-width: 1;" +
-                "-fx-padding: 0;" +
-                "-fx-cursor: hand;";
+        "-fx-text-fill: #FF6900;" +
+        "-fx-font-size: 13px;" +
+        "-fx-background-radius: 11;" +
+        "-fx-border-color: #FFBD95;" +
+        "-fx-border-radius: 11;" +
+        "-fx-border-width: 1;" +
+        "-fx-padding: 0;" +
+        "-fx-cursor: hand;";
 
         b1.setOnMouseEntered(e -> b1.setStyle(actionHoverStyle));
         b1.setOnMouseExited(e -> b1.setStyle(actionStyle));
@@ -786,41 +789,43 @@ public class Dashbord  {
 
         HBox navBox = new HBox(12, topLinks, navSpacer1, searchBox, navSpacer2, locationBox, actionBox);
         navBox.setPrefHeight(68);
+        navBox.setTranslateX(-20);
         navBox.setPadding(new Insets(12, 24, 12, 24));
         navBox.setAlignment(Pos.CENTER_LEFT);
         navBox.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-color: #ebccb7;" +
-                "-fx-border-width: 0 0 1 0;"
+        "-fx-background-color: white;" +
+        "-fx-background-color: #ebccb7;" +
+        "-fx-border-width: 0 0 1 0;"
         );
-        navBox.setTranslateX(-28);
+        // navBox.setTranslateX(-28);
 
         // =====================================================
         // HERO BOX
         // =====================================================
 
         HBox hbright = new HBox(35);
+
         hbright.setPrefWidth(1200);
         hbright.setPrefHeight(315);
         hbright.setPadding(new Insets(34, 40, 34, 40));
         hbright.setAlignment(Pos.CENTER_LEFT);
 
         LinearGradient darkGradient = new LinearGradient(
-                0, 0, 1, 0, true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0.0, Color.web("#242529")),
-                new Stop(0.55, Color.web("#303136")),
-                new Stop(1.0, Color.web("#563A2B"))
+        0, 0, 1, 0, true,
+        CycleMethod.NO_CYCLE,
+        new Stop(0.0, Color.web("#242529")),
+        new Stop(0.55, Color.web("#303136")),
+        new Stop(1.0, Color.web("#563A2B"))
         );
 
         hbright.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                darkGradient,
-                                new CornerRadii(22),
-                                Insets.EMPTY
-                        )
-                )
+        new Background(
+        new BackgroundFill(
+        darkGradient,
+        new CornerRadii(22),
+        Insets.EMPTY
+        )
+        )
         );
         hbright.setEffect(cardShadow);
 
@@ -834,54 +839,53 @@ public class Dashbord  {
 
         Label badge = new Label("✦  NEXT-GEN INTELLIGENCE");
         badge.setStyle(
-                "-fx-background-color: #503629;" +
-                "-fx-text-fill: #FF9D67;" +
-                "-fx-font-size: 8px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 20;" +
-                "-fx-padding: 7 13 7 13;"
+        "-fx-background-color: #503629;" +
+        "-fx-text-fill: #FF9D67;" +
+        "-fx-font-size: 8px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-background-radius: 20;" +
+        "-fx-padding: 7 13 7 13;"
         );
 
         Text heading = new Text("What are you\nlooking for today?");
         heading.setStyle(
-                "-fx-fill: white;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 30px;" +
-                "-fx-font-weight: 900;"
+        "-fx-fill: white;" +
+        "-fx-font-family: 'Montserrat';" +
+        "-fx-font-size: 30px;" +
+        "-fx-font-weight: 900;"
         );
 
         Text description = new Text(
-                "Your hyper-local AI is ready to source, compare,\n" +
-                "and deliver from your favorite downtown spots."
+        "Your hyper-local AI is ready to source, compare,\n" +
+        "and deliver from your favorite downtown spots."
         );
         description.setStyle(
-                "-fx-fill: #C9C9C9;" +
-                "-fx-font-size: 11px;"
+        "-fx-fill: #C9C9C9;" +
+        "-fx-font-size: 11px;"
         );
 
         Button groceries = new Button("♧  Combine Groceries");
         groceries.setPrefHeight(42);
         groceries.setStyle(
-                "-fx-background-color: #45464B;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 11;" +
-                "-fx-padding: 10 16 10 16;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: #45464B;" +
+        "-fx-text-fill: white;" +
+        "-fx-font-size: 9px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-background-radius: 11;" +
+        "-fx-padding: 10 16 10 16;" +
+        "-fx-cursor: hand;"
         );
-        
 
         Button bestPrice = new Button("⌁  Find Best Price");
         bestPrice.setPrefHeight(42);
         bestPrice.setStyle(
-                "-fx-background-color: #FF6900;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 11;" +
-                "-fx-padding: 10 17 10 17;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: #FF6900;" +
+        "-fx-text-fill: white;" +
+        "-fx-font-size: 9px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-background-radius: 11;" +
+        "-fx-padding: 10 17 10 17;" +
+        "-fx-cursor: hand;"
         );
 
         HBox buttons = new HBox(10, groceries, bestPrice);
@@ -899,39 +903,38 @@ public class Dashbord  {
         notification.setPadding(new Insets(20));
         notification.setAlignment(Pos.TOP_LEFT);
         notification.setStyle(
-                "-fx-background-color: #ECEAE9;" +
-                "-fx-background-radius: 18;" +
-                "-fx-border-color: rgba(255,255,255,0.35);" +
-                "-fx-border-radius: 18;" +
-                "-fx-border-width: 1;"
+        "-fx-background-color: #ECEAE9;" +
+        "-fx-background-radius: 18;" +
+        "-fx-border-color: rgba(255,255,255,0.35);" +
+        "-fx-border-radius: 18;" +
+        "-fx-border-width: 1;"
         );
         notification.setEffect(cardShadow);
-        
 
         Label aiCircle = new Label("✦");
         aiCircle.setPrefSize(38, 38);
         aiCircle.setAlignment(Pos.CENTER);
         aiCircle.setStyle(
-                "-fx-background-color: #FF6900;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 14px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 50%;"
+        "-fx-background-color: #FF6900;" +
+        "-fx-text-fill: white;" +
+        "-fx-font-size: 14px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-background-radius: 50%;"
         );
 
         VBox aiHeading = new VBox(2);
         Label aiTitle = new Label("AI Recommendation");
         aiTitle.setStyle(
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #333333;"
+        "-fx-font-size: 11px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-text-fill: #333333;"
         );
 
         Label aiStatus = new Label("PERSONALIZED FOR YOU");
         aiStatus.setStyle(
-                "-fx-font-size: 7px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;"
+        "-fx-font-size: 7px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-text-fill: #FF6900;"
         );
 
         aiHeading.getChildren().addAll(aiTitle, aiStatus);
@@ -940,14 +943,14 @@ public class Dashbord  {
         aiHeader.setAlignment(Pos.CENTER_LEFT);
 
         Text notificationText = new Text(
-                "You usually order coffee beans on Tuesdays.\n\n" +
-                "Artisan Pantry has your favorite\n" +
-                "brand in stock today."
+        "You usually order coffee beans on Tuesdays.\n\n" +
+        "Artisan Pantry has your favorite\n" +
+        "brand in stock today."
         );
         notificationText.setStyle(
-                "-fx-fill: #444444;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;"
+        "-fx-fill: #444444;" +
+        "-fx-font-size: 10px;" +
+        "-fx-font-weight: bold;"
         );
 
         Region notificationSpacer = new Region();
@@ -955,31 +958,31 @@ public class Dashbord  {
 
         Button dismiss = new Button("Dismiss");
         dismiss.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #777777;" +
-                "-fx-font-size: 9px;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: #777777;" +
+        "-fx-font-size: 9px;" +
+        "-fx-cursor: hand;"
         );
 
         Button checkStock = new Button("Check Stock");
         checkStock.setStyle(
-                "-fx-background-color: #FF6900;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 10;" +
-                "-fx-padding: 8 13 8 13;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: #FF6900;" +
+        "-fx-text-fill: white;" +
+        "-fx-font-size: 9px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-background-radius: 10;" +
+        "-fx-padding: 8 13 8 13;" +
+        "-fx-cursor: hand;"
         );
 
         HBox notificationButtons = new HBox(8, dismiss, checkStock);
         notificationButtons.setAlignment(Pos.CENTER_RIGHT);
 
         notification.getChildren().addAll(
-                aiHeader,
-                notificationText,
-                notificationSpacer,
-                notificationButtons
+        aiHeader,
+        notificationText,
+        notificationSpacer,
+        notificationButtons
         );
 
         hbright.getChildren().addAll(leftContent, notification);
@@ -993,17 +996,17 @@ public class Dashbord  {
 
         Label categoryTitle = new Label("Browse by Category");
         categoryTitle.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: 800;" +
-                "-fx-text-fill: #222222;"
+        "-fx-font-size: 17px;" +
+        "-fx-font-weight: 800;" +
+        "-fx-text-fill: #222222;"
         );
 
         Label viewAll = new Label("View all  →");
         viewAll.setStyle(
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-cursor: hand;"
+        "-fx-font-size: 9px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-text-fill: #FF6900;" +
+        "-fx-cursor: hand;"
         );
 
         Region categorySpacer = new Region();
@@ -1017,19 +1020,19 @@ public class Dashbord  {
 
         Button grocerie = new Button("🛒\nGroceries");
         grocerie.setOnAction(event->{
-                Grocries gr=new Grocries();
-                Runnable callbacToDashbord=new Runnable() {
-                        public void run(){
-                                backTodashbord();
-                        }
-                };
-               Homepage.HomepageStage.setScene(gr.getGrocriescene(callbacToDashbord));
+            Grocries gr=new Grocries(userId);
+            Runnable callbacToDashbord=new Runnable() {
+                public void run(){
+                    backTodashbord();
+                }
+            };
+            Homepage.HomepageStage.setScene(gr.getGrocriescene(callbacToDashbord));
         });
-        
+
         Button electronics = new Button("▣\nElectronics");
         electronics.setOnAction(event->{
-                Electronics es=new Electronics();
-                Homepage.HomepageStage.setScene(es.getElectrScene());
+            Electronics es=new Electronics(userId);
+            Homepage.HomepageStage.setScene(es.getElectrScene());
         });
         Button fashion = new Button("♧\nFashion");
         Button health = new Button("✚\nHealth");
@@ -1043,30 +1046,30 @@ public class Dashbord  {
         Button stationery = new Button("✎\nStationery");
 
         String categoryStyle = "-fx-background-color: white;" +
-                "-fx-text-fill: #D94F0B;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #E8E3EA;" +
-                "-fx-border-width: 1;" +
-                "-fx-border-radius: 15;" +
-                "-fx-padding: 10;" +
-                "-fx-cursor: hand;";
+        "-fx-text-fill: #D94F0B;" +
+        "-fx-font-size: 9px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-background-radius: 15;" +
+        "-fx-border-color: #E8E3EA;" +
+        "-fx-border-width: 1;" +
+        "-fx-border-radius: 15;" +
+        "-fx-padding: 10;" +
+        "-fx-cursor: hand;";
 
         String categoryHoverStyle = "-fx-background-color: #FFF2E9;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #FFB889;" +
-                "-fx-border-width: 1;" +
-                "-fx-border-radius: 15;" +
-                "-fx-padding: 10;" +
-                "-fx-cursor: hand;";
+        "-fx-text-fill: #FF6900;" +
+        "-fx-font-size: 9px;" +
+        "-fx-font-weight: bold;" +
+        "-fx-background-radius: 15;" +
+        "-fx-border-color: #FFB889;" +
+        "-fx-border-width: 1;" +
+        "-fx-border-radius: 15;" +
+        "-fx-padding: 10;" +
+        "-fx-cursor: hand;";
 
         Button[] categoryButtons = {
-                grocerie, electronics, fashion, health, home, gifts,
-                beauty, pharmacy, sports, furniture, toys, stationery
+            grocerie, electronics, fashion, health, home, gifts,
+            beauty, pharmacy, sports, furniture, toys, stationery
         };
 
         for (Button button : categoryButtons) {
@@ -1108,7 +1111,7 @@ public class Dashbord  {
         // =====================================================
 
         VBox Rightvbox = new VBox(22, navBox, hbright, categorySection);
-        Rightvbox.setPadding(new Insets(0, 26, 20, 26));
+        Rightvbox.setPadding(new Insets(0, 10, 20, 10));
         Rightvbox.setStyle("-fx-background-color: #F7F5F8;");
 
         // =====================================================
@@ -1116,21 +1119,21 @@ public class Dashbord  {
         // =====================================================
 
         RadialGradient orangeGlow1 = new RadialGradient(
-                0, 0, 0.84, 0.16, 0.42, true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0.0, Color.web("#FF9148", 0.25)),
-                new Stop(0.40, Color.web("#FFD1B4", 0.12)),
-                new Stop(1.0, Color.TRANSPARENT)
+        0, 0, 0.84, 0.16, 0.42, true,
+        CycleMethod.NO_CYCLE,
+        new Stop(0.0, Color.web("#FF9148", 0.25)),
+        new Stop(0.40, Color.web("#FFD1B4", 0.12)),
+        new Stop(1.0, Color.TRANSPARENT)
         );
 
         Rightvbox.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                orangeGlow1,
-                                CornerRadii.EMPTY,
-                                Insets.EMPTY
-                        )
-                )
+        new Background(
+        new BackgroundFill(
+        orangeGlow1,
+        CornerRadii.EMPTY,
+        Insets.EMPTY
+        )
+        )
         );
 
         // =====================================================
@@ -1153,7 +1156,6 @@ public class Dashbord  {
         chatbotView.setFitHeight(32);
         chatbotView.setPreserveRatio(true);
 
-
         Button chatbotButton = new Button();
         chatbotButton.setGraphic(chatbotView);
         chatbotButton.setPrefSize(50, 50);
@@ -1162,15 +1164,14 @@ public class Dashbord  {
         chatbotButton.setTranslateX(-400);
 
         chatbotButton.setStyle(
-                "-fx-background-color: #FF6900;" +
-                "-fx-background-radius: 50%;" +
-                "-fx-border-color: white;" +
-                "-fx-border-width: 2;" +
-                "-fx-border-radius: 50%;" +
-                "-fx-padding: 8;" +
-                "-fx-cursor: hand;"
+        "-fx-background-color: #FF6900;" +
+        "-fx-background-radius: 50%;" +
+        "-fx-border-color: white;" +
+        "-fx-border-width: 2;" +
+        "-fx-border-radius: 50%;" +
+        "-fx-padding: 8;" +
+        "-fx-cursor: hand;"
         );
-        
 
         DropShadow chatbotShadow = new DropShadow();
         chatbotShadow.setRadius(12);
@@ -1182,13 +1183,13 @@ public class Dashbord  {
 
         chatbotButton.setOnMouseEntered(e -> {
             chatbotButton.setStyle(
-                    "-fx-background-color: #FF8533;" +
-                    "-fx-background-radius: 50%;" +
-                    "-fx-border-color: white;" +
-                    "-fx-border-width: 2;" +
-                    "-fx-border-radius: 50%;" +
-                    "-fx-padding: 8;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: #FF8533;" +
+            "-fx-background-radius: 50%;" +
+            "-fx-border-color: white;" +
+            "-fx-border-width: 2;" +
+            "-fx-border-radius: 50%;" +
+            "-fx-padding: 8;" +
+            "-fx-cursor: hand;"
             );
             chatbotButton.setScaleX(1.08);
             chatbotButton.setScaleY(1.08);
@@ -1196,23 +1197,21 @@ public class Dashbord  {
 
         chatbotButton.setOnMouseExited(e -> {
             chatbotButton.setStyle(
-                    "-fx-background-color: #FF6900;" +
-                    "-fx-background-radius: 50%;" +
-                    "-fx-border-color: white;" +
-                    "-fx-border-width: 2;" +
-                    "-fx-border-radius: 50%;" +
-                    "-fx-padding: 8;" +
-                    "-fx-cursor: hand;"
+            "-fx-background-color: #FF6900;" +
+            "-fx-background-radius: 50%;" +
+            "-fx-border-color: white;" +
+            "-fx-border-width: 2;" +
+            "-fx-border-radius: 50%;" +
+            "-fx-padding: 8;" +
+            "-fx-cursor: hand;"
             );
             chatbotButton.setScaleX(1.0);
             chatbotButton.setScaleY(1.0);
         });
         chatbotButton.setOnAction(event->{
-                SmartAssistantUI chAssistantUI=new SmartAssistantUI();
-                Homepage.HomepageStage.setScene(chAssistantUI.getSmartAssisstantui());
+            SmartAssistantUI chAssistantUI=new SmartAssistantUI();
+            Homepage.HomepageStage.setScene(chAssistantUI.getSmartAssisstantui());
         });
-
-        
 
         // =====================================================
         // ROOT STACKPANE
@@ -1231,11 +1230,10 @@ public class Dashbord  {
         // =====================================================
 
         Scene sc = new Scene(root, 1900, 800);
-                Dashbordscene=sc;
-                return Dashbordscene;
-        }
+        Dashbordscene=sc;
+        return Dashbordscene;
+    }
 
-    
     public void backTodashbord(){
         Homepage.HomepageStage.setScene(Dashbordscene);
     }
