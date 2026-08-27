@@ -1,5 +1,7 @@
 package com.kryox.view.Customer;
 
+import com.kryox.controller.Customer.Chatbot;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,6 +20,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class SmartAssistantUI {
+        private String userId;
+
+        public String userId(){
+                return userId;
+        }
 
     private Scene SmartAssistantUi;
 
@@ -105,10 +112,9 @@ public class SmartAssistantUI {
 
         // Change this to your own previous-page navigation if needed.
         backButton.setOnAction(event -> {
-            if (backButton.getScene() != null &&
-                    backButton.getScene().getWindow() != null) {
-                backButton.getScene().getWindow().hide();
-            }
+                Dashbord db=new Dashbord(userId);
+                Homepage.HomepageStage.setScene(db.getDashbordScene());
+            
         });
 
         VBox aiCircle = new VBox();
@@ -384,7 +390,7 @@ public class SmartAssistantUI {
                 rightVBox
         );
 
-        SmartAssistantUi = new Scene(root, 1250, 760);
+        SmartAssistantUi = new Scene(root, 1550, 800);
 
         return SmartAssistantUi;
     }
@@ -392,67 +398,55 @@ public class SmartAssistantUI {
     // =============================================================
     // SEND MESSAGE
     // =============================================================
-    private void sendMessage() {
+   private void sendMessage() {
 
-        String userText = inputField.getText();
+    String userText = inputField.getText();
 
-        if (userText == null || userText.trim().isEmpty()) {
-            return;
-        }
-
-        userText = userText.trim();
-
-        // Add user's typed message to the live feed.
-        addUserMessage(userText);
-
-        // Clear input after sending.
-        inputField.clear();
-
-        /*
-         * ==========================================================
-         * FUTURE GROQ / API INTEGRATION
-         * ==========================================================
-         *
-         * Later, API response yaha se milega:
-         *
-         * String apiResponse = callGroqAPI(userText);
-         * addAiMessage(apiResponse);
-         *
-         * Abhi testing ke liye echo response show ho raha hai.
-         */
-        String testResponse =
-                "I found some products related to your request:\n\"" +
-                userText + "\"";
-
-        addAiMessage(testResponse);
-
-        // =========================================================
-        // TEST PRODUCT RESULTS
-        // =========================================================
-        // Later these products can come directly from your API/Groq
-        // response. For now, they are sample dynamic result cards.
-        addProductResult(
-                "Artisan Sourdough",
-                "Freshly baked • 500g",
-                "$5.99",
-                "/assets/images/img1.png"
-        );
-
-        addProductResult(
-                "Organic Avocado",
-                "Fresh produce • 4 pack",
-                "$6.99",
-                "/assets/images/avocado.png"
-        );
-
-        addProductResult(
-                "Wireless Headphones",
-                "Bluetooth • Local store",
-                "$29.99",
-                "/assets/images/headphone.png"
-        );
+    if (userText == null || userText.trim().isEmpty()) {
+        return;
     }
 
+    userText = userText.trim();
+
+    // User ka message show karo
+    addUserMessage(userText);
+
+    // Input clear karo
+    inputField.clear();
+
+    // Gemini API call background thread mein
+    String finalUserText = userText;
+
+    new Thread(() -> {
+
+        try {
+
+            // YAHAN controller ki Gemini method call hogi
+            Chatbot chatbot=new Chatbot();
+            String response = chatbot.getGeminiResponse(finalUserText);
+
+            // JavaFX UI ko main thread par update karo
+            javafx.application.Platform.runLater(() -> {
+
+                if (response != null && !response.isEmpty()) {
+                    addAiMessage(response);
+                } else {
+                    addAiMessage("Sorry, response nahi mila.");
+                }
+
+            });
+
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+
+            javafx.application.Platform.runLater(() ->
+                addAiMessage("Gemini API se response lene mein error aa gaya.")
+            );
+        }
+
+    }).start();
+}
     // =============================================================
     // ADD USER MESSAGE TO FEED
     // =============================================================

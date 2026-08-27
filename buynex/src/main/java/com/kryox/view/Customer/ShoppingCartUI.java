@@ -27,10 +27,20 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
+import java.util.List;
+import com.kryox.controller.Customer.CARTcontroller;
+import com.kryox.model.Customer.Productcart;
 
 public class ShoppingCartUI {
+
         private Scene addcartScene;
-        Scene getaddcartScene(){
+        private String userId;
+
+        public ShoppingCartUI(String userId) {
+                this.userId = userId;
+        }
+
+        public Scene getaddcartScene(){
                  // =====================================================
         // SHADOWS
         // =====================================================
@@ -150,26 +160,26 @@ public class ShoppingCartUI {
                 new Button("Dashboard");
 
         dashboard.setOnAction(event->{
-                Dashbord ds=new Dashbord();
+                Dashbord ds=new Dashbord(null);
                 Homepage.HomepageStage.setScene(ds.getDashbordScene());
         });
 
         Button nearby =
                 new Button("Nearby Shops");
-                neaby_shope ns=new neaby_shope();
+                neaby_shope ns=new neaby_shope(userId);
                 Homepage.HomepageStage.setScene(ns.getNearby_shopes(null));
 
         Button deals =
                 new Button("Deals");
         deals.setOnAction(event->{
-                DealsDB db=new DealsDB();
+                DealsDB db=new DealsDB(userId);
                 Homepage.HomepageStage.setScene(db.getDealScene(null));
         });
 
         Button orders =
                 new Button("My Orders");
         orders.setOnAction(event->{
-                My_orderAllorder my=new My_orderAllorder();
+                My_orderAllorder my=new My_orderAllorder(userId);
                 Homepage.HomepageStage.setScene(my.getAllorderScene());
         });
 
@@ -672,8 +682,8 @@ public class ShoppingCartUI {
         Scene scene =
                 new Scene(
                         mainBox,
-                        1500,
-                        800
+                        1530,
+                        850
                 );
                 addcartScene=scene;
 
@@ -1469,30 +1479,71 @@ public class ShoppingCartUI {
 
         products.setPrefWidth(700);
 
-        VBox product1 =
-                createCartProduct(
-                        "Artisanal Sourdough Loaf",
-                        "BakeHouse Local",
-                        "$12.00",
-                        "",
-                        "2",
-                        "/assects/images/products/bread.png"
+        // -----------------------------------------------------
+        // FETCH CART PRODUCTS FROM FIRESTORE
+        // -----------------------------------------------------
+
+        if (userId == null || userId.isBlank()) {
+
+                Label errorLabel =
+                        new Label("User not logged in.");
+
+                errorLabel.setStyle(
+                        "-fx-font-size: 14px;" +
+                        "-fx-text-fill: #B44D00;" +
+                        "-fx-font-weight: bold;"
                 );
 
-        VBox product2 =
-                createCartProduct(
-                        "Organic Hass Avocados (Pack of 3)",
-                        "Green Grocer",
-                        "$5.50",
-                        "",
-                        "1",
-                        "/assects/images/products/avocado.png"
-                );
+                products.getChildren().add(errorLabel);
 
-        products.getChildren().addAll(
-                product1,
-                product2
-        );
+        } else {
+
+                CARTcontroller cartController =
+                        new CARTcontroller();
+
+                List<Productcart> cartList =
+                        cartController.getCart(userId);
+
+                if (cartList.isEmpty()) {
+
+                        Label emptyLabel =
+                                new Label("Your cart is empty.");
+
+                        emptyLabel.setStyle(
+                                "-fx-font-size: 14px;" +
+                                "-fx-text-fill: #777777;" +
+                                "-fx-font-weight: bold;"
+                        );
+
+                        products.getChildren().add(emptyLabel);
+
+                } else {
+
+                        for (Productcart product : cartList) {
+
+                                String productName =
+                                        product.getName();
+
+                                String shopName =
+                                        product.getName1();
+
+                                String price =
+                                        "$" + product.getPrice();
+
+                                VBox productCard =
+                                        createCartProduct(
+                                                productName,
+                                                shopName,
+                                                price,
+                                                "",
+                                                "1",
+                                                "/assects/images/products/avocado.png"
+                                        );
+
+                                products.getChildren().add(productCard);
+                        }
+                }
+        }
 
         VBox summary =
                 createOrderSummary();
