@@ -1,70 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kryox</groupId>
-    <artifactId>buynex</artifactId>
+    <groupId>com.buynex</groupId>
+    <artifactId>admin</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <!-- Properties -->
-    <properties>
 
-        <!-- Java Version -->
+    <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-
-        <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- JavaFX Version -->
         <javafx.version>21.0.12</javafx.version>
-
     </properties>
 
-    <!-- Dependencies -->
     <dependencies>
 
-        <!-- ========================= -->
-        <!-- JavaFX Controls            -->
-        <!-- ========================= -->
+        <!-- JavaFX Controls -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
         </dependency>
 
-
-        <!-- ========================= -->
-        <!-- JavaFX FXML                -->
-        <!-- ========================= -->
+        <!-- JavaFX FXML -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
 
-
-        <!-- ========================= -->
-        <!-- Firebase Admin SDK         -->
-        <!-- ========================= -->
+        <!-- Firebase Admin SDK -->
         <dependency>
             <groupId>com.google.firebase</groupId>
             <artifactId>firebase-admin</artifactId>
             <version>9.1.1</version>
         </dependency>
 
+        <!-- JSON -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20250517</version>
+        </dependency>
+
+        <!-- Cloudinary -->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.39.0</version>
+        </dependency>
+
     </dependencies>
 
-
-    <!-- Build Configuration -->
     <build>
-
         <plugins>
 
-            <!-- ========================= -->
-            <!-- Maven Compiler Plugin      -->
-            <!-- ========================= -->
+            <!-- Java Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -76,23 +73,18 @@
                 </configuration>
             </plugin>
 
-
-            <!-- ========================= -->
-            <!-- JavaFX Maven Plugin        -->
-            <!-- ========================= -->
+            <!-- JavaFX Maven Plugin -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
 
                 <configuration>
-                    <mainClass>com.kryox.Main</mainClass>
+                    <mainClass>com.buynex.Main</mainClass>
                 </configuration>
-
             </plugin>
 
         </plugins>
-
     </build>
 
 </project>
