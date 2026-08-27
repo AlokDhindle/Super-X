@@ -1,6 +1,12 @@
 package com.kryox;
 
+import com.kryox.view.Customer.Homepage;
+
 import javafx.application.Application;
+
+
+
+
 import com.kryox.view.Customer.Homepage;
 public class Main {
 

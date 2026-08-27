@@ -7,12 +7,15 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 
 import com.kryox.config.APIKEYconfig;
+import com.kryox.config.Apikey;
+
+
 
 public class Chatbot {
 
     // API key separate config file se aa rahi hai
     private static final String GEMINI_API_KEY =
-            APIKEYconfig.GEMINI_API_KEY;
+        APIKEYconfig.GEMINI_API_KEY;
 
     private static final String GEMINI_MODEL =
             "gemini-3.7-flash";
