@@ -1,6 +1,6 @@
 package com.kryox.view.Customer;
 
-import javafx.application.Application;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,10 +25,15 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
+
 
 public class Electronics  {
         private Scene Electrinicscene;
+         private String userId;
+
+    public Electronics(String userId) {
+        this.userId = userId;
+    }
 
         Scene getElectrScene(){
                 // =====================================================
@@ -196,7 +201,7 @@ public class Electronics  {
                 "-fx-cursor: hand;"
         );
         lefButton2.setOnAction(event->{
-                neaby_shope ns=new neaby_shope();
+                neaby_shope ns=new neaby_shope(userId);
                 Homepage.HomepageStage.setScene(ns.getNearby_shopes(null));
         });
 
@@ -519,7 +524,7 @@ public class Electronics  {
                 "-fx-cursor: hand;"
         );
         lefButton6.setOnAction(event->{
-                Seting se=new Seting();
+                Seting se=new Seting(userId);
                 Runnable callbacktoDashborad=new Runnable() {
                         public void run(){
                                 
@@ -740,7 +745,7 @@ public class Electronics  {
         b3.setOnMouseEntered(e -> b3.setStyle(actionHoverStyle));
         b3.setOnMouseExited(e -> b3.setStyle(actionStyle));
         b2.setOnAction(evene->{
-                ShoppingCartUI sui=new ShoppingCartUI();
+                ShoppingCartUI sui=new ShoppingCartUI(userId);
                 Homepage.HomepageStage.setScene(sui.getaddcartScene());
         });
 
@@ -764,6 +769,7 @@ public class Electronics  {
         HBox navBox = new HBox(12, topLinks, navSpacer1, searchBox, navSpacer2, locationBox, actionBox);
         navBox.setPrefHeight(68);
         navBox.setPadding(new Insets(12, 24, 12, 24));
+        navBox.setTranslateX(-25);
         navBox.setAlignment(Pos.CENTER_LEFT);
         navBox.setStyle(
                 "-fx-background-color: white;" +
@@ -846,6 +852,9 @@ public class Electronics  {
                 "-fx-padding: 10 16 10 16;" +
                 "-fx-cursor: hand;"
         );
+        groceries.setOnAction(event->{
+
+        });
         
 
         Button bestPrice = new Button("⌁  Find Best Price");
@@ -991,6 +1000,10 @@ public class Electronics  {
         // =====================================================
 
         Button grocerie = new Button("🛒\nGroceries");
+        grocerie.setOnAction(event->{
+                Electronics electronics=new Electronics(userId);
+
+        });
         Button electronics = new Button("▣\nElectronics");
         Button fashion = new Button("♧\nFashion");
         Button health = new Button("✚\nHealth");
@@ -1703,7 +1716,7 @@ public class Electronics  {
         // SCENE
         // =====================================================
 
-        Scene sc = new Scene(mainBox, 1500, 800);
+        Scene sc = new Scene(mainBox, 1530, 850);
         Electrinicscene=sc;
                 return Electrinicscene;
         }
