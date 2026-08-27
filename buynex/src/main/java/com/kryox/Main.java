@@ -1,5 +1,6 @@
 package com.kryox;
 
+<<<<<<< HEAD
 import com.kryox.view.ShopkeeperLogin;
 
 
@@ -23,5 +24,18 @@ public class Main extends Application {
         System.out.println("Hello world!");
         launch(args);
 
+=======
+import javafx.application.Application;
+
+import com.kryox.view.Customer.BookingSuccess;
+import com.kryox.view.Customer.Checkout;
+import com.kryox.view.Customer.Homepage;
+import com.kryox.view.Customer.ShoppingCartUI;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Application.launch(Homepage.class, args);
+>>>>>>> f5a4c14ed2bacf6ba6e6e4cb4e7c3d667086c715
     }
 }
