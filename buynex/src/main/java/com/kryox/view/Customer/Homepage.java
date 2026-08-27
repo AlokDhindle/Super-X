@@ -1,12 +1,7 @@
 package com.kryox.view.Customer;
 
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.paint.CycleMethod;
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
-import javafx.util.Duration;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,604 +12,1223 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 
 public class Homepage extends Application {
-        public static Stage HomepageStage;
-        private Scene homeScene;
-
-        @Override
-        public void start(Stage stage) throws Exception {
-                HomepageStage = stage;
-                DropShadow shadowhb4 = new DropShadow();
-
-                shadowhb4.setRadius(18);
-                shadowhb4.setSpread(0.08);
-                shadowhb4.setOffsetX(0);
-                shadowhb4.setOffsetY(5);
-                shadowhb4.setColor(Color.rgb(0, 0, 0, 0.12));
-
-                Text t1 = new Text("Welcome back to ");
-                t1.setFont(Font.font("Poppins", FontWeight.BOLD, 34));
-                t1.setFill(Color.web("#171717"));
-                t1.setLayoutX(500);
-
-                Text t2 = new Text("BuyNeX");
-                t2.setStyle("""
-                                    -fx-font-family: 'Poppins';
-                                    -fx-font-size: 34px;
-                                    -fx-font-weight: bold;
-                                    -fx-fill: #D86B1F;;
-                                """);
-                t2.setLayoutX(500);
-                ScaleTransition st5 = new ScaleTransition(Duration.seconds(1.5), t2);
-                st5.setFromX(1);
-                st5.setFromY(1);
-                st5.setToX(1.1);
-                st5.setToY(1.1);
-                st5.setCycleCount(ScaleTransition.INDEFINITE);
-                st5.setAutoReverse(true);
-                st5.play();
-
-                Text t3 = new Text(
-                                "Our hyperlocal ecosystem connects intelligence with speed. Please select \n                      your specific portal to continue your journey.");
-
-                t3.setStyle(
-                                "-fx-font-size: 15px;" +
-                                                "-fx-font-family: 'Poppins';" +
-                                                "-fx-fill: #674A40;" +
-                                                "-fx-font-weight: 400;");
-                Text t4 = new Text("BuyNeX");
-                t4.setStyle("""
-                                    -fx-font-family: 'Poppins';
-                                    -fx-font-size: 34px;
-                                    -fx-font-weight: bold;
-                                    -fx-fill: #c56b2a;
-                                """);
-                t4.setTranslateX(100);
-                t4.setTranslateY(2);
-                // block1
-                Button b1 = new Button("->");
-                b1.setTranslateX(-360);
-                b1.setTranslateY(165);
-                b1.setMaxSize(50, 20);
-
-                Image i1 = new Image("assets/images/shop.png");
-                ImageView iv1 = new ImageView(i1);
-
-                iv1.setFitWidth(35);
-                iv1.setFitHeight(35);
-
-                HBox hbiv1 = new HBox(iv1);
-                hbiv1.setPrefSize(50, 50);
-                hbiv1.setMinSize(50, 50);
-                hbiv1.setMaxSize(50, 50);
-
-                hbiv1.setAlignment(Pos.CENTER);
-
-                hbiv1.setStyle(
-                                "-fx-background-color: #FFD9C9;" +
-                                                "-fx-background-radius: 12;");
-
-                hbiv1.setTranslateY(15);
-
-                ScaleTransition st4 = new ScaleTransition(Duration.seconds(1.5), iv1);
-                st4.setFromX(1.2);
-                st4.setFromY(1.2);
-                st4.setToX(1.1);
-                st4.setToY(1.1);
-                st4.setCycleCount(ScaleTransition.INDEFINITE);
-                st4.setAutoReverse(true);
-                st4.play();
-
-                Text thb3 = new Text("Shopkeeper");
-                thb3.setFont(Font.font("Poppins", FontWeight.BOLD, 26));
-                thb3.setFill(Color.web("#171717"));
-                thb3.setTranslateX(95);
-                thb3.setTranslateY(67);
-
-                Text t1hb3 = new Text(
-                                "Manage your inventory, process local orders, and \n     grow your retail business with AI insights.");
-                t1hb3.setStyle("""
-                                    -fx-font-family: 'Poppins';
-                                    -fx-font-size: 14px;
-                                    -fx-font-weight: normal;
-                                    -fx-fill: #674A40;
-                                """);
-                t1hb3.setTranslateX(-190);
-                t1hb3.setTranslateY(110);
-                HBox hb3 = new HBox(thb3, hbiv1, t1hb3, b1);
-                hb3.setPrefSize(320, 220);
-                hb3.setMinSize(320, 220);
-                hb3.setMaxSize(320, 220);
-
-                hb3.setStyle(
-                                "-fx-pref-width: 320px;" +
-                                                "-fx-pref-height: 220px;" +
-                                                "-fx-background-color: #ffffff;" +
-                                                "-fx-background-radius: 18;" +
-                                                "-fx-border-radius: 18;" +
-                                                "-fx-border-color: #ffffff;");
-
-                DropShadow glow = new DropShadow();
-                glow.setColor(Color.web("#edb07a"));
-                glow.setRadius(25);
-                glow.setSpread(0.4);
-
-                hb3.setOnMouseEntered(e -> {
-                        hb3.setEffect(glow);
-
-                        hb3.setStyle(
-                                        "-fx-pref-width: 440px;" +
-                                                        "-fx-pref-height: 300px;" +
-                                                        "-fx-background-color: #FFFFFF;" +
-                                                        "-fx-background-radius: 18;" +
-                                                        "-fx-border-radius: 18;" +
-                                                        "-fx-border-color: #ffffff;" +
-                                                        "-fx-border-width: 1;");
-                });
-
-                hb3.setOnMouseExited(e -> {
-                        hb3.setEffect(null);
-                        hb3.setEffect(shadowhb4);
-                });
-
-                // block2
-                Button b2 = new Button("customer");
-                b2.setTranslateX(-330);
-                b2.setTranslateY(165);
-                b2.setMaxSize(50, 20);
-                b2.setOnAction(event -> {
-                        CustomerLogin cl = new CustomerLogin();
-                        Homepage.HomepageStage.setScene(cl.getLoginScene());
-                });
-                Image i2 = new Image("assets/images/shopper.png");
-                ImageView iv2 = new ImageView(i2);
-
-                iv2.setFitWidth(35);
-                iv2.setFitHeight(35);
-                iv2.setPreserveRatio(true);
-
-                HBox hbiv2 = new HBox(iv2);
-
-                hbiv2.setPrefSize(50, 50);
-                hbiv2.setMinSize(50, 50);
-                hbiv2.setMaxSize(50, 50);
-
-                hbiv2.setAlignment(Pos.CENTER);
-                hbiv2.setTranslateX(140);
-                hbiv2.setTranslateY(15);
-
-                hbiv2.setStyle(
-                                "-fx-background-color: #E8E8E8;" +
-                                                "-fx-background-radius: 12;");
-                ScaleTransition st3 = new ScaleTransition(Duration.seconds(1.5), iv2);
-                st3.setFromX(1.2);
-                st3.setFromY(1.2);
-                st3.setToX(1.1);
-                st3.setToY(1.1);
-                st3.setCycleCount(ScaleTransition.INDEFINITE);
-                st3.setAutoReverse(true);
-                st3.play();
-
-                Text thb4 = new Text("Customer");
-                thb4.setFont(Font.font("Poppins", FontWeight.BOLD, 23));
-                thb4.setFill(Color.web("#171717"));
-                thb4.setTranslateX(60);
-                thb4.setTranslateY(67);
-
-                Text t1hb4 = new Text(
-                                "Explore nearby shops, get lightning-fast delivery, \n     and enjoy a premium hyperlocal experience.");
-                t1hb4.setStyle("""
-                                    -fx-font-family: 'Poppins';
-                                    -fx-font-size: 14px;
-                                    -fx-font-weight: normal;
-                                    -fx-fill: #674A40;;
-                                """);
-                t1hb4.setTranslateX(-140);
-                t1hb4.setTranslateY(110);
-
-                HBox hb4 = new HBox(hbiv2, thb4, t1hb4, b2);
-                hb4.setPrefSize(320, 220);
-                hb4.setMinSize(320, 220);
-                hb4.setMaxSize(320, 220);
-
-                hb4.setStyle(
-                                "-fx-pref-width: 320px;" +
-                                                "-fx-pref-height: 220px;" +
-                                                "-fx-background-color: #ffffff;" +
-                                                "-fx-background-radius: 18;" +
-                                                "-fx-border-radius: 18;" +
-                                                "-fx-border-color: #ffffff;");
-                DropShadow glowhb = new DropShadow();
-                glowhb.setColor(Color.web("#edb07a"));
-                glowhb.setRadius(25);
-                glowhb.setSpread(0.4);
-
-                hb4.setOnMouseEntered(e -> {
-                        hb4.setEffect(glow);
-                        hb4.setStyle(
-                                        "-fx-pref-width: 440px;" +
-                                                        "-fx-pref-height: 300px;" +
-                                                        "-fx-background-color: #FFFFFF;" +
-                                                        "-fx-background-radius: 18;" +
-                                                        "-fx-border-radius: 18;" +
-                                                        "-fx-border-color: #ffffff;" +
-                                                        "-fx-border-width: 1;");
-                });
-
-                hb4.setOnMouseExited(e -> {
-                        hb4.setEffect(null);
-                        hb4.setEffect(shadowhb4);
-                });
-
-                HBox hb5 = new HBox(20, hb3, hb4);
-
-                hb5.setStyle(
-                                "-fx-background-color: transparent;");
-                hb5.setTranslateX(450);
-                hb5.setTranslateY(160);
-
-                // block 3
-
-                Button b3 = new Button("->");
-                b3.setTranslateX(-290);
-                b3.setTranslateY(165);
-                b3.setMaxSize(50, 20);
-
-                Image i3 = new Image("assets/images/protection.png");
-                ImageView iv3 = new ImageView(i3);
-
-                iv3.setFitWidth(35);
-                iv3.setFitHeight(35);
-
-                HBox hbiv3 = new HBox(iv3);
-                hbiv3.setPrefSize(50, 50);
-                hbiv3.setMinSize(50, 50);
-                hbiv3.setMaxSize(50, 50);
-
-                hbiv3.setAlignment(Pos.CENTER);
-
-                hbiv3.setStyle(
-                                "-fx-background-color: #E8E8E8;" +
-                                                "-fx-background-radius: 12;");
-
-                hbiv3.setTranslateX(140);
-                hbiv3.setTranslateY(15);
-
-                ScaleTransition st2 = new ScaleTransition(Duration.seconds(1.5), iv3);
-
-                st2.setFromX(1.0);
-                st2.setFromY(1.0);
-
-                st2.setToX(1.08);
-                st2.setToY(1.08);
-
-                st2.setCycleCount(Animation.INDEFINITE);
-                st2.setAutoReverse(true);
-
-                st2.play();
-
-                Text thb5 = new Text("Admin");
-
-                thb5.setFont(
-                                Font.font(
-                                                "Poppins",
-                                                FontWeight.BOLD,
-                                                20));
-
-                thb5.setFill(Color.web("#171717"));
-
-                thb5.setTranslateX(79);
-                thb5.setTranslateY(80);
-
-                Text t1hb5 = new Text(
-                                "Monitor system health, manage platform users,\n" +
-                                                "and oversee the entire BuyNeX operations grid.");
-
-                t1hb5.setFont(
-                                Font.font(
-                                                "Poppins",
-                                                FontWeight.NORMAL,
-                                                12));
-
-                t1hb5.setFill(Color.web("#674A40"));
-
-                t1hb5.setTranslateX(-105);
-                t1hb5.setTranslateY(110);
-
-                HBox hb6 = new HBox(
-                                hbiv3,
-                                thb5,
-                                t1hb5,
-                                b3);
-
-                hb6.setPrefSize(320, 220);
-                hb6.setMinSize(320, 220);
-                hb6.setMaxSize(320, 220);
-
-                hb6.setStyle(
-                                "-fx-background-color: #FFFFFF;" +
-                                                "-fx-background-radius: 18;" +
-                                                "-fx-border-radius: 18;" +
-                                                "-fx-border-color: #EEEEEE;" +
-                                                "-fx-border-width: 1;");
-                ;
-
-                DropShadow glowhb6 = new DropShadow();
-                glowhb6.setColor(Color.web("#edb07a"));
-                glowhb6.setRadius(25);
-                glowhb6.setSpread(0.4);
-
-                hb6.setOnMouseEntered(e -> {
-                        hb6.setEffect(glowhb6);
-                        hb6.setStyle("""
-                                        -fx-background-color: #ffffff;
-                                        -fx-background-radius: 15;
-                                        -fx-background-color: #ffffff;
-                                        -fx-border-width: 2;
-                                        -fx-border-radius: 15;
-                                        """);
-                });
-
-                hb6.setOnMouseExited(e -> {
-                        hb6.setEffect(null);
-                        hb6.setEffect(shadowhb4);
-                });
-
-                Button b4 = new Button("->");
-                b4.setTranslateX(-290);
-                b4.setTranslateY(165);
-                b4.setMaxSize(50, 20);
-
-                Image i4 = new Image("assets/images/man.png");
-                ImageView iv4 = new ImageView(i4);
-
-                iv4.setFitWidth(35);
-                iv4.setFitHeight(35);
-
-                HBox hbiv4 = new HBox(iv4);
-                hbiv4.setPrefSize(50, 50);
-                hbiv4.setMinSize(50, 50);
-                hbiv4.setMaxSize(50, 50);
-
-                hbiv4.setAlignment(Pos.CENTER);
-
-                hbiv4.setStyle(
-                                "-fx-background-color: #FFD9C9;" +
-                                                "-fx-background-radius: 12;");
-
-                hbiv4.setTranslateX(140);
-                hbiv4.setTranslateY(15);
-
-                ScaleTransition st1 = new ScaleTransition(Duration.seconds(1.5), iv3);
-                st1.setFromX(1.2);
-                st1.setFromY(1.2);
-                st1.setToX(1.1);
-                st1.setToY(1.1);
-                st1.setCycleCount(ScaleTransition.INDEFINITE);
-                st1.setAutoReverse(true);
-                st1.play();
-
-                Text thb6 = new Text("Delivery");
-                thb6.setFont(Font.font("Poppins", FontWeight.BOLD, 26));
-                thb6.setFill(Color.web("#171717"));
-                thb6.setTranslateX(55);
-                thb6.setTranslateY(67);
-                Text t1hb6 = new Text(
-                                "Monitor system health, manage platform users \n and oversee the entire BuyNeX operations grid.");
-                t1hb5.setStyle("""
-                                    -fx-font-family: 'Poppins';
-                                    -fx-font-size: 14px;
-                                    -fx-font-weight: normal;
-                                    -fx-fill: #674A40;
-                                """);
-                t1hb6.setTranslateX(-120);
-                t1hb6.setTranslateY(110);
-
-                HBox hb7 = new HBox(hbiv4, thb6, t1hb6, b4);
-                hb7.setPrefSize(320, 220);
-                hb7.setMinSize(320, 220);
-                hb7.setMaxSize(320, 220);
-                hb7.setEffect(shadowhb4);
-
-                hb7.setStyle(
-                                "-fx-pref-width: 440px;" +
-                                                "-fx-pref-height: 300px;" +
-                                                "-fx-background-color: #FFFFFF;" +
-                                                "-fx-background-radius: 18;" +
-                                                "-fx-border-radius: 18;" +
-                                                "-fx-border-color: #ffffff;" +
-                                                "-fx-border-width: 1;");
-
-                DropShadow glowhb7 = new DropShadow();
-                glowhb7.setColor(Color.web("#edb07a"));
-                glowhb7.setRadius(25);
-                glowhb7.setSpread(0.4);
-
-                hb7.setOnMouseEntered(e -> {
-                        hb7.setEffect(glowhb6);
-                        hb7.setStyle("""
-                                        -fx-background-color: #ffffff;
-                                        -fx-background-radius: 15;
-                                        -fx-background-color: #ffffff;
-                                        -fx-border-width: 2;
-                                        -fx-border-radius: 15;
-                                        """);
-                });
-
-                hb7.setOnMouseExited(e -> {
-                        hb7.setEffect(null);
-                        hb7.setEffect(shadowhb4);
-                });
-                HBox hb8 = new HBox(20, hb6, hb7);
-
-                RadialGradient orangeGlow1 = new RadialGradient(
-                                0,
-                                0,
-                                0.82, // X position → right
-                                0.18, // Y position → top
-                                0.45, // glow size
-                                true,
-                                CycleMethod.NO_CYCLE,
-
-                                new Stop(
-                                                0.0,
-                                                Color.web("#D86B1F", 0.20)),
-
-                                new Stop(
-                                                0.35,
-                                                Color.web("#EAD7D0", 0.15)),
-
-                                new Stop(
-                                                0.70,
-                                                Color.web("#FAF8FE", 0.05)),
-
-                                new Stop(
-                                                1.0,
-                                                Color.web("#FAF8FE", 0.0)));
-
-                hb8.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                orangeGlow1,
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
-                hb8.setTranslateX(450);
-                hb8.setTranslateY(190);
-
-                Image im = new Image("assets\\images\\Gemini_Generated_Image_5vc4955vc4955vc4-removebg-preview.png");
-                ImageView ivi = new ImageView(im);
-
-                ivi.setFitWidth(80);
-                ivi.setFitHeight(50);
-                ivi.setTranslateX(-120);
-
-                ScaleTransition st = new ScaleTransition(Duration.seconds(1.5), ivi);
-                st.setFromX(1.2);
-                st.setFromY(1.2);
-                st.setToX(1.1);
-                st.setToY(1.1);
-                st.setCycleCount(ScaleTransition.INDEFINITE);
-                st.setAutoReverse(true);
-                st.play();
-
-                hb3.setEffect(shadowhb4);
-                hb4.setEffect(shadowhb4);
-                hb6.setEffect(shadowhb4);
-                hb7.setEffect(shadowhb4);
-
-                Text t5 = new Text("Need help ?");
-                t5.setFont(Font.font("System", FontWeight.NORMAL, 12));
-                t5.setTranslateX(1240);
-                t5.setTranslateY(15);
-
-                Image img = new Image("assets\\images\\mark.png");
-                ImageView imgv = new ImageView(img);
-                imgv.setFitHeight(30);
-                imgv.setFitWidth(30);
-                imgv.setTranslateX(1250);
-                imgv.setTranslateY(10);
-
-                HBox hb1 = new HBox(t4, t5, imgv);
-                hb1.setStyle(
-                                "-fx-background-color: #eee5df;");
-
-                hb1.setEffect(shadowhb4);
-
-                HBox hb = new HBox(t1, t2);
-                hb.setStyle("-fx-background-color: transparent;");
-                hb.setTranslateX(580);
-                hb.setTranslateY(80);
-
-                VBox vb = new VBox(hb, t3);
-                vb.setStyle("-fx-background-color: transparent;");
-
-                t3.setTranslateX(550);
-                t3.setTranslateY(100);
-
-                VBox vb1 = new VBox(hb1, vb, hb5, hb8);
-
-                RadialGradient rightTopGlow = new RadialGradient(
-                                0,
-                                0,
-                                0.80, // RIGHT
-                                0.03, // TOP
-                                0.65, // SIZE
-                                true,
-                                CycleMethod.NO_CYCLE,
-
-                                new Stop(
-                                                0.0,
-                                                Color.web("#D86B1F", 0.30)),
-
-                                new Stop(
-                                                0.35,
-                                                Color.web("#EAD7D0", 0.12)),
-
-                                new Stop(
-                                                0.70,
-                                                Color.web("#FAF8FE", 0.03)),
-
-                                new Stop(
-                                                1.0,
-                                                Color.web("#FAF8FE", 0.0)));
-
-                RadialGradient leftBottomGlow = new RadialGradient(
-                                0,
-                                0,
-                                0.08, // LEFT
-                                0.90, // BOTTOM
-                                0.40, // SIZE
-                                true,
-                                CycleMethod.NO_CYCLE,
-
-                                new Stop(
-                                                0.0,
-                                                Color.web("#D86B1F", 0.14)),
-
-                                new Stop(
-                                                0.35,
-                                                Color.web("#EAD7D0", 0.10)),
-
-                                new Stop(
-                                                0.70,
-                                                Color.web("#FAF8FE", 0.03)),
-
-                                new Stop(
-                                                1.0,
-                                                Color.web("#FAF8FE", 0.0)));
-
-                vb1.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                rightTopGlow,
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY),
-                                                new BackgroundFill(
-                                                                leftBottomGlow,
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
-                vb1.setStyle("-fx-background-color: #eee5df;");
-
-                Scene sc = new Scene(vb1, 1000, 800);
-
-                stage.setTitle("Home page");
-                stage.setScene(sc);
-                stage.setMaximized(true);
-                stage.show();
 
+    public static Stage HomepageStage;
+    private Scene homeScene;
+
+    // =========================================================
+    // INTRO VIDEO PATH
+    // =========================================================
+
+    private static final String VIDEO_PATH =
+            "C:\\test\\test\\src\\main\\resources\\assets\\vedio\\Videio1.mp4";
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
+        HomepageStage = stage;
+
+        showIntroVideo(stage);
+    }
+
+    // =========================================================
+    // INTRO VIDEO
+    // =========================================================
+
+    private void showIntroVideo(Stage stage) {
+
+        try {
+
+            Media media = new Media(
+                    new java.io.File(VIDEO_PATH)
+                            .toURI()
+                            .toString()
+            );
+
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+            MediaView mediaView = new MediaView(mediaPlayer);
+
+            mediaView.setPreserveRatio(true);
+
+            javafx.scene.layout.StackPane videoPane =
+                    new javafx.scene.layout.StackPane(mediaView);
+
+            videoPane.setStyle(
+                    "-fx-background-color: black;"
+            );
+
+            Scene videoScene =
+                    new Scene(videoPane, 1700, 900);
+
+            stage.setTitle("BuyNeX");
+
+            stage.setScene(videoScene);
+
+            stage.setMaximized(true);
+
+            stage.show();
+
+            mediaView.fitWidthProperty().bind(
+                    videoPane.widthProperty()
+            );
+
+            mediaView.fitHeightProperty().bind(
+                    videoPane.heightProperty()
+            );
+
+            // When video finishes
+            mediaPlayer.setOnEndOfMedia(() -> {
+
+                mediaPlayer.stop();
+
+                mediaPlayer.dispose();
+
+                showHomepage(stage);
+            });
+
+            // Video error
+            mediaPlayer.setOnError(() -> {
+
+                System.out.println(
+                        "Video Error: " +
+                                mediaPlayer.getError()
+                );
+
+                mediaPlayer.dispose();
+
+                showHomepage(stage);
+            });
+
+            mediaPlayer.play();
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Unable to load intro video: " +
+                            e.getMessage()
+            );
+
+            showHomepage(stage);
         }
+    }
 
+    // =========================================================
+    // HOMEPAGE
+    // =========================================================
+
+    private void showHomepage(Stage stage) {
+
+        // =====================================================
+        // COMMON SHADOW
+        // =====================================================
+
+        DropShadow shadow = new DropShadow();
+
+        shadow.setRadius(18);
+        shadow.setSpread(0.08);
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(5);
+
+        shadow.setColor(
+                Color.rgb(0, 0, 0, 0.12)
+        );
+
+        // =====================================================
+        // HEADER
+        // =====================================================
+
+        Text logoText = new Text("BuyNeX");
+
+        logoText.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.BOLD,
+                        34
+                )
+        );
+
+        logoText.setFill(
+                Color.web("#c56b2a")
+        );
+
+        Text helpText = new Text("Need help ?");
+
+        helpText.setFont(
+                Font.font(
+                        "System",
+                        FontWeight.NORMAL,
+                        12
+                )
+        );
+
+        Image logoImage =
+                new Image(
+                        "assets\\images\\mark.png"
+                );
+
+        ImageView logoImageView =
+                new ImageView(logoImage);
+
+        logoImageView.setFitHeight(30);
+        logoImageView.setFitWidth(30);
+
+        HBox header = new HBox();
+
+        header.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        header.setSpacing(15);
+
+        header.setPadding(
+                new Insets(
+                        10,
+                        25,
+                        10,
+                        25
+                )
+        );
+
+        Region headerSpacer = new Region();
+
+        HBox.setHgrow(
+                headerSpacer,
+                Priority.ALWAYS
+        );
+
+        header.getChildren().addAll(
+                logoText,
+                headerSpacer,
+                helpText,
+                logoImageView
+        );
+
+        header.setStyle(
+                "-fx-background-color: #eee5df;"
+        );
+
+        header.setEffect(shadow);
+
+        // =====================================================
+        // WELCOME TEXT
+        // =====================================================
+
+        Text welcomeText =
+                new Text("Welcome back to ");
+
+        welcomeText.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.BOLD,
+                        34
+                )
+        );
+
+        welcomeText.setFill(
+                Color.web("#171717")
+        );
+
+        Text buyNexText =
+                new Text("BuyNeX");
+
+        buyNexText.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.BOLD,
+                        34
+                )
+        );
+
+        buyNexText.setFill(
+                Color.web("#D86B1F")
+        );
+
+        ScaleTransition welcomeAnimation =
+                new ScaleTransition(
+                        javafx.util.Duration.seconds(1.5),
+                        buyNexText
+                );
+
+        welcomeAnimation.setFromX(1);
+        welcomeAnimation.setFromY(1);
+
+        welcomeAnimation.setToX(1.1);
+        welcomeAnimation.setToY(1.1);
+
+        welcomeAnimation.setCycleCount(
+                Animation.INDEFINITE
+        );
+
+        welcomeAnimation.setAutoReverse(true);
+
+        welcomeAnimation.play();
+
+        HBox welcomeBox =
+                new HBox(
+                        8,
+                        welcomeText,
+                        buyNexText
+                );
+
+        welcomeBox.setAlignment(
+                Pos.CENTER
+        );
+
+        Text description =
+                new Text(
+                        "Our hyperlocal ecosystem connects intelligence with speed.\n" +
+                        "Please select your specific portal to continue your journey."
+                );
+
+        description.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.NORMAL,
+                        15
+                )
+        );
+
+        description.setFill(
+                Color.web("#674A40")
+        );
+
+        description.setTextAlignment(
+                TextAlignment.CENTER
+        );
+
+        VBox introBox =
+                new VBox(
+                        10,
+                        welcomeBox,
+                        description
+                );
+
+        introBox.setAlignment(
+                Pos.CENTER
+        );
+
+        // =====================================================
+        // CARD 1 - SHOPKEEPER
+        // =====================================================
+
+        Image shopImage =
+                new Image(
+                        "assets/images/shop.png"
+                );
+
+        ImageView shopImageView =
+                new ImageView(shopImage);
+
+        shopImageView.setFitWidth(35);
+        shopImageView.setFitHeight(35);
+
+        HBox shopIconBox =
+                new HBox(shopImageView);
+
+        shopIconBox.setPrefSize(64, 64);
+        shopIconBox.setMinSize(64, 64);
+        shopIconBox.setMaxSize(64, 64);
+
+        shopIconBox.setAlignment(
+                Pos.CENTER
+        );
+
+        shopIconBox.setStyle(
+                "-fx-background-color: #FFD9C9;" +
+                "-fx-background-radius: 15;"
+        );
+
+        ScaleTransition shopAnimation =
+                new ScaleTransition(
+                        javafx.util.Duration.seconds(1.5),
+                        shopImageView
+                );
+
+        shopAnimation.setFromX(1.2);
+        shopAnimation.setFromY(1.2);
+
+        shopAnimation.setToX(1.1);
+        shopAnimation.setToY(1.1);
+
+        shopAnimation.setCycleCount(
+                Animation.INDEFINITE
+        );
+
+        shopAnimation.setAutoReverse(true);
+
+        shopAnimation.play();
+
+        Text shopTitle =
+                new Text("Shopkeeper");
+
+        shopTitle.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.BOLD,
+                        26
+                )
+        );
+
+        shopTitle.setFill(
+                Color.web("#171717")
+        );
+
+        Text shopDescription =
+                new Text(
+                        "Manage your inventory, process local orders,\n" +
+                        "and grow your retail business with AI insights."
+                );
+
+        shopDescription.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.NORMAL,
+                        14
+                )
+        );
+
+        shopDescription.setFill(
+                Color.web("#674A40")
+        );
+
+        shopDescription.setTextAlignment(
+                TextAlignment.CENTER
+        );
+
+        Image arrowImage1 =
+                new Image(
+                        "assets\\arrow.png"
+                );
+
+        ImageView arrowView1 =
+                new ImageView(arrowImage1);
+
+        arrowView1.setFitWidth(30);
+        arrowView1.setFitHeight(30);
+
+        Button b1 =
+                new Button();
+
+        b1.setGraphic(arrowView1);
+
+        b1.setPrefSize(60, 50);
+        b1.setMinSize(60, 50);
+        b1.setMaxSize(60, 50);
+
+        b1.setStyle(
+                "-fx-background-color: #e6690f;" +
+                "-fx-background-radius: 15;"
+        );
+
+        Region shopSpacer =
+                new Region();
+
+        VBox.setVgrow(
+                shopSpacer,
+                Priority.ALWAYS
+        );
+
+        VBox shopCard =
+                new VBox(
+                        8,
+                        shopIconBox,
+                        shopTitle,
+                        shopDescription,
+                        shopSpacer,
+                        b1
+                );
+
+        shopCard.setAlignment(
+                Pos.CENTER
+        );
+
+        shopCard.setPrefSize(320, 280);
+        shopCard.setMinSize(320, 280);
+        shopCard.setMaxSize(320, 280);
+
+        shopCard.setPadding(
+                new Insets(15)
+        );
+
+        shopCard.setStyle(
+                "-fx-background-color: #ffffff;" +
+                "-fx-background-radius: 18;" +
+                "-fx-border-radius: 18;" +
+                "-fx-border-color: #ffffff;"
+        );
+
+        // =====================================================
+        // CARD 2 - CUSTOMER
+        // =====================================================
+
+        Image customerImage =
+                new Image(
+                        "assets/images/shopper.png"
+                );
+
+        ImageView customerImageView =
+                new ImageView(customerImage);
+
+        customerImageView.setFitWidth(35);
+        customerImageView.setFitHeight(35);
+
+        customerImageView.setPreserveRatio(true);
+
+        HBox customerIconBox =
+                new HBox(customerImageView);
+
+        customerIconBox.setPrefSize(64, 64);
+        customerIconBox.setMinSize(64, 64);
+        customerIconBox.setMaxSize(64, 64);
+
+        customerIconBox.setAlignment(
+                Pos.CENTER
+        );
+
+        customerIconBox.setStyle(
+                "-fx-background-color: #E8E8E8;" +
+                "-fx-background-radius: 15;"
+        );
+
+        ScaleTransition customerAnimation =
+                new ScaleTransition(
+                        javafx.util.Duration.seconds(1.5),
+                        customerImageView
+                );
+
+        customerAnimation.setFromX(1.2);
+        customerAnimation.setFromY(1.2);
+
+        customerAnimation.setToX(1.1);
+        customerAnimation.setToY(1.1);
+
+        customerAnimation.setCycleCount(
+                Animation.INDEFINITE
+        );
+
+        customerAnimation.setAutoReverse(true);
+
+        customerAnimation.play();
+
+        Text customerTitle =
+                new Text("Customer");
+
+        customerTitle.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.BOLD,
+                        28
+                )
+        );
+
+        customerTitle.setFill(
+                Color.web("#171717")
+        );
+
+        Text customerDescription =
+                new Text(
+                        "Explore nearby shops, get lightning-fast delivery,\n" +
+                        "and enjoy a premium hyperlocal experience."
+                );
+
+        customerDescription.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.NORMAL,
+                        14
+                )
+        );
+
+        customerDescription.setFill(
+                Color.web("#674A40")
+        );
+
+        customerDescription.setTextAlignment(
+                TextAlignment.CENTER
+        );
+
+        Image arrowImage2 =
+                new Image(
+                        "assets\\arrow.png"
+                );
+
+        ImageView arrowView2 =
+                new ImageView(arrowImage2);
+
+        arrowView2.setFitWidth(30);
+        arrowView2.setFitHeight(30);
+
+        Button b2 =
+                new Button();
+
+        b2.setGraphic(arrowView2);
+
+        b2.setPrefSize(60, 50);
+        b2.setMinSize(60, 50);
+        b2.setMaxSize(60, 50);
+
+        b2.setStyle(
+                "-fx-background-color: #e6690f;" +
+                "-fx-background-radius: 15;"
+        );
+
+        b2.setOnAction(event -> {
+
+            CustomerLogin cl =
+                    new CustomerLogin();
+
+            Homepage.HomepageStage.setScene(
+                    cl.getLoginScene()
+            );
+        });
+
+        Region customerSpacer =
+                new Region();
+
+        VBox.setVgrow(
+                customerSpacer,
+                Priority.ALWAYS
+        );
+
+        VBox customerCard =
+                new VBox(
+                        8,
+                        customerIconBox,
+                        customerTitle,
+                        customerDescription,
+                        customerSpacer,
+                        b2
+                );
+
+        customerCard.setAlignment(
+                Pos.CENTER
+        );
+
+        customerCard.setPrefSize(320, 280);
+        customerCard.setMinSize(320, 280);
+        customerCard.setMaxSize(320, 280);
+
+        customerCard.setPadding(
+                new Insets(15)
+        );
+
+        customerCard.setStyle(
+                "-fx-background-color: #ffffff;" +
+                "-fx-background-radius: 18;" +
+                "-fx-border-radius: 18;" +
+                "-fx-border-color: #ffffff;"
+        );
+
+        // =====================================================
+        // CARD 3 - ADMIN
+        // =====================================================
+
+        Image adminImage =
+                new Image(
+                        "assets/images/protection.png"
+                );
+
+        ImageView adminImageView =
+                new ImageView(adminImage);
+
+        adminImageView.setFitWidth(35);
+        adminImageView.setFitHeight(35);
+
+        HBox adminIconBox =
+                new HBox(adminImageView);
+
+        adminIconBox.setPrefSize(64, 64);
+        adminIconBox.setMinSize(64, 64);
+        adminIconBox.setMaxSize(64, 64);
+
+        adminIconBox.setAlignment(
+                Pos.CENTER
+        );
+
+        adminIconBox.setStyle(
+                "-fx-background-color: #E8E8E8;" +
+                "-fx-background-radius: 15;"
+        );
+
+        ScaleTransition adminAnimation =
+                new ScaleTransition(
+                        javafx.util.Duration.seconds(1.5),
+                        adminImageView
+                );
+
+        adminAnimation.setFromX(1.0);
+        adminAnimation.setFromY(1.0);
+
+        adminAnimation.setToX(1.08);
+        adminAnimation.setToY(1.08);
+
+        adminAnimation.setCycleCount(
+                Animation.INDEFINITE
+        );
+
+        adminAnimation.setAutoReverse(true);
+
+        adminAnimation.play();
+
+        Text adminTitle =
+                new Text("Admin");
+
+        adminTitle.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.BOLD,
+                        26
+                )
+        );
+
+        adminTitle.setFill(
+                Color.web("#171717")
+        );
+
+        Text adminDescription =
+                new Text(
+                        "Monitor system health, manage platform users,\n" +
+                        "and oversee the entire BuyNeX operations grid."
+                );
+
+        adminDescription.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.NORMAL,
+                        13
+                )
+        );
+
+        adminDescription.setFill(
+                Color.web("#674A40")
+        );
+
+        adminDescription.setTextAlignment(
+                TextAlignment.CENTER
+        );
+
+        Image arrowImage3 =
+                new Image(
+                        "assets\\arrow.png"
+                );
+
+        ImageView arrowView3 =
+                new ImageView(arrowImage3);
+
+        arrowView3.setFitWidth(30);
+        arrowView3.setFitHeight(30);
+
+        Button b3 =
+                new Button();
+
+        b3.setGraphic(arrowView3);
+
+        b3.setPrefSize(60, 50);
+        b3.setMinSize(60, 50);
+        b3.setMaxSize(60, 50);
+
+        b3.setStyle(
+                "-fx-background-color: #e6690f;" +
+                "-fx-background-radius: 15;"
+        );
+
+        Region adminSpacer =
+                new Region();
+
+        VBox.setVgrow(
+                adminSpacer,
+                Priority.ALWAYS
+        );
+
+        VBox adminCard =
+                new VBox(
+                        8,
+                        adminIconBox,
+                        adminTitle,
+                        adminDescription,
+                        adminSpacer,
+                        b3
+                );
+
+        adminCard.setAlignment(
+                Pos.CENTER
+        );
+
+        adminCard.setPrefSize(320, 280);
+        adminCard.setMinSize(320, 280);
+        adminCard.setMaxSize(320, 280);
+
+        adminCard.setPadding(
+                new Insets(15)
+        );
+
+        adminCard.setStyle(
+                "-fx-background-color: #FFFFFF;" +
+                "-fx-background-radius: 18;" +
+                "-fx-border-radius: 18;" +
+                "-fx-border-color: #EEEEEE;"
+        );
+
+        // =====================================================
+        // CARD 4 - DELIVERY
+        // =====================================================
+
+        Image deliveryImage =
+                new Image(
+                        "assets/images/man.png"
+                );
+
+        ImageView deliveryImageView =
+                new ImageView(deliveryImage);
+
+        deliveryImageView.setFitWidth(35);
+        deliveryImageView.setFitHeight(35);
+
+        HBox deliveryIconBox =
+                new HBox(deliveryImageView);
+
+        deliveryIconBox.setPrefSize(64, 64);
+        deliveryIconBox.setMinSize(64, 64);
+        deliveryIconBox.setMaxSize(64, 64);
+
+        deliveryIconBox.setAlignment(
+                Pos.CENTER
+        );
+
+        deliveryIconBox.setStyle(
+                "-fx-background-color: #FFD9C9;" +
+                "-fx-background-radius: 15;"
+        );
+
+        ScaleTransition deliveryAnimation =
+                new ScaleTransition(
+                        javafx.util.Duration.seconds(1.5),
+                        deliveryImageView
+                );
+
+        deliveryAnimation.setFromX(1.2);
+        deliveryAnimation.setFromY(1.2);
+
+        deliveryAnimation.setToX(1.1);
+        deliveryAnimation.setToY(1.1);
+
+        deliveryAnimation.setCycleCount(
+                Animation.INDEFINITE
+        );
+
+        deliveryAnimation.setAutoReverse(true);
+
+        deliveryAnimation.play();
+
+        Text deliveryTitle =
+                new Text("Delivery");
+
+        deliveryTitle.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.BOLD,
+                        26
+                )
+        );
+
+        deliveryTitle.setFill(
+                Color.web("#171717")
+        );
+
+        Text deliveryDescription =
+                new Text(
+                        "Monitor system health, manage platform users,\n" +
+                        "and oversee the entire BuyNeX operations grid."
+                );
+
+        deliveryDescription.setFont(
+                Font.font(
+                        "Poppins",
+                        FontWeight.NORMAL,
+                        13
+                )
+        );
+
+        deliveryDescription.setFill(
+                Color.web("#674A40")
+        );
+
+        deliveryDescription.setTextAlignment(
+                TextAlignment.CENTER
+        );
+
+        Image arrowImage4 =
+                new Image(
+                        "assets\\arrow.png"
+                );
+
+        ImageView arrowView4 =
+                new ImageView(arrowImage4);
+
+        arrowView4.setFitWidth(30);
+        arrowView4.setFitHeight(30);
+
+        Button b4 =
+                new Button();
+
+        b4.setGraphic(arrowView4);
+
+        b4.setPrefSize(60, 50);
+        b4.setMinSize(60, 50);
+        b4.setMaxSize(60, 50);
+
+        b4.setStyle(
+                "-fx-background-color: #e6690f;" +
+                "-fx-background-radius: 15;"
+        );
+
+        Region deliverySpacer =
+                new Region();
+
+        VBox.setVgrow(
+                deliverySpacer,
+                Priority.ALWAYS
+        );
+
+        VBox deliveryCard =
+                new VBox(
+                        8,
+                        deliveryIconBox,
+                        deliveryTitle,
+                        deliveryDescription,
+                        deliverySpacer,
+                        b4
+                );
+
+        deliveryCard.setAlignment(
+                Pos.CENTER
+        );
+
+        deliveryCard.setPrefSize(320, 280);
+        deliveryCard.setMinSize(320, 280);
+        deliveryCard.setMaxSize(320, 280);
+
+        deliveryCard.setPadding(
+                new Insets(15)
+        );
+
+        deliveryCard.setStyle(
+                "-fx-background-color: #FFFFFF;" +
+                "-fx-background-radius: 18;" +
+                "-fx-border-radius: 18;" +
+                "-fx-border-color: #FFFFFF;"
+        );
+
+        // =====================================================
+        // CARD HOVER EFFECT
+        // =====================================================
+
+        DropShadow orangeGlow =
+                new DropShadow();
+
+        orangeGlow.setColor(
+                Color.web("#f0872c")
+        );
+
+        orangeGlow.setRadius(25);
+
+        orangeGlow.setSpread(0.4);
+
+        setHoverEffect(
+                shopCard,
+                orangeGlow
+        );
+
+        setHoverEffect(
+                customerCard,
+                orangeGlow
+        );
+
+        setHoverEffect(
+                adminCard,
+                orangeGlow
+        );
+
+        setHoverEffect(
+                deliveryCard,
+                orangeGlow
+        );
+
+        // =====================================================
+        // FIRST ROW
+        // =====================================================
+
+        HBox firstRow =
+                new HBox(
+                        20,
+                        shopCard,
+                        customerCard
+                );
+
+        firstRow.setAlignment(
+                Pos.CENTER
+        );
+
+        // =====================================================
+        // SECOND ROW
+        // =====================================================
+
+        HBox secondRow =
+                new HBox(
+                        20,
+                        adminCard,
+                        deliveryCard
+                );
+
+        secondRow.setAlignment(
+                Pos.CENTER
+        );
+
+        // =====================================================
+        // ALL CARDS
+        // =====================================================
+
+        VBox cardsBox =
+                new VBox(
+                        20,
+                        firstRow,
+                        secondRow
+                );
+
+        cardsBox.setAlignment(
+                Pos.CENTER
+        );
+
+        // =====================================================
+        // MAIN LAYOUT
+        // =====================================================
+
+        VBox mainLayout =
+                new VBox(
+                        15,
+                        header,
+                        introBox,
+                        cardsBox
+                );
+
+        mainLayout.setAlignment(
+                Pos.TOP_CENTER
+        );
+
+        mainLayout.setPadding(
+                new Insets(
+                        0,
+                        20,
+                        20,
+                        20
+                )
+        );
+
+        // =====================================================
+        // BACKGROUND GLOW
+        // =====================================================
+
+        RadialGradient rightTopGlow =
+                new RadialGradient(
+                        0,
+                        0,
+                        0.80,
+                        0.03,
+                        0.65,
+                        true,
+                        CycleMethod.NO_CYCLE,
+
+                        new Stop(
+                                0.0,
+                                Color.web(
+                                        "#D86B1F",
+                                        0.30
+                                )
+                        ),
+
+                        new Stop(
+                                0.35,
+                                Color.web(
+                                        "#EAD7D0",
+                                        0.12
+                                )
+                        ),
+
+                        new Stop(
+                                0.70,
+                                Color.web(
+                                        "#FAF8FE",
+                                        0.03
+                                )
+                        ),
+
+                        new Stop(
+                                1.0,
+                                Color.web(
+                                        "#FAF8FE",
+                                        0.0
+                                )
+                        )
+                );
+
+        RadialGradient leftBottomGlow =
+                new RadialGradient(
+                        0,
+                        0,
+                        0.08,
+                        0.90,
+                        0.40,
+                        true,
+                        CycleMethod.NO_CYCLE,
+
+                        new Stop(
+                                0.0,
+                                Color.web(
+                                        "#D86B1F",
+                                        0.14
+                                )
+                        ),
+
+                        new Stop(
+                                0.35,
+                                Color.web(
+                                        "#EAD7D0",
+                                        0.10
+                                )
+                        ),
+
+                        new Stop(
+                                0.70,
+                                Color.web(
+                                        "#FAF8FE",
+                                        0.03
+                                )
+                        ),
+
+                        new Stop(
+                                1.0,
+                                Color.web(
+                                        "#FAF8FE",
+                                        0.0
+                                )
+                        )
+                );
+
+        mainLayout.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                rightTopGlow,
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY
+                        ),
+                        new BackgroundFill(
+                                leftBottomGlow,
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        // =====================================================
+        // SCENE
+        // =====================================================
+
+        Scene scene =
+                new Scene(
+                        mainLayout,
+                        1550,
+                        850
+                );
+
+        stage.setTitle(
+                "Home page"
+        );
+
+        stage.setScene(scene);
+
+        stage.setMaximized(true);
+
+        stage.show();
+    }
+
+    // =========================================================
+    // HOVER EFFECT METHOD
+    // =========================================================
+
+    private void setHoverEffect(
+            VBox card,
+            DropShadow glow
+    ) {
+
+        card.setEffect(
+                new DropShadow(
+                        18,
+                        0,
+                        5,
+                        Color.rgb(
+                                0,
+                                0,
+                                0,
+                                0.12
+                        )
+                )
+        );
+
+        card.setOnMouseEntered(event -> {
+
+            card.setEffect(glow);
+
+            card.setStyle(
+                    "-fx-background-color: #FFFFFF;" +
+                    "-fx-background-radius: 18;" +
+                    "-fx-border-radius: 18;" +
+                    "-fx-border-color: #ffffff;" +
+                    "-fx-border-width: 1;"
+            );
+        });
+
+        card.setOnMouseExited(event -> {
+
+            card.setEffect(
+                    new DropShadow(
+                            18,
+                            0,
+                            5,
+                            Color.rgb(
+                                    0,
+                                    0,
+                                    0,
+                                    0.12
+                            )
+                    )
+            );
+
+            card.setStyle(
+                    "-fx-background-color: #FFFFFF;" +
+                    "-fx-background-radius: 18;" +
+                    "-fx-border-radius: 18;" +
+                    "-fx-border-color: #ffffff;"
+            );
+        });
+    }
 }
