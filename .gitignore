@@ -1,0 +1,25 @@
+# Secret config files
+
+buynex/src/main/java/com/kryox/config/APIKEYconfig.java
+buynex/src/main/java/com/kryox/config/Customerconfig.java
+
+buynex/src/main/resources/serviceAccount.json
+
+# VS Code
+.vscode/
+
+# Maven / Java build
+target/
+*.class
+
+# Environment files
+.env
+.env.*
+
+# IDE files
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
