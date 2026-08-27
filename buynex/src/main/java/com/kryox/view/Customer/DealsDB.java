@@ -30,6 +30,11 @@ import java.net.URL;
 
 
 public class DealsDB  {
+public String userId;
+
+        public DealsDB(String userId) {
+        this.userId = userId;
+    }
 
     private Image loadImage(String path) {
         URL url = getClass().getResource(path);
@@ -343,7 +348,7 @@ public class DealsDB  {
                 "-fx-cursor: hand;"
         );
         lefButton4.setOnAction(event->{
-                My_orderAllorder my=new My_orderAllorder();
+                My_orderAllorder my=new My_orderAllorder(userId);
                 Homepage.HomepageStage.setScene(my.getAllorderScene());
         });
 
@@ -413,7 +418,7 @@ public class DealsDB  {
                 "-fx-cursor: hand;"
         );
         lefButton5.setOnAction(e->{
-                Analytics as=new Analytics();
+                Analytics as=new Analytics(userId);
                 Homepage.HomepageStage.setScene(as.getAnalyticscene(callbacktodashboar));
         });
 

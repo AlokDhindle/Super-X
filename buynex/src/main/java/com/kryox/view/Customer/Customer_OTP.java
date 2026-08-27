@@ -79,10 +79,10 @@ public class Customer_OTP {
         Button btn = new Button("Verify Code");
         btn.setPrefSize(220,45);
         btn.setStyle("-fx-background-color:#D66A16;-fx-text-fill:white;-fx-font-size:16px;-fx-font-weight:bold;");
-        btn.setOnAction(event->{
-            Dashbord db=new Dashbord();
-            Homepage.HomepageStage.setScene(db.getDashbordScene());
-        });
+        //btn.setOnAction(event->{
+          //  Dashbord db=new Dashbord();
+          //  Homepage.HomepageStage.setScene(db.getDashbordScene());
+       // });
         
         Text timer = new Text("Resend in 00:28");
         timer.setStyle("-fx-font-size:13px;");
@@ -130,7 +130,7 @@ vb.setEffect(shadow);
         root.setStyle("-fx-background-color: #eee5df");
         root.setTop(hb3);
         root.setCenter(vb);
-        Scene scene = new Scene(root,1550,830);
+        Scene scene = new Scene(root,1550,850);
         otpScene=scene;
         
 
