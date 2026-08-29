@@ -35,8 +35,8 @@ public class CongratulationsPage {
         VBox card = new VBox();
         card.setAlignment(Pos.CENTER);
         card.setSpacing(18);
-        card.setPadding(new Insets(35, 40, 35, 40));
-        card.setMaxWidth(470);
+        card.setPadding(new Insets(42, 48, 42, 48));
+        card.setMaxWidth(540);
 
         card.setStyle(
                 "-fx-background-color:white;" +
@@ -51,7 +51,7 @@ public class CongratulationsPage {
 
         StackPane successIcon = new StackPane();
 
-        Circle iconCircle = new Circle(40);
+        Circle iconCircle = new Circle(46);
         iconCircle.setFill(Color.web("#EBE2DC"));
 
         Label check = new Label("✓");
@@ -59,7 +59,7 @@ public class CongratulationsPage {
                 Font.font(
                         "Arial",
                         FontWeight.BOLD,
-                        34
+                        40
                 )
         );
 
@@ -85,7 +85,7 @@ public class CongratulationsPage {
                 Font.font(
                         "Arial",
                         FontWeight.BOLD,
-                        25
+                        30
                 )
         );
 
@@ -111,7 +111,7 @@ public class CongratulationsPage {
         description.setFont(
                 Font.font(
                         "Arial",
-                        13
+                        15
                 )
         );
 
@@ -124,7 +124,7 @@ public class CongratulationsPage {
         // FEATURE CARDS
         // =========================
 
-        HBox features = new HBox(12);
+        HBox features = new HBox(16);
 
         features.setAlignment(
                 Pos.CENTER
@@ -170,17 +170,17 @@ public class CongratulationsPage {
                 );
 
         dashboardButton.setPrefWidth(
-                350
+                370
         );
 
         dashboardButton.setPrefHeight(
-                48
+                54
         );
 
         dashboardButton.setStyle(
                 "-fx-background-color:linear-gradient(to right,#C64F00,#FFAE81);" +
                 "-fx-text-fill:white;" +
-                "-fx-font-size:14px;" +
+                "-fx-font-size:16px;" +
                 "-fx-font-weight:bold;" +
                 "-fx-background-radius:25;" +
                 "-fx-cursor:hand;"
@@ -205,7 +205,7 @@ public class CongratulationsPage {
         inviteText.setFont(
                 Font.font(
                         "Arial",
-                        11
+                        13
                 )
         );
 
@@ -222,7 +222,7 @@ public class CongratulationsPage {
                 Font.font(
                         "Arial",
                         FontWeight.BOLD,
-                        12
+                        14
                 )
         );
 
@@ -272,7 +272,7 @@ public class CongratulationsPage {
                 Font.font(
                         "Arial",
                         FontWeight.BOLD,
-                        14
+                        16
                 )
         );
 
@@ -295,7 +295,7 @@ public class CongratulationsPage {
                 Font.font(
                         "Arial",
                         FontWeight.BOLD,
-                        11
+                        13
                 )
         );
 
@@ -327,7 +327,7 @@ public class CongratulationsPage {
             dashboardButton.setStyle(
                     "-fx-background-color:#C64F00;" +
                     "-fx-text-fill:white;" +
-                    "-fx-font-size:14px;" +
+                    "-fx-font-size:16px;" +
                     "-fx-font-weight:bold;" +
                     "-fx-background-radius:25;" +
                     "-fx-cursor:hand;"
@@ -340,7 +340,7 @@ public class CongratulationsPage {
             dashboardButton.setStyle(
                     "-fx-background-color:linear-gradient(to right,#C64F00,#FFAE81);" +
                     "-fx-text-fill:white;" +
-                    "-fx-font-size:14px;" +
+                    "-fx-font-size:16px;" +
                     "-fx-font-weight:bold;" +
                     "-fx-background-radius:25;" +
                     "-fx-cursor:hand;"
@@ -375,7 +375,7 @@ public class CongratulationsPage {
             String subtitleText
     ) {
 
-        HBox card = new HBox(12);
+        HBox card = new HBox(14);
 
         card.setAlignment(
                 Pos.CENTER_LEFT
@@ -388,7 +388,7 @@ public class CongratulationsPage {
         );
 
         card.setPrefWidth(
-                190
+                215
         );
 
         card.setStyle(
@@ -403,13 +403,13 @@ public class CongratulationsPage {
                 new StackPane();
 
         iconBox.setPrefSize(
-                34,
-                34
+                40,
+                40
         );
 
         iconBox.setMinSize(
-                34,
-                34
+                40,
+                40
         );
 
         iconBox.setStyle(
@@ -426,7 +426,7 @@ public class CongratulationsPage {
                 Font.font(
                         "Arial",
                         FontWeight.BOLD,
-                        16
+                        19
                 )
         );
 
@@ -451,7 +451,7 @@ public class CongratulationsPage {
                 Font.font(
                         "Arial",
                         FontWeight.BOLD,
-                        12
+                        14
                 )
         );
 
@@ -468,7 +468,7 @@ public class CongratulationsPage {
         subtitle.setFont(
                 Font.font(
                         "Arial",
-                        10
+                        12
                 )
         );
 
