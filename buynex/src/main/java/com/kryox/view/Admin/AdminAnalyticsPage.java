@@ -42,11 +42,11 @@ public class AdminAnalyticsPage {
                 left.setStyle("-fx-background-color:#F3E3D3;");
 
                 Text logo = new Text("Admin Panel");
-                logo.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+                logo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
                 logo.setFill(Color.web("#A83E00"));
 
                 Text adminPanel = new Text("Marketplace Controller");
-                adminPanel.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+                adminPanel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
                 adminPanel.setFill(Color.web("#999999"));
 
                 VBox logoBox = new VBox(4, logo, adminPanel);
@@ -69,13 +69,13 @@ public class AdminAnalyticsPage {
 
                 Image img1 = new Image(getClass().getResource("/assets/images/admin/dashboard.png").toExternalForm());
                 ImageView iv1 = new ImageView(img1);
-                iv1.setFitWidth(16);
-                iv1.setFitHeight(16);
+                iv1.setFitWidth(20);
+                iv1.setFitHeight(20);
                 iv1.setPreserveRatio(true);
 
                 Text dashboardText = new Text("Dashboard");
                 dashboardText.setFill(Color.web("#333333"));
-                dashboardText.setFont(Font.font("Arial", 12));
+                dashboardText.setFont(Font.font("Arial", 14));
 
                 dashboard.getChildren().addAll(iv1, dashboardText);
 
@@ -86,7 +86,7 @@ public class AdminAnalyticsPage {
 
                         dashboardText.setFill(Color.WHITE);
                         dashboardText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -103,7 +103,7 @@ public class AdminAnalyticsPage {
                                                         "-fx-background-radius:10;");
 
                         dashboardText.setFill(Color.web("#333333"));
-                        dashboardText.setFont(Font.font("Arial", 12));
+                        dashboardText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -131,15 +131,15 @@ public class AdminAnalyticsPage {
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-background-radius:10;");
 
-                Image img2 = new Image(getClass().getResource("/assets/images/admin/admin logo.png").toExternalForm());
+                Image img2 = new Image("assets\\images\\admin\\admin_logo.png");
                 ImageView iv2 = new ImageView(img2);
-                iv2.setFitWidth(16);
-                iv2.setFitHeight(16);
+                iv2.setFitWidth(20);
+                iv2.setFitHeight(20);
                 iv2.setPreserveRatio(true);
 
                 Text usersText = new Text("Users");
                 usersText.setFill(Color.web("#333333"));
-                usersText.setFont(Font.font("Arial", 12));
+                usersText.setFont(Font.font("Arial", 14));
 
                 users.getChildren().addAll(iv2, usersText);
 
@@ -150,7 +150,7 @@ public class AdminAnalyticsPage {
 
                         usersText.setFill(Color.WHITE);
                         usersText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -167,7 +167,7 @@ public class AdminAnalyticsPage {
                                                         "-fx-background-radius:10;");
 
                         usersText.setFill(Color.web("#333333"));
-                        usersText.setFont(Font.font("Arial", 12));
+                        usersText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -200,13 +200,13 @@ public class AdminAnalyticsPage {
 
                 Image img3 = new Image(getClass().getResource("/assets/images/admin/shop.png").toExternalForm());
                 ImageView iv3 = new ImageView(img3);
-                iv3.setFitWidth(16);
-                iv3.setFitHeight(16);
+                iv3.setFitWidth(20);
+                iv3.setFitHeight(20);
                 iv3.setPreserveRatio(true);
 
                 Text shopsText = new Text("Shops");
                 shopsText.setFill(Color.web("#333333"));
-                shopsText.setFont(Font.font("Arial", 12));
+                shopsText.setFont(Font.font("Arial", 14));
 
                 shops.getChildren().addAll(iv3, shopsText);
 
@@ -217,7 +217,7 @@ public class AdminAnalyticsPage {
 
                         shopsText.setFill(Color.WHITE);
                         shopsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -234,7 +234,7 @@ public class AdminAnalyticsPage {
                                                         "-fx-background-radius:10;");
 
                         shopsText.setFill(Color.web("#333333"));
-                        shopsText.setFont(Font.font("Arial", 12));
+                        shopsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -263,13 +263,13 @@ public class AdminAnalyticsPage {
 
                 Image img4 = new Image(getClass().getResource("/assets/images/admin/tag.png").toExternalForm());
                 ImageView iv4 = new ImageView(img4);
-                iv4.setFitWidth(16);
-                iv4.setFitHeight(16);
+                iv4.setFitWidth(20);
+                iv4.setFitHeight(20);
                 iv4.setPreserveRatio(true);
 
                 Text offersText = new Text("Offers");
                 offersText.setFill(Color.web("#333333"));
-                offersText.setFont(Font.font("Arial", 12));
+                offersText.setFont(Font.font("Arial", 14));
 
                 offers.getChildren().addAll(iv4, offersText);
 
@@ -280,7 +280,7 @@ public class AdminAnalyticsPage {
 
                         offersText.setFill(Color.WHITE);
                         offersText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -297,7 +297,7 @@ public class AdminAnalyticsPage {
                                                         "-fx-background-radius:10;");
 
                         offersText.setFill(Color.web("#333333"));
-                        offersText.setFont(Font.font("Arial", 12));
+                        offersText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -326,13 +326,13 @@ public class AdminAnalyticsPage {
 
                 Image img5 = new Image(getClass().getResource("/assets/images/admin/stats.png").toExternalForm());
                 ImageView iv5 = new ImageView(img5);
-                iv5.setFitWidth(16);
-                iv5.setFitHeight(16);
+                iv5.setFitWidth(20);
+                iv5.setFitHeight(20);
                 iv5.setPreserveRatio(true);
 
                 Text analyticsText = new Text("Analytics");
                 analyticsText.setFill(Color.web("#333333"));
-                analyticsText.setFont(Font.font("Arial", 12));
+                analyticsText.setFont(Font.font("Arial", 14));
 
                 analytics.getChildren().addAll(iv5, analyticsText);
 
@@ -343,7 +343,7 @@ public class AdminAnalyticsPage {
 
                         analyticsText.setFill(Color.WHITE);
                         analyticsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -360,7 +360,7 @@ public class AdminAnalyticsPage {
                                                         "-fx-background-radius:10;");
 
                         analyticsText.setFill(Color.web("#333333"));
-                        analyticsText.setFont(Font.font("Arial", 12));
+                        analyticsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -399,13 +399,13 @@ public class AdminAnalyticsPage {
 
                 Image img6 = new Image(getClass().getResource("/assets/images/admin/setting.png").toExternalForm());
                 ImageView iv6 = new ImageView(img6);
-                iv6.setFitWidth(16);
-                iv6.setFitHeight(16);
+                iv6.setFitWidth(20);
+                iv6.setFitHeight(20);
                 iv6.setPreserveRatio(true);
 
                 Text settingsText = new Text("Settings");
                 settingsText.setFill(Color.web("#333333"));
-                settingsText.setFont(Font.font("Arial", 12));
+                settingsText.setFont(Font.font("Arial", 14));
 
                 settings.getChildren().addAll(iv6, settingsText);
                 settings.setOnMouseEntered(e -> {
@@ -415,7 +415,7 @@ public class AdminAnalyticsPage {
 
                         settingsText.setFill(Color.WHITE);
                         settingsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -432,7 +432,7 @@ public class AdminAnalyticsPage {
                                                         "-fx-background-radius:10;");
 
                         settingsText.setFill(Color.web("#333333"));
-                        settingsText.setFont(Font.font("Arial", 12));
+                        settingsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -460,13 +460,13 @@ public class AdminAnalyticsPage {
 
                 Image img7 = new Image(getClass().getResource("/assets/images/admin/service-call.png").toExternalForm());
                 ImageView iv7 = new ImageView(img7);
-                iv7.setFitWidth(16);
-                iv7.setFitHeight(16);
+                iv7.setFitWidth(20);
+                iv7.setFitHeight(20);
                 iv7.setPreserveRatio(true);
 
                 Text supportText = new Text("Support");
                 supportText.setFill(Color.web("#333333"));
-                supportText.setFont(Font.font("Arial", 12));
+                supportText.setFont(Font.font("Arial", 14));
 
                 support.getChildren().addAll(iv7, supportText);
 
@@ -481,7 +481,7 @@ public class AdminAnalyticsPage {
 
                         supportText.setFill(Color.WHITE);
                         supportText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -498,7 +498,7 @@ public class AdminAnalyticsPage {
                                                         "-fx-background-radius:10;");
 
                         supportText.setFill(Color.web("#333333"));
-                        supportText.setFont(Font.font("Arial", 12));
+                        supportText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -568,7 +568,7 @@ public class AdminAnalyticsPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                24));
+                                                28));
 
                 Text subtitle = new Text(
                                 "Real-time performance metrics and predictive modeling for Zone B.");
@@ -576,7 +576,7 @@ public class AdminAnalyticsPage {
                 subtitle.setFont(
                                 Font.font(
                                                 "Arial",
-                                                11));
+                                                14));
 
                 subtitle.setFill(
                                 Color.web("#777777"));
@@ -590,7 +590,9 @@ public class AdminAnalyticsPage {
 
                 excel.setStyle(
                                 "-fx-background-color:#F1EFF2;" +
-                                                "-fx-background-radius:6;");
+                                                "-fx-background-radius:6;" +
+                                                "-fx-font-size:13px;" +
+                                                "-fx-padding:8 16 8 16;");
 
                 Button pdf = new Button("PDF Report");
 
@@ -598,7 +600,9 @@ public class AdminAnalyticsPage {
 
                 pdf.setStyle(
                                 "-fx-background-color:#FF6500;" +
-                                                "-fx-background-radius:6;");
+                                                "-fx-background-radius:6;" +
+                                                "-fx-font-size:13px;" +
+                                                "-fx-padding:8 16 8 16;");
 
                 HBox buttons = new HBox(
                                 10,
@@ -663,7 +667,7 @@ public class AdminAnalyticsPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                16));
+                                                20));
 
                 VBox heatmap = new VBox(3);
 
@@ -761,7 +765,7 @@ public class AdminAnalyticsPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                16));
+                                                18));
 
                 Text ai1 = new Text(
                                 "Inventory Surge Predicted\n" +
@@ -771,7 +775,7 @@ public class AdminAnalyticsPage {
                 ai1.setFont(
                                 Font.font(
                                                 "Arial",
-                                                10));
+                                                12));
 
                 Text ai2 = new Text(
                                 "Security Alert\n" +
@@ -781,7 +785,7 @@ public class AdminAnalyticsPage {
                 ai2.setFont(
                                 Font.font(
                                                 "Arial",
-                                                10));
+                                                12));
 
                 Text ai3 = new Text(
                                 "Operational Efficiency\n" +
@@ -791,7 +795,7 @@ public class AdminAnalyticsPage {
                 ai3.setFont(
                                 Font.font(
                                                 "Arial",
-                                                10));
+                                                12));
 
                 VBox ai1Box = new VBox(ai1);
 
@@ -861,14 +865,17 @@ public class AdminAnalyticsPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                16));
+                                                18));
 
                 StackPane salesGraph = new StackPane();
 
-                salesGraph.setPrefHeight(105);
+                salesGraph.setPrefHeight(155);
 
                 Image analysImage = new Image(getClass().getResource("/assets/images/admin/analysisgraph.png").toExternalForm());
                 ImageView img = new ImageView(analysImage);
+                img.setFitWidth(440);
+                img.setFitHeight(150);
+                img.setPreserveRatio(true);
 
                 salesGraph.getChildren().add(
                                 img);
@@ -883,18 +890,17 @@ public class AdminAnalyticsPage {
                 
 
                 HBox days = new HBox(
-                                22,
-                                img,
-                                mon,
-                                tue,
-                                wed,
-                                thu,
-                                fri,
-                                sat,
-                                sun);
+                        32,
+                        mon,
+                        tue,
+                        wed,
+                        thu,
+                        fri,
+                        sat,
+                        sun);
 
-                days.setAlignment(
-                                Pos.CENTER_LEFT);
+                days.setAlignment(Pos.CENTER);
+                days.setPrefWidth(440);
 
                 VBox salesBox = new VBox(
                                 12,
@@ -925,7 +931,7 @@ public class AdminAnalyticsPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                16));
+                                                18));
 
                 // FIX:
                 // The original code used "chart" without declaring it.
@@ -942,7 +948,7 @@ public class AdminAnalyticsPage {
                 categoryText.setFont(
                                 Font.font(
                                                 "Arial",
-                                                11));
+                                                13));
 
                 HBox categoryData = new HBox(
                                 25,
@@ -1033,7 +1039,7 @@ public class AdminAnalyticsPage {
                                         Font.font(
                                                         "Arial",
                                                         FontWeight.BOLD,
-                                                        9));
+                                                        11));
 
                         h.setFill(
                                         Color.web("#654A3E"));
@@ -1053,7 +1059,7 @@ public class AdminAnalyticsPage {
                                                 15,
                                                 8,
                                                 15,
-                                                8));
+                                                10));
 
                 // =========================================================
                 // ROW 1
@@ -1108,7 +1114,7 @@ public class AdminAnalyticsPage {
                                                 15,
                                                 8,
                                                 15,
-                                                8));
+                                                10));
 
                 // =========================================================
                 // ROW 2
@@ -1164,7 +1170,7 @@ public class AdminAnalyticsPage {
                                                 15,
                                                 8,
                                                 15,
-                                                8));
+                                                10));
 
                 // =========================================================
                 // ROW 3
@@ -1220,7 +1226,7 @@ public class AdminAnalyticsPage {
                                                 15,
                                                 8,
                                                 15,
-                                                8));
+                                                10));
 
                 // =========================================================
                 // OFFER TABLE
@@ -1397,7 +1403,7 @@ public class AdminAnalyticsPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                17));
+                                                20));
 
                 Text market = new Text(
                                 "Market Share");
@@ -1405,7 +1411,7 @@ public class AdminAnalyticsPage {
                 market.setFont(
                                 Font.font(
                                                 "Arial",
-                                                8));
+                                                10));
 
                 market.setFill(
                                 Color.web("#777777"));
@@ -1442,7 +1448,8 @@ public class AdminAnalyticsPage {
                 label.setStyle(
                                 "-fx-background-color:#EEECEF;" +
                                                 "-fx-background-radius:15;" +
-                                                "-fx-padding:5 12 5 12;");
+                                                "-fx-font-size:13px;" +
+                                                "-fx-padding:6 13 6 13;");
 
                 return label;
         }
@@ -1463,7 +1470,8 @@ public class AdminAnalyticsPage {
                                         "-fx-background-color:#FFF1EC;" +
                                                         "-fx-text-fill:#A83E00;" +
                                                         "-fx-background-radius:12;" +
-                                                        "-fx-padding:5 12 5 12;");
+                                                        "-fx-font-size:13px;" +
+                                                        "-fx-padding:6 13 6 13;");
 
                 } else {
 
@@ -1471,7 +1479,8 @@ public class AdminAnalyticsPage {
                                         "-fx-background-color:#E7E5E8;" +
                                                         "-fx-text-fill:#555555;" +
                                                         "-fx-background-radius:12;" +
-                                                        "-fx-padding:5 12 5 12;");
+                                                        "-fx-font-size:13px;" +
+                                                        "-fx-padding:6 13 6 13;");
                 }
 
                 return label;
@@ -1533,8 +1542,8 @@ public class AdminAnalyticsPage {
                                 ImageView imageView = new ImageView(
                                                 image);
 
-                                imageView.setFitWidth(16);
-                                imageView.setFitHeight(16);
+                                imageView.setFitWidth(20);
+                                imageView.setFitHeight(20);
                                 imageView.setPreserveRatio(true);
 
                                 item.getChildren().add(
@@ -1560,7 +1569,7 @@ public class AdminAnalyticsPage {
                                         Font.font(
                                                         "Arial",
                                                         FontWeight.BOLD,
-                                                        12));
+                                                        14));
 
                 } else {
 
@@ -1570,7 +1579,7 @@ public class AdminAnalyticsPage {
                         text.setFont(
                                         Font.font(
                                                         "Arial",
-                                                        12));
+                                                        14));
                 }
 
                 item.getChildren().add(text);
@@ -1591,7 +1600,7 @@ public class AdminAnalyticsPage {
                                         Font.font(
                                                         "Arial",
                                                         FontWeight.BOLD,
-                                                        12));
+                                                        14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -1615,7 +1624,7 @@ public class AdminAnalyticsPage {
                                                 Font.font(
                                                                 "Arial",
                                                                 FontWeight.BOLD,
-                                                                12));
+                                                                14));
 
                         } else {
 
@@ -1625,7 +1634,7 @@ public class AdminAnalyticsPage {
                                 text.setFont(
                                                 Font.font(
                                                                 "Arial",
-                                                                12));
+                                                                14));
                         }
 
                         ScaleTransition st = new ScaleTransition(
@@ -1657,7 +1666,7 @@ public class AdminAnalyticsPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                8));
+                                                10));
 
                 t.setFill(
                                 Color.web("#777777"));
@@ -1669,7 +1678,7 @@ public class AdminAnalyticsPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                17));
+                                                20));
 
                 v.setFill(
                                 Color.web("#A83E00"));
@@ -1681,7 +1690,7 @@ public class AdminAnalyticsPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                9));
+                                                11));
 
                 p.setFill(
                                 Color.web("#777777"));

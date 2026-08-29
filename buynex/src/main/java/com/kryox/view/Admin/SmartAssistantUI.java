@@ -49,8 +49,8 @@ public class SmartAssistantUI {
         centerVBox.setStyle("-fx-background-color: linear-gradient(to bottom, #FFF9F5, #F4ECE7);");
 
         HBox headerHBox = new HBox();
-        headerHBox.setPrefHeight(76);
-        headerHBox.setMinHeight(76);
+        headerHBox.setPrefHeight(86);
+        headerHBox.setMinHeight(86);
         headerHBox.setAlignment(Pos.CENTER_LEFT);
         headerHBox.setPadding(new Insets(12, 20, 12, 18));
         headerHBox.setSpacing(14);
@@ -60,9 +60,9 @@ public class SmartAssistantUI {
                 "-fx-border-width: 0 0 1 0;");
 
         Button backButton = new Button("←  Back");
-        backButton.setPrefHeight(38);
-        backButton.setMinWidth(82);
-        backButton.setFont(Font.font("Arial", FontWeight.BOLD, 11));
+        backButton.setPrefHeight(44);
+        backButton.setMinWidth(96);
+        backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         backButton.setTextFill(Color.web("#5C3B2E"));
         backButton.setStyle(
                 "-fx-background-color: #FFF0E7;" +
@@ -94,9 +94,9 @@ public class SmartAssistantUI {
         });
 
         VBox aiCircle = new VBox();
-        aiCircle.setPrefSize(42, 42);
-        aiCircle.setMinSize(42, 42);
-        aiCircle.setMaxSize(42, 42);
+        aiCircle.setPrefSize(50, 50);
+        aiCircle.setMinSize(50, 50);
+        aiCircle.setMaxSize(50, 50);
         aiCircle.setAlignment(Pos.CENTER);
         aiCircle.setStyle(
                 "-fx-background-color: #FF7109;" +
@@ -104,24 +104,24 @@ public class SmartAssistantUI {
                 "-fx-effect: dropshadow(gaussian, rgba(166, 63, 8, 0.20), 8, 0, 0, 2);");
 
         Text aiIcon = new Text("✦");
-        aiIcon.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        aiIcon.setFont(Font.font("Arial", FontWeight.BOLD, 22));
         aiIcon.setFill(Color.WHITE);
         aiCircle.getChildren().add(aiIcon);
 
         Text aiTitle = new Text("BuyNeX Smart Assistant");
-        aiTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        aiTitle.setFont(Font.font("Arial", FontWeight.BOLD, 22));
         aiTitle.setFill(Color.web("#2E2420"));
 
         Text aiSubtitle = new Text("Smart local shopping • AI powered");
-        aiSubtitle.setFont(Font.font("Arial", 9));
+        aiSubtitle.setFont(Font.font("Arial", 12));
         aiSubtitle.setFill(Color.web("#806B61"));
 
         Text onlineDot = new Text("●");
-        onlineDot.setFont(Font.font("Arial", 8));
+        onlineDot.setFont(Font.font("Arial", 10));
         onlineDot.setFill(Color.web("#3E9B55"));
 
         Text onlineText = new Text(" Online");
-        onlineText.setFont(Font.font("Arial", 9));
+        onlineText.setFont(Font.font("Arial", 11));
         onlineText.setFill(Color.web("#3E7D4B"));
 
         HBox onlineHBox = new HBox(2, onlineDot, onlineText);
@@ -133,10 +133,10 @@ public class SmartAssistantUI {
         HBox.setHgrow(headerSpace, Priority.ALWAYS);
 
         Text menuIcon = new Text("⋮");
-        menuIcon.setFont(Font.font("Arial", 22));
+        menuIcon.setFont(Font.font("Arial", 27));
         menuIcon.setFill(Color.web("#6C5A52"));
         headerHBox.getChildren().addAll(backButton, aiCircle, titleVBox, headerSpace, menuIcon);
-        chatVBox = new VBox(16);
+        chatVBox = new VBox(18);
         chatVBox.setPadding(new Insets(22, 28, 18, 28));
         chatVBox.setFillWidth(true);
         addAiMessage("Hello! I'm your BuyNeX AI. How can I help you source, " + "compare, or track your local purchases today?");
@@ -151,7 +151,7 @@ public class SmartAssistantUI {
         VBox.setVgrow(chatScrollPane, Priority.ALWAYS);
 
         HBox inputOuterHBox = new HBox();
-        inputOuterHBox.setPrefHeight(78);
+        inputOuterHBox.setPrefHeight(88);
         inputOuterHBox.setAlignment(Pos.CENTER);
         inputOuterHBox.setPadding(new Insets(12, 24, 14, 24));
         inputOuterHBox.setStyle(
@@ -159,7 +159,7 @@ public class SmartAssistantUI {
                 "-fx-border-width: 1 0 0 0;");
 
         HBox inputHBox = new HBox();
-        inputHBox.setPrefHeight(50);
+        inputHBox.setPrefHeight(58);
         inputHBox.setAlignment(Pos.CENTER_LEFT);
         inputHBox.setSpacing(8);
         inputHBox.setMaxWidth(Double.MAX_VALUE);
@@ -173,16 +173,16 @@ public class SmartAssistantUI {
                 "-fx-effect: dropshadow(gaussian, rgba(80, 45, 25, 0.08), 12, 0, 0, 2);");
 
         Text attachIcon = new Text("⌕");
-        attachIcon.setFont(Font.font("Arial", 18));
+        attachIcon.setFont(Font.font("Arial", 22));
         attachIcon.setFill(Color.web("#5B5552"));
         inputField = new TextArea();
         inputField.setPromptText("Ask BuyNeX AI...");
-        inputField.setFont(Font.font("Arial", 20));
+        inputField.setFont(Font.font("Arial", 22));
         inputField.setWrapText(true);
         inputField.setPrefRowCount(1);
-        inputField.setPrefHeight(38);
-        inputField.setMinHeight(32);
-        inputField.setMaxHeight(55);
+        inputField.setPrefHeight(46);
+        inputField.setMinHeight(38);
+        inputField.setMaxHeight(64);
         inputField.setStyle(
                 "-fx-background-color: transparent;" +
                 "-fx-border-color: transparent;" +
@@ -191,14 +191,14 @@ public class SmartAssistantUI {
         HBox.setHgrow(inputField, Priority.ALWAYS);
 
         Text micIcon = new Text("♩");
-        micIcon.setFont(Font.font("Arial", 17));
+        micIcon.setFont(Font.font("Arial", 21));
         micIcon.setFill(Color.web("#5B5552"));
 
         Button sendButton = new Button("➤");
-        sendButton.setPrefSize(31, 31);
-        sendButton.setMinSize(31, 31);
-        sendButton.setMaxSize(31, 31);
-        sendButton.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        sendButton.setPrefSize(38, 38);
+        sendButton.setMinSize(38, 38);
+        sendButton.setMaxSize(38, 38);
+        sendButton.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         sendButton.setTextFill(Color.WHITE);
         sendButton.setStyle(
                 "-fx-background-color: #A94005;" +
@@ -219,9 +219,9 @@ public class SmartAssistantUI {
         centerVBox.getChildren().addAll(headerHBox, chatScrollPane, inputOuterHBox);
 
         VBox rightVBox = new VBox();
-        rightVBox.setPrefWidth(285);
-        rightVBox.setMinWidth(285);
-        rightVBox.setMaxWidth(285);
+        rightVBox.setPrefWidth(320);
+        rightVBox.setMinWidth(320);
+        rightVBox.setMaxWidth(320);
         rightVBox.setMaxHeight(Double.MAX_VALUE);
         rightVBox.setPadding(new Insets(22, 16, 18, 16));
         rightVBox.setSpacing(10);
@@ -231,7 +231,7 @@ public class SmartAssistantUI {
                 "-fx-border-width: 0 0 0 1;");
 
         Text capabilitiesTitle = new Text("Explore BuyNeX AI");
-        capabilitiesTitle.setFont(Font.font("Arial", FontWeight.BOLD, 17));
+        capabilitiesTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         capabilitiesTitle.setFill(Color.web("#30241F"));
 
         VBox sourceCard = capabilityCard("▢", "Source Products", "\"Find the best price for\navocados nearby.\"");
@@ -242,7 +242,7 @@ public class SmartAssistantUI {
         VBox.setVgrow(rightSpace, Priority.ALWAYS);
 
         VBox infoBox = new VBox();
-        infoBox.setPrefHeight(120);
+        infoBox.setPrefHeight(140);
         infoBox.setPadding(new Insets(10));
         infoBox.setSpacing(6);
         infoBox.setStyle(
@@ -255,16 +255,16 @@ public class SmartAssistantUI {
         infoTitleHBox.setAlignment(Pos.TOP_LEFT);
 
         Text infoIcon = new Text("ⓘ");
-        infoIcon.setFont(Font.font("Arial", 15));
+        infoIcon.setFont(Font.font("Arial", 18));
         infoIcon.setFill(Color.web("#A94005"));
 
         Text infoTitle = new Text("The BuyNeX Smart\nAssistant");
-        infoTitle.setFont(Font.font("Arial", 10));
+        infoTitle.setFont(Font.font("Arial", 12));
         infoTitle.setFill(Color.web("#594C48"));
         infoTitleHBox.getChildren().addAll(infoIcon, infoTitle);
 
         Text infoText = new Text("uses real-time local data to\n" + "provide the most accurate\n" + "recommendations.");
-        infoText.setFont(Font.font("Arial", 9));
+        infoText.setFont(Font.font("Arial", 11));
         infoText.setFill(Color.web("#594C48"));
         infoBox.getChildren().addAll(infoTitleHBox, infoText);
         rightVBox.getChildren().addAll(capabilitiesTitle, sourceCard, trackCard, compareCard, trendsCard, rightSpace, infoBox);
@@ -319,13 +319,13 @@ public class SmartAssistantUI {
                 userMessageHBox.setMaxWidth(Double.MAX_VALUE);
                 
                 Text userMessage = new Text(message);
-                userMessage.setFont(Font.font("Arial", 11));
+                userMessage.setFont(Font.font("Arial", 14));
                 userMessage.setFill(Color.WHITE);
-                userMessage.setWrappingWidth(330);
+                userMessage.setWrappingWidth(380);
                 
                 VBox userMessageBox = new VBox();
                 userMessageBox.setPadding(new Insets(9, 11, 9, 11));
-                userMessageBox.setMaxWidth(360);
+                userMessageBox.setMaxWidth(420);
                 userMessageBox.setStyle(
                         "-fx-background-color: #A94005;" +
                         "-fx-background-radius: 9;");
@@ -342,26 +342,26 @@ public class SmartAssistantUI {
                 aiMessageHBox.setSpacing(9);
                 
                 VBox smallAiCircle = new VBox();
-                smallAiCircle.setPrefSize(23, 23);
-                smallAiCircle.setMinSize(23, 23);
-                smallAiCircle.setMaxSize(23, 23);
+                smallAiCircle.setPrefSize(28, 28);
+                smallAiCircle.setMinSize(28, 28);
+                smallAiCircle.setMaxSize(28, 28);
                 smallAiCircle.setAlignment(Pos.CENTER);
                 smallAiCircle.setStyle(
                         "-fx-background-color: #FF7109;" +
                         "-fx-background-radius: 20;");
                 
                         Text smallAiIcon = new Text("♙");
-                smallAiIcon.setFont(Font.font("Arial", 12));
+                smallAiIcon.setFont(Font.font("Arial", 15));
                 smallAiCircle.getChildren().add(smallAiIcon);
                 
                 Text aiMessage = new Text(message);
-                aiMessage.setFont(Font.font("Arial", 11));
+                aiMessage.setFont(Font.font("Arial", 14));
                 aiMessage.setFill(Color.web("#3E3836"));
-                aiMessage.setWrappingWidth(390);
+                aiMessage.setWrappingWidth(440);
                 
                 VBox aiMessageBox = new VBox();
                 aiMessageBox.setPadding(new Insets(10, 11, 10, 11));
-                aiMessageBox.setMaxWidth(410);
+                aiMessageBox.setMaxWidth(470);
                 aiMessageBox.setStyle("-fx-background-color: #F0EDF2;" + "-fx-background-radius: 8;"
                                 + "-fx-border-color: #E2DDE4;" + "-fx-border-radius: 8;");
                 aiMessageBox.getChildren().add(aiMessage);
@@ -376,22 +376,22 @@ public class SmartAssistantUI {
         aiRow.setMaxWidth(Double.MAX_VALUE);
         
         VBox smallAiCircle = new VBox();
-        smallAiCircle.setPrefSize(23, 23);
-        smallAiCircle.setMinSize(23, 23);
-        smallAiCircle.setMaxSize(23, 23);
+        smallAiCircle.setPrefSize(28, 28);
+        smallAiCircle.setMinSize(28, 28);
+        smallAiCircle.setMaxSize(28, 28);
         smallAiCircle.setAlignment(Pos.CENTER);
         smallAiCircle.setStyle(
                 "-fx-background-color: #FF7109;" +
                 "-fx-background-radius: 20;");
         Text smallAiIcon = new Text("♙");
-        smallAiIcon.setFont(Font.font("Arial", 12));
+        smallAiIcon.setFont(Font.font("Arial", 15));
         smallAiCircle.getChildren().add(smallAiIcon);
         
         VBox productCard = new VBox();
         productCard.setSpacing(8);
         productCard.setPadding(new Insets(9));
-        productCard.setMaxWidth(410);
-        productCard.setPrefWidth(390);
+        productCard.setMaxWidth(470);
+        productCard.setPrefWidth(450);
         productCard.setStyle(
                 "-fx-background-color: #F0EDF2;" +
                 "-fx-background-radius: 10;" +
@@ -402,9 +402,9 @@ public class SmartAssistantUI {
         productRow.setAlignment(Pos.CENTER_LEFT);
         
         VBox imageBox = new VBox();
-        imageBox.setPrefSize(82, 76);
-        imageBox.setMinSize(82, 76);
-        imageBox.setMaxSize(82, 76);
+        imageBox.setPrefSize(92, 86);
+        imageBox.setMinSize(92, 86);
+        imageBox.setMaxSize(92, 86);
         imageBox.setAlignment(Pos.CENTER);
         imageBox.setStyle(
                 "-fx-background-color: #FFF8F3;" +
@@ -414,22 +414,22 @@ public class SmartAssistantUI {
         try {
             java.net.URL imageUrl = getClass().getResource(imagePath);
             if (imageUrl != null) {
-                Image image = new Image(imageUrl.toExternalForm(), 72, 66, true, true);
+                Image image = new Image(imageUrl.toExternalForm(), 82, 76, true, true);
                 ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(72);
-                imageView.setFitHeight(66);
+                imageView.setFitWidth(82);
+                imageView.setFitHeight(76);
                 imageView.setPreserveRatio(true);
                 imageView.setSmooth(true);
                 imageBox.getChildren().add(imageView);
             } else {
                 Text noImage = new Text("No Image");
-                noImage.setFont(Font.font("Arial", 8));
+                noImage.setFont(Font.font("Arial", 10));
                 noImage.setFill(Color.web("#999999"));
                 imageBox.getChildren().add(noImage);
             }
         } catch (Exception ex) {
             Text noImage = new Text("No Image");
-            noImage.setFont(Font.font("Arial", 8));
+            noImage.setFont(Font.font("Arial", 10));
             noImage.setFill(Color.web("#999999"));
             imageBox.getChildren().add(noImage);
         }
@@ -439,17 +439,17 @@ public class SmartAssistantUI {
         detailsBox.setAlignment(Pos.CENTER_LEFT);
         
         Text name = new Text(productName);
-        name.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        name.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         name.setFill(Color.web("#302A28"));
-        name.setWrappingWidth(180);
+        name.setWrappingWidth(210);
         
         Text description = new Text(productDescription);
-        description.setFont(Font.font("Arial", 9));
+        description.setFont(Font.font("Arial", 11));
         description.setFill(Color.web("#625A56"));
-        description.setWrappingWidth(180);
+        description.setWrappingWidth(210);
         
         Text priceText = new Text(price);
-        priceText.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+        priceText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         priceText.setFill(Color.web("#A94005"));
         detailsBox.getChildren().addAll(name, description, priceText);
         
@@ -458,14 +458,14 @@ public class SmartAssistantUI {
         HBox.setHgrow(productSpacer, Priority.ALWAYS);
         
         Button addToCartButton = new Button("Add to Cart");
-        addToCartButton.setPrefWidth(86);
-        addToCartButton.setPrefHeight(31);
-        addToCartButton.setMinWidth(86);
+        addToCartButton.setPrefWidth(100);
+        addToCartButton.setPrefHeight(38);
+        addToCartButton.setMinWidth(100);
         addToCartButton.setStyle(
                 "-fx-background-color: #FF7109;" +
                 "-fx-text-fill: white;" +
                 "-fx-font-family: 'Arial';" +
-                "-fx-font-size: 9px;" +
+                "-fx-font-size: 12px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-background-radius: 8;" +
                 "-fx-cursor: hand;");
@@ -475,7 +475,7 @@ public class SmartAssistantUI {
                     "-fx-background-color: #3E8E41;" +
                     "-fx-text-fill: white;" +
                     "-fx-font-family: 'Arial';" +
-                    "-fx-font-size: 9px;" +
+                    "-fx-font-size: 12px;" +
                     "-fx-font-weight: bold;" +
                     "-fx-background-radius: 8;");
         });
@@ -497,7 +497,7 @@ public class SmartAssistantUI {
 
     private VBox capabilityCard(String iconText, String titleText, String descriptionText) {
                 VBox card = new VBox();
-                card.setPrefHeight(85);
+                card.setPrefHeight(105);
                 card.setMaxWidth(Double.MAX_VALUE);
                 card.setPadding(new Insets(10));
                 card.setSpacing(5);
@@ -508,16 +508,16 @@ public class SmartAssistantUI {
                 titleHBox.setAlignment(Pos.CENTER_LEFT);
                 
                 Text icon = new Text(iconText);
-                icon.setFont(Font.font("Arial", 14));
+                icon.setFont(Font.font("Arial", 17));
                 icon.setFill(Color.web("#A94005"));
                 
                 Text title = new Text(titleText);
-                title.setFont(Font.font("Arial", FontWeight.BOLD, 11));
+                title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
                 title.setFill(Color.web("#A94005"));
                 titleHBox.getChildren().addAll(icon, title);
                 
                 Text description = new Text(descriptionText);
-                description.setFont(Font.font("Arial", 9));
+                description.setFont(Font.font("Arial", 11));
                 description.setFill(Color.web("#594C48"));
                 card.getChildren().addAll(titleHBox, description);
                 return card;
