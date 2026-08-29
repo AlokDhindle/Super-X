@@ -1,11 +1,9 @@
 package com.kryox.controller.Admin;
 
 import java.net.URI;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 
 import org.json.JSONObject;
 
@@ -23,7 +21,37 @@ public class ControllerFirebase {
             HttpClient.newHttpClient();
 
 
+    // =========================================================
+    // OLD SIGNUP
+    // Other existing code break hou naye mhanun thevla aahe
+    // =========================================================
     public String signUp(
+            String email,
+            String password
+    ) {
+
+        JSONObject result =
+                signUpAdmin(
+                        email,
+                        password
+                );
+
+        if (result != null) {
+
+            return result.getString(
+                    "idToken"
+            );
+        }
+
+        return null;
+    }
+
+
+    // =========================================================
+    // ADMIN SIGNUP
+    // UID + idToken donhi miltil
+    // =========================================================
+    public JSONObject signUpAdmin(
             String email,
             String password
     ) {
@@ -81,11 +109,6 @@ public class ControllerFirebase {
                             + response.statusCode()
             );
 
-            System.out.println(
-                    "Signup Response: "
-                            + response.body()
-            );
-
             if (response.statusCode() == 200) {
 
                 JSONObject json =
@@ -93,9 +116,11 @@ public class ControllerFirebase {
                                 response.body()
                         );
 
-                return json.getString(
-                        "idToken"
+                System.out.println(
+                        "Admin Authentication account created"
                 );
+
+                return json;
             }
 
             JSONObject error =
@@ -132,6 +157,13 @@ public class ControllerFirebase {
     }
 
 
+    // =========================================================
+    // ADMIN LOGIN
+    // 1. Firebase Authentication
+    // 2. UID
+    // 3. Firestore admins/{UID}
+    // 4. role == Admin
+    // =========================================================
     public boolean login(
             String email,
             String password
@@ -190,12 +222,179 @@ public class ControllerFirebase {
                             + response.statusCode()
             );
 
+            // Firebase Authentication failed
+            if (response.statusCode() != 200) {
+
+                System.out.println(
+                        "Invalid Email or Password"
+                );
+
+                return false;
+            }
+
+            JSONObject json =
+                    new JSONObject(
+                            response.body()
+                    );
+
+            String uid =
+                    json.getString(
+                            "localId"
+                    );
+
+            String idToken =
+                    json.getString(
+                            "idToken"
+                    );
+
+            String firebaseEmail =
+                    json.getString(
+                            "email"
+                    );
+
             System.out.println(
-                    "Login Response: "
-                            + response.body()
+                    "Authentication successful"
             );
 
-            return response.statusCode() == 200;
+            System.out.println(
+                    "Checking Admin permission..."
+            );
+
+
+            // =================================================
+            // CHECK FIRESTORE admins/{UID}
+            // =================================================
+
+            String adminUrl =
+                    "https://firestore.googleapis.com/v1/projects/"
+                            + PROJECT_ID
+                            + "/databases/(default)/documents/admins/"
+                            + uid;
+
+            HttpRequest adminRequest =
+                    HttpRequest.newBuilder()
+                            .uri(
+                                    URI.create(
+                                            adminUrl
+                                    )
+                            )
+                            .header(
+                                    "Authorization",
+                                    "Bearer " + idToken
+                            )
+                            .GET()
+                            .build();
+
+            HttpResponse<String> adminResponse =
+                    client.send(
+                            adminRequest,
+                            HttpResponse.BodyHandlers.ofString()
+                    );
+
+            System.out.println(
+                    "Admin Check Status: "
+                            + adminResponse.statusCode()
+            );
+
+
+            // admins/{UID} document nasel
+            if (adminResponse.statusCode() != 200) {
+
+                System.out.println(
+                        "Access Denied: Email is not registered as Admin"
+                );
+
+                return false;
+            }
+
+
+            JSONObject adminJson =
+                    new JSONObject(
+                            adminResponse.body()
+                    );
+
+            if (!adminJson.has("fields")) {
+
+                System.out.println(
+                        "Access Denied: Admin fields not found"
+                );
+
+                return false;
+            }
+
+            JSONObject fields =
+                    adminJson.getJSONObject(
+                            "fields"
+                    );
+
+
+            // =================================================
+            // ROLE CHECK
+            // =================================================
+
+            if (!fields.has("role")) {
+
+                System.out.println(
+                        "Access Denied: Admin role not found"
+                );
+
+                return false;
+            }
+
+            String role =
+                    fields
+                            .getJSONObject("role")
+                            .getString("stringValue");
+
+
+            if (!role.equalsIgnoreCase("Admin")) {
+
+                System.out.println(
+                        "Access Denied: User role is "
+                                + role
+                );
+
+                return false;
+            }
+
+
+            // =================================================
+            // EMAIL CHECK
+            // =================================================
+
+            if (!fields.has("email")) {
+
+                System.out.println(
+                        "Access Denied: Admin email not found"
+                );
+
+                return false;
+            }
+
+            String adminEmail =
+                    fields
+                            .getJSONObject("email")
+                            .getString("stringValue");
+
+
+            if (!adminEmail.equalsIgnoreCase(
+                    firebaseEmail
+            )) {
+
+                System.out.println(
+                        "Access Denied: Email does not match"
+                );
+
+                return false;
+            }
+
+
+            System.out.println(
+                    "Admin verified successfully"
+            );
+
+            return true;
+
 
         } catch (Exception e) {
 
@@ -211,7 +410,12 @@ public class ControllerFirebase {
     }
 
 
+    // =========================================================
+    // NEW ADMIN SAVE
+    // Document ID = Firebase UID
+    // =========================================================
     public boolean saveAdminData(
+            String uid,
             String employeeId,
             String fullName,
             String username,
@@ -224,18 +428,30 @@ public class ControllerFirebase {
 
         try {
 
-            if (employeeId == null
-                    || employeeId.isBlank()) {
+            if (uid == null
+                    || uid.isBlank()) {
 
                 System.out.println(
-                        "Employee ID is empty"
+                        "Firebase UID is empty"
                 );
 
                 return false;
             }
 
+
             JSONObject fields =
                     new JSONObject();
+
+
+            fields.put(
+                    "uid",
+                    new JSONObject()
+                            .put(
+                                    "stringValue",
+                                    uid
+                            )
+            );
+
 
             fields.put(
                     "fullName",
@@ -246,6 +462,7 @@ public class ControllerFirebase {
                             )
             );
 
+
             fields.put(
                     "username",
                     new JSONObject()
@@ -254,6 +471,7 @@ public class ControllerFirebase {
                                     username
                             )
             );
+
 
             fields.put(
                     "email",
@@ -264,6 +482,7 @@ public class ControllerFirebase {
                             )
             );
 
+
             fields.put(
                     "mobile",
                     new JSONObject()
@@ -272,6 +491,7 @@ public class ControllerFirebase {
                                     mobile
                             )
             );
+
 
             fields.put(
                     "employeeId",
@@ -282,6 +502,7 @@ public class ControllerFirebase {
                             )
             );
 
+
             fields.put(
                     "role",
                     new JSONObject()
@@ -290,6 +511,7 @@ public class ControllerFirebase {
                                     role
                             )
             );
+
 
             fields.put(
                     "accessCode",
@@ -300,6 +522,7 @@ public class ControllerFirebase {
                             )
             );
 
+
             JSONObject payload =
                     new JSONObject();
 
@@ -308,17 +531,17 @@ public class ControllerFirebase {
                     fields
             );
 
-            String safeEmployeeId =
-                    URLEncoder.encode(
-                            employeeId,
-                            StandardCharsets.UTF_8
-                    );
+
+            // IMPORTANT:
+            // Employee ID nahi
+            // Firebase UID document ID aahe
 
             String url =
                     "https://firestore.googleapis.com/v1/projects/"
                             + PROJECT_ID
                             + "/databases/(default)/documents/admins/"
-                            + safeEmployeeId;
+                            + uid;
+
 
             HttpRequest request =
                     HttpRequest.newBuilder()
@@ -343,21 +566,19 @@ public class ControllerFirebase {
                             )
                             .build();
 
+
             HttpResponse<String> response =
                     client.send(
                             request,
                             HttpResponse.BodyHandlers.ofString()
                     );
 
+
             System.out.println(
                     "Firestore Status: "
                             + response.statusCode()
             );
 
-            System.out.println(
-                    "Firestore Response: "
-                            + response.body()
-            );
 
             if (response.statusCode() == 200) {
 
@@ -368,11 +589,17 @@ public class ControllerFirebase {
                 return true;
             }
 
+
             System.out.println(
                     "Admin data storage failed"
             );
 
+            System.out.println(
+                    response.body()
+            );
+
             return false;
+
 
         } catch (Exception e) {
 

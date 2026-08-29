@@ -37,7 +37,7 @@ public class AdminDashboardPage {
         public Scene getUserScene() {
 
                 BorderPane root = new BorderPane();
-                root.setStyle("-fx-background-color:#F9F7FB;");
+                root.setStyle("-fx-background-color: #eee5df;");
 
                 VBox left = new VBox();
                 left.setPrefWidth(210);
@@ -559,6 +559,7 @@ public class AdminDashboardPage {
                 center.setPadding(new Insets(25));
                 center.setMaxWidth(1120);
                 center.setMaxHeight(Double.MAX_VALUE);
+                center.setStyle("-fx-background-color: #eee5df;");
 
                 // =========================
                 // TOP
@@ -1706,11 +1707,13 @@ public class AdminDashboardPage {
                 centerScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
                 centerScroll.setPannable(true);
                 centerScroll.setStyle(
-                                "-fx-background:#F9F7FB;" +
-                                                "-fx-background-color:#F9F7FB;" +
-                                                "-fx-border-color:transparent;");
+                                "-fx-background:#eee5df;" +
+                                "-fx-background-color:#eee5df;" +
+                                "-fx-border-color:transparent;"
+                        );
 
                 root.setCenter(centerScroll);
+
 
                 // =========================
                 // SCENE

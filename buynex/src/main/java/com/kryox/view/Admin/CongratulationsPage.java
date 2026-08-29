@@ -486,7 +486,6 @@ public class CongratulationsPage {
                 iconBox,
                 texts
         );
-
         return card;
     }
 }

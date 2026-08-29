@@ -122,6 +122,14 @@ public class AdminLoginPage {
                                 passwordTitle,
                                 passwordField);
 
+                Text errorMessage = new Text("");
+                errorMessage.setStyle(
+                                "-fx-fill:#D32F2F;" +
+                                                "-fx-font-size:13px;" +
+                                                "-fx-font-weight:bold;");
+                errorMessage.setVisible(false);
+                errorMessage.setManaged(false);
+
                 Button login = new Button("Login   →");
                 login.setPrefHeight(50);
                 login.setMaxWidth(Double.MAX_VALUE);
@@ -132,24 +140,61 @@ public class AdminLoginPage {
                                                 "-fx-font-size:18px;" +
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-background-radius:8;");
+
                 ControllerFirebase controler = new ControllerFirebase();
+
+                emailField.textProperty().addListener((obs, oldValue, newValue) -> {
+                        errorMessage.setVisible(false);
+                        errorMessage.setManaged(false);
+                });
+
+                passwordField.textProperty().addListener((obs, oldValue, newValue) -> {
+                        errorMessage.setVisible(false);
+                        errorMessage.setManaged(false);
+                });
 
                 login.setOnAction(e -> {
 
+                        String email = emailField.getText().trim();
+                        String password = passwordField.getText();
+
+                        if (email.isEmpty() || password.isEmpty()) {
+
+                                errorMessage.setText(
+                                                "Please enter email and password.");
+                                errorMessage.setVisible(true);
+                                errorMessage.setManaged(true);
+
+                                return;
+                        }
+
                         boolean flage = controler.login(
-                                        emailField.getText(),
-                                        passwordField.getText());
+                                        email,
+                                        password
+                        );
 
                         if (flage) {
-                                System.out.println("Login successful");
 
-                                AdminDashboardPage dashboardPage = new AdminDashboardPage();
+                                errorMessage.setVisible(false);
+                                errorMessage.setManaged(false);
+
+                                System.out.println("Admin Login successful");
+
+                                AdminDashboardPage dashboardPage =
+                                                new AdminDashboardPage();
 
                                 Homepage.HomepageStage.setScene(
-                                                dashboardPage.getUserScene());
+                                                dashboardPage.getUserScene()
+                                );
 
                         } else {
-                                System.out.println("Login failed");
+
+                                System.out.println("Admin Login failed");
+
+                                errorMessage.setText(
+                                                "Invalid Admin Email or Password.");
+                                errorMessage.setVisible(true);
+                                errorMessage.setManaged(true);
                         }
                 });
 
@@ -230,6 +275,7 @@ public class AdminLoginPage {
                                 idBox,
                                 emailBox,
                                 passwordBox,
+                                errorMessage,
                                 login,
                                 signInBox,
                                 google);
@@ -304,6 +350,7 @@ public class AdminLoginPage {
 
                 vb.setAlignment(Pos.CENTER);
                 vb.setPadding(new Insets(30));
+                vb.setStyle("-fx-background-color: #eee5df;");
 
                 vb.setBackground(
                                 new Background(

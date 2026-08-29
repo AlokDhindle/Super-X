@@ -1,5 +1,7 @@
 package com.kryox.dao.Admin;
 
+import org.json.JSONObject;
+
 import com.kryox.controller.Admin.ControllerFirebase;
 import com.kryox.model.Admin.Admin;
 
@@ -10,27 +12,40 @@ public class AdminDao {
 
     public boolean registerAdmin(Admin admin) {
 
-        String idToken =
-                firebase.signUp(
+        JSONObject authResult =
+                firebase.signUpAdmin(
                         admin.getEmail(),
                         admin.getPassword()
                 );
 
-        if (idToken == null) {
+        if (authResult == null) {
 
-            System.out.println("Firebase Authentication failed");
+            System.out.println(
+                    "Firebase Authentication failed"
+            );
 
             return false;
         }
 
+        String uid =
+                authResult.getString(
+                        "localId"
+                );
+
+        String idToken =
+                authResult.getString(
+                        "idToken"
+                );
+
         boolean stored =
                 firebase.saveAdminData(
+                        uid,
                         admin.getEmployeeId(),
                         admin.getFullName(),
                         admin.getUsername(),
                         admin.getEmail(),
                         admin.getMobile(),
-                        admin.getRole(),
+                        "Admin",
                         admin.getAccessCode(),
                         idToken
                 );

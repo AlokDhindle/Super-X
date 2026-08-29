@@ -1,7 +1,8 @@
 package com.kryox.view.Admin;
 
-import com.kryox.dao.Admin.AdminDao;
-import com.kryox.model.Admin.Admin;
+import org.json.JSONObject;
+
+import com.kryox.controller.Admin.ControllerFirebase;
 import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
@@ -45,7 +46,7 @@ public class AdminRegistrationPage {
                 "-fx-font-size:15px;"
         );
 
-        Image img1 = new Image(getClass().getResource("/assets/images/admin/admin logo.png").toExternalForm());
+        Image img1 = new Image(getClass().getResource("/assets/images/admin/admin_logo.png").toExternalForm());
 
         ImageView iv1 = new ImageView(img1);
         iv1.setFitWidth(24);
@@ -238,13 +239,9 @@ public class AdminRegistrationPage {
 
         ComboBox<String> roleBox = new ComboBox<>();
 
-        roleBox.getItems().addAll(
-                "Admin",
-                "Manager",
-                "Super Admin"
-        );
-
-        roleBox.setPromptText("Select Role");
+        roleBox.getItems().add("Admin");
+        roleBox.setValue("Admin");
+        roleBox.setDisable(true);
         roleBox.setMaxWidth(Double.MAX_VALUE);
         roleBox.setPrefHeight(42);
         roleBox.setStyle("-fx-font-size:13px;");
@@ -354,6 +351,8 @@ public class AdminRegistrationPage {
                 "-fx-background-radius:5;"
         );
 
+        ControllerFirebase controller = new ControllerFirebase();
+
         create.setOnAction(event -> {
 
             String fullName = nameField.getText().trim();
@@ -406,24 +405,50 @@ public class AdminRegistrationPage {
                 return;
             }
 
-            Admin admin = new Admin(
-                    employeeId,
-                    fullName,
-                    usernameValue,
-                    emailValue,
-                    passwordValue,
-                    mobileValue,
-                    roleValue,
-                    accessCode
-            );
+            JSONObject authResult =
+                    controller.signUpAdmin(
+                            emailValue,
+                            passwordValue
+                    );
 
-            AdminDao adminDao =
-                    new AdminDao();
+            if (authResult == null) {
+
+                Alert alert =
+                        new Alert(Alert.AlertType.ERROR);
+
+                alert.setTitle("Registration Failed");
+                alert.setHeaderText(null);
+                alert.setContentText(
+                        "Admin registration failed. Email may already exist or the details are invalid."
+                );
+
+                alert.showAndWait();
+
+                return;
+            }
+
+            String uid =
+                    authResult.getString("localId");
+
+            String idToken =
+                    authResult.getString("idToken");
 
             boolean stored =
-                    adminDao.registerAdmin(admin);
+                    controller.saveAdminData(
+                            uid,
+                            employeeId,
+                            fullName,
+                            usernameValue,
+                            emailValue,
+                            mobileValue,
+                            roleValue,
+                            accessCode,
+                            idToken
+                    );
 
             if (stored) {
+
+                System.out.println("Admin registered successfully");
 
                 CongratulationsPage successPage =
                         new CongratulationsPage();
@@ -437,10 +462,10 @@ public class AdminRegistrationPage {
                 Alert alert =
                         new Alert(Alert.AlertType.ERROR);
 
-                alert.setTitle("Firebase Error");
+                alert.setTitle("Firestore Error");
                 alert.setHeaderText(null);
                 alert.setContentText(
-                        "Admin data could not be stored."
+                        "Authentication account was created, but admin data could not be stored in Firestore."
                 );
 
                 alert.showAndWait();
