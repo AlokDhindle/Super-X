@@ -312,6 +312,15 @@ public class Seting {
                                                 "-fx-padding: 0 0 0 14;" +
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
+                helpBtn.setOnAction(event->{
+                        Helppage hp=new Helppage(userId);
+                        Runnable rn=new Runnable() {
+                                public void run(){
+
+                                }
+                        };
+                        Homepage.HomepageStage.setScene(hp.getHelpScene(rn));
+                });
         
 
                 // ================= TERMS BUTTON =================
