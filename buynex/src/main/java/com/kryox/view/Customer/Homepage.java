@@ -1,5 +1,7 @@
 package com.kryox.view.Customer;
 
+import com.kryox.view.Admin.AdminLoginPage;
+
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
@@ -751,6 +753,10 @@ public class Homepage extends Application {
                 "-fx-background-color: #e6690f;" +
                 "-fx-background-radius: 15;"
         );
+        b3.setOnAction(event->{
+                AdminLoginPage adl=new AdminLoginPage();
+                Homepage.HomepageStage.setScene(adl.getLoginScene());
+        });
 
         Region adminSpacer =
                 new Region();
