@@ -45,11 +45,11 @@ public class ShopVerificationPage {
                 left.setStyle("-fx-background-color:#F3E3D3;");
 
                 Text logo = new Text("Admin Panel");
-                logo.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+                logo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
                 logo.setFill(Color.web("#A83E00"));
 
                 Text adminPanel = new Text("Marketplace Controller");
-                adminPanel.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+                adminPanel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
                 adminPanel.setFill(Color.web("#999999"));
 
                 VBox logoBox = new VBox(4, logo, adminPanel);
@@ -72,13 +72,13 @@ public class ShopVerificationPage {
 
                 Image img1 = new Image(getClass().getResource("/assets/images/admin/dashboard.png").toExternalForm());
                 ImageView iv1 = new ImageView(img1);
-                iv1.setFitWidth(16);
-                iv1.setFitHeight(16);
+                iv1.setFitWidth(20);
+                iv1.setFitHeight(20);
                 iv1.setPreserveRatio(true);
 
                 Text dashboardText = new Text("Dashboard");
                 dashboardText.setFill(Color.web("#333333"));
-                dashboardText.setFont(Font.font("Arial", 12));
+                dashboardText.setFont(Font.font("Arial", 14));
 
                 dashboard.getChildren().addAll(iv1, dashboardText);
 
@@ -89,7 +89,7 @@ public class ShopVerificationPage {
 
                         dashboardText.setFill(Color.WHITE);
                         dashboardText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -106,7 +106,7 @@ public class ShopVerificationPage {
                                                         "-fx-background-radius:10;");
 
                         dashboardText.setFill(Color.web("#333333"));
-                        dashboardText.setFont(Font.font("Arial", 12));
+                        dashboardText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -137,15 +137,15 @@ public class ShopVerificationPage {
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-background-radius:10;");
 
-                Image img2 = new Image(getClass().getResource("/assets/images/admin/admin logo.png").toExternalForm());
+                Image img2 = new Image("assets\\images\\admin\\admin_logo.png");
                 ImageView iv2 = new ImageView(img2);
-                iv2.setFitWidth(16);
-                iv2.setFitHeight(16);
+                iv2.setFitWidth(20);
+                iv2.setFitHeight(20);
                 iv2.setPreserveRatio(true);
 
                 Text usersText = new Text("Users");
                 usersText.setFill(Color.web("#333333"));
-                usersText.setFont(Font.font("Arial", 12));
+                usersText.setFont(Font.font("Arial", 14));
 
                 users.getChildren().addAll(iv2, usersText);
 
@@ -156,7 +156,7 @@ public class ShopVerificationPage {
 
                         usersText.setFill(Color.WHITE);
                         usersText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -173,7 +173,7 @@ public class ShopVerificationPage {
                                                         "-fx-background-radius:10;");
 
                         usersText.setFill(Color.web("#333333"));
-                        usersText.setFont(Font.font("Arial", 12));
+                        usersText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -206,13 +206,13 @@ public class ShopVerificationPage {
 
                 Image img3 = new Image(getClass().getResource("/assets/images/admin/shop.png").toExternalForm());
                 ImageView iv3 = new ImageView(img3);
-                iv3.setFitWidth(16);
-                iv3.setFitHeight(16);
+                iv3.setFitWidth(20);
+                iv3.setFitHeight(20);
                 iv3.setPreserveRatio(true);
 
                 Text shopsText = new Text("Shops");
                 shopsText.setFill(Color.web("#333333"));
-                shopsText.setFont(Font.font("Arial", 12));
+                shopsText.setFont(Font.font("Arial", 14));
 
                 shops.getChildren().addAll(iv3, shopsText);
 
@@ -223,7 +223,7 @@ public class ShopVerificationPage {
 
                         shopsText.setFill(Color.WHITE);
                         shopsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -240,7 +240,7 @@ public class ShopVerificationPage {
                                                         "-fx-background-radius:10;");
 
                         shopsText.setFill(Color.web("#333333"));
-                        shopsText.setFont(Font.font("Arial", 12));
+                        shopsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -269,13 +269,13 @@ public class ShopVerificationPage {
 
                 Image img4 = new Image(getClass().getResource("/assets/images/admin/tag.png").toExternalForm());
                 ImageView iv4 = new ImageView(img4);
-                iv4.setFitWidth(16);
-                iv4.setFitHeight(16);
+                iv4.setFitWidth(20);
+                iv4.setFitHeight(20);
                 iv4.setPreserveRatio(true);
 
                 Text offersText = new Text("Offers");
                 offersText.setFill(Color.web("#333333"));
-                offersText.setFont(Font.font("Arial", 12));
+                offersText.setFont(Font.font("Arial", 14));
 
                 offers.getChildren().addAll(iv4, offersText);
 
@@ -286,7 +286,7 @@ public class ShopVerificationPage {
 
                         offersText.setFill(Color.WHITE);
                         offersText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -303,7 +303,7 @@ public class ShopVerificationPage {
                                                         "-fx-background-radius:10;");
 
                         offersText.setFill(Color.web("#333333"));
-                        offersText.setFont(Font.font("Arial", 12));
+                        offersText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -332,13 +332,13 @@ public class ShopVerificationPage {
 
                 Image img5 = new Image(getClass().getResource("/assets/images/admin/stats.png").toExternalForm());
                 ImageView iv5 = new ImageView(img5);
-                iv5.setFitWidth(16);
-                iv5.setFitHeight(16);
+                iv5.setFitWidth(20);
+                iv5.setFitHeight(20);
                 iv5.setPreserveRatio(true);
 
                 Text analyticsText = new Text("Analytics");
                 analyticsText.setFill(Color.web("#333333"));
-                analyticsText.setFont(Font.font("Arial", 12));
+                analyticsText.setFont(Font.font("Arial", 14));
 
                 analytics.getChildren().addAll(iv5, analyticsText);
 
@@ -349,7 +349,7 @@ public class ShopVerificationPage {
 
                         analyticsText.setFill(Color.WHITE);
                         analyticsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -366,7 +366,7 @@ public class ShopVerificationPage {
                                                         "-fx-background-radius:10;");
 
                         analyticsText.setFill(Color.web("#333333"));
-                        analyticsText.setFont(Font.font("Arial", 12));
+                        analyticsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -405,13 +405,13 @@ public class ShopVerificationPage {
 
                 Image img6 = new Image(getClass().getResource("/assets/images/admin/setting.png").toExternalForm());
                 ImageView iv6 = new ImageView(img6);
-                iv6.setFitWidth(16);
-                iv6.setFitHeight(16);
+                iv6.setFitWidth(20);
+                iv6.setFitHeight(20);
                 iv6.setPreserveRatio(true);
 
                 Text settingsText = new Text("Settings");
                 settingsText.setFill(Color.web("#333333"));
-                settingsText.setFont(Font.font("Arial", 12));
+                settingsText.setFont(Font.font("Arial", 14));
 
                 settings.getChildren().addAll(iv6, settingsText);
 
@@ -426,13 +426,13 @@ public class ShopVerificationPage {
 
                 Image img7 = new Image(getClass().getResource("/assets/images/admin/service-call.png").toExternalForm());
                 ImageView iv7 = new ImageView(img7);
-                iv7.setFitWidth(16);
-                iv7.setFitHeight(16);
+                iv7.setFitWidth(20);
+                iv7.setFitHeight(20);
                 iv7.setPreserveRatio(true);
 
                 Text supportText = new Text("Support");
                 supportText.setFill(Color.web("#333333"));
-                supportText.setFont(Font.font("Arial", 12));
+                supportText.setFont(Font.font("Arial", 14));
 
                 support.getChildren().addAll(iv7, supportText);
 
@@ -447,7 +447,7 @@ public class ShopVerificationPage {
 
                         settingsText.setFill(Color.WHITE);
                         settingsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -464,7 +464,7 @@ public class ShopVerificationPage {
                                                         "-fx-background-radius:10;");
 
                         settingsText.setFill(Color.web("#333333"));
-                        settingsText.setFont(Font.font("Arial", 12));
+                        settingsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -493,7 +493,7 @@ public class ShopVerificationPage {
 
                         supportText.setFill(Color.WHITE);
                         supportText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -510,7 +510,7 @@ public class ShopVerificationPage {
                                                         "-fx-background-radius:10;");
 
                         supportText.setFill(Color.web("#333333"));
-                        supportText.setFont(Font.font("Arial", 12));
+                        supportText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -533,6 +533,7 @@ public class ShopVerificationPage {
                 // =========================
 
                 Button exit = new Button("Exit");
+                exit.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
                 HBox profile = new HBox(
                                 exit);
@@ -580,7 +581,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                28));
+                                                32));
 
                 title.setFill(
                                 Color.web("#B84300"));
@@ -591,7 +592,7 @@ public class ShopVerificationPage {
                 subtitle.setFont(
                                 Font.font(
                                                 "Arial",
-                                                11));
+                                                14));
 
                 subtitle.setFill(
                                 Color.web("#777777"));
@@ -629,7 +630,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                8));
+                                                10));
 
                 pendingTitle.setFill(
                                 Color.GRAY);
@@ -641,7 +642,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                17));
+                                                20));
 
                 pending.getChildren().addAll(
                                 pendingTitle,
@@ -670,7 +671,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                8));
+                                                10));
 
                 todayTitle.setFill(
                                 Color.GRAY);
@@ -682,7 +683,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                17));
+                                                20));
 
                 todayValue.setFill(
                                 Color.web("#B84300"));
@@ -713,7 +714,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                15));
+                                                18));
 
                 Region approvalSpace = new Region();
 
@@ -728,7 +729,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                9));
+                                                12));
 
                 filter.setFill(
                                 Color.web("#B84300"));
@@ -759,7 +760,7 @@ public class ShopVerificationPage {
                 // CARD 1
                 // =====================================================
 
-                VBox card1 = new VBox(10);
+                VBox card1 = new VBox(12);
 
                 card1.setPadding(
                                 new Insets(14));
@@ -774,8 +775,8 @@ public class ShopVerificationPage {
                                 Pos.CENTER_LEFT);
 
                 Rectangle card1Image = new Rectangle(
-                                38,
-                                38);
+                                44,
+                                44);
 
                 card1Image.setArcWidth(10);
                 card1Image.setArcHeight(10);
@@ -792,7 +793,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                14));
+                                                17));
 
                 Text card1Owner = new Text(
                                 "Owner: Rajesh Kumar • Registered 2h ago");
@@ -800,7 +801,7 @@ public class ShopVerificationPage {
                 card1Owner.setFont(
                                 Font.font(
                                                 "Arial",
-                                                9));
+                                                11));
 
                 card1Owner.setFill(
                                 Color.GRAY);
@@ -822,7 +823,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                7));
+                                                9));
 
                 card1Category.setFill(
                                 Color.GRAY);
@@ -844,7 +845,7 @@ public class ShopVerificationPage {
                 license1.setFont(
                                 Font.font(
                                                 "Arial",
-                                                9));
+                                                11));
 
                 Text gst1 = new Text(
                                 "▧ GST Certificate");
@@ -852,7 +853,7 @@ public class ShopVerificationPage {
                 gst1.setFont(
                                 Font.font(
                                                 "Arial",
-                                                9));
+                                                11));
 
                 Region card1BottomSpace = new Region();
 
@@ -863,13 +864,14 @@ public class ShopVerificationPage {
                 Button view1 = new Button(
                                 "View Documents");
 
-                view1.setPrefHeight(30);
+                view1.setPrefHeight(36);
 
                 view1.setStyle(
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-text-fill:white;" +
                                                 "-fx-background-radius:7;" +
-                                                "-fx-font-size:10;");
+                                                "-fx-font-size:12px;" +
+                                                "-fx-font-size:12px;");
 
                 card1Bottom.getChildren().addAll(
                                 license1,
@@ -885,7 +887,7 @@ public class ShopVerificationPage {
                 // CARD 2
                 // =====================================================
 
-                VBox card2 = new VBox(10);
+                VBox card2 = new VBox(12);
 
                 card2.setPadding(
                                 new Insets(14));
@@ -900,8 +902,8 @@ public class ShopVerificationPage {
                                 Pos.CENTER_LEFT);
 
                 Rectangle card2Image = new Rectangle(
-                                38,
-                                38);
+                                44,
+                                44);
 
                 card2Image.setArcWidth(10);
                 card2Image.setArcHeight(10);
@@ -918,7 +920,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                14));
+                                                17));
 
                 Text card2Owner = new Text(
                                 "Owner: Sarah Jenkins • Registered 5h ago");
@@ -926,7 +928,7 @@ public class ShopVerificationPage {
                 card2Owner.setFont(
                                 Font.font(
                                                 "Arial",
-                                                9));
+                                                11));
 
                 card2Owner.setFill(
                                 Color.GRAY);
@@ -948,7 +950,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                7));
+                                                9));
 
                 card2Category.setFill(
                                 Color.GRAY);
@@ -970,7 +972,7 @@ public class ShopVerificationPage {
                 license2.setFont(
                                 Font.font(
                                                 "Arial",
-                                                9));
+                                                11));
 
                 Text gst2 = new Text(
                                 "▧ GST Certificate");
@@ -978,7 +980,7 @@ public class ShopVerificationPage {
                 gst2.setFont(
                                 Font.font(
                                                 "Arial",
-                                                9));
+                                                11));
 
                 Region card2BottomSpace = new Region();
 
@@ -989,13 +991,13 @@ public class ShopVerificationPage {
                 Button view2 = new Button(
                                 "View Documents");
 
-                view2.setPrefHeight(30);
+                view2.setPrefHeight(36);
 
                 view2.setStyle(
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-text-fill:white;" +
                                                 "-fx-background-radius:7;" +
-                                                "-fx-font-size:10;");
+                                                "-fx-font-size:12px;");
 
                 card2Bottom.getChildren().addAll(
                                 license2,
@@ -1011,7 +1013,7 @@ public class ShopVerificationPage {
                 // CARD 3
                 // =====================================================
 
-                VBox card3 = new VBox(10);
+                VBox card3 = new VBox(12);
 
                 card3.setPadding(
                                 new Insets(14));
@@ -1026,8 +1028,8 @@ public class ShopVerificationPage {
                                 Pos.CENTER_LEFT);
 
                 Rectangle card3Image = new Rectangle(
-                                38,
-                                38);
+                                44,
+                                44);
 
                 card3Image.setArcWidth(10);
                 card3Image.setArcHeight(10);
@@ -1044,7 +1046,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                14));
+                                                17));
 
                 Text card3Owner = new Text(
                                 "Owner: Anita Desai • Registered Yesterday");
@@ -1052,7 +1054,7 @@ public class ShopVerificationPage {
                 card3Owner.setFont(
                                 Font.font(
                                                 "Arial",
-                                                9));
+                                                11));
 
                 card3Owner.setFill(
                                 Color.GRAY);
@@ -1074,7 +1076,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                7));
+                                                9));
 
                 card3Category.setFill(
                                 Color.GRAY);
@@ -1096,7 +1098,7 @@ public class ShopVerificationPage {
                 license3.setFont(
                                 Font.font(
                                                 "Arial",
-                                                9));
+                                                11));
 
                 Text gst3 = new Text(
                                 "⚠ GST Missing");
@@ -1104,7 +1106,7 @@ public class ShopVerificationPage {
                 gst3.setFont(
                                 Font.font(
                                                 "Arial",
-                                                9));
+                                                11));
 
                 Region card3BottomSpace = new Region();
 
@@ -1115,13 +1117,13 @@ public class ShopVerificationPage {
                 Button view3 = new Button(
                                 "View Documents");
 
-                view3.setPrefHeight(30);
+                view3.setPrefHeight(36);
 
                 view3.setStyle(
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-text-fill:white;" +
                                                 "-fx-background-radius:7;" +
-                                                "-fx-font-size:10;");
+                                                "-fx-font-size:12px;");
 
                 card3Bottom.getChildren().addAll(
                                 license3,
@@ -1164,7 +1166,7 @@ public class ShopVerificationPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                35));
+                                                42));
 
                 check.setFill(
                                 Color.web("#E5D3CB"));
@@ -1175,7 +1177,7 @@ public class ShopVerificationPage {
                 reviewText.setFont(
                                 Font.font(
                                                 "Arial",
-                                                11));
+                                                14));
 
                 reviewText.setFill(
                                 Color.web("#999999"));
@@ -1319,18 +1321,18 @@ public class ShopVerificationPage {
                                                 "-fx-border-radius:15;");
 
                 Text panelTitle = new Text("Document Review");
-                panelTitle.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+                panelTitle.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
-                Rectangle shopImage = new Rectangle(45, 45);
+                Rectangle shopImage = new Rectangle(52, 52);
                 shopImage.setArcWidth(10);
                 shopImage.setArcHeight(10);
                 shopImage.setFill(Color.web("#EFF0D9"));
 
                 Text shopNameText = new Text(shopName);
-                shopNameText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+                shopNameText.setFont(Font.font("Arial", FontWeight.BOLD, 19));
 
                 Text ownerText = new Text(ownerName);
-                ownerText.setFont(Font.font("Arial", 10));
+                ownerText.setFont(Font.font("Arial", 12));
                 ownerText.setFill(Color.GRAY);
 
                 VBox shopInfo = new VBox(4, shopNameText, ownerText);
@@ -1343,7 +1345,7 @@ public class ShopVerificationPage {
                                 "-fx-background-color:#F7E5D7;" +
                                                 "-fx-padding:5 12 5 12;" +
                                                 "-fx-background-radius:8;" +
-                                                "-fx-font-size:9;");
+                                                "-fx-font-size:11px;");
 
                 HBox shopHeader = new HBox(
                                 12,
@@ -1354,10 +1356,10 @@ public class ShopVerificationPage {
                 shopHeader.setAlignment(Pos.CENTER_LEFT);
 
                 Text licenseIcon = new Text("▣");
-                licenseIcon.setFont(Font.font("Arial", 22));
+                licenseIcon.setFont(Font.font("Arial", 26));
 
                 Text licenseName = new Text("Business License");
-                licenseName.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+                licenseName.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
                 Region licenseSpace = new Region();
                 HBox.setHgrow(licenseSpace, Priority.ALWAYS);
@@ -1367,17 +1369,19 @@ public class ShopVerificationPage {
                                 "-fx-background-color:#DFF2DA;" +
                                                 "-fx-text-fill:#26733C;" +
                                                 "-fx-padding:4 10 4 10;" +
-                                                "-fx-background-radius:7;");
+                                                "-fx-background-radius:7;" +
+                                                        "-fx-font-size:12px;");
 
                 Button viewLicense = new Button("View");
-                viewLicense.setPrefSize(90, 32);
+                viewLicense.setPrefSize(100, 38);
                 viewLicense.setStyle(
                                 "-fx-background-color:white;" +
                                                 "-fx-text-fill:#FF6500;" +
                                                 "-fx-border-color:#FF6500;" +
                                                 "-fx-border-radius:7;" +
                                                 "-fx-background-radius:7;" +
-                                                "-fx-font-weight:bold;");
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-font-size:13px;");
 
                 HBox licenseRow = new HBox(
                                 15,
@@ -1393,10 +1397,10 @@ public class ShopVerificationPage {
                                                 "-fx-border-width:1 0 1 0;");
 
                 Text gstIcon = new Text("▣");
-                gstIcon.setFont(Font.font("Arial", 22));
+                gstIcon.setFont(Font.font("Arial", 26));
 
                 Text gstName = new Text("GST Certificate");
-                gstName.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+                gstName.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
                 Region gstSpace = new Region();
                 HBox.setHgrow(gstSpace, Priority.ALWAYS);
@@ -1412,7 +1416,8 @@ public class ShopVerificationPage {
                                         "-fx-background-color:#DFF2DA;" +
                                                         "-fx-text-fill:#26733C;" +
                                                         "-fx-padding:4 10 4 10;" +
-                                                        "-fx-background-radius:7;");
+                                                        "-fx-background-radius:7;" +
+                                                        "-fx-font-size:12px;");
                 } else {
                         gstStatus.setStyle(
                                         "-fx-background-color:#FFE1E1;" +
@@ -1422,7 +1427,7 @@ public class ShopVerificationPage {
                 }
 
                 Button viewGst = new Button("View");
-                viewGst.setPrefSize(90, 32);
+                viewGst.setPrefSize(100, 38);
                 viewGst.setDisable(!gstAvailable);
                 viewGst.setStyle(
                                 "-fx-background-color:white;" +
@@ -1430,7 +1435,8 @@ public class ShopVerificationPage {
                                                 "-fx-border-color:#FF6500;" +
                                                 "-fx-border-radius:7;" +
                                                 "-fx-background-radius:7;" +
-                                                "-fx-font-weight:bold;");
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-font-size:13px;");
 
                 HBox gstRow = new HBox(
                                 15,
@@ -1446,29 +1452,33 @@ public class ShopVerificationPage {
                                                 "-fx-border-width:0 0 1 0;");
 
                 Label noteLabel = new Label("Review Note (optional)");
+                noteLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
                 TextArea reviewNote = new TextArea();
                 reviewNote.setPromptText("Add a note for the shopkeeper...");
                 reviewNote.setPrefRowCount(4);
                 reviewNote.setWrapText(true);
+                reviewNote.setStyle("-fx-font-size:13px;");
 
                 Button reject = new Button("Reject");
-                reject.setPrefSize(120, 38);
+                reject.setPrefSize(130, 44);
                 reject.setStyle(
                                 "-fx-background-color:white;" +
                                                 "-fx-text-fill:#E53935;" +
                                                 "-fx-border-color:#E53935;" +
                                                 "-fx-border-radius:7;" +
                                                 "-fx-background-radius:7;" +
-                                                "-fx-font-weight:bold;");
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-font-size:13px;");
 
                 Button approve = new Button("Approve Shop");
-                approve.setPrefSize(145, 38);
+                approve.setPrefSize(160, 44);
                 approve.setStyle(
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-text-fill:white;" +
                                                 "-fx-background-radius:7;" +
-                                                "-fx-font-weight:bold;");
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-font-size:13px;");
 
                 Region actionSpace = new Region();
                 HBox.setHgrow(actionSpace, Priority.ALWAYS);

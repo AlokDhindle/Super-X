@@ -1,46 +1,35 @@
-
 # Secret config files
 buynex/src/main/java/com/kryox/config/Config.java
 buynex/src/main/java/com/kryox/config/GeminiConfig.java
 buynex/src/main/java/com/kryox/config/Apikey.java
-# Maven generated files
-buynex/target/
-target/
-
-# Environment files
-.env
-*.env
-
-# IDE
-.vscode/
-.idea/
-*.iml
-
-# Logs / OS
-*.log
-.DS_Store
-Thumbs.db
-# Secret config files
-
 buynex/src/main/java/com/kryox/config/APIKEYconfig.java
 buynex/src/main/java/com/kryox/config/Coustomerconfig.java
 
-buynex/src/main/resources/serviceAccount.json
-
-# VS Code
-.vscode/
+# Firebase / service account secrets
+serviceAccount.json
+serviceAccount.json.json
+**/serviceAccount.json
+**/serviceAccount.json.json
 
 # Maven / Java build
+buynex/target/
 target/
 *.class
 
 # Environment files
 .env
 .env.*
+*.env
 
-# IDE files
+# VS Code
+.vscode/
+
+# IDE
 .idea/
 *.iml
+
+# Logs
+*.log
 
 # OS files
 .DS_Store
