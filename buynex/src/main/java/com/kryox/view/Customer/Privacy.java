@@ -23,6 +23,12 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 
 public class Privacy {
+        public String userId;
+
+        public Privacy(String userId) {
+                this.userId = userId;
+        }
+
         private Scene PrivacyScene;
 
         Scene getPrivecyscene(Runnable callbacktoDashboard) {
@@ -286,6 +292,10 @@ public class Privacy {
                                                 "-fx-padding: 0 0 0 14;" +
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
+                helpBtn.setOnAction(event->{
+                        Helppage hp=new Helppage(userId);
+                        Homepage.HomepageStage.setScene(hp.getHelpScene(callbacktoDashboard));
+                });
 
                 // ================= TERMS BUTTON =================
 
@@ -312,7 +322,8 @@ public class Privacy {
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
                 back.setOnAction(even -> {
-                        callbacktoDashboard.run();
+                        Dashbord ds = new Dashbord(userId);
+                        Homepage.HomepageStage.setScene(ds.getDashbordScene());
                 });
 
                 // ================= MENU BOX =================
