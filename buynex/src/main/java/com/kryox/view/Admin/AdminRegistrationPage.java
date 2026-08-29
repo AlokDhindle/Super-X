@@ -35,27 +35,27 @@ public class AdminRegistrationPage {
         Text logo = new Text("BuyNeX");
         logo.setStyle(
                 "-fx-fill:white;" +
-                "-fx-font-size:28px;" +
+                "-fx-font-size:32px;" +
                 "-fx-font-weight:bold;"
         );
 
         Label info = new Label("Centralized Administration Portal");
         info.setStyle(
                 "-fx-text-fill:white;" +
-                "-fx-font-size:13px;"
+                "-fx-font-size:15px;"
         );
 
         Image img1 = new Image(getClass().getResource("/assets/images/admin/admin logo.png").toExternalForm());
 
         ImageView iv1 = new ImageView(img1);
-        iv1.setFitWidth(20);
-        iv1.setFitHeight(20);
+        iv1.setFitWidth(24);
+        iv1.setFitHeight(24);
         iv1.setPreserveRatio(true);
 
         StackPane iconBox1 = new StackPane(iv1);
-        iconBox1.setPrefSize(32, 32);
-        iconBox1.setMinSize(32, 32);
-        iconBox1.setMaxSize(32, 32);
+        iconBox1.setPrefSize(38, 38);
+        iconBox1.setMinSize(38, 38);
+        iconBox1.setMaxSize(38, 38);
         iconBox1.setStyle(
                 "-fx-background-color:#ffffff33;" +
                 "-fx-background-radius:7;"
@@ -64,7 +64,7 @@ public class AdminRegistrationPage {
         Label f1 = new Label("Secure Admin Access");
         f1.setStyle(
                 "-fx-text-fill:white;" +
-                "-fx-font-size:13px;"
+                "-fx-font-size:15px;"
         );
 
         HBox feature1 = new HBox(10);
@@ -74,14 +74,14 @@ public class AdminRegistrationPage {
         Image img2 = new Image(getClass().getResource("/assets/images/admin/sequrity logo.png").toExternalForm());
 
         ImageView iv2 = new ImageView(img2);
-        iv2.setFitWidth(20);
-        iv2.setFitHeight(20);
+        iv2.setFitWidth(24);
+        iv2.setFitHeight(24);
         iv2.setPreserveRatio(true);
 
         StackPane iconBox2 = new StackPane(iv2);
-        iconBox2.setPrefSize(32, 32);
-        iconBox2.setMinSize(32, 32);
-        iconBox2.setMaxSize(32, 32);
+        iconBox2.setPrefSize(38, 38);
+        iconBox2.setMinSize(38, 38);
+        iconBox2.setMaxSize(38, 38);
         iconBox2.setStyle(
                 "-fx-background-color:#ffffff33;" +
                 "-fx-background-radius:7;"
@@ -90,7 +90,7 @@ public class AdminRegistrationPage {
         Label f2 = new Label("Role-based Permissions");
         f2.setStyle(
                 "-fx-text-fill:white;" +
-                "-fx-font-size:13px;"
+                "-fx-font-size:15px;"
         );
 
         HBox feature2 = new HBox(10);
@@ -100,14 +100,14 @@ public class AdminRegistrationPage {
         Image img3 = new Image(getClass().getResource("/assets/images/admin/analysis logo.png").toExternalForm());
 
         ImageView iv3 = new ImageView(img3);
-        iv3.setFitWidth(20);
-        iv3.setFitHeight(20);
+        iv3.setFitWidth(24);
+        iv3.setFitHeight(24);
         iv3.setPreserveRatio(true);
 
         StackPane iconBox3 = new StackPane(iv3);
-        iconBox3.setPrefSize(32, 32);
-        iconBox3.setMinSize(32, 32);
-        iconBox3.setMaxSize(32, 32);
+        iconBox3.setPrefSize(38, 38);
+        iconBox3.setMinSize(38, 38);
+        iconBox3.setMaxSize(38, 38);
         iconBox3.setStyle(
                 "-fx-background-color:#ffffff33;" +
                 "-fx-background-radius:7;"
@@ -116,7 +116,7 @@ public class AdminRegistrationPage {
         Label f3 = new Label("Real-time Operations Analytics");
         f3.setStyle(
                 "-fx-text-fill:white;" +
-                "-fx-font-size:13px;"
+                "-fx-font-size:15px;"
         );
         f3.setWrapText(true);
 
@@ -135,21 +135,23 @@ public class AdminRegistrationPage {
         Label title = new Label("Create Admin Account");
         title.setStyle(
                 "-fx-text-fill:#a84400;" +
-                "-fx-font-size:26px;" +
+                "-fx-font-size:30px;" +
                 "-fx-font-weight:bold;"
         );
 
         Label sub = new Label("Register a new administrator for BuyNeX.");
         sub.setStyle(
                 "-fx-text-fill:#555555;" +
-                "-fx-font-size:12px;"
+                "-fx-font-size:14px;"
         );
 
         Label nameLabel = new Label("Full Name");
+        nameLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
         TextField nameField = new TextField();
         nameField.setPromptText("John Doe");
-        nameField.setPrefHeight(36);
+        nameField.setPrefHeight(42);
+        nameField.setStyle("-fx-font-size:13px;");
 
         VBox name = new VBox(4);
         name.getChildren().addAll(
@@ -158,10 +160,12 @@ public class AdminRegistrationPage {
         );
 
         Label usernameLabel = new Label("Admin Username");
+        usernameLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
         TextField usernameField = new TextField();
         usernameField.setPromptText("j.doe_nx");
-        usernameField.setPrefHeight(36);
+        usernameField.setPrefHeight(42);
+        usernameField.setStyle("-fx-font-size:13px;");
 
         VBox username = new VBox(4);
         username.getChildren().addAll(
@@ -179,10 +183,12 @@ public class AdminRegistrationPage {
         HBox.setHgrow(username, Priority.ALWAYS);
 
         Label emailLabel = new Label("Official Email");
+        emailLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
         TextField emailField = new TextField();
         emailField.setPromptText("admin@buynex.com");
-        emailField.setPrefHeight(36);
+        emailField.setPrefHeight(42);
+        emailField.setStyle("-fx-font-size:13px;");
 
         VBox email = new VBox(4);
         email.getChildren().addAll(
@@ -191,10 +197,12 @@ public class AdminRegistrationPage {
         );
 
         Label mobileLabel = new Label("Mobile Number");
+        mobileLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
         TextField mobileField = new TextField();
         mobileField.setPromptText("+1 (555) 000-0000");
-        mobileField.setPrefHeight(36);
+        mobileField.setPrefHeight(42);
+        mobileField.setStyle("-fx-font-size:13px;");
 
         VBox mobile = new VBox(4);
         mobile.getChildren().addAll(
@@ -212,10 +220,12 @@ public class AdminRegistrationPage {
         HBox.setHgrow(mobile, Priority.ALWAYS);
 
         Label employeeLabel = new Label("Employee/Admin ID");
+        employeeLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
         TextField employeeField = new TextField();
         employeeField.setPromptText("NX-2024-88");
-        employeeField.setPrefHeight(36);
+        employeeField.setPrefHeight(42);
+        employeeField.setStyle("-fx-font-size:13px;");
 
         VBox employee = new VBox(4);
         employee.getChildren().addAll(
@@ -224,6 +234,7 @@ public class AdminRegistrationPage {
         );
 
         Label roleLabel = new Label("Admin Role");
+        roleLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
         ComboBox<String> roleBox = new ComboBox<>();
 
@@ -235,7 +246,8 @@ public class AdminRegistrationPage {
 
         roleBox.setPromptText("Select Role");
         roleBox.setMaxWidth(Double.MAX_VALUE);
-        roleBox.setPrefHeight(36);
+        roleBox.setPrefHeight(42);
+        roleBox.setStyle("-fx-font-size:13px;");
 
         VBox role = new VBox(4);
         role.getChildren().addAll(
@@ -253,10 +265,12 @@ public class AdminRegistrationPage {
         HBox.setHgrow(role, Priority.ALWAYS);
 
         Label passwordLabel = new Label("Password");
+        passwordLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("••••••••");
-        passwordField.setPrefHeight(36);
+        passwordField.setPrefHeight(42);
+        passwordField.setStyle("-fx-font-size:13px;");
 
         VBox password = new VBox(4);
         password.getChildren().addAll(
@@ -265,10 +279,12 @@ public class AdminRegistrationPage {
         );
 
         Label confirmLabel = new Label("Confirm Password");
+        confirmLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
         PasswordField confirmField = new PasswordField();
         confirmField.setPromptText("••••••••");
-        confirmField.setPrefHeight(36);
+        confirmField.setPrefHeight(42);
+        confirmField.setStyle("-fx-font-size:13px;");
 
         VBox confirm = new VBox(4);
         confirm.getChildren().addAll(
@@ -290,12 +306,13 @@ public class AdminRegistrationPage {
 
         accessLabel.setStyle(
                 "-fx-text-fill:#a84400;" +
-                "-fx-font-size:12px;"
+                "-fx-font-size:14px;"
         );
 
         TextField accessField = new TextField();
         accessField.setPromptText("Enter authorization hash");
-        accessField.setPrefHeight(36);
+        accessField.setPrefHeight(42);
+        accessField.setStyle("-fx-font-size:13px;");
 
         Label accessInfo = new Label(
                 "This code is provided by the System Architect during onboarding."
@@ -303,7 +320,7 @@ public class AdminRegistrationPage {
 
         accessInfo.setStyle(
                 "-fx-text-fill:#777777;" +
-                "-fx-font-size:9px;"
+                "-fx-font-size:13px;"
         );
 
         accessInfo.setWrapText(true);
@@ -327,13 +344,13 @@ public class AdminRegistrationPage {
 
         Button create = new Button("Create Account   →");
         create.setMaxWidth(Double.MAX_VALUE);
-        create.setPrefHeight(42);
+        create.setPrefHeight(48);
 
         create.setStyle(
                 "-fx-background-color:#e85b00;" +
                 "-fx-text-fill:white;" +
                 "-fx-font-weight:bold;" +
-                "-fx-font-size:13px;" +
+                "-fx-font-size:15px;" +
                 "-fx-background-radius:5;"
         );
 
@@ -435,7 +452,7 @@ public class AdminRegistrationPage {
 
         signIn.setStyle(
                 "-fx-text-fill:#555555;" +
-                "-fx-font-size:11px;"
+                "-fx-font-size:13px;"
         );
 
         signIn.setOnMouseClicked(event -> {
