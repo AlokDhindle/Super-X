@@ -754,8 +754,8 @@ public class Homepage extends Application {
                 "-fx-background-radius: 15;"
         );
         b3.setOnAction(event->{
-               AdminLoginPage login = new AdminLoginPage();
-               Homepage.HomepageStage.setScene(login.getLoginScene()); 
+                AdminLoginPage adl=new AdminLoginPage();
+                Homepage.HomepageStage.setScene(adl.getLoginScene());
         });
 
         Region adminSpacer =
