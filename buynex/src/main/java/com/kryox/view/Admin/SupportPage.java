@@ -45,11 +45,11 @@ public class SupportPage {
                 left.setStyle("-fx-background-color:#F3E3D3;");
 
                 Text logo = new Text("Admin Panel");
-                logo.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+                logo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
                 logo.setFill(Color.web("#A83E00"));
 
                 Text adminPanel = new Text("Marketplace Controller");
-                adminPanel.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+                adminPanel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
                 adminPanel.setFill(Color.web("#999999"));
 
                 VBox logoBox = new VBox(4, logo, adminPanel);
@@ -72,13 +72,13 @@ public class SupportPage {
 
                 Image img1 = new Image(getClass().getResource("/assets/images/admin/dashboard.png").toExternalForm());
                 ImageView iv1 = new ImageView(img1);
-                iv1.setFitWidth(16);
-                iv1.setFitHeight(16);
+                iv1.setFitWidth(20);
+                iv1.setFitHeight(20);
                 iv1.setPreserveRatio(true);
 
                 Text dashboardText = new Text("Dashboard");
                 dashboardText.setFill(Color.web("#333333"));
-                dashboardText.setFont(Font.font("Arial", 12));
+                dashboardText.setFont(Font.font("Arial", 14));
 
                 dashboard.getChildren().addAll(iv1, dashboardText);
 
@@ -89,7 +89,7 @@ public class SupportPage {
 
                         dashboardText.setFill(Color.WHITE);
                         dashboardText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -106,7 +106,7 @@ public class SupportPage {
                                                         "-fx-background-radius:10;");
 
                         dashboardText.setFill(Color.web("#333333"));
-                        dashboardText.setFont(Font.font("Arial", 12));
+                        dashboardText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -130,15 +130,15 @@ public class SupportPage {
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-background-radius:10;");
 
-                Image img2 = new Image(getClass().getResource("/assets/images/admin/admin logo.png").toExternalForm());
+                Image img2 = new Image("assets\\images\\admin\\admin_logo.png");
                 ImageView iv2 = new ImageView(img2);
-                iv2.setFitWidth(16);
-                iv2.setFitHeight(16);
+                iv2.setFitWidth(20);
+                iv2.setFitHeight(20);
                 iv2.setPreserveRatio(true);
 
                 Text usersText = new Text("Users");
                 usersText.setFill(Color.web("#333333"));
-                usersText.setFont(Font.font("Arial", 12));
+                usersText.setFont(Font.font("Arial", 14));
 
                 users.getChildren().addAll(iv2, usersText);
 
@@ -149,7 +149,7 @@ public class SupportPage {
 
                         usersText.setFill(Color.WHITE);
                         usersText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -166,7 +166,7 @@ public class SupportPage {
                                                         "-fx-background-radius:10;");
 
                         usersText.setFill(Color.web("#333333"));
-                        usersText.setFont(Font.font("Arial", 12));
+                        usersText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -199,13 +199,13 @@ public class SupportPage {
 
                 Image img3 = new Image(getClass().getResource("/assets/images/admin/shop.png").toExternalForm());
                 ImageView iv3 = new ImageView(img3);
-                iv3.setFitWidth(16);
-                iv3.setFitHeight(16);
+                iv3.setFitWidth(20);
+                iv3.setFitHeight(20);
                 iv3.setPreserveRatio(true);
 
                 Text shopsText = new Text("Shops");
                 shopsText.setFill(Color.web("#333333"));
-                shopsText.setFont(Font.font("Arial", 12));
+                shopsText.setFont(Font.font("Arial", 14));
 
                 shops.getChildren().addAll(iv3, shopsText);
 
@@ -216,7 +216,7 @@ public class SupportPage {
 
                         shopsText.setFill(Color.WHITE);
                         shopsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -233,7 +233,7 @@ public class SupportPage {
                                                         "-fx-background-radius:10;");
 
                         shopsText.setFill(Color.web("#333333"));
-                        shopsText.setFont(Font.font("Arial", 12));
+                        shopsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -262,13 +262,13 @@ public class SupportPage {
 
                 Image img4 = new Image(getClass().getResource("/assets/images/admin/tag.png").toExternalForm());
                 ImageView iv4 = new ImageView(img4);
-                iv4.setFitWidth(16);
-                iv4.setFitHeight(16);
+                iv4.setFitWidth(20);
+                iv4.setFitHeight(20);
                 iv4.setPreserveRatio(true);
 
                 Text offersText = new Text("Offers");
                 offersText.setFill(Color.web("#333333"));
-                offersText.setFont(Font.font("Arial", 12));
+                offersText.setFont(Font.font("Arial", 14));
 
                 offers.getChildren().addAll(iv4, offersText);
 
@@ -279,7 +279,7 @@ public class SupportPage {
 
                         offersText.setFill(Color.WHITE);
                         offersText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -296,7 +296,7 @@ public class SupportPage {
                                                         "-fx-background-radius:10;");
 
                         offersText.setFill(Color.web("#333333"));
-                        offersText.setFont(Font.font("Arial", 12));
+                        offersText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -325,13 +325,13 @@ public class SupportPage {
 
                 Image img5 = new Image(getClass().getResource("/assets/images/admin/stats.png").toExternalForm());
                 ImageView iv5 = new ImageView(img5);
-                iv5.setFitWidth(16);
-                iv5.setFitHeight(16);
+                iv5.setFitWidth(20);
+                iv5.setFitHeight(20);
                 iv5.setPreserveRatio(true);
 
                 Text analyticsText = new Text("Analytics");
                 analyticsText.setFill(Color.web("#333333"));
-                analyticsText.setFont(Font.font("Arial", 12));
+                analyticsText.setFont(Font.font("Arial", 14));
 
                 analytics.getChildren().addAll(iv5, analyticsText);
 
@@ -342,7 +342,7 @@ public class SupportPage {
 
                         analyticsText.setFill(Color.WHITE);
                         analyticsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -359,7 +359,7 @@ public class SupportPage {
                                                         "-fx-background-radius:10;");
 
                         analyticsText.setFill(Color.web("#333333"));
-                        analyticsText.setFont(Font.font("Arial", 12));
+                        analyticsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -398,13 +398,13 @@ public class SupportPage {
 
                 Image img6 = new Image(getClass().getResource("/assets/images/admin/setting.png").toExternalForm());
                 ImageView iv6 = new ImageView(img6);
-                iv6.setFitWidth(16);
-                iv6.setFitHeight(16);
+                iv6.setFitWidth(20);
+                iv6.setFitHeight(20);
                 iv6.setPreserveRatio(true);
 
                 Text settingsText = new Text("Settings");
                 settingsText.setFill(Color.web("#333333"));
-                settingsText.setFont(Font.font("Arial", 12));
+                settingsText.setFont(Font.font("Arial", 14));
 
                 settings.getChildren().addAll(iv6, settingsText);
 
@@ -419,13 +419,13 @@ public class SupportPage {
 
                 Image img7 = new Image(getClass().getResource("/assets/images/admin/service-call.png").toExternalForm());
                 ImageView iv7 = new ImageView(img7);
-                iv7.setFitWidth(16);
-                iv7.setFitHeight(16);
+                iv7.setFitWidth(20);
+                iv7.setFitHeight(20);
                 iv7.setPreserveRatio(true);
 
                 Text supportText = new Text("Support");
                 supportText.setFill(Color.web("#333333"));
-                supportText.setFont(Font.font("Arial", 12));
+                supportText.setFont(Font.font("Arial", 14));
 
                 support.getChildren().addAll(iv7, supportText);
 
@@ -440,7 +440,7 @@ public class SupportPage {
 
                         settingsText.setFill(Color.ORANGE);
                         settingsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -457,7 +457,7 @@ public class SupportPage {
                                                         "-fx-background-radius:10;");
 
                         settingsText.setFill(Color.web("#333333"));
-                        settingsText.setFont(Font.font("Arial", 12));
+                        settingsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -483,7 +483,7 @@ public class SupportPage {
 
                         supportText.setFill(Color.WHITE);
                         supportText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -500,7 +500,7 @@ public class SupportPage {
                                                         "-fx-background-radius:10;");
 
                         supportText.setFill(Color.web("#333333"));
-                        supportText.setFont(Font.font("Arial", 12));
+                        supportText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -521,6 +521,7 @@ public class SupportPage {
                 // =========================
 
                 Button exit = new Button("Exit");
+                exit.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
                 HBox profile = new HBox(
                                 exit);
@@ -551,30 +552,31 @@ public class SupportPage {
                 rightBox.setStyle("-fx-background-color:#FAF8FC;");
 
                 Text searchIcon = new Text("⌕");
-                searchIcon.setFont(Font.font(20));
+                searchIcon.setFont(Font.font(24));
                 TextField topSearch = new TextField();
                 topSearch.setPromptText("Search orders, shops, or users...");
-                topSearch.setPrefWidth(330);
+                topSearch.setPrefWidth(350);
                 topSearch.setStyle(
                                 "-fx-background-color:#F2F0F5;" +
-                                                "-fx-background-radius:18;");
+                                                "-fx-background-radius:18;" +
+                                                "-fx-font-size:14px;");
                 HBox topSearchBox = new HBox(8, searchIcon, topSearch);
                 topSearchBox.setAlignment(Pos.CENTER_LEFT);
 
                 Image chatbotImage = new Image(
                                 getClass().getResource("/assets/images/admin/message.png").toExternalForm());
                 ImageView chatbot = new ImageView(chatbotImage);
-                chatbot.setFitWidth(18);
-                chatbot.setFitHeight(18);
+                chatbot.setFitWidth(22);
+                chatbot.setFitHeight(22);
 
                 Image bellImage = new Image(
                                 getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
                 ImageView bell = new ImageView(bellImage);
-                bell.setFitWidth(18);
-                bell.setFitHeight(18);
+                bell.setFitWidth(22);
+                bell.setFitHeight(22);
 
                 Text portal = new Text("Admin Portal");
-                portal.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+                portal.setFont(Font.font("Arial", FontWeight.BOLD, 17));
                 HBox topRight = new HBox(18, chatbot, bell, portal);
                 topRight.setAlignment(Pos.CENTER_RIGHT);
 
@@ -584,19 +586,20 @@ public class SupportPage {
                 top.setAlignment(Pos.CENTER_LEFT);
 
                 Text title = new Text("Support Center");
-                title.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+                title.setFont(Font.font("Arial", FontWeight.BOLD, 29));
                 Text subtitle = new Text("Get help and manage support requests.");
-                subtitle.setFont(Font.font("Arial", 12));
+                subtitle.setFont(Font.font("Arial", 14));
                 subtitle.setFill(Color.web("#777777"));
                 VBox heading = new VBox(5, title, subtitle);
 
                 Text openNumber = new Text("18");
-                openNumber.setFont(Font.font("Arial", FontWeight.BOLD, 22));
+                openNumber.setFont(Font.font("Arial", FontWeight.BOLD, 25));
                 Text openLabel = new Text("Open Tickets");
+                openLabel.setFont(Font.font("Arial", 13));
                 openLabel.setFill(Color.web("#666666"));
                 VBox openText = new VBox(7, openLabel, openNumber);
                 Text openIcon = new Text("☏");
-                openIcon.setFont(Font.font(25));
+                openIcon.setFont(Font.font(30));
                 openIcon.setFill(Color.web("#FF6500"));
                 HBox openCard = new HBox(20, openIcon, openText);
                 openCard.setAlignment(Pos.CENTER_LEFT);
@@ -608,12 +611,13 @@ public class SupportPage {
                                                 "-fx-background-radius:10;");
 
                 Text resolvedNumber = new Text("24");
-                resolvedNumber.setFont(Font.font("Arial", FontWeight.BOLD, 22));
+                resolvedNumber.setFont(Font.font("Arial", FontWeight.BOLD, 25));
                 Text resolvedLabel = new Text("Resolved Today");
+                resolvedLabel.setFont(Font.font("Arial", 13));
                 resolvedLabel.setFill(Color.web("#666666"));
                 VBox resolvedText = new VBox(7, resolvedLabel, resolvedNumber);
                 Text resolvedIcon = new Text("✓");
-                resolvedIcon.setFont(Font.font(25));
+                resolvedIcon.setFont(Font.font(30));
                 resolvedIcon.setFill(Color.web("#1FA64B"));
                 HBox resolvedCard = new HBox(20, resolvedIcon, resolvedText);
                 resolvedCard.setAlignment(Pos.CENTER_LEFT);
@@ -625,12 +629,13 @@ public class SupportPage {
                                                 "-fx-background-radius:10;");
 
                 Text responseNumber = new Text("12 mins");
-                responseNumber.setFont(Font.font("Arial", FontWeight.BOLD, 22));
+                responseNumber.setFont(Font.font("Arial", FontWeight.BOLD, 25));
                 Text responseLabel = new Text("Average Response");
+                responseLabel.setFont(Font.font("Arial", 13));
                 responseLabel.setFill(Color.web("#666666"));
                 VBox responseText = new VBox(7, responseLabel, responseNumber);
                 Text responseIcon = new Text("◷");
-                responseIcon.setFont(Font.font(25));
+                responseIcon.setFont(Font.font(30));
                 responseIcon.setFill(Color.web("#E39A00"));
                 HBox responseCard = new HBox(20, responseIcon, responseText);
                 responseCard.setAlignment(Pos.CENTER_LEFT);
@@ -650,20 +655,22 @@ public class SupportPage {
                 HBox cards = new HBox(18, openCard, resolvedCard, responseCard);
 
                 Text ticketTitle = new Text("Support Tickets");
-                ticketTitle.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+                ticketTitle.setFont(Font.font("Arial", FontWeight.BOLD, 19));
                 TextField ticketSearch = new TextField();
                 ticketSearch.setPromptText("Search tickets...");
-                ticketSearch.setPrefWidth(210);
+                ticketSearch.setPrefWidth(230);
+                ticketSearch.setStyle("-fx-font-size:13px;");
                 ComboBox<String> ticketStatus = new ComboBox<>();
                 ticketStatus.getItems().addAll("All Status", "Open", "In Progress", "Resolved", "Closed");
                 ticketStatus.setValue("All Status");
+                ticketStatus.setStyle("-fx-font-size:13px;");
 
                 Region ticketGrow = new Region();
                 HBox.setHgrow(ticketGrow, Priority.ALWAYS);
                 HBox ticketHeader = new HBox(12, ticketTitle, ticketGrow, ticketSearch, ticketStatus);
                 ticketHeader.setAlignment(Pos.CENTER_LEFT);
 
-                String headerStyle = "-fx-font-size:10px;-fx-fill:#777777;";
+                String headerStyle = "-fx-font-size:12px;-fx-fill:#777777;-fx-font-weight:bold;";
                 Text idHeader = new Text("Ticket");
                 Text userHeader = new Text("User");
                 Text subjectHeader = new Text("Subject");
@@ -707,6 +714,13 @@ public class SupportPage {
                         Text currentStatus = new Text(item[4]);
                         Text date = new Text(item[5]);
                         Text action = new Text("◉");
+                        id.setFont(Font.font("Arial", 12));
+                        userEmail.setFont(Font.font("Arial", 12));
+                        subject.setFont(Font.font("Arial", 12));
+                        priority.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+                        currentStatus.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+                        date.setFont(Font.font("Arial", 12));
+                        action.setFont(Font.font("Arial", 14));
                         id.setWrappingWidth(85);
                         userEmail.setWrappingWidth(135);
                         subject.setWrappingWidth(170);
@@ -735,7 +749,7 @@ public class SupportPage {
                 HBox.setHgrow(ticketTable, Priority.ALWAYS);
 
                 Text createTitle = new Text("Create Support Ticket");
-                createTitle.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+                createTitle.setFont(Font.font("Arial", FontWeight.BOLD, 19));
 
                 TextField userEmailInput = new TextField();
                 userEmailInput.setPromptText("Enter user email");
@@ -750,27 +764,43 @@ public class SupportPage {
                 TextArea descriptionInput = new TextArea();
                 descriptionInput.setPromptText("Describe your issue in detail...");
                 descriptionInput.setPrefRowCount(4);
+                descriptionInput.setStyle("-fx-font-size:13px;");
 
-                userEmailInput.setPrefHeight(38);
-                subjectInput.setPrefHeight(38);
-                categoryInput.setPrefHeight(38);
-                priorityInput.setPrefHeight(38);
+                userEmailInput.setPrefHeight(44);
+                userEmailInput.setStyle("-fx-font-size:13px;");
+                subjectInput.setPrefHeight(44);
+                subjectInput.setStyle("-fx-font-size:13px;");
+                categoryInput.setPrefHeight(44);
+                categoryInput.setStyle("-fx-font-size:13px;");
+                priorityInput.setPrefHeight(44);
+                priorityInput.setStyle("-fx-font-size:13px;");
                 categoryInput.setMaxWidth(Double.MAX_VALUE);
                 priorityInput.setMaxWidth(Double.MAX_VALUE);
 
-                VBox emailBox = new VBox(5, new Label("User Email"), userEmailInput);
-                VBox subjectBox = new VBox(5, new Label("Subject"), subjectInput);
-                VBox categoryBox = new VBox(5, new Label("Category"), categoryInput);
-                VBox priorityBox = new VBox(5, new Label("Priority"), priorityInput);
-                VBox descriptionBox = new VBox(5, new Label("Description"), descriptionInput);
+                Label emailLabel = new Label("User Email");
+                emailLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
+                VBox emailBox = new VBox(5, emailLabel, userEmailInput);
+                Label subjectLabel = new Label("Subject");
+                subjectLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
+                VBox subjectBox = new VBox(5, subjectLabel, subjectInput);
+                Label categoryLabel = new Label("Category");
+                categoryLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
+                VBox categoryBox = new VBox(5, categoryLabel, categoryInput);
+                Label priorityLabel = new Label("Priority");
+                priorityLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
+                VBox priorityBox = new VBox(5, priorityLabel, priorityInput);
+                Label descriptionLabel = new Label("Description");
+                descriptionLabel.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
+                VBox descriptionBox = new VBox(5, descriptionLabel, descriptionInput);
 
                 Button submit = new Button("Submit Ticket");
                 submit.setMaxWidth(Double.MAX_VALUE);
-                submit.setPrefHeight(40);
+                submit.setPrefHeight(46);
                 submit.setStyle(
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-text-fill:white;" +
                                                 "-fx-font-weight:bold;" +
+                                                "-fx-font-size:14px;" +
                                                 "-fx-background-radius:7;");
 
                 VBox createTicket = new VBox(
@@ -810,6 +840,13 @@ public class SupportPage {
                         Text currentStatus = new Text("Open");
                         Text date = new Text(dateValue);
                         Text action = new Text("◉");
+                        id.setFont(Font.font("Arial", 12));
+                        userEmail.setFont(Font.font("Arial", 12));
+                        subject.setFont(Font.font("Arial", 12));
+                        priority.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+                        currentStatus.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+                        date.setFont(Font.font("Arial", 12));
+                        action.setFont(Font.font("Arial", 14));
                         id.setWrappingWidth(85);
                         userEmail.setWrappingWidth(135);
                         subject.setWrappingWidth(170);
@@ -841,13 +878,16 @@ public class SupportPage {
                 });
 
                 Text faqTitle = new Text("Frequently Asked Questions");
-                faqTitle.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+                faqTitle.setFont(Font.font("Arial", FontWeight.BOLD, 19));
                 Button faq1 = new Button("How do I verify a shop?                                      ˅");
                 Button faq2 = new Button("How do I manage flagged accounts?                       ˅");
                 Button faq3 = new Button("How do I contact technical support?                    ˅");
                 faq1.setMaxWidth(Double.MAX_VALUE);
+                faq1.setStyle("-fx-font-size:13px;-fx-padding:10;");
                 faq2.setMaxWidth(Double.MAX_VALUE);
+                faq2.setStyle("-fx-font-size:13px;-fx-padding:10;");
                 faq3.setMaxWidth(Double.MAX_VALUE);
+                faq3.setStyle("-fx-font-size:13px;-fx-padding:10;");
                 faq1.setAlignment(Pos.CENTER_LEFT);
                 faq2.setAlignment(Pos.CENTER_LEFT);
                 faq3.setAlignment(Pos.CENTER_LEFT);

@@ -42,7 +42,7 @@ public class OfferPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                21));
+                                                24));
 
                 logo.setFill(
                                 Color.web("#A83E00"));
@@ -54,7 +54,7 @@ public class OfferPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                10));
+                                                14));
 
                 controller.setFill(
                                 Color.web("#999999"));
@@ -85,8 +85,8 @@ public class OfferPage {
 
                 ImageView iv1 = new ImageView(img1);
 
-                iv1.setFitWidth(16);
-                iv1.setFitHeight(16);
+                iv1.setFitWidth(20);
+                iv1.setFitHeight(20);
                 iv1.setPreserveRatio(true);
 
                 Text dashboardText = new Text(
@@ -96,7 +96,7 @@ public class OfferPage {
                                 Color.web("#333333"));
 
                 dashboardText.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
 
                 dashboard.getChildren().addAll(
                                 iv1,
@@ -114,7 +114,7 @@ public class OfferPage {
                                         Font.font(
                                                         "Arial",
                                                         FontWeight.BOLD,
-                                                        12));
+                                                        14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -135,7 +135,7 @@ public class OfferPage {
                                         Color.web("#333333"));
 
                         dashboardText.setFont(
-                                        Font.font("Arial", 12));
+                                        Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -166,13 +166,12 @@ public class OfferPage {
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-background-radius:10;");
 
-                Image img2 = new Image(
-                                getClass().getResource("/assets/images/admin/admin logo.png").toExternalForm());
+                Image img2 = new Image("assets\\images\\admin\\admin_logo.png");
 
                 ImageView iv2 = new ImageView(img2);
 
-                iv2.setFitWidth(16);
-                iv2.setFitHeight(16);
+                iv2.setFitWidth(20);
+                iv2.setFitHeight(20);
                 iv2.setPreserveRatio(true);
 
                 Text usersText = new Text("Users");
@@ -183,7 +182,7 @@ public class OfferPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                12));
+                                                14));
 
                 users.getChildren().addAll(
                                 iv2,
@@ -216,7 +215,7 @@ public class OfferPage {
                                         Color.web("#333333"));
 
                         usersText.setFont(
-                                        Font.font("Arial", 12));
+                                        Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -251,8 +250,8 @@ public class OfferPage {
 
                 ImageView iv3 = new ImageView(img3);
 
-                iv3.setFitWidth(16);
-                iv3.setFitHeight(16);
+                iv3.setFitWidth(20);
+                iv3.setFitHeight(20);
                 iv3.setPreserveRatio(true);
 
                 Text shopsText = new Text("Shops");
@@ -261,7 +260,7 @@ public class OfferPage {
                                 Color.web("#333333"));
 
                 shopsText.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
 
                 shops.getChildren().addAll(
                                 iv3,
@@ -279,7 +278,7 @@ public class OfferPage {
                                         Font.font(
                                                         "Arial",
                                                         FontWeight.BOLD,
-                                                        12));
+                                                        14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -300,7 +299,7 @@ public class OfferPage {
                                         Color.web("#333333"));
 
                         shopsText.setFont(
-                                        Font.font("Arial", 12));
+                                        Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -335,8 +334,8 @@ public class OfferPage {
 
                 ImageView iv4 = new ImageView(img4);
 
-                iv4.setFitWidth(16);
-                iv4.setFitHeight(16);
+                iv4.setFitWidth(20);
+                iv4.setFitHeight(20);
                 iv4.setPreserveRatio(true);
 
                 Text offersText = new Text("Offers");
@@ -345,7 +344,7 @@ public class OfferPage {
                                 Color.web("#333333"));
 
                 offersText.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
 
                 offers.getChildren().addAll(
                                 iv4,
@@ -363,7 +362,7 @@ public class OfferPage {
                                         Font.font(
                                                         "Arial",
                                                         FontWeight.BOLD,
-                                                        12));
+                                                        14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -384,7 +383,7 @@ public class OfferPage {
                                         Color.web("#333333"));
 
                         offersText.setFont(
-                                        Font.font("Arial", 12));
+                                        Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -419,8 +418,8 @@ public class OfferPage {
 
                 ImageView iv5 = new ImageView(img5);
 
-                iv5.setFitWidth(16);
-                iv5.setFitHeight(16);
+                iv5.setFitWidth(20);
+                iv5.setFitHeight(20);
                 iv5.setPreserveRatio(true);
 
                 Text analyticsText = new Text(
@@ -430,7 +429,7 @@ public class OfferPage {
                                 Color.web("#333333"));
 
                 analyticsText.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
 
                 analytics.getChildren().addAll(
                                 iv5,
@@ -448,7 +447,7 @@ public class OfferPage {
                                         Font.font(
                                                         "Arial",
                                                         FontWeight.BOLD,
-                                                        12));
+                                                        14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -469,7 +468,7 @@ public class OfferPage {
                                         Color.web("#333333"));
 
                         analyticsText.setFont(
-                                        Font.font("Arial", 12));
+                                        Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -515,8 +514,8 @@ public class OfferPage {
 
                 ImageView iv6 = new ImageView(img6);
 
-                iv6.setFitWidth(16);
-                iv6.setFitHeight(16);
+                iv6.setFitWidth(20);
+                iv6.setFitHeight(20);
                 iv6.setPreserveRatio(true);
 
                 Text settingsText = new Text(
@@ -526,7 +525,7 @@ public class OfferPage {
                                 Color.web("#333333"));
 
                 settingsText.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
 
                 settings.getChildren().addAll(
                                 iv6,
@@ -543,7 +542,7 @@ public class OfferPage {
                                         Font.font(
                                                         "Arial",
                                                         FontWeight.BOLD,
-                                                        12));
+                                                        14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -564,7 +563,7 @@ public class OfferPage {
                                         Color.web("#333333"));
 
                         settingsText.setFont(
-                                        Font.font("Arial", 12));
+                                        Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -599,8 +598,8 @@ public class OfferPage {
 
                 ImageView iv7 = new ImageView(img7);
 
-                iv7.setFitWidth(16);
-                iv7.setFitHeight(16);
+                iv7.setFitWidth(20);
+                iv7.setFitHeight(20);
                 iv7.setPreserveRatio(true);
 
                 Text supportText = new Text(
@@ -610,7 +609,7 @@ public class OfferPage {
                                 Color.web("#333333"));
 
                 supportText.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
 
                 support.getChildren().addAll(
                                 iv7,
@@ -631,7 +630,7 @@ public class OfferPage {
                                         Font.font(
                                                         "Arial",
                                                         FontWeight.BOLD,
-                                                        12));
+                                                        14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -652,7 +651,7 @@ public class OfferPage {
                                         Color.web("#333333"));
 
                         supportText.setFont(
-                                        Font.font("Arial", 12));
+                                        Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -671,7 +670,7 @@ public class OfferPage {
                 });
 
                 javafx.scene.shape.Circle avatar = new javafx.scene.shape.Circle(
-                                16,
+                                19,
                                 Color.web("#D9B79C"));
 
                 Text alex = new Text("Alex Rivera");
@@ -680,13 +679,13 @@ public class OfferPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
 
                 Text superAdmin = new Text(
                                 "Super Admin");
 
                 superAdmin.setFont(
-                                Font.font("Arial", 9));
+                                Font.font("Arial", 11));
 
                 superAdmin.setFill(
                                 Color.web("#777777"));
@@ -740,12 +739,12 @@ public class OfferPage {
 
                 Text pageTitle = new Text("Offers & Promotions");
                 pageTitle.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 28));
+                                Font.font("Georgia", FontWeight.BOLD, 32));
 
                 Text pageSubtitle = new Text(
                                 "Manage network-wide campaigns and monitor shop performance.");
                 pageSubtitle.setFont(
-                                Font.font("Georgia", 14));
+                                Font.font("Georgia", 16));
                 pageSubtitle.setFill(Color.web("#777777"));
 
                 VBox titleBox = new VBox(6);
@@ -767,7 +766,7 @@ public class OfferPage {
                 VBox filterBox = new VBox();
                 filterBox.setSpacing(10);
                 filterBox.setPadding(new Insets(10));
-                filterBox.setPrefWidth(155);
+                filterBox.setPrefWidth(175);
                 filterBox.setStyle(
                                 "-fx-background-color:white;" +
                                                 "-fx-background-radius:14;" +
@@ -783,11 +782,12 @@ public class OfferPage {
                                                 "-fx-background-radius:9;");
 
                 Text marketIcon = new Text("◉");
+                marketIcon.setFont(Font.font("Georgia", 16));
                 marketIcon.setFill(Color.web("#A83E00"));
 
                 Text marketText = new Text("Marketwide");
                 marketText.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 13));
+                                Font.font("Georgia", FontWeight.BOLD, 15));
                 marketText.setFill(Color.web("#8E3D18"));
 
                 marketwide.getChildren().addAll(
@@ -800,10 +800,11 @@ public class OfferPage {
                 shopSpecific.setPadding(new Insets(8));
 
                 Text shopIcon = new Text("▣");
+                shopIcon.setFont(Font.font("Georgia", 16));
                 Text shopText = new Text("Shop-\nSpecific");
 
                 shopText.setFont(
-                                Font.font("Georgia", 12));
+                                Font.font("Georgia", 14));
 
                 shopSpecific.getChildren().addAll(
                                 shopIcon,
@@ -815,10 +816,11 @@ public class OfferPage {
                 seasonal.setPadding(new Insets(8));
 
                 Text seasonalIcon = new Text("□");
+                seasonalIcon.setFont(Font.font("Georgia", 16));
                 Text seasonalText = new Text("Seasonal");
 
                 seasonalText.setFont(
-                                Font.font("Georgia", 12));
+                                Font.font("Georgia", 14));
 
                 seasonal.getChildren().addAll(
                                 seasonalIcon,
@@ -830,10 +832,11 @@ public class OfferPage {
                 aiSuggested.setPadding(new Insets(8));
 
                 Text aiIcon = new Text("✣");
+                aiIcon.setFont(Font.font("Georgia", 16));
                 Text aiText = new Text("AI-Suggested");
 
                 aiText.setFont(
-                                Font.font("Georgia", 12));
+                                Font.font("Georgia", 14));
 
                 aiSuggested.getChildren().addAll(
                                 aiIcon,
@@ -851,7 +854,7 @@ public class OfferPage {
 
                 VBox promotions = new VBox();
                 promotions.setSpacing(18);
-                promotions.setPrefWidth(600);
+                promotions.setPrefWidth(630);
 
                 // =========================
                 // CREATE CAMPAIGN HEADER
@@ -865,7 +868,7 @@ public class OfferPage {
                                 "Showing Active Marketwide promotions");
 
                 showing.setFont(
-                                Font.font("Georgia", 13));
+                                Font.font("Georgia", 15));
 
                 Region headerGrow = new Region();
                 HBox.setHgrow(
@@ -874,11 +877,12 @@ public class OfferPage {
 
                 Button createCampaign = new Button("+  Create Global Campaign");
 
-                createCampaign.setPrefHeight(38);
+                createCampaign.setPrefHeight(44);
                 createCampaign.setStyle(
                                 "-fx-background-color:#B84300;" +
                                                 "-fx-text-fill:white;" +
                                                 "-fx-font-weight:bold;" +
+                                                "-fx-font-size:14px;" +
                                                 "-fx-background-radius:8;");
 
                 campaignHeader.getChildren().addAll(
@@ -913,11 +917,11 @@ public class OfferPage {
 
                 Text summer = new Text("Summer Tech Fest");
                 summer.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 16));
+                                Font.font("Georgia", FontWeight.BOLD, 19));
 
                 Text active = new Text("Active");
                 active.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 11));
+                                Font.font("Georgia", FontWeight.BOLD, 13));
                 active.setFill(Color.web("#8E3D18"));
 
                 Region grow1 = new Region();
@@ -934,7 +938,7 @@ public class OfferPage {
                                 "15% off electronics network-wide to boost Q3 electronics slump.");
 
                 summerDescription.setFont(
-                                Font.font("Georgia", 12));
+                                Font.font("Georgia", 14));
                 summerDescription.setFill(
                                 Color.web("#777777"));
 
@@ -947,12 +951,12 @@ public class OfferPage {
 
                 Text conversionTitle = new Text("Conversion Rate");
                 conversionTitle.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 10));
+                                Font.font("Georgia", FontWeight.BOLD, 12));
                 conversionTitle.setFill(Color.GRAY);
 
                 Text conversionValue = new Text("4.2% ↗");
                 conversionValue.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 15));
+                                Font.font("Georgia", FontWeight.BOLD, 18));
 
                 conversion.getChildren().addAll(
                                 conversionTitle,
@@ -962,12 +966,12 @@ public class OfferPage {
 
                 Text shopsTitle = new Text("Participating Shops");
                 shopsTitle.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 10));
+                                Font.font("Georgia", FontWeight.BOLD, 12));
                 shopsTitle.setFill(Color.GRAY);
 
                 Text shopsValue = new Text("142");
                 shopsValue.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 15));
+                                Font.font("Georgia", FontWeight.BOLD, 18));
 
                 shopsCount.getChildren().addAll(
                                 shopsTitle,
@@ -977,12 +981,12 @@ public class OfferPage {
 
                 Text liftTitle = new Text("Est. Network Lift");
                 liftTitle.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 10));
+                                Font.font("Georgia", FontWeight.BOLD, 12));
                 liftTitle.setFill(Color.GRAY);
 
                 Text liftValue = new Text("+$42k");
                 liftValue.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 15));
+                                Font.font("Georgia", FontWeight.BOLD, 18));
                 liftValue.setFill(Color.web("#A83E00"));
 
                 networkLift.getChildren().addAll(
@@ -1018,12 +1022,12 @@ public class OfferPage {
 
                 Text groceries = new Text("Fresh Groceries Push");
                 groceries.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 16));
+                                Font.font("Georgia", FontWeight.BOLD, 19));
                 groceries.setFill(Color.web("#555555"));
 
                 Text paused = new Text("Paused");
                 paused.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 11));
+                                Font.font("Georgia", FontWeight.BOLD, 13));
                 paused.setFill(Color.GRAY);
 
                 Region grow2 = new Region();
@@ -1040,7 +1044,7 @@ public class OfferPage {
                                 "Free delivery on orders over $50 for fresh produce partners.");
 
                 groceryDescription.setFont(
-                                Font.font("Georgia", 12));
+                                Font.font("Georgia", 14));
                 groceryDescription.setFill(
                                 Color.web("#888888"));
 
@@ -1053,12 +1057,12 @@ public class OfferPage {
 
                 Text conversionTitle2 = new Text("Conversion Rate");
                 conversionTitle2.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 10));
+                                Font.font("Georgia", FontWeight.BOLD, 12));
                 conversionTitle2.setFill(Color.GRAY);
 
                 Text conversionValue2 = new Text("--");
                 conversionValue2.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 15));
+                                Font.font("Georgia", FontWeight.BOLD, 18));
 
                 conversion2.getChildren().addAll(
                                 conversionTitle2,
@@ -1068,12 +1072,12 @@ public class OfferPage {
 
                 Text shopsTitle2 = new Text("Participating Shops");
                 shopsTitle2.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 10));
+                                Font.font("Georgia", FontWeight.BOLD, 12));
                 shopsTitle2.setFill(Color.GRAY);
 
                 Text shopsValue2 = new Text("45");
                 shopsValue2.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 15));
+                                Font.font("Georgia", FontWeight.BOLD, 18));
 
                 shopsCount2.getChildren().addAll(
                                 shopsTitle2,
@@ -1083,12 +1087,12 @@ public class OfferPage {
 
                 Text liftTitle2 = new Text("Est. Network Lift");
                 liftTitle2.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 10));
+                                Font.font("Georgia", FontWeight.BOLD, 12));
                 liftTitle2.setFill(Color.GRAY);
 
                 Text liftValue2 = new Text("--");
                 liftValue2.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 15));
+                                Font.font("Georgia", FontWeight.BOLD, 18));
 
                 networkLift2.getChildren().addAll(
                                 liftTitle2,
@@ -1114,7 +1118,7 @@ public class OfferPage {
                 VBox aiPromotion = new VBox();
                 aiPromotion.setSpacing(15);
                 aiPromotion.setPadding(new Insets(20));
-                aiPromotion.setPrefWidth(245);
+                aiPromotion.setPrefWidth(275);
 
                 aiPromotion.setStyle(
                                 "-fx-background-color:white;" +
@@ -1127,13 +1131,13 @@ public class OfferPage {
                                 "✣  AI Promotion\n    Engine");
 
                 aiPromotionTitle.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 17));
+                                Font.font("Georgia", FontWeight.BOLD, 20));
 
                 Text aiDescription = new Text(
                                 "Real-time insights to optimize\nnetwork GMV.");
 
                 aiDescription.setFont(
-                                Font.font("Georgia", 12));
+                                Font.font("Georgia", 14));
                 aiDescription.setFill(
                                 Color.web("#666666"));
 
@@ -1141,7 +1145,7 @@ public class OfferPage {
                                 "NEEDS BOOST (TRENDING\nDOWN)");
 
                 needsBoost.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 10));
+                                Font.font("Georgia", FontWeight.BOLD, 12));
 
                 // Chips
                 HBox chip1 = new HBox();
@@ -1152,7 +1156,7 @@ public class OfferPage {
 
                 Text chipText1 = new Text("Winter Apparel");
                 chipText1.setFont(
-                                Font.font("Georgia", 10));
+                                Font.font("Georgia", 12));
 
                 chip1.getChildren().add(chipText1);
 
@@ -1164,7 +1168,7 @@ public class OfferPage {
 
                 Text chipText2 = new Text("Home Goods");
                 chipText2.setFont(
-                                Font.font("Georgia", 10));
+                                Font.font("Georgia", 12));
 
                 chip2.getChildren().add(chipText2);
 
@@ -1176,7 +1180,7 @@ public class OfferPage {
 
                 Text chipText3 = new Text("Pet Supplies");
                 chipText3.setFont(
-                                Font.font("Georgia", 10));
+                                Font.font("Georgia", 12));
 
                 chip3.getChildren().add(chipText3);
 
@@ -1184,7 +1188,7 @@ public class OfferPage {
                                 "Generate Campaign Ideas  →");
 
                 generateIdeas.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 11));
+                                Font.font("Georgia", FontWeight.BOLD, 13));
                 generateIdeas.setFill(
                                 Color.web("#8E3D18"));
 
@@ -1194,19 +1198,19 @@ public class OfferPage {
                                 "PREDICTED ROI (ACTIVE)");
 
                 predicted.setFont(
-                                Font.font("Georgia", FontWeight.BOLD, 10));
+                                Font.font("Georgia", FontWeight.BOLD, 12));
 
                 Text roi1 = new Text(
                                 "Summer Tech Fest                         2.4x");
 
                 roi1.setFont(
-                                Font.font("Georgia", 11));
+                                Font.font("Georgia", 13));
 
                 Text roi2 = new Text(
                                 "Local Artisan Week                       1.8x");
 
                 roi2.setFont(
-                                Font.font("Georgia", 11));
+                                Font.font("Georgia", 13));
 
                 aiPromotion.getChildren().addAll(
                                 aiPromotionTitle,

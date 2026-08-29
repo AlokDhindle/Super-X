@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -45,11 +46,11 @@ public class AdminDashboardPage {
                 left.setStyle("-fx-background-color:#F3E3D3;");
 
                 Text logo = new Text("Admin Panel");
-                logo.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+                logo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
                 logo.setFill(Color.web("#A83E00"));
 
                 Text adminPanel = new Text("Marketplace Controller");
-                adminPanel.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+                adminPanel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
                 adminPanel.setFill(Color.web("#999999"));
 
                 VBox logoBox = new VBox(4, logo, adminPanel);
@@ -72,13 +73,13 @@ public class AdminDashboardPage {
 
                 Image img1 = new Image(getClass().getResource("/assets/images/admin/dashboard.png").toExternalForm());
                 ImageView iv1 = new ImageView(img1);
-                iv1.setFitWidth(16);
-                iv1.setFitHeight(16);
+                iv1.setFitWidth(20);
+                iv1.setFitHeight(20);
                 iv1.setPreserveRatio(true);
 
                 Text dashboardText = new Text("Dashboard");
                 dashboardText.setFill(Color.web("#333333"));
-                dashboardText.setFont(Font.font("Arial", 12));
+                dashboardText.setFont(Font.font("Arial", 14));
 
                 dashboard.getChildren().addAll(iv1, dashboardText);
 
@@ -89,7 +90,7 @@ public class AdminDashboardPage {
 
                         dashboardText.setFill(Color.WHITE);
                         dashboardText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -106,7 +107,7 @@ public class AdminDashboardPage {
                                                         "-fx-background-radius:10;");
 
                         dashboardText.setFill(Color.web("#333333"));
-                        dashboardText.setFont(Font.font("Arial", 12));
+                        dashboardText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -130,15 +131,15 @@ public class AdminDashboardPage {
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-background-radius:10;");
 
-                Image img2 = new Image(getClass().getResource("/assets/images/admin/admin logo.png").toExternalForm());
+                Image img2 = new Image("assets\\images\\admin\\admin_logo.png");
                 ImageView iv2 = new ImageView(img2);
-                iv2.setFitWidth(16);
-                iv2.setFitHeight(16);
+                iv2.setFitWidth(20);
+                iv2.setFitHeight(20);
                 iv2.setPreserveRatio(true);
 
                 Text usersText = new Text("Users");
                 usersText.setFill(Color.web("#333333"));
-                usersText.setFont(Font.font("Arial", 12));
+                usersText.setFont(Font.font("Arial", 14));
 
                 users.getChildren().addAll(iv2, usersText);
 
@@ -149,7 +150,7 @@ public class AdminDashboardPage {
 
                         usersText.setFill(Color.WHITE);
                         usersText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -166,7 +167,7 @@ public class AdminDashboardPage {
                                                         "-fx-background-radius:10;");
 
                         usersText.setFill(Color.web("#333333"));
-                        usersText.setFont(Font.font("Arial", 12));
+                        usersText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -199,13 +200,13 @@ public class AdminDashboardPage {
 
                 Image img3 = new Image(getClass().getResource("/assets/images/admin/shop.png").toExternalForm());
                 ImageView iv3 = new ImageView(img3);
-                iv3.setFitWidth(16);
-                iv3.setFitHeight(16);
+                iv3.setFitWidth(20);
+                iv3.setFitHeight(20);
                 iv3.setPreserveRatio(true);
 
                 Text shopsText = new Text("Shops");
                 shopsText.setFill(Color.web("#333333"));
-                shopsText.setFont(Font.font("Arial", 12));
+                shopsText.setFont(Font.font("Arial", 14));
 
                 shops.getChildren().addAll(iv3, shopsText);
 
@@ -216,7 +217,7 @@ public class AdminDashboardPage {
 
                         shopsText.setFill(Color.WHITE);
                         shopsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -233,7 +234,7 @@ public class AdminDashboardPage {
                                                         "-fx-background-radius:10;");
 
                         shopsText.setFill(Color.web("#333333"));
-                        shopsText.setFont(Font.font("Arial", 12));
+                        shopsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -262,13 +263,13 @@ public class AdminDashboardPage {
 
                 Image img4 = new Image(getClass().getResource("/assets/images/admin/tag.png").toExternalForm());
                 ImageView iv4 = new ImageView(img4);
-                iv4.setFitWidth(16);
-                iv4.setFitHeight(16);
+                iv4.setFitWidth(20);
+                iv4.setFitHeight(20);
                 iv4.setPreserveRatio(true);
 
                 Text offersText = new Text("Offers");
                 offersText.setFill(Color.web("#333333"));
-                offersText.setFont(Font.font("Arial", 12));
+                offersText.setFont(Font.font("Arial", 14));
 
                 offers.getChildren().addAll(iv4, offersText);
 
@@ -279,7 +280,7 @@ public class AdminDashboardPage {
 
                         offersText.setFill(Color.WHITE);
                         offersText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -296,7 +297,7 @@ public class AdminDashboardPage {
                                                         "-fx-background-radius:10;");
 
                         offersText.setFill(Color.web("#333333"));
-                        offersText.setFont(Font.font("Arial", 12));
+                        offersText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -325,13 +326,13 @@ public class AdminDashboardPage {
 
                 Image img5 = new Image(getClass().getResource("/assets/images/admin/stats.png").toExternalForm());
                 ImageView iv5 = new ImageView(img5);
-                iv5.setFitWidth(16);
-                iv5.setFitHeight(16);
+                iv5.setFitWidth(20);
+                iv5.setFitHeight(20);
                 iv5.setPreserveRatio(true);
 
                 Text analyticsText = new Text("Analytics");
                 analyticsText.setFill(Color.web("#333333"));
-                analyticsText.setFont(Font.font("Arial", 12));
+                analyticsText.setFont(Font.font("Arial", 14));
 
                 analytics.getChildren().addAll(iv5, analyticsText);
 
@@ -342,7 +343,7 @@ public class AdminDashboardPage {
 
                         analyticsText.setFill(Color.WHITE);
                         analyticsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -359,7 +360,7 @@ public class AdminDashboardPage {
                                                         "-fx-background-radius:10;");
 
                         analyticsText.setFill(Color.web("#333333"));
-                        analyticsText.setFont(Font.font("Arial", 12));
+                        analyticsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -398,13 +399,13 @@ public class AdminDashboardPage {
 
                 Image img6 = new Image(getClass().getResource("/assets/images/admin/setting.png").toExternalForm());
                 ImageView iv6 = new ImageView(img6);
-                iv6.setFitWidth(16);
-                iv6.setFitHeight(16);
+                iv6.setFitWidth(20);
+                iv6.setFitHeight(20);
                 iv6.setPreserveRatio(true);
 
                 Text settingsText = new Text("Settings");
                 settingsText.setFill(Color.web("#333333"));
-                settingsText.setFont(Font.font("Arial", 12));
+                settingsText.setFont(Font.font("Arial", 14));
 
                 settings.getChildren().addAll(iv6, settingsText);
 
@@ -419,13 +420,13 @@ public class AdminDashboardPage {
 
                 Image img7 = new Image(getClass().getResource("/assets/images/admin/service-call.png").toExternalForm());
                 ImageView iv7 = new ImageView(img7);
-                iv7.setFitWidth(16);
-                iv7.setFitHeight(16);
+                iv7.setFitWidth(20);
+                iv7.setFitHeight(20);
                 iv7.setPreserveRatio(true);
 
                 Text supportText = new Text("Support");
                 supportText.setFill(Color.web("#333333"));
-                supportText.setFont(Font.font("Arial", 12));
+                supportText.setFont(Font.font("Arial", 14));
 
                 support.getChildren().addAll(iv7, supportText);
 
@@ -440,7 +441,7 @@ public class AdminDashboardPage {
 
                         settingsText.setFill(Color.WHITE);
                         settingsText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -457,7 +458,7 @@ public class AdminDashboardPage {
                                                         "-fx-background-radius:10;");
 
                         settingsText.setFill(Color.web("#333333"));
-                        settingsText.setFont(Font.font("Arial", 12));
+                        settingsText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -483,7 +484,7 @@ public class AdminDashboardPage {
 
                         supportText.setFill(Color.WHITE);
                         supportText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 12));
+                                        Font.font("Arial", FontWeight.BOLD, 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -500,7 +501,7 @@ public class AdminDashboardPage {
                                                         "-fx-background-radius:10;");
 
                         supportText.setFill(Color.web("#333333"));
-                        supportText.setFont(Font.font("Arial", 12));
+                        supportText.setFont(Font.font("Arial", 14));
 
                         ScaleTransition st = new ScaleTransition(
                                         Duration.millis(120),
@@ -521,6 +522,7 @@ public class AdminDashboardPage {
                 // =========================
 
                 Button exit = new Button("Exit");
+                exit.setStyle("-fx-font-size:13px;-fx-font-weight:bold;");
 
                 HBox profile = new HBox(
                                 exit);
@@ -556,7 +558,7 @@ public class AdminDashboardPage {
                 center.setSpacing(20);
                 center.setPadding(new Insets(25));
                 center.setMaxWidth(1120);
-                center.setMaxHeight(850);
+                center.setMaxHeight(Double.MAX_VALUE);
 
                 // =========================
                 // TOP
@@ -571,15 +573,16 @@ public class AdminDashboardPage {
                 search.setPromptText(
                                 "Search orders, shops, or users...");
                 search.setPrefWidth(340);
-                search.setPrefHeight(38);
+                search.setPrefHeight(42);
                 search.setStyle(
                                 "-fx-background-color:#F2F0F5;" +
-                                                "-fx-background-radius:20;");
+                                                "-fx-background-radius:20;" +
+                                                "-fx-font-size:14px;");
 
                 Image aiChatbotImage = new Image(getClass().getResource("/assets/images/admin/message.png").toExternalForm());
                 ImageView iv8 = new ImageView(aiChatbotImage);
-                iv8.setFitWidth(20);
-                iv8.setFitHeight(20);
+                iv8.setFitWidth(24);
+                iv8.setFitHeight(24);
                 iv8.setPreserveRatio(true);
                 // Icons 
                 iv8.setOnMouseClicked(e -> {
@@ -591,8 +594,8 @@ public class AdminDashboardPage {
 
                 Image notification = new Image(getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
                 ImageView iv9 = new ImageView(notification);
-                iv9.setFitWidth(20);
-                iv9.setFitHeight(20);
+                iv9.setFitWidth(24);
+                iv9.setFitHeight(24);
                 iv9.setPreserveRatio(true);
 
                 Popup notificationPopup = new Popup();
@@ -602,14 +605,14 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                17));
+                                                20));
 
                 Button markRead = new Button("Mark all as read");
 
                 markRead.setStyle(
                                 "-fx-background-color:transparent;" +
                                                 "-fx-text-fill:#E65300;" +
-                                                "-fx-font-size:11px;");
+                                                "-fx-font-size:13px;");
 
                 Region notificationGrow = new Region();
 
@@ -635,7 +638,7 @@ public class AdminDashboardPage {
                                                 "2 mins ago");
 
                 notificationText1.setStyle(
-                                "-fx-font-size:11px;");
+                                "-fx-font-size:13px;");
 
                 HBox notification1 = new HBox(
                                 12,
@@ -662,7 +665,7 @@ public class AdminDashboardPage {
                                                 "10 mins ago");
 
                 notificationText2.setStyle(
-                                "-fx-font-size:11px;");
+                                "-fx-font-size:13px;");
 
                 HBox notification2 = new HBox(
                                 12,
@@ -689,7 +692,7 @@ public class AdminDashboardPage {
                                                 "1 hour ago");
 
                 notificationText3.setStyle(
-                                "-fx-font-size:11px;");
+                                "-fx-font-size:13px;");
 
                 HBox notification3 = new HBox(
                                 12,
@@ -712,13 +715,14 @@ public class AdminDashboardPage {
                 viewAll.setMaxWidth(
                                 Double.MAX_VALUE);
 
-                viewAll.setPrefHeight(38);
+                viewAll.setPrefHeight(42);
 
                 viewAll.setStyle(
                                 "-fx-background-color:#FF6500;" +
                                                 "-fx-text-fill:white;" +
                                                 "-fx-font-weight:bold;" +
-                                                "-fx-background-radius:7;");
+                                                "-fx-background-radius:7;" +
+                                                "-fx-font-size:13px;");
 
                 VBox notificationBox = new VBox(
                                 12,
@@ -771,7 +775,7 @@ public class AdminDashboardPage {
                 Text admin = new Text(
                                 " Admin Portal");
                 admin.setFont(
-                                Font.font("Arial", FontWeight.BOLD, 13));
+                                Font.font("Arial", FontWeight.BOLD, 15));
 
                 Region topGrow = new Region();
                 HBox.setHgrow(
@@ -817,7 +821,7 @@ public class AdminDashboardPage {
                                 Color.web("#FDE4D8"));
 
                 Text card1Icon = new Text("\uD83D\uDC64");
-                card1Icon.setFont(Font.font(19));
+                card1Icon.setFont(Font.font(23));
                 card1Icon.setFill(
                                 Color.web("#B84300"));
 
@@ -831,7 +835,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
                 card1Badge.setFill(
                                 Color.web("#1FA64B"));
 
@@ -848,7 +852,7 @@ public class AdminDashboardPage {
                 Text card1Title = new Text(
                                 "Total Customers");
                 card1Title.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
                 card1Title.setFill(
                                 Color.web("#777777"));
 
@@ -857,7 +861,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                18));
+                                                22));
 
                 card1.getChildren().addAll(
                                 card1Top,
@@ -882,7 +886,7 @@ public class AdminDashboardPage {
                                 Color.web("#FDE4D8"));
 
                 Text card2Icon = new Text("\uD83C\uDFEA");
-                card2Icon.setFont(Font.font(19));
+                card2Icon.setFont(Font.font(23));
                 card2Icon.setFill(
                                 Color.web("#B84300"));
 
@@ -896,7 +900,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
                 card2Badge.setFill(
                                 Color.web("#1FA64B"));
 
@@ -913,7 +917,7 @@ public class AdminDashboardPage {
                 Text card2Title = new Text(
                                 "Total Shopkeepers");
                 card2Title.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
                 card2Title.setFill(
                                 Color.web("#777777"));
 
@@ -922,7 +926,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                18));
+                                                22));
 
                 card2.getChildren().addAll(
                                 card2Top,
@@ -947,7 +951,7 @@ public class AdminDashboardPage {
                                 Color.web("#FDE4D8"));
 
                 Text card3Icon = new Text("\uD83D\uDCB0");
-                card3Icon.setFont(Font.font(19));
+                card3Icon.setFont(Font.font(23));
                 card3Icon.setFill(
                                 Color.web("#B84300"));
 
@@ -961,7 +965,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
                 card3Badge.setFill(
                                 Color.web("#B21F0C"));
 
@@ -978,7 +982,7 @@ public class AdminDashboardPage {
                 Text card3Title = new Text(
                                 "Total Revenue");
                 card3Title.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
                 card3Title.setFill(
                                 Color.web("#777777"));
 
@@ -988,7 +992,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                18));
+                                                22));
 
                 card3.getChildren().addAll(
                                 card3Top,
@@ -1013,7 +1017,7 @@ public class AdminDashboardPage {
                                 Color.web("#FCE1E1"));
 
                 Text card4Icon = new Text("\uD83D\uDEE1");
-                card4Icon.setFont(Font.font(19));
+                card4Icon.setFont(Font.font(23));
                 card4Icon.setFill(
                                 Color.web("#C0392B"));
 
@@ -1027,7 +1031,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
                 card4Badge.setFill(
                                 Color.web("#C0392B"));
 
@@ -1044,7 +1048,7 @@ public class AdminDashboardPage {
                 Text card4Title = new Text(
                                 "Pending Verifications");
                 card4Title.setFont(
-                                Font.font("Arial", 12));
+                                Font.font("Arial", 14));
                 card4Title.setFill(
                                 Color.web("#777777"));
 
@@ -1053,7 +1057,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                18));
+                                                22));
 
                 card4.getChildren().addAll(
                                 card4Top,
@@ -1102,12 +1106,12 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                14));
+                                                17));
 
                 Text salesText = new Text(
                                 "Performance overview for the current fiscal year");
                 salesText.setFont(
-                                Font.font("Arial", 11));
+                                Font.font("Arial", 13));
                 salesText.setFill(Color.GRAY);
 
                 VBox salesHeaderText = new VBox(
@@ -1121,12 +1125,12 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
 
                 Text ordersTab = new Text(
                                 "Orders");
                 ordersTab.setFont(
-                                Font.font("Arial", 11));
+                                Font.font("Arial", 13));
                 ordersTab.setFill(Color.GRAY);
 
                 HBox tabs = new HBox(
@@ -1214,7 +1218,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                14));
+                                                17));
 
                 Text trending = new Text(
                                 "TRENDING NOW");
@@ -1222,7 +1226,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                9));
+                                                11));
                 trending.setFill(
                                 Color.web("#B84300"));
 
@@ -1239,12 +1243,12 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                12));
+                                                14));
 
                 Text audioText = new Text(
                                 "+240% surge in last 24h");
                 audioText.setFont(
-                                Font.font("Arial", 9));
+                                Font.font("Arial", 11));
                 audioText.setFill(
                                 Color.web("#777777"));
 
@@ -1265,12 +1269,12 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                12));
+                                                14));
 
                 Text groceryText = new Text(
                                 "Consistently high demand");
                 groceryText.setFont(
-                                Font.font("Arial", 9));
+                                Font.font("Arial", 11));
                 groceryText.setFill(
                                 Color.web("#777777"));
 
@@ -1284,7 +1288,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                9));
+                                                11));
                 growth.setFill(
                                 Color.web("#B84300"));
 
@@ -1299,13 +1303,13 @@ public class AdminDashboardPage {
                 Text suggestion1 = new Text(
                                 "Increase flash sale frequency in the Downtown sector to capitalize on peak 6 PM traffic.");
                 suggestion1.setFont(
-                                Font.font("Arial", 10));
+                                Font.font("Arial", 12));
                 suggestion1.setWrappingWidth(250);
 
                 Text suggestion2 = new Text(
                                 "Onboard 15+ more Health & Wellness vendors to meet unfulfilled search queries.");
                 suggestion2.setFont(
-                                Font.font("Arial", 10));
+                                Font.font("Arial", 12));
                 suggestion2.setWrappingWidth(250);
 
                 suggestions.getChildren().addAll(
@@ -1315,12 +1319,13 @@ public class AdminDashboardPage {
                 Button report = new Button(
                                 "Generate Full Report");
                 report.setPrefWidth(260);
-                report.setPrefHeight(38);
+                report.setPrefHeight(42);
                 report.setStyle(
                                 "-fx-background-color:#B84300;" +
                                                 "-fx-text-fill:white;" +
                                                 "-fx-background-radius:8;" +
-                                                "-fx-font-weight:bold;");
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-font-size:13px;");
 
                 Region insightsGrow = new Region();
 
@@ -1365,7 +1370,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                14));
+                                                17));
 
                 Text shopViewAll = new Text(
                                 "View All");
@@ -1373,7 +1378,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
                 shopViewAll.setFill(
                                 Color.web("#B84300"));
 
@@ -1407,22 +1412,22 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                10));
+                                                12));
                 th2.setFont(
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                10));
+                                                12));
                 th3.setFont(
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                10));
+                                                12));
                 th4.setFont(
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                10));
+                                                12));
 
                 th1.setFill(Color.web("#999999"));
                 th2.setFill(Color.web("#999999"));
@@ -1456,16 +1461,16 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
                 r1c2.setFont(
-                                Font.font("Arial", 11));
+                                Font.font("Arial", 13));
                 r1c3.setFont(
-                                Font.font("Arial", 11));
+                                Font.font("Arial", 13));
                 r1c4.setFont(
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                10));
+                                                12));
                 r1c4.setFill(
                                 Color.web("#E08A00"));
 
@@ -1492,16 +1497,16 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
                 r2c2.setFont(
-                                Font.font("Arial", 11));
+                                Font.font("Arial", 13));
                 r2c3.setFont(
-                                Font.font("Arial", 11));
+                                Font.font("Arial", 13));
                 r2c4.setFont(
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                10));
+                                                12));
                 r2c4.setFill(
                                 Color.web("#1FA64B"));
 
@@ -1528,16 +1533,16 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                11));
+                                                13));
                 r3c2.setFont(
-                                Font.font("Arial", 11));
+                                Font.font("Arial", 13));
                 r3c3.setFont(
-                                Font.font("Arial", 11));
+                                Font.font("Arial", 13));
                 r3c4.setFont(
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                10));
+                                                12));
                 r3c4.setFill(
                                 Color.web("#C0392B"));
 
@@ -1578,12 +1583,12 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                14));
+                                                17));
 
                 Text lastDays = new Text(
                                 "Last 7 Days");
                 lastDays.setFont(
-                                Font.font("Arial", 11));
+                                Font.font("Arial", 13));
                 lastDays.setFill(Color.GRAY);
 
                 Region dailyHeaderGrow = new Region();
@@ -1617,7 +1622,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                9));
+                                                11));
                 peakLabel.setFill(
                                 Color.web("#999999"));
 
@@ -1627,7 +1632,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                12));
+                                                14));
 
                 VBox peak = new VBox(3);
                 peak.getChildren().addAll(
@@ -1640,7 +1645,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                9));
+                                                11));
                 sessionLabel.setFill(
                                 Color.web("#999999"));
 
@@ -1650,7 +1655,7 @@ public class AdminDashboardPage {
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
-                                                12));
+                                                14));
 
                 VBox session = new VBox(3);
                 session.getChildren().addAll(
@@ -1693,9 +1698,19 @@ public class AdminDashboardPage {
 
                 StackPane.setAlignment(
                                 center,
-                                Pos.CENTER);
+                                Pos.TOP_CENTER);
 
-                root.setCenter(centerWrapper);
+                ScrollPane centerScroll = new ScrollPane(centerWrapper);
+                centerScroll.setFitToWidth(true);
+                centerScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                centerScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+                centerScroll.setPannable(true);
+                centerScroll.setStyle(
+                                "-fx-background:#F9F7FB;" +
+                                                "-fx-background-color:#F9F7FB;" +
+                                                "-fx-border-color:transparent;");
+
+                root.setCenter(centerScroll);
 
                 // =========================
                 // SCENE
