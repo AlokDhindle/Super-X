@@ -1,6 +1,11 @@
 package com.kryox.view.Customer;
 
-import javafx.application.Application;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.kryox.controller.Customer.CARTcontroller;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,448 +20,238 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-public class Electronics  {
-        private Scene Electrinicscene;
+public class Electronics {
 
-        Scene getElectrScene(){
-                // =====================================================
+    private Scene Electrinicscene;
+    private final String userId;
+
+    // =========================================================
+    // BUY NEX PREMIUM THEME
+    // =========================================================
+    private static final String ORANGE = "#FF6900";
+    private static final String ORANGE_DARK = "#D9570A";
+    private static final String ORANGE_LIGHT = "#FFF1E8";
+    private static final String CREAM = "#EBCCB7";
+    private static final String PAGE_BG = "#F7F5F8";
+    private static final String CARD_BG = "#FFFFFF";
+    private static final String TEXT = "#202124";
+    private static final String MUTED = "#77747A";
+    private static final String BORDER = "#E9E4EA";
+
+    public Electronics(String userId) {
+        this.userId = userId;
+    }
+
+    // =========================================================
+    // MAIN SCENE
+    // =========================================================
+    public Scene getElectrScene() {
+
+        // ---------------------------------------------------------
         // SHADOWS
-        // =====================================================
-
-        DropShadow shadow = new DropShadow();
-        shadow.setRadius(18);
-        shadow.setSpread(0.05);
-        shadow.setOffsetX(5);
-        shadow.setOffsetY(0);
-        shadow.setColor(Color.rgb(0, 0, 0, 0.14));
+        // ---------------------------------------------------------
+        DropShadow sidebarShadow = new DropShadow();
+        sidebarShadow.setRadius(18);
+        sidebarShadow.setOffsetX(3);
+        sidebarShadow.setOffsetY(0);
+        sidebarShadow.setColor(Color.rgb(0, 0, 0, 0.10));
 
         DropShadow cardShadow = new DropShadow();
-        cardShadow.setRadius(14);
-        cardShadow.setOffsetY(5);
-        cardShadow.setSpread(0.02);
-        cardShadow.setColor(Color.rgb(0, 0, 0, 0.10));
+        cardShadow.setRadius(16);
+        cardShadow.setOffsetY(6);
+        cardShadow.setColor(Color.rgb(0, 0, 0, 0.09));
 
-        DropShadow productShadow = new DropShadow();
-        productShadow.setRadius(8);
-        productShadow.setOffsetY(2);
-        productShadow.setSpread(0.02);
-        productShadow.setColor(Color.rgb(0, 0, 0, 0.08));
+        DropShadow softShadow = new DropShadow();
+        softShadow.setRadius(10);
+        softShadow.setOffsetY(3);
+        softShadow.setColor(Color.rgb(0, 0, 0, 0.07));
 
-        // =====================================================
+        // =========================================================
+        // LEFT SIDEBAR
+        // =========================================================
+        VBox leftBox = new VBox(12);
+
+        leftBox.setPrefWidth(245);
+        leftBox.setMinWidth(245);
+        leftBox.setMaxWidth(245);
+
+        leftBox.setPadding(new Insets(28, 20, 20, 20));
+        leftBox.setAlignment(Pos.TOP_CENTER);
+
+        leftBox.setStyle(
+                "-fx-background-color: " + CREAM + ";"
+        );
+
+        leftBox.setEffect(sidebarShadow);
+
         // LOGO
-        // =====================================================
+        Label logo = new Label("BuyNeX");
 
-        Label name = new Label("BuyNeX");
-        name.setStyle(
+        logo.setStyle(
                 "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 28px;" +
+                "-fx-font-size: 29px;" +
                 "-fx-font-weight: 900;" +
                 "-fx-text-fill: #E87500;"
         );
 
-        // =====================================================
-        // PREMIUM SHOPPER
-        // =====================================================
+        // PREMIUM SHOPPER BOX
+        HBox premiumBox = new HBox();
 
-        HBox premiumBox = new HBox(9);
-        premiumBox.setPrefSize(205, 58);
-        premiumBox.setMinSize(205, 58);
-        premiumBox.setMaxSize(205, 58);
-        premiumBox.setAlignment(Pos.CENTER_LEFT);
-        premiumBox.setPadding(new Insets(8, 13, 8, 13));
-        premiumBox.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #E9E2EA;" +
-                "-fx-border-width: 1;" +
-                "-fx-border-radius: 15;"
+        premiumBox.setPrefSize(205, 64);
+        premiumBox.setMinSize(205, 64);
+        premiumBox.setMaxSize(205, 64);
+
+        premiumBox.setPadding(
+                new Insets(10, 14, 10, 14)
         );
-        premiumBox.setEffect(cardShadow);
 
-        VBox textBox = new VBox(3);
-        Label title = new Label("Premium Shopper");
-        title.setStyle(
+        premiumBox.setAlignment(Pos.CENTER_LEFT);
+
+        premiumBox.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-background-radius: 17;" +
+                "-fx-border-color: #EEE5E8;" +
+                "-fx-border-radius: 17;" +
+                "-fx-border-width: 1;"
+        );
+
+        premiumBox.setEffect(softShadow);
+
+        VBox premiumText = new VBox(3);
+
+        Label premiumTitle = new Label("Premium Shopper");
+
+        premiumTitle.setStyle(
                 "-fx-font-family: 'Montserrat';" +
                 "-fx-font-size: 12px;" +
-                "-fx-font-weight: bold;" +
+                "-fx-font-weight: 800;" +
                 "-fx-text-fill: #222222;"
         );
 
-        Label subtitle = new Label("● AI Assistant Active");
-        subtitle.setStyle(
+        Label premiumStatus = new Label(
+                "●  AI Assistant Active"
+        );
+
+        premiumStatus.setStyle(
                 "-fx-font-family: 'Montserrat';" +
                 "-fx-font-size: 9px;" +
                 "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;"
+                "-fx-text-fill: " + ORANGE + ";"
         );
 
-        textBox.getChildren().addAll(title, subtitle);
-        premiumBox.getChildren().add(textBox);
-
-        // =====================================================
-        // DASHBOARD
-        // =====================================================
-
-        Image di = new Image("/assets/images/Dashbord/dashboard.png");
-        ImageView div = new ImageView(di);
-        div.setFitHeight(21);
-        div.setFitWidth(21);
-        div.setPreserveRatio(true);
-
-        Button lefButton1 = new Button("Dashboard");
-        lefButton1.setPrefWidth(125);
-        lefButton1.setPrefHeight(38);
-        lefButton1.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        premiumText.getChildren().addAll(
+                premiumTitle,
+                premiumStatus
         );
 
-        HBox hbInDashboard = new HBox(17, div, lefButton1);
-        hbInDashboard.setPrefWidth(205);
-        hbInDashboard.setMinWidth(205);
-        hbInDashboard.setMaxWidth(205);
-        hbInDashboard.setPrefHeight(42);
-        hbInDashboard.setMinHeight(42);
-        hbInDashboard.setMaxHeight(42);
-        hbInDashboard.setPadding(new Insets(2, 8, 2, 13));
-        hbInDashboard.setAlignment(Pos.CENTER_LEFT);
-        hbInDashboard.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
-
-        hbInDashboard.setOnMouseEntered(e -> {
-            hbInDashboard.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
-            lefButton1.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        hbInDashboard.setOnMouseExited(e -> {
-            hbInDashboard.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
-            lefButton1.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        // =====================================================
-        // NEARBY SHOPS
-        // =====================================================
-
-        Image di2 = new Image("/assets/images/store.png");
-        ImageView div2 = new ImageView(di2);
-        div2.setFitHeight(23);
-        div2.setFitWidth(23);
-        div2.setPreserveRatio(true);
-
-        Button lefButton2 = new Button("Nearby Shops");
-        lefButton2.setPrefWidth(125);
-        lefButton2.setPrefHeight(38);
-        lefButton2.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
-        );
-        lefButton2.setOnAction(event->{
-                neaby_shope ns=new neaby_shope();
-                Homepage.HomepageStage.setScene(ns.getNearby_shopes(null));
-        });
-
-        HBox hbInDashboard2 = new HBox(17, div2, lefButton2);
-        hbInDashboard2.setPrefWidth(205);
-        hbInDashboard2.setMinWidth(205);
-        hbInDashboard2.setMaxWidth(205);
-        hbInDashboard2.setPrefHeight(42);
-        hbInDashboard2.setMinHeight(42);
-        hbInDashboard2.setMaxHeight(42);
-        hbInDashboard2.setPadding(new Insets(2, 8, 2, 13));
-        hbInDashboard2.setAlignment(Pos.CENTER_LEFT);
-        hbInDashboard2.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
-
-        hbInDashboard2.setOnMouseEntered(e -> {
-            hbInDashboard2.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
-            lefButton2.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        hbInDashboard2.setOnMouseExited(e -> {
-            hbInDashboard2.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
-            lefButton2.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        // =====================================================
-        // DEALS
-        // =====================================================
-
-        Image di3 = new Image("/assets/images/Dashbord/hot-sale.png");
-        ImageView div3 = new ImageView(di3);
-        div3.setFitHeight(23);
-        div3.setFitWidth(23);
-        div3.setPreserveRatio(true);
-
-        Button lefButton3 = new Button("Deals");
-        lefButton3.setPrefWidth(125);
-        lefButton3.setPrefHeight(38);
-        lefButton3.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        premiumBox.getChildren().add(
+                premiumText
         );
 
-        HBox hbInDashboard3 = new HBox(17, div3, lefButton3);
-        hbInDashboard3.setPrefWidth(205);
-        hbInDashboard3.setMinWidth(205);
-        hbInDashboard3.setMaxWidth(205);
-        hbInDashboard3.setPrefHeight(42);
-        hbInDashboard3.setMinHeight(42);
-        hbInDashboard3.setMaxHeight(42);
-        hbInDashboard3.setPadding(new Insets(2, 8, 2, 13));
-        hbInDashboard3.setAlignment(Pos.CENTER_LEFT);
-        hbInDashboard3.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+        // =========================================================
+        // SIDEBAR MENU
+        // =========================================================
+        VBox menuBox = new VBox(5);
 
-        hbInDashboard3.setOnMouseEntered(e -> {
-            hbInDashboard3.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
-            lefButton3.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
+        HBox dashboardRow =
+                createSidebarRow("▦", "Dashboard");
+
+        HBox nearbyRow =
+                createSidebarRow("⌂", "Nearby Shops");
+
+        HBox dealsRow =
+                createSidebarRow("♢", "Deals");
+
+        HBox ordersRow =
+                createSidebarRow("□", "My Orders");
+
+        HBox analyticsRow =
+                createSidebarRow("⌁", "Analytics");
+
+        // ---------------------------------------------------------
+        // NEARBY SHOPS NAVIGATION
+        // ---------------------------------------------------------
+        nearbyRow.setOnMouseClicked(e -> {
+
+            neaby_shope ns =
+                    new neaby_shope(userId);
+
+            Runnable callback =
+                    this::backToElectronics;
+
+            Homepage.HomepageStage.setScene(
+                    ns.getNearby_shopes(callback)
             );
         });
 
-        hbInDashboard3.setOnMouseExited(e -> {
-            hbInDashboard3.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
-            lefButton3.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        // =====================================================
-        // MY ORDERS
-        // =====================================================
-
-        Image di4 = new Image("/assets/images/Dashbord/package.png");
-        ImageView div4 = new ImageView(di4);
-        div4.setFitHeight(23);
-        div4.setFitWidth(23);
-        div4.setPreserveRatio(true);
-
-        Button lefButton4 = new Button("My Orders");
-        lefButton4.setPrefWidth(125);
-        lefButton4.setPrefHeight(38);
-        lefButton4.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        menuBox.getChildren().addAll(
+                dashboardRow,
+                nearbyRow,
+                dealsRow,
+                ordersRow,
+                analyticsRow
         );
 
-        HBox hbInDashboard4 = new HBox(17, div4, lefButton4);
-        hbInDashboard4.setPrefWidth(205);
-        hbInDashboard4.setMinWidth(205);
-        hbInDashboard4.setMaxWidth(205);
-        hbInDashboard4.setPrefHeight(42);
-        hbInDashboard4.setMinHeight(42);
-        hbInDashboard4.setMaxHeight(42);
-        hbInDashboard4.setPadding(new Insets(2, 8, 2, 13));
-        hbInDashboard4.setAlignment(Pos.CENTER_LEFT);
-        hbInDashboard4.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+        // =========================================================
+        // SIDEBAR SPACER
+        // =========================================================
+        Region sidebarSpacer =
+                new Region();
 
-        hbInDashboard4.setOnMouseEntered(e -> {
-            hbInDashboard4.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
-            lefButton4.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        hbInDashboard4.setOnMouseExited(e -> {
-            hbInDashboard4.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
-            lefButton4.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        // =====================================================
-        // ANALYTICS
-        // =====================================================
-
-        Image di5 = new Image("/assets/images/Dashbord/line-chart.png");
-        ImageView div5 = new ImageView(di5);
-        div5.setFitHeight(23);
-        div5.setFitWidth(23);
-        div5.setPreserveRatio(true);
-
-        Button lefButton5 = new Button("Analytics");
-        lefButton5.setPrefWidth(125);
-        lefButton5.setPrefHeight(38);
-        lefButton5.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        VBox.setVgrow(
+                sidebarSpacer,
+                Priority.ALWAYS
         );
 
-        HBox hbInDashboard5 = new HBox(17, div5, lefButton5);
-        hbInDashboard5.setPrefWidth(205);
-        hbInDashboard5.setMinWidth(205);
-        hbInDashboard5.setMaxWidth(205);
-        hbInDashboard5.setPrefHeight(42);
-        hbInDashboard5.setMinHeight(42);
-        hbInDashboard5.setMaxHeight(42);
-        hbInDashboard5.setPadding(new Insets(2, 8, 2, 13));
-        hbInDashboard5.setAlignment(Pos.CENTER_LEFT);
-        hbInDashboard5.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+        // =========================================================
+        // GOLD UPGRADE CARD
+        // =========================================================
+        VBox upgradeCard =
+                new VBox(8);
 
-        hbInDashboard5.setOnMouseEntered(e -> {
-            hbInDashboard5.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
-            lefButton5.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
-            );
-        });
+        upgradeCard.setPrefSize(205, 118);
+        upgradeCard.setMinSize(205, 118);
+        upgradeCard.setMaxSize(205, 118);
 
-        hbInDashboard5.setOnMouseExited(e -> {
-            hbInDashboard5.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
-            lefButton5.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-border-width: 0;" +
-                    "-fx-padding: 0;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        // =====================================================
-        // UPGRADE CARD
-        // =====================================================
-
-        VBox upgradeCard = new VBox(7);
-        upgradeCard.setPrefWidth(205);
-        upgradeCard.setMinWidth(205);
-        upgradeCard.setMaxWidth(205);
-        upgradeCard.setPrefHeight(112);
-        upgradeCard.setPadding(new Insets(15));
-        upgradeCard.setAlignment(Pos.CENTER_LEFT);
-
-        LinearGradient upgradeGradient = new LinearGradient(
-                0, 0, 1, 1, true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0, Color.web("#25262A")),
-                new Stop(1, Color.web("#45474D"))
+        upgradeCard.setPadding(
+                new Insets(15)
         );
+
+        upgradeCard.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        LinearGradient upgradeGradient =
+                new LinearGradient(
+                        0,
+                        0,
+                        1,
+                        1,
+                        true,
+                        CycleMethod.NO_CYCLE,
+                        new Stop(
+                                0,
+                                Color.web("#242529")
+                        ),
+                        new Stop(
+                                1,
+                                Color.web("#45474D")
+                        )
+                );
 
         upgradeCard.setBackground(
                 new Background(
@@ -468,24 +263,36 @@ public class Electronics  {
                 )
         );
 
-        Label upgradeTitle = new Label("Unlock Gold");
+        Label upgradeTitle =
+                new Label("Unlock Gold");
+
         upgradeTitle.setStyle(
                 "-fx-font-size: 12px;" +
-                "-fx-font-weight: bold;" +
+                "-fx-font-weight: 800;" +
                 "-fx-text-fill: white;"
         );
 
-        Label upgradeText = new Label("Smarter deals & exclusive rewards");
+        Label upgradeText =
+                new Label(
+                        "Smarter deals & exclusive rewards"
+                );
+
         upgradeText.setStyle(
                 "-fx-font-size: 8px;" +
-                "-fx-text-fill: #BEBFC3;"
+                "-fx-text-fill: #C6C6C9;"
         );
 
-        Button upgradeGold = new Button("Upgrade to Gold");
-        upgradeGold.setPrefWidth(175);
-        upgradeGold.setPrefHeight(30);
-        upgradeGold.setStyle(
-                "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
+        Button upgradeButton =
+                new Button("Upgrade to Gold");
+
+        upgradeButton.setMaxWidth(
+                Double.MAX_VALUE
+        );
+
+        upgradeButton.setPrefHeight(31);
+
+        upgradeButton.setStyle(
+                "-fx-background-color: linear-gradient(to right, #FF6900, #FF995A);" +
                 "-fx-text-fill: white;" +
                 "-fx-font-size: 10px;" +
                 "-fx-font-weight: bold;" +
@@ -493,351 +300,332 @@ public class Electronics  {
                 "-fx-cursor: hand;"
         );
 
-        upgradeCard.getChildren().addAll(upgradeTitle, upgradeText, upgradeGold);
-
-        // =====================================================
-        // SETTINGS
-        // =====================================================
-
-        Image di6 = new Image("/assets/images/Dashbord/category.png");
-        ImageView div6 = new ImageView(di6);
-        div6.setFitHeight(19);
-        div6.setFitWidth(19);
-        div6.setPreserveRatio(true);
-
-        Button lefButton6 = new Button("Settings");
-        lefButton6.setPrefWidth(135);
-        lefButton6.setPrefHeight(34);
-        lefButton6.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #666666;" +
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
+        upgradeCard.getChildren().addAll(
+                upgradeTitle,
+                upgradeText,
+                upgradeButton
         );
-        lefButton6.setOnAction(event->{
-                Seting se=new Seting();
-                Runnable callbacktoDashborad=new Runnable() {
-                        public void run(){
-                                
-                        }
-                };
-                Homepage.HomepageStage.setScene(se.getSetingscene(callbacktoDashborad=null));
+
+        // SETTINGS
+        HBox settingsRow =
+                createSmallSidebarRow(
+                        "⚙",
+                        "Settings"
+                );
+
+        settingsRow.setOnMouseClicked(e -> {
+
+            Seting se =
+                    new Seting(userId);
+
+            Runnable callback =
+                    this::backToElectronics;
+
+            Homepage.HomepageStage.setScene(
+                    se.getSetingscene(callback)
+            );
         });
 
-        HBox hbInDashboard6 = new HBox(10, div6, lefButton6);
-        hbInDashboard6.setPrefWidth(205);
-        hbInDashboard6.setMinWidth(205);
-        hbInDashboard6.setMaxWidth(205);
-        hbInDashboard6.setPrefHeight(34);
-        hbInDashboard6.setAlignment(Pos.CENTER_LEFT);
-        hbInDashboard6.setPadding(new Insets(0, 8, 0, 18));
-
-        // =====================================================
         // HELP
-        // =====================================================
-
-        Image di7 = new Image("/assets/images/Dashbord/question.png");
-        ImageView div7 = new ImageView(di7);
-        div7.setFitHeight(19);
-        div7.setFitWidth(19);
-        div7.setPreserveRatio(true);
-
-        Button lefButton7 = new Button("Help & Support");
-        lefButton7.setPrefWidth(135);
-        lefButton7.setPrefHeight(34);
-        lefButton7.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #666666;" +
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: 500;" +
-                "-fx-border-width: 0;" +
-                "-fx-padding: 0;" +
-                "-fx-alignment: CENTER_LEFT;" +
-                "-fx-cursor: hand;"
-        );
-
-        HBox hbInDashboard7 = new HBox(10, div7, lefButton7);
-        hbInDashboard7.setPrefWidth(205);
-        hbInDashboard7.setMinWidth(205);
-        hbInDashboard7.setMaxWidth(205);
-        hbInDashboard7.setPrefHeight(34);
-        hbInDashboard7.setAlignment(Pos.CENTER_LEFT);
-        hbInDashboard7.setPadding(new Insets(0, 8, 0, 18));
-
-        // =====================================================
-        // LEFT BOX
-        // =====================================================
-
-        VBox leftBox = new VBox(14);
-        leftBox.setPrefWidth(245);
-        leftBox.setMinWidth(245);
-        leftBox.setMaxWidth(245);
-        leftBox.setPrefHeight(800);
-        leftBox.setAlignment(Pos.TOP_CENTER);
-        leftBox.setPadding(new Insets(27, 20, 20, 20));
-        leftBox.setStyle("-fx-background-color: #ebccb7;");
-        leftBox.setEffect(shadow);
-
-        Region sidebarSpacer = new Region();
-        VBox.setVgrow(sidebarSpacer, Priority.ALWAYS);
+        HBox helpRow =
+                createSmallSidebarRow(
+                        "?",
+                        "Help & Support"
+                );
 
         leftBox.getChildren().addAll(
-                name,
+                logo,
                 premiumBox,
-                hbInDashboard,
-                hbInDashboard2,
-                hbInDashboard3,
-                hbInDashboard4,
-                hbInDashboard5,
+                menuBox,
                 sidebarSpacer,
                 upgradeCard,
-                hbInDashboard6,
-                hbInDashboard7
+                settingsRow,
+                helpRow
         );
 
-        // =====================================================
+        // =========================================================
+        // MAIN CONTENT
+        // =========================================================
+        VBox content =
+                new VBox(22);
+
+        content.setPadding(
+                new Insets(0, 28, 35, 28)
+        );
+
+        content.setStyle(
+                "-fx-background-color: " + PAGE_BG + ";"
+        );
+
+        // =========================================================
         // TOP NAVIGATION
-        // =====================================================
+        // =========================================================
+        HBox navBox =
+                new HBox(14);
 
-        Button t1 = new Button("Offers");
-        Button t2 = new Button("Shops");
-        Button t3 = new Button("Support");
+        navBox.setPrefHeight(72);
+        navBox.setMinHeight(72);
 
-        String topButtonStyle = "-fx-background-color: transparent;" +
-                "-fx-text-fill: #666666;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 6 8 6 8;" +
-                "-fx-border-width: 0;" +
-                "-fx-cursor: hand;";
-
-        t1.setStyle(topButtonStyle);
-        t2.setStyle(topButtonStyle);
-        t3.setStyle(topButtonStyle);
-
-        t1.setOnMouseEntered(e -> t1.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 6 8 6 8;" +
-                "-fx-border-width: 0;" +
-                "-fx-cursor: hand;"
-        ));
-
-        t1.setOnMouseExited(e -> t1.setStyle(topButtonStyle));
-
-        t2.setOnMouseEntered(e -> t2.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 6 8 6 8;" +
-                "-fx-border-width: 0;" +
-                "-fx-cursor: hand;"
-        ));
-
-        t2.setOnMouseExited(e -> t2.setStyle(topButtonStyle));
-
-        t3.setOnMouseEntered(e -> t3.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 6 8 6 8;" +
-                "-fx-border-width: 0;" +
-                "-fx-cursor: hand;"
-        ));
-
-        t3.setOnMouseExited(e -> t3.setStyle(topButtonStyle));
-
-        HBox topLinks = new HBox(6, t1, t2, t3);
-        topLinks.setAlignment(Pos.CENTER_LEFT);
-
-        // =====================================================
-        // SEARCH
-        // =====================================================
-
-        TextField searchBox = new TextField();
-        searchBox.setPromptText("Search products, shops or deals with AI...");
-        searchBox.setPrefWidth(310);
-        searchBox.setPrefHeight(39);
-        searchBox.setStyle(
-                "-fx-background-color: #F8F7FA;" +
-                "-fx-background-radius: 20;" +
-                "-fx-border-color: #E5E1E8;" +
-                "-fx-border-radius: 20;" +
-                "-fx-border-width: 1;" +
-                "-fx-padding: 0 16 0 16;" +
-                "-fx-font-size: 10px;" +
-                "-fx-text-fill: #444444;" +
-                "-fx-prompt-text-fill: #999999;"
+        navBox.setAlignment(
+                Pos.CENTER_LEFT
         );
 
+        navBox.setPadding(
+                new Insets(12, 20, 12, 20)
+        );
 
-        // =====================================================
+        navBox.setStyle(
+                "-fx-background-color: " + CREAM + ";" +
+                "-fx-border-color: transparent transparent #DFC1AC transparent;" +
+                "-fx-border-width: 0 0 1 0;"
+        );
+
+        Button offers =
+                createTopButton("Offers");
+
+        Button shops =
+                createTopButton("Shops");
+
+        Button support =
+                createTopButton("Support");
+
+        HBox topLinks =
+                new HBox(4);
+
+        topLinks.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        topLinks.getChildren().addAll(
+                offers,
+                shops,
+                support
+        );
+
+        Region navSpacer1 =
+                new Region();
+
+        HBox.setHgrow(
+                navSpacer1,
+                Priority.ALWAYS
+        );
+
+        // SEARCH
+        TextField searchBox =
+                new TextField();
+
+        searchBox.setPromptText(
+                "Search products, shops or deals with AI..."
+        );
+
+        searchBox.setPrefWidth(340);
+        searchBox.setMinWidth(250);
+        searchBox.setPrefHeight(40);
+
+        searchBox.setStyle(
+                "-fx-background-color: #FAF9FB;" +
+                "-fx-background-radius: 21;" +
+                "-fx-border-color: #E5DDE4;" +
+                "-fx-border-radius: 21;" +
+                "-fx-border-width: 1;" +
+                "-fx-padding: 0 17 0 17;" +
+                "-fx-font-size: 10px;" +
+                "-fx-text-fill: #333333;" +
+                "-fx-prompt-text-fill: #9A969C;"
+        );
+
+        Region navSpacer2 =
+                new Region();
+
+        HBox.setHgrow(
+                navSpacer2,
+                Priority.ALWAYS
+        );
+
         // LOCATION
-        // =====================================================
+        HBox locationBox =
+                new HBox(5);
 
-        Label locationIcon = new Label("📍");
-        Label locationText = new Label("Downtown Manhattan⌄");
+        locationBox.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        Label locationIcon =
+                new Label("⌖");
+
+        locationIcon.setStyle(
+                "-fx-font-size: 14px;" +
+                "-fx-text-fill: #555555;"
+        );
+
+        Label locationText =
+                new Label(
+                        "Downtown Manhattan⌄"
+                );
+
         locationText.setStyle(
                 "-fx-font-size: 10px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #555555;"
         );
 
-        HBox locationBox = new HBox(4, locationIcon, locationText);
-        locationBox.setAlignment(Pos.CENTER_LEFT);
-        locationBox.setTranslateX(-200);
+        locationBox.getChildren().addAll(
+                locationIcon,
+                locationText
+        );
 
-        // =====================================================
-        // ACTIONS
-        // =====================================================
+        // ACTION BUTTONS
+        HBox actions =
+                new HBox(8);
 
-        Button b1 = new Button("🔔");
-        Button b2 = new Button("🛒");
-        Button b3 = new Button("●");
+        actions.setAlignment(
+                Pos.CENTER_RIGHT
+        );
 
-        String actionStyle = "-fx-background-color: white;" +
-                "-fx-text-fill: #555555;" +
-                "-fx-font-size: 13px;" +
-                "-fx-background-radius: 11;" +
-                "-fx-border-color: #E7E2E9;" +
-                "-fx-border-radius: 11;" +
-                "-fx-border-width: 1;" +
-                "-fx-padding: 0;" +
-                "-fx-cursor: hand;";
+        Button notificationButton =
+                createActionButton("♧");
 
-        b1.setPrefSize(37, 37);
-        b2.setPrefSize(37, 37);
-        b3.setPrefSize(37, 37);
+        Button cartButton =
+                createActionButton("🛒");
 
-        b1.setStyle(actionStyle);
-        b2.setStyle(actionStyle);
-        b3.setStyle(actionStyle);
+        Button profileButton =
+                createActionButton("●");
 
-        String actionHoverStyle = "-fx-background-color: #FFF2E9;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 13px;" +
-                "-fx-background-radius: 11;" +
-                "-fx-border-color: #FFBD95;" +
-                "-fx-border-radius: 11;" +
-                "-fx-border-width: 1;" +
-                "-fx-padding: 0;" +
-                "-fx-cursor: hand;";
+        // CART NAVIGATION
+        cartButton.setOnAction(e -> {
 
-        b1.setOnMouseEntered(e -> b1.setStyle(actionHoverStyle));
-        b1.setOnMouseExited(e -> b1.setStyle(actionStyle));
+            ShoppingCartUI sui =
+                    new ShoppingCartUI(userId);
 
-        b2.setOnMouseEntered(e -> b2.setStyle(actionHoverStyle));
-        b2.setOnMouseExited(e -> b2.setStyle(actionStyle));
-
-        b3.setOnMouseEntered(e -> b3.setStyle(actionHoverStyle));
-        b3.setOnMouseExited(e -> b3.setStyle(actionStyle));
-        b2.setOnAction(evene->{
-                ShoppingCartUI sui=new ShoppingCartUI();
-                Homepage.HomepageStage.setScene(sui.getaddcartScene());
+            Homepage.HomepageStage.setScene(
+                    sui.getaddcartScene()
+            );
         });
 
-        HBox actionBox = new HBox(7, b1, b2, b3);
-        actionBox.setAlignment(Pos.CENTER_RIGHT);
-        actionBox.setTranslateX(-200);
-
-        // =====================================================
-        // NAVIGATION SPACERS
-        // =====================================================
-
-        Region navSpacer1 = new Region();
-        HBox.setHgrow(navSpacer1, Priority.ALWAYS);
-        Region navSpacer2 = new Region();
-        HBox.setHgrow(navSpacer2, Priority.ALWAYS);
-
-        // =====================================================
-        // NAV BOX
-        // =====================================================
-
-        HBox navBox = new HBox(12, topLinks, navSpacer1, searchBox, navSpacer2, locationBox, actionBox);
-        navBox.setPrefHeight(68);
-        navBox.setPadding(new Insets(12, 24, 12, 24));
-        navBox.setAlignment(Pos.CENTER_LEFT);
-        navBox.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-color: #ebccb7;" +
-                "-fx-border-width: 0 0 1 0;"
+        actions.getChildren().addAll(
+                notificationButton,
+                cartButton,
+                profileButton
         );
 
-        // =====================================================
-        // HERO BOX
-        // =====================================================
-
-        HBox hbright = new HBox(35);
-        hbright.setPrefWidth(1200);
-        hbright.setPrefHeight(315);
-        hbright.setPadding(new Insets(34, 40, 34, 40));
-        hbright.setAlignment(Pos.CENTER_LEFT);
-
-        LinearGradient darkGradient = new LinearGradient(
-                0, 0, 1, 0, true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0.0, Color.web("#242529")),
-                new Stop(0.55, Color.web("#303136")),
-                new Stop(1.0, Color.web("#563A2B"))
+        navBox.getChildren().addAll(
+                topLinks,
+                navSpacer1,
+                searchBox,
+                navSpacer2,
+                locationBox,
+                actions
         );
 
-        hbright.setBackground(
+        // =========================================================
+        // HERO
+        // =========================================================
+        HBox hero =
+                new HBox(28);
+
+        hero.setPrefHeight(280);
+        hero.setMinHeight(280);
+
+        hero.setPadding(
+                new Insets(30, 34, 30, 34)
+        );
+
+        hero.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        LinearGradient heroGradient =
+                new LinearGradient(
+                        0,
+                        0,
+                        1,
+                        0,
+                        true,
+                        CycleMethod.NO_CYCLE,
+                        new Stop(
+                                0,
+                                Color.web("#242529")
+                        ),
+                        new Stop(
+                                0.58,
+                                Color.web("#303136")
+                        ),
+                        new Stop(
+                                1,
+                                Color.web("#50372B")
+                        )
+                );
+
+        hero.setBackground(
                 new Background(
                         new BackgroundFill(
-                                darkGradient,
-                                new CornerRadii(22),
+                                heroGradient,
+                                new CornerRadii(24),
                                 Insets.EMPTY
                         )
                 )
         );
-        hbright.setEffect(cardShadow);
 
-        // =====================================================
-        // HERO LEFT CONTENT
-        // =====================================================
+        hero.setEffect(cardShadow);
 
-        VBox leftContent = new VBox(13);
-        leftContent.setPrefWidth(600);
-        leftContent.setAlignment(Pos.CENTER_LEFT);
+        // HERO LEFT
+        VBox heroLeft =
+                new VBox(12);
 
-        Label badge = new Label("✦  NEXT-GEN INTELLIGENCE");
+        heroLeft.setPrefWidth(560);
+
+        heroLeft.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        Label badge =
+                new Label(
+                        "✦  NEXT-GEN INTELLIGENCE"
+                );
+
         badge.setStyle(
                 "-fx-background-color: #503629;" +
                 "-fx-text-fill: #FF9D67;" +
                 "-fx-font-size: 8px;" +
                 "-fx-font-weight: bold;" +
-                "-fx-background-radius: 20;" +
+                "-fx-background-radius: 18;" +
                 "-fx-padding: 7 13 7 13;"
         );
 
-        Text heading = new Text("What are you\nlooking for today?");
-        heading.setStyle(
+        Text heroTitle =
+                new Text(
+                        "What are you\nlooking for today?"
+                );
+
+        heroTitle.setStyle(
                 "-fx-fill: white;" +
                 "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 30px;" +
+                "-fx-font-size: 29px;" +
                 "-fx-font-weight: 900;"
         );
 
-        Text description = new Text(
-                "Your hyper-local AI is ready to source, compare,\n" +
-                "and deliver from your favorite downtown spots."
-        );
-        description.setStyle(
-                "-fx-fill: #C9C9C9;" +
+        Text heroDescription =
+                new Text(
+                        "Your hyper-local AI is ready to source, compare,\n" +
+                        "and deliver from your favorite downtown spots."
+                );
+
+        heroDescription.setStyle(
+                "-fx-fill: #C8C8CA;" +
                 "-fx-font-size: 11px;"
         );
 
-        Button groceries = new Button("♧  Combine Groceries");
-        groceries.setPrefHeight(42);
-        groceries.setStyle(
+        HBox heroButtons =
+                new HBox(10);
+
+        Button combineButton =
+                new Button(
+                        "♧  Combine Groceries"
+                );
+
+        combineButton.setPrefHeight(41);
+
+        combineButton.setStyle(
                 "-fx-background-color: #45464B;" +
                 "-fx-text-fill: white;" +
                 "-fx-font-size: 9px;" +
@@ -846,89 +634,160 @@ public class Electronics  {
                 "-fx-padding: 10 16 10 16;" +
                 "-fx-cursor: hand;"
         );
-        
 
-        Button bestPrice = new Button("⌁  Find Best Price");
-        bestPrice.setPrefHeight(42);
-        bestPrice.setStyle(
-                "-fx-background-color: #FF6900;" +
+        Button bestPriceButton =
+                new Button(
+                        "⌁  Find Best Price"
+                );
+
+        bestPriceButton.setPrefHeight(41);
+
+        bestPriceButton.setStyle(
+                "-fx-background-color: " + ORANGE + ";" +
                 "-fx-text-fill: white;" +
                 "-fx-font-size: 9px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-background-radius: 11;" +
-                "-fx-padding: 10 17 10 17;" +
+                "-fx-padding: 10 18 10 18;" +
                 "-fx-cursor: hand;"
         );
 
-        HBox buttons = new HBox(10, groceries, bestPrice);
-        leftContent.getChildren().addAll(badge, heading, description, buttons);
+        heroButtons.getChildren().addAll(
+                combineButton,
+                bestPriceButton
+        );
 
-        // =====================================================
+        heroLeft.getChildren().addAll(
+                badge,
+                heroTitle,
+                heroDescription,
+                heroButtons
+        );
+
+        // =========================================================
         // AI RECOMMENDATION CARD
-        // =====================================================
+        // =========================================================
+        VBox aiCard =
+                new VBox(10);
 
-        VBox notification = new VBox(13);
-        notification.setPrefWidth(300);
-        notification.setMinWidth(300);
-        notification.setMaxWidth(300);
-        notification.setPrefHeight(245);
-        notification.setPadding(new Insets(20));
-        notification.setAlignment(Pos.TOP_LEFT);
-        notification.setStyle(
-                "-fx-background-color: #ECEAE9;" +
-                "-fx-background-radius: 18;" +
-                "-fx-border-color: rgba(255,255,255,0.35);" +
-                "-fx-border-radius: 18;" +
+        aiCard.setPrefWidth(300);
+        aiCard.setMinWidth(280);
+        aiCard.setMaxWidth(310);
+
+        aiCard.setPrefHeight(220);
+
+        aiCard.setPadding(
+                new Insets(19)
+        );
+
+        aiCard.setAlignment(
+                Pos.TOP_LEFT
+        );
+
+        aiCard.setStyle(
+                "-fx-background-color: #F0EEED;" +
+                "-fx-background-radius: 19;" +
+                "-fx-border-color: rgba(255,255,255,0.40);" +
+                "-fx-border-radius: 19;" +
                 "-fx-border-width: 1;"
         );
-        notification.setEffect(cardShadow);
 
-        Label aiCircle = new Label("✦");
-        aiCircle.setPrefSize(38, 38);
-        aiCircle.setAlignment(Pos.CENTER);
-        aiCircle.setStyle(
-                "-fx-background-color: #FF6900;" +
+        HBox aiHeader =
+                new HBox(10);
+
+        aiHeader.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        StackPane aiIconCircle =
+                new StackPane();
+
+        Circle circle =
+                new Circle(
+                        19,
+                        Color.web(ORANGE)
+                );
+
+        Label star =
+                new Label("✦");
+
+        star.setStyle(
                 "-fx-text-fill: white;" +
                 "-fx-font-size: 14px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 50%;"
+                "-fx-font-weight: bold;"
         );
 
-        VBox aiHeading = new VBox(2);
-        Label aiTitle = new Label("AI Recommendation");
+        aiIconCircle.getChildren().addAll(
+                circle,
+                star
+        );
+
+        VBox aiHeading =
+                new VBox(2);
+
+        Label aiTitle =
+                new Label(
+                        "AI Recommendation"
+                );
+
         aiTitle.setStyle(
                 "-fx-font-size: 11px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #333333;"
+                "-fx-font-weight: 800;" +
+                "-fx-text-fill: #303030;"
         );
 
-        Label aiStatus = new Label("PERSONALIZED FOR YOU");
+        Label aiStatus =
+                new Label(
+                        "PERSONALIZED FOR YOU"
+                );
+
         aiStatus.setStyle(
                 "-fx-font-size: 7px;" +
                 "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;"
+                "-fx-text-fill: " + ORANGE + ";"
         );
 
-        aiHeading.getChildren().addAll(aiTitle, aiStatus);
-
-        HBox aiHeader = new HBox(10, aiCircle, aiHeading);
-        aiHeader.setAlignment(Pos.CENTER_LEFT);
-
-        Text notificationText = new Text(
-                "You usually order coffee beans on Tuesdays.\n\n" +
-                "Artisan Pantry has your favorite\n" +
-                "brand in stock today."
+        aiHeading.getChildren().addAll(
+                aiTitle,
+                aiStatus
         );
-        notificationText.setStyle(
+
+        aiHeader.getChildren().addAll(
+                aiIconCircle,
+                aiHeading
+        );
+
+        Text aiText =
+                new Text(
+                        "You usually order coffee beans on Tuesdays.\n\n" +
+                        "Artisan Pantry has your favorite\n" +
+                        "brand in stock today."
+                );
+
+        aiText.setStyle(
                 "-fx-fill: #444444;" +
                 "-fx-font-size: 10px;" +
                 "-fx-font-weight: bold;"
         );
 
-        Region notificationSpacer = new Region();
-        VBox.setVgrow(notificationSpacer, Priority.ALWAYS);
+        Region aiSpacer =
+                new Region();
 
-        Button dismiss = new Button("Dismiss");
+        VBox.setVgrow(
+                aiSpacer,
+                Priority.ALWAYS
+        );
+
+        HBox aiButtons =
+                new HBox(8);
+
+        aiButtons.setAlignment(
+                Pos.CENTER_RIGHT
+        );
+
+        Button dismiss =
+                new Button("Dismiss");
+
         dismiss.setStyle(
                 "-fx-background-color: transparent;" +
                 "-fx-text-fill: #777777;" +
@@ -936,9 +795,15 @@ public class Electronics  {
                 "-fx-cursor: hand;"
         );
 
-        Button checkStock = new Button("Check Stock");
+        dismiss.setOnAction(
+                e -> aiCard.setVisible(false)
+        );
+
+        Button checkStock =
+                new Button("Check Stock");
+
         checkStock.setStyle(
-                "-fx-background-color: #FF6900;" +
+                "-fx-background-color: " + ORANGE + ";" +
                 "-fx-text-fill: white;" +
                 "-fx-font-size: 9px;" +
                 "-fx-font-weight: bold;" +
@@ -947,768 +812,1526 @@ public class Electronics  {
                 "-fx-cursor: hand;"
         );
 
-        HBox notificationButtons = new HBox(8, dismiss, checkStock);
-        notificationButtons.setAlignment(Pos.CENTER_RIGHT);
+        aiButtons.getChildren().addAll(
+                dismiss,
+                checkStock
+        );
 
-        notification.getChildren().addAll(
+        aiCard.getChildren().addAll(
                 aiHeader,
-                notificationText,
-                notificationSpacer,
-                notificationButtons
+                aiText,
+                aiSpacer,
+                aiButtons
         );
 
-        hbright.getChildren().addAll(leftContent, notification);
+        Region heroSpacer =
+                new Region();
 
-        // =====================================================
-        // CATEGORY TITLE
-        // =====================================================
+        HBox.setHgrow(
+                heroSpacer,
+                Priority.ALWAYS
+        );
 
-        HBox categoryHeader = new HBox();
-        categoryHeader.setAlignment(Pos.CENTER_LEFT);
+        hero.getChildren().addAll(
+                heroLeft,
+                heroSpacer,
+                aiCard
+        );
 
-        Label categoryTitle = new Label("Browse by Category");
+        // =========================================================
+        // CATEGORY SECTION
+        // =========================================================
+        VBox categorySection =
+                new VBox(13);
+
+        HBox categoryHeader =
+                new HBox();
+
+        categoryHeader.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        Label categoryTitle =
+                new Label(
+                        "Browse by Category"
+                );
+
         categoryTitle.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: 800;" +
-                "-fx-text-fill: #222222;"
+                "-fx-font-family: 'Montserrat';" +
+                "-fx-font-size: 18px;" +
+                "-fx-font-weight: 900;" +
+                "-fx-text-fill: " + TEXT + ";"
         );
 
-        Label viewAll = new Label("View all  →");
+        Region categorySpacer =
+                new Region();
+
+        HBox.setHgrow(
+                categorySpacer,
+                Priority.ALWAYS
+        );
+
+        Label viewAll =
+                new Label(
+                        "View all  →"
+                );
+
         viewAll.setStyle(
                 "-fx-font-size: 9px;" +
                 "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;" +
+                "-fx-text-fill: " + ORANGE + ";" +
                 "-fx-cursor: hand;"
         );
 
-        Region categorySpacer = new Region();
-        HBox.setHgrow(categorySpacer, Priority.ALWAYS);
+        categoryHeader.getChildren().addAll(
+                categoryTitle,
+                categorySpacer,
+                viewAll
+        );
 
-        categoryHeader.getChildren().addAll(categoryTitle, categorySpacer, viewAll);
+        // FLOWPANE fixes category overflow
+        FlowPane categories =
+                new FlowPane();
 
-        // =====================================================
-        // CATEGORY BUTTONS
-        // =====================================================
+        categories.setHgap(12);
+        categories.setVgap(10);
+        categories.setAlignment(
+                Pos.CENTER_LEFT
+        );
 
-        Button grocerie = new Button("🛒\nGroceries");
-        Button electronics = new Button("▣\nElectronics");
-        Button fashion = new Button("♧\nFashion");
-        Button health = new Button("✚\nHealth");
-        Button home = new Button("⌂\nHome");
-        Button gifts = new Button("♧\nGifts");
-        Button beauty = new Button("✦\nBeauty");
-        Button pharmacy = new Button("✚\nPharmacy");
-        Button sports = new Button("⚽\nSports");
-        Button furniture = new Button("⌂\nFurniture");
-        Button toys = new Button("♟\nToys");
-        Button stationery = new Button("✎\nStationery");
+        categories.setPrefWrapLength(
+                1100
+        );
 
-        String categoryStyle = "-fx-background-color: white;" +
-                "-fx-text-fill: #D94F0B;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #E8E3EA;" +
-                "-fx-border-width: 1;" +
-                "-fx-border-radius: 15;" +
-                "-fx-padding: 10;" +
-                "-fx-cursor: hand;";
-
-        String categoryHoverStyle = "-fx-background-color: #FFF2E9;" +
-                "-fx-text-fill: #FF6900;" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #FFB889;" +
-                "-fx-border-width: 1;" +
-                "-fx-border-radius: 15;" +
-                "-fx-padding: 10;" +
-                "-fx-cursor: hand;";
-
-        Button[] categoryButtons = {
-                grocerie, electronics, fashion, health, home, gifts,
-                beauty, pharmacy, sports, furniture, toys, stationery
+        String[] categoryNames = {
+                "🛒  Groceries",
+                "▣  Electronics",
+                "♧  Fashion",
+                "✚  Health",
+                "⌂  Home",
+                "♧  Gifts",
+                "✦  Beauty",
+                "✚  Pharmacy",
+                "⚽  Sports",
+                "⌂  Furniture",
+                "♟  Toys",
+                "✎  Stationery"
         };
 
-        for (Button button : categoryButtons) {
-            button.setPrefWidth(105);
-            button.setPrefHeight(78);
-            button.setMinWidth(105);
-            button.setMinHeight(78);
-            button.setMaxWidth(105);
-            button.setMaxHeight(78);
-            button.setStyle(categoryStyle);
+        for (String category : categoryNames) {
 
-            button.setOnMouseEntered(e -> button.setStyle(categoryHoverStyle));
-            button.setOnMouseExited(e -> button.setStyle(categoryStyle));
+            Button categoryButton =
+                    new Button(category);
+
+            categoryButton.setPrefSize(
+                    105,
+                    60
+            );
+
+            categoryButton.setMinSize(
+                    105,
+                    60
+            );
+
+            categoryButton.setMaxSize(
+                    105,
+                    60
+            );
+
+            categoryButton.setStyle(
+                    "-fx-background-color: white;" +
+                    "-fx-text-fill: #D94F0B;" +
+                    "-fx-font-size: 12px;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-background-radius: 15;" +
+                    "-fx-border-color: " + BORDER + ";" +
+                    "-fx-border-radius: 15;" +
+                    "-fx-border-width: 1;" +
+                    "-fx-cursor: hand;"
+            );
+
+            categoryButton.setOnMouseEntered(
+                    e -> categoryButton.setStyle(
+                            "-fx-background-color: " + ORANGE_LIGHT + ";" +
+                            "-fx-text-fill: " + ORANGE + ";" +
+                            "-fx-font-size: 1px;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-background-radius: 15;" +
+                            "-fx-border-color: #FFB889;" +
+                            "-fx-border-radius: 15;" +
+                            "-fx-border-width: 1;" +
+                            "-fx-cursor: hand;"
+                    )
+            );
+
+            categoryButton.setOnMouseExited(
+                    e -> categoryButton.setStyle(
+                            "-fx-background-color: white;" +
+                            "-fx-text-fill: #D94F0B;" +
+                            "-fx-font-size: 14px;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-background-radius: 15;" +
+                            "-fx-border-color: " + BORDER + ";" +
+                            "-fx-border-radius: 15;" +
+                            "-fx-border-width: 1;" +
+                            "-fx-cursor: hand;"
+                    )
+            );
+
+            categories.getChildren().add(
+                    categoryButton
+            );
         }
 
-        // =====================================================
-        // CATEGORY ROWS
-        // =====================================================
+        categorySection.getChildren().addAll(
+                categoryHeader,
+                categories
+        );
 
-        HBox categoriesRow1 = new HBox(12, grocerie, electronics, fashion, health, home, gifts,beauty, pharmacy, sports, furniture, toys, stationery);
-        categoriesRow1.setAlignment(Pos.CENTER_LEFT);
+        // =========================================================
+        // MAIN PRODUCTS LAYOUT
+        // =========================================================
+        HBox mainLayout =
+                new HBox(22);
 
-        
+        mainLayout.setAlignment(
+                Pos.TOP_LEFT
+        );
 
-        // =====================================================
-        // CATEGORY SECTION
-        // =====================================================
+        // =========================================================
+        // FILTERS
+        // =========================================================
+        VBox filtersBox =
+                new VBox(10);
 
-        VBox categorySection = new VBox(13, categoryHeader, categoriesRow1);
-        categorySection.setPadding(new Insets(0, 8, 20, 8));
+        filtersBox.setPrefWidth(250);
+        filtersBox.setMinWidth(250);
+        filtersBox.setMaxWidth(250);
 
-        // =====================================================
-        // RIGHT VBOX WITH DASHBOARD COMPONENTS + ELECTRONICS
-        // =====================================================
+        filtersBox.setPadding(
+                new Insets(19)
+        );
 
-        VBox rightContent = new VBox(22);
-        rightContent.setPadding(new Insets(0, 26, 20, 26));
-        rightContent.setStyle("-fx-background-color: #F7F5F8;");
-
-        // =====================================================
-        // MAIN LAYOUT - HBox with Filters (Left) and Products (Right)
-        // =====================================================
-
-        HBox mainLayout = new HBox(25);
-        mainLayout.setPadding(new Insets(0, 0, 0, 0));
-        mainLayout.setAlignment(Pos.TOP_LEFT);
-
-        // =====================================================
-        // LEFT SIDE - FILTERS
-        // =====================================================
-
-        VBox filtersBox = new VBox(8);
-        filtersBox.setPrefWidth(280);
-        filtersBox.setMinWidth(280);
-        filtersBox.setMaxWidth(280);
-        filtersBox.setPadding(new Insets(20, 20, 20, 20));
         filtersBox.setStyle(
                 "-fx-background-color: white;" +
-                "-fx-background-radius: 12;" +
-                "-fx-border-color: #EAE6EC;" +
-                "-fx-border-radius: 12;" +
+                "-fx-background-radius: 18;" +
+                "-fx-border-color: " + BORDER + ";" +
+                "-fx-border-radius: 18;" +
                 "-fx-border-width: 1;"
         );
-        filtersBox.setEffect(productShadow);
 
-        // Filters Title
-        Label filtersTitle = new Label("# Filters");
-        filtersTitle.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 22px;" +
-                "-fx-font-weight: 800;" +
-                "-fx-text-fill: #222222;"
+        filtersBox.setEffect(
+                softShadow
         );
 
-        // BRAND Section
-        Label brandTitle = new Label("BRAND");
-        brandTitle.setStyle(
+        Label filterTitle =
+                new Label("Filters");
+
+        filterTitle.setStyle(
                 "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: 700;" +
-                "-fx-text-fill: #222222;" +
-                "-fx-padding: 10 0 5 0;"
+                "-fx-font-size: 21px;" +
+                "-fx-font-weight: 900;" +
+                "-fx-text-fill: " + TEXT + ";"
         );
 
-        VBox brandBox = new VBox(6);
-        String[] brands = {"Apple", "Samsung", "Sony", "Dell", "Logitech"};
+        Label brandTitle =
+                createFilterHeading("BRAND");
+
+        VBox brandBox =
+                new VBox(7);
+
+        String[] brands = {
+                "Apple",
+                "Samsung",
+                "Sony",
+                "Dell",
+                "Logitech"
+        };
+
         for (String brand : brands) {
-            HBox brandItem = new HBox(8);
-            brandItem.setAlignment(Pos.CENTER_LEFT);
-            Label checkMark = new Label("☐");
-            checkMark.setStyle("-fx-font-size: 14px; -fx-text-fill: #777777;");
-            Label brandLabel = new Label(brand);
-            brandLabel.setStyle(
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-text-fill: #444444;"
+            brandBox.getChildren().add(
+                    createFilterItem(brand)
             );
-            brandItem.getChildren().addAll(checkMark, brandLabel);
-            brandBox.getChildren().add(brandItem);
         }
 
-        // CATEGORY Section
-        Label categoryTitle2 = new Label("CATEGORY");
-        categoryTitle2.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: 700;" +
-                "-fx-text-fill: #222222;" +
-                "-fx-padding: 10 0 5 0;"
-        );
+        Label categoryFilterTitle =
+                createFilterHeading("CATEGORY");
 
-        VBox categoryBox = new VBox(6);
-        String[] categories = {"Laptops", "Smartphones", "Audio", "Accessories"};
-        for (String cat : categories) {
-            HBox catItem = new HBox(8);
-            catItem.setAlignment(Pos.CENTER_LEFT);
-            Label checkMark = new Label("☐");
-            checkMark.setStyle("-fx-font-size: 14px; -fx-text-fill: #777777;");
-            Label catLabel = new Label(cat);
-            catLabel.setStyle(
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-text-fill: #444444;"
+        VBox categoryFilterBox =
+                new VBox(7);
+
+        String[] filterCategories = {
+                "Laptops",
+                "Smartphones",
+                "Audio",
+                "Accessories"
+        };
+
+        for (String category : filterCategories) {
+            categoryFilterBox.getChildren().add(
+                    createFilterItem(category)
             );
-            catItem.getChildren().addAll(checkMark, catLabel);
-            categoryBox.getChildren().add(catItem);
         }
 
-        // Divider
-        Region divider = new Region();
+        Region divider =
+                new Region();
+
         divider.setPrefHeight(1);
-        divider.setStyle("-fx-background-color: #EAE6EC;");
-        divider.setPadding(new Insets(5, 0, 5, 0));
 
-        // PRICE RANGE Section
-        Label priceTitle = new Label("PRICE RANGE");
-        priceTitle.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: 700;" +
-                "-fx-text-fill: #222222;" +
-                "-fx-padding: 10 0 5 0;"
+        divider.setMaxWidth(
+                Double.MAX_VALUE
         );
 
-        Label priceRange = new Label("$ Min - $ Max");
-        priceRange.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 11px;" +
-                "-fx-text-fill: #777777;"
+        divider.setStyle(
+                "-fx-background-color: #EAE6EC;"
         );
 
-        Label priceValue = new Label("$10 - $2000+");
+        Label priceTitle =
+                createFilterHeading(
+                        "PRICE RANGE"
+                );
+
+        Label priceValue =
+                new Label(
+                        "$10  —  $2,000+"
+                );
+
         priceValue.setStyle(
-                "-fx-font-family: 'Montserrat';" +
                 "-fx-font-size: 12px;" +
-                "-fx-font-weight: 600;" +
-                "-fx-text-fill: #222222;"
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #444444;"
         );
 
-        // RATING Section
-        Label ratingTitle = new Label("RATING");
-        ratingTitle.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: 700;" +
-                "-fx-text-fill: #222222;" +
-                "-fx-padding: 10 0 5 0;"
+        StackPane priceBar =
+                new StackPane();
+
+        priceBar.setPrefHeight(5);
+
+        Region priceTrack =
+                new Region();
+
+        priceTrack.setPrefHeight(5);
+
+        priceTrack.setMaxWidth(
+                Double.MAX_VALUE
         );
 
-        Label ratingValue = new Label("★★★★★ 4.0 & Up");
-        ratingValue.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-weight: 600;" +
-                "-fx-text-fill: #FF6900;"
+        priceTrack.setStyle(
+                "-fx-background-color: #FFE0CC;" +
+                "-fx-background-radius: 5;"
         );
 
-        // Add all to filters
+        Region priceProgress =
+                new Region();
+
+        priceProgress.setPrefHeight(5);
+        priceProgress.setPrefWidth(155);
+
+        priceProgress.setMaxWidth(
+                Double.MAX_VALUE
+        );
+
+        priceProgress.setStyle(
+                "-fx-background-color: " + ORANGE + ";" +
+                "-fx-background-radius: 5;"
+        );
+
+        StackPane.setAlignment(
+                priceTrack,
+                Pos.CENTER_LEFT
+        );
+
+        StackPane.setAlignment(
+                priceProgress,
+                Pos.CENTER_LEFT
+        );
+
+        priceBar.getChildren().addAll(
+                priceTrack,
+                priceProgress
+        );
+
+        Label ratingTitle =
+                createFilterHeading("RATING");
+
+        Label rating =
+                new Label(
+                        "★★★★★   4.0 & Up"
+                );
+
+        rating.setStyle(
+                "-fx-font-size: 11px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: " + ORANGE + ";"
+        );
+
         filtersBox.getChildren().addAll(
-                filtersTitle,
-                brandTitle, brandBox,
-                categoryTitle2, categoryBox,
+                filterTitle,
+                brandTitle,
+                brandBox,
+                categoryFilterTitle,
+                categoryFilterBox,
                 divider,
-                priceTitle, priceRange, priceValue,
-                ratingTitle, ratingValue
+                priceTitle,
+                priceValue,
+                priceBar,
+                ratingTitle,
+                rating
         );
 
-        // =====================================================
-        // RIGHT SIDE - ELECTRONICS CONTENT
-        // =====================================================
+        // =========================================================
+        // PRODUCTS CONTENT
+        // =========================================================
+        VBox productsContent =
+                new VBox(15);
 
-        VBox productsContent = new VBox(15);
-        productsContent.setAlignment(Pos.TOP_LEFT);
-        HBox.setHgrow(productsContent, Priority.ALWAYS);
+        HBox.setHgrow(
+                productsContent,
+                Priority.ALWAYS
+        );
 
-        // Electronics Title
-        Label electronicsTitle = new Label("# Electronics");
+        productsContent.setAlignment(
+                Pos.TOP_LEFT
+        );
+
+        // PRODUCT HEADER
+        HBox productHeading =
+                new HBox();
+
+        productHeading.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        Label electronicsTitle =
+                new Label("Electronics");
+
         electronicsTitle.setStyle(
                 "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 24px;" +
+                "-fx-font-size: 23px;" +
+                "-fx-font-weight: 900;" +
+                "-fx-text-fill: " + TEXT + ";"
+        );
+
+        Region productHeaderSpacer =
+                new Region();
+
+        HBox.setHgrow(
+                productHeaderSpacer,
+                Priority.ALWAYS
+        );
+
+        Label productCount =
+                new Label(
+                        "12 products"
+                );
+
+        productCount.setStyle(
+                "-fx-font-size: 10px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #8A858B;"
+        );
+
+        productHeading.getChildren().addAll(
+                electronicsTitle,
+                productHeaderSpacer,
+                productCount
+        );
+
+        // =========================================================
+        // PROMOTION BANNER
+        // =========================================================
+        HBox promotion =
+                new HBox();
+
+        promotion.setMinHeight(126);
+        promotion.setPrefHeight(126);
+
+        promotion.setPadding(
+                new Insets(18, 22, 18, 22)
+        );
+
+        promotion.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        LinearGradient promotionGradient =
+                new LinearGradient(
+                        0,
+                        0,
+                        1,
+                        0,
+                        true,
+                        CycleMethod.NO_CYCLE,
+                        new Stop(
+                                0,
+                                Color.web("#191A2C")
+                        ),
+                        new Stop(
+                                1,
+                                Color.web("#262E4E")
+                        )
+                );
+
+        promotion.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                promotionGradient,
+                                new CornerRadii(18),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        promotion.setEffect(
+                cardShadow
+        );
+
+        VBox promotionText =
+                new VBox(5);
+
+        Label promoSmall =
+                new Label(
+                        "FEATURED PROMOTION"
+                );
+
+        promoSmall.setStyle(
+                "-fx-font-size: 9px;" +
                 "-fx-font-weight: 800;" +
-                "-fx-text-fill: #222222;"
-        );
-
-        // =====================================================
-        // FEATURED PROMOTION BANNER
-        // =====================================================
-
-        VBox promotionBanner = new VBox(6);
-        promotionBanner.setPadding(new Insets(20, 25, 20, 25));
-        promotionBanner.setStyle(
-                "-fx-background-color: linear-gradient(to right, #1A1A2E, #16213E);" +
-                "-fx-background-radius: 12;" +
-                "-fx-border-radius: 12;"
-        );
-        promotionBanner.setEffect(cardShadow);
-
-        Label promoLabel = new Label("Featured Promotion");
-        promoLabel.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: 700;" +
                 "-fx-text-fill: #FF9D67;"
         );
 
-        Label promoTitle = new Label("Next-Gen Tech");
+        Label promoTitle =
+                new Label(
+                        "Next-Gen Tech"
+                );
+
         promoTitle.setStyle(
                 "-fx-font-family: 'Montserrat';" +
                 "-fx-font-size: 20px;" +
-                "-fx-font-weight: 800;" +
+                "-fx-font-weight: 900;" +
                 "-fx-text-fill: white;"
         );
 
-        Label promoDesc = new Label("Up to 30% off on premium laptops and smartphones.");
-        promoDesc.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 12px;" +
-                "-fx-text-fill: #CCCCCC;"
+        Label promoDescription =
+                new Label(
+                        "Premium laptops, smartphones & audio essentials — up to 30% off."
+                );
+
+        promoDescription.setStyle(
+                "-fx-font-size: 10px;" +
+                "-fx-text-fill: #C7C9D2;"
         );
 
-        Button shopSale = new Button("Shop the Sale →");
-        shopSale.setPrefWidth(140);
-        shopSale.setPrefHeight(36);
+        Button shopSale =
+                new Button(
+                        "Shop the Sale  →"
+                );
+
+        shopSale.setPrefSize(
+                137,
+                34
+        );
+
         shopSale.setStyle(
-                "-fx-background-color: #FF6900;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 20;" +
-                "-fx-cursor: hand;"
-        );
-
-        shopSale.setOnMouseEntered(e -> {
-            shopSale.setStyle(
-                    "-fx-background-color: #E85A00;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 11px;" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-background-radius: 20;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        shopSale.setOnMouseExited(e -> {
-            shopSale.setStyle(
-                    "-fx-background-color: #FF6900;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 11px;" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-background-radius: 20;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-        promotionBanner.getChildren().addAll(promoLabel, promoTitle, promoDesc, shopSale);
-
-        // =====================================================
-        // PRODUCTS SECTION - VERTICAL PRODUCT CARDS
-        // =====================================================
-
-        // Cart data for this page
-        java.util.List<String> cartItems = new java.util.ArrayList<>();
-
-        VBox productsBox = new VBox(12);
-        productsBox.setPadding(new Insets(5, 0, 10, 0));
-
-        HBox productGrid = new HBox(16);
-        productGrid.setAlignment(Pos.TOP_LEFT);
-        productGrid.setFillHeight(false);
-
-        // -----------------------------------------------------
-        // Product Card 1 - MacBook Pro M3
-        // -----------------------------------------------------
-        VBox product1 = new VBox(9);
-        product1.setPrefWidth(285);
-        product1.setMinWidth(285);
-        product1.setMaxWidth(285);
-        product1.setPrefHeight(350);
-        product1.setPadding(new Insets(12));
-        product1.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 16;" +
-                "-fx-border-color: #EAE6EC;" +
-                "-fx-border-radius: 16;" +
-                "-fx-border-width: 1;"
-        );
-        product1.setEffect(productShadow);
-
-        VBox imageBox1 = new VBox();
-        imageBox1.setAlignment(Pos.CENTER);
-        imageBox1.setPrefSize(261, 205);
-        imageBox1.setMinSize(261, 205);
-        imageBox1.setMaxSize(261, 205);
-        imageBox1.setStyle(
-                "-fx-background-color: #F7F7F7;" +
-                "-fx-background-radius: 12;"
-        );
-
-        java.net.URL imageUrl1 = getClass().getResource("/assets/images/Electronics/macbook.png");
-        if (imageUrl1 != null) {
-            ImageView productImage1 = new ImageView(new Image(imageUrl1.toExternalForm()));
-            productImage1.setFitWidth(230);
-            productImage1.setFitHeight(180);
-            productImage1.setPreserveRatio(true);
-            imageBox1.getChildren().add(productImage1);
-        } else {
-            Label fallback1 = new Label("💻");
-            fallback1.setStyle("-fx-font-size: 75px;");
-            imageBox1.getChildren().add(fallback1);
-        }
-
-        Label name1 = new Label("MacBook Pro M3");
-        name1.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 15px;" +
-                "-fx-font-weight: 700;" +
-                "-fx-text-fill: #222222;"
-        );
-
-        Label brand1 = new Label("Apple");
-        brand1.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 11px;" +
-                "-fx-text-fill: #777777;"
-        );
-
-        HBox bottom1 = new HBox();
-        bottom1.setAlignment(Pos.CENTER_LEFT);
-
-        Label price1 = new Label("$1,999");
-        price1.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: 800;" +
-                "-fx-text-fill: #222222;"
-        );
-
-        Region priceSpacer1 = new Region();
-        HBox.setHgrow(priceSpacer1, Priority.ALWAYS);
-
-        Button addBtn1 = new Button("+  Add to Cart");
-        addBtn1.setPrefHeight(34);
-        addBtn1.setStyle(
-                "-fx-background-color: #FF6900;" +
+                "-fx-background-color: " + ORANGE + ";" +
                 "-fx-text-fill: white;" +
                 "-fx-font-size: 10px;" +
                 "-fx-font-weight: bold;" +
-                "-fx-background-radius: 17;" +
-                "-fx-padding: 0 12 0 12;" +
+                "-fx-background-radius: 18;" +
                 "-fx-cursor: hand;"
         );
-        addBtn1.setOnAction(e -> {
-            cartItems.add("MacBook Pro M3 - $1,999");
-            addBtn1.setText("✓ Added");
-            addBtn1.setStyle(
-                    "-fx-background-color: #2E9B57;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 10px;" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-background-radius: 17;" +
-                    "-fx-padding: 0 12 0 12;" +
-                    "-fx-cursor: hand;"
-            );
-            b2.setText("🛒 " + cartItems.size());
-        });
 
-        bottom1.getChildren().addAll(price1, priceSpacer1, addBtn1);
-        product1.getChildren().addAll(imageBox1, name1, brand1, bottom1);
-
-        // -----------------------------------------------------
-        // Product Card 2 - Samsung Galaxy S24 Ultra
-        // -----------------------------------------------------
-        VBox product2 = new VBox(9);
-        product2.setPrefWidth(285);
-        product2.setMinWidth(285);
-        product2.setMaxWidth(285);
-        product2.setPrefHeight(350);
-        product2.setPadding(new Insets(12));
-        product2.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 16;" +
-                "-fx-border-color: #EAE6EC;" +
-                "-fx-border-radius: 16;" +
-                "-fx-border-width: 1;"
-        );
-        product2.setEffect(productShadow);
-
-        VBox imageBox2 = new VBox();
-        imageBox2.setAlignment(Pos.CENTER);
-        imageBox2.setPrefSize(261, 205);
-        imageBox2.setMinSize(261, 205);
-        imageBox2.setMaxSize(261, 205);
-        imageBox2.setStyle(
-                "-fx-background-color: #F7F7F7;" +
-                "-fx-background-radius: 12;"
+        promotionText.getChildren().addAll(
+                promoSmall,
+                promoTitle,
+                promoDescription,
+                shopSale
         );
 
-        java.net.URL imageUrl2 = getClass().getResource("/assets/images/Electronics/s24.png");
-        if (imageUrl2 != null) {
-            ImageView productImage2 = new ImageView(new Image(imageUrl2.toExternalForm()));
-            productImage2.setFitWidth(210);
-            productImage2.setFitHeight(180);
-            productImage2.setPreserveRatio(true);
-            imageBox2.getChildren().add(productImage2);
-        } else {
-            Label fallback2 = new Label("📱");
-            fallback2.setStyle("-fx-font-size: 75px;");
-            imageBox2.getChildren().add(fallback2);
-        }
+        Region promoSpacer =
+                new Region();
 
-        Label name2 = new Label("Samsung Galaxy S24 Ultra");
-        name2.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 15px;" +
-                "-fx-font-weight: 700;" +
-                "-fx-text-fill: #222222;"
+        HBox.setHgrow(
+                promoSpacer,
+                Priority.ALWAYS
         );
 
-        Label brand2 = new Label("Samsung  •  5% OFF");
-        brand2.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 11px;" +
-                "-fx-text-fill: #777777;"
+        Label promoBadge =
+                new Label(
+                        "30%\nOFF"
+                );
+
+        promoBadge.setAlignment(
+                Pos.CENTER
         );
 
-        HBox bottom2 = new HBox();
-        bottom2.setAlignment(Pos.CENTER_LEFT);
-
-        Label price2 = new Label("$1,199");
-        price2.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: 800;" +
-                "-fx-text-fill: #222222;"
-        );
-
-        Region priceSpacer2 = new Region();
-        HBox.setHgrow(priceSpacer2, Priority.ALWAYS);
-
-        Button addBtn2 = new Button("+  Add to Cart");
-        addBtn2.setPrefHeight(34);
-        addBtn2.setStyle(
-                "-fx-background-color: #FF6900;" +
+        promoBadge.setStyle(
+                "-fx-background-color: " + ORANGE + ";" +
                 "-fx-text-fill: white;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 17;" +
-                "-fx-padding: 0 12 0 12;" +
-                "-fx-cursor: hand;"
-        );
-        addBtn2.setOnAction(e -> {
-            cartItems.add("Samsung Galaxy S24 Ultra - $1,199");
-            addBtn2.setText("✓ Added");
-            addBtn2.setStyle(
-                    "-fx-background-color: #2E9B57;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 10px;" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-background-radius: 17;" +
-                    "-fx-padding: 0 12 0 12;" +
-                    "-fx-cursor: hand;"
-            );
-            b2.setText("🛒 " + cartItems.size());
-        });
-
-        bottom2.getChildren().addAll(price2, priceSpacer2, addBtn2);
-        product2.getChildren().addAll(imageBox2, name2, brand2, bottom2);
-
-        // -----------------------------------------------------
-        // Product Card 3 - Sony WH-1000XM5
-        // -----------------------------------------------------
-        VBox product3 = new VBox(9);
-        product3.setPrefWidth(285);
-        product3.setMinWidth(285);
-        product3.setMaxWidth(285);
-        product3.setPrefHeight(350);
-        product3.setPadding(new Insets(12));
-        product3.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 16;" +
-                "-fx-border-color: #EAE6EC;" +
-                "-fx-border-radius: 16;" +
-                "-fx-border-width: 1;"
-        );
-        product3.setEffect(productShadow);
-
-        VBox imageBox3 = new VBox();
-        imageBox3.setAlignment(Pos.CENTER);
-        imageBox3.setPrefSize(261, 205);
-        imageBox3.setMinSize(261, 205);
-        imageBox3.setMaxSize(261, 205);
-        imageBox3.setStyle(
-                "-fx-background-color: #F7F7F7;" +
-                "-fx-background-radius: 12;"
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: 900;" +
+                "-fx-background-radius: 45;" +
+                "-fx-padding: 13 12 13 12;"
         );
 
-        java.net.URL imageUrl3 = getClass().getResource("/assets/images/Electronics/sony-headphones.png");
-        if (imageUrl3 != null) {
-            ImageView productImage3 = new ImageView(new Image(imageUrl3.toExternalForm()));
-            productImage3.setFitWidth(220);
-            productImage3.setFitHeight(175);
-            productImage3.setPreserveRatio(true);
-            imageBox3.getChildren().add(productImage3);
-        } else {
-            Label fallback3 = new Label("🎧");
-            fallback3.setStyle("-fx-font-size: 75px;");
-            imageBox3.getChildren().add(fallback3);
-        }
-
-        Label name3 = new Label("Sony WH-1000XM5 Headphones");
-        name3.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 15px;" +
-                "-fx-font-weight: 700;" +
-                "-fx-text-fill: #222222;"
+        promotion.getChildren().addAll(
+                promotionText,
+                promoSpacer,
+                promoBadge
         );
 
-        Label brand3 = new Label("Sony  •  ⭐ 4.7");
-        brand3.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 11px;" +
-                "-fx-text-fill: #777777;"
+        // =========================================================
+        // PRODUCT GRID
+        // =========================================================
+        FlowPane productGrid =
+                new FlowPane();
+
+        productGrid.setHgap(15);
+        productGrid.setVgap(15);
+
+        productGrid.setAlignment(
+                Pos.TOP_LEFT
         );
 
-        HBox bottom3 = new HBox();
-        bottom3.setAlignment(Pos.CENTER_LEFT);
-
-        Label price3 = new Label("$349");
-        price3.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: 800;" +
-                "-fx-text-fill: #222222;"
+        /*
+         * IMPORTANT:
+         * FlowPane is used instead of HBox.
+         * Cards will automatically move to the next row
+         * instead of getting cut off.
+         */
+        productGrid.setPrefWrapLength(
+                850
         );
 
-        Region priceSpacer3 = new Region();
-        HBox.setHgrow(priceSpacer3, Priority.ALWAYS);
+        List<String> cartItems =
+                new ArrayList<>();
 
-        Button addBtn3 = new Button("+  Add to Cart");
-        addBtn3.setPrefHeight(34);
-        addBtn3.setStyle(
-                "-fx-background-color: #FF6900;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 17;" +
-                "-fx-padding: 0 12 0 12;" +
-                "-fx-cursor: hand;"
+        // CARD 1
+        VBox product1 =
+                createProductCard(
+                        "MacBook Pro M3",
+                        "Apple",
+                        "$1,999",
+                        "Premium Laptop",
+                        "macbook.png",
+                        "💻",
+                        "★★★★★  4.9",
+                        cartItems,
+                        cartButton
+                );
+
+        // CARD 2
+        VBox product2 =
+                createProductCard(
+                        "Galaxy S24 Ultra",
+                        "Samsung  •  5% OFF",
+                        "$1,199",
+                        "Flagship Smartphone",
+                        "s24.png",
+                        "📱",
+                        "★★★★★  4.8",
+                        cartItems,
+                        cartButton
+                );
+
+        // CARD 3
+        VBox product3 =
+                createProductCard(
+                        "WH-1000XM5",
+                        "Sony",
+                        "$349",
+                        "Noise Cancelling Audio",
+                        "sony-headphones.png",
+                        "🎧",
+                        "★★★★★  4.7",
+                        cartItems,
+                        cartButton
+                );
+
+        productGrid.getChildren().addAll(
+                product1,
+                product2,
+                product3
         );
-        addBtn3.setOnAction(e -> {
-            cartItems.add("Sony WH-1000XM5 Headphones - $349");
-            addBtn3.setText("✓ Added");
-            addBtn3.setStyle(
-                    "-fx-background-color: #2E9B57;" +
-                    "-fx-text-fill: white;" +
-                    "-fx-font-size: 10px;" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-background-radius: 17;" +
-                    "-fx-padding: 0 12 0 12;" +
-                    "-fx-cursor: hand;"
-            );
-            b2.setText("🛒 " + cartItems.size());
-        });
-
-        bottom3.getChildren().addAll(price3, priceSpacer3, addBtn3);
-        product3.getChildren().addAll(imageBox3, name3, brand3, bottom3);
-
-        // Three vertical cards in one horizontal row, like the screenshot.
-        productGrid.getChildren().addAll(product1, product2, product3);
-        productsBox.getChildren().add(productGrid);
-
-        // =====================================================
-        // ADD TO RIGHT CONTENT
-        // =====================================================
 
         productsContent.getChildren().addAll(
-                electronicsTitle,
-                promotionBanner,
-                productsBox
+                productHeading,
+                promotion,
+                productGrid
         );
 
-        // =====================================================
-        // ADD TO MAIN LAYOUT
-        // =====================================================
+        mainLayout.getChildren().addAll(
+                filtersBox,
+                productsContent
+        );
 
-        mainLayout.getChildren().addAll(filtersBox, productsContent);
-
-        // =====================================================
-        // ADD TO RIGHT VBOX
-        // =====================================================
-
-        rightContent.getChildren().addAll(
+        // =========================================================
+        // ADD EVERYTHING TO CONTENT
+        // =========================================================
+        content.getChildren().addAll(
                 navBox,
-                hbright,
+                hero,
                 categorySection,
                 mainLayout
         );
 
-        // =====================================================
-        // SUBTLE ORANGE BACKGROUND GLOW
-        // =====================================================
+        // =========================================================
+        // BACKGROUND GLOW
+        // =========================================================
+        RadialGradient glow =
+                new RadialGradient(
+                        0,
+                        0,
+                        0.85,
+                        0.12,
+                        0.28,
+                        true,
+                        CycleMethod.NO_CYCLE,
+                        new Stop(
+                                0.0,
+                                Color.web("#FF9148", 0.16)
+                        ),
+                        new Stop(
+                                0.45,
+                                Color.web("#FFD1B4", 0.07)
+                        ),
+                        new Stop(
+                                1.0,
+                                Color.TRANSPARENT
+                        )
+                );
 
-        RadialGradient orangeGlow1 = new RadialGradient(
-                0, 0, 0.84, 0.16, 0.42, true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0.0, Color.web("#FF9148", 0.25)),
-                new Stop(0.40, Color.web("#FFD1B4", 0.12)),
-                new Stop(1.0, Color.TRANSPARENT)
-        );
-
-        rightContent.setBackground(
+        content.setBackground(
                 new Background(
                         new BackgroundFill(
-                                orangeGlow1,
+                                glow,
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY
                         )
                 )
         );
 
-        // =====================================================
+        // =========================================================
         // SCROLL PANE
-        // =====================================================
+        // =========================================================
+        ScrollPane scrollPane =
+                new ScrollPane();
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(rightContent);
-        scrollPane.setFitToWidth(true);
+        scrollPane.setContent(
+                content
+        );
+
+        scrollPane.setFitToWidth(
+                true
+        );
+
+        scrollPane.setPannable(
+                true
+        );
+
+        scrollPane.setVbarPolicy(
+                ScrollPane.ScrollBarPolicy.AS_NEEDED
+        );
+
+        scrollPane.setHbarPolicy(
+                ScrollPane.ScrollBarPolicy.NEVER
+        );
+
         scrollPane.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-background: transparent;" +
+                "-fx-background-color: " + PAGE_BG + ";" +
+                "-fx-background: " + PAGE_BG + ";" +
                 "-fx-border-color: transparent;"
         );
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        // =====================================================
-        // RIGHT VBOX FINAL
-        // =====================================================
+        // =========================================================
+        // ROOT BORDERPANE
+        // =========================================================
+        BorderPane mainBox =
+                new BorderPane();
 
-        VBox Rightvbox = new VBox(0);
-        Rightvbox.setPadding(new Insets(0, 0, 0, 0));
-        Rightvbox.setStyle("-fx-background-color: #F7F5F8;");
-        Rightvbox.getChildren().add(scrollPane);
-        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        mainBox.setLeft(
+                leftBox
+        );
 
-        // =====================================================
-        // BORDER PANE
-        // =====================================================
+        mainBox.setCenter(
+                scrollPane
+        );
 
-        BorderPane mainBox = new BorderPane();
-        mainBox.setLeft(leftBox);
-        mainBox.setCenter(Rightvbox);
-        mainBox.setStyle("-fx-background-color: #F7F5F8;");
+        mainBox.setStyle(
+                "-fx-background-color: " + PAGE_BG + ";"
+        );
 
-        // =====================================================
+        // =========================================================
         // SCENE
-        // =====================================================
+        // =========================================================
+        Scene scene =
+                new Scene(
+                        mainBox,
+                        1530,
+                        850
+                );
 
-        Scene sc = new Scene(mainBox, 1500, 800);
-        Electrinicscene=sc;
-                return Electrinicscene;
+        Electrinicscene =
+                scene;
+
+        return Electrinicscene;
+    }
+
+    // =============================================================
+    // PREMIUM PRODUCT CARD
+    // =============================================================
+    // =============================================================
+    // PREMIUM PRODUCT CARD
+    // =============================================================
+    private VBox createProductCard(
+            String productName,
+            String brand,
+            String price,
+            String category,
+            String imageName,
+            String fallbackIcon,
+            String rating,
+            List<String> cartItems,
+            Button cartButton
+    ) {
+
+        VBox card = new VBox(9);
+
+        card.setPrefWidth(270);
+        card.setMinWidth(270);
+        card.setMaxWidth(270);
+
+        card.setPrefHeight(365);
+        card.setMinHeight(365);
+        card.setMaxHeight(365);
+
+        card.setPadding(new Insets(12));
+
+        card.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-background-radius: 18;" +
+                "-fx-border-color: " + BORDER + ";" +
+                "-fx-border-radius: 18;" +
+                "-fx-border-width: 1;" +
+                "-fx-cursor: hand;"
+        );
+
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(13);
+        shadow.setOffsetY(5);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.08));
+
+        card.setEffect(shadow);
+
+        // =========================================================
+        // HOVER
+        // =========================================================
+        card.setOnMouseEntered(e -> {
+            card.setTranslateY(-4);
+            card.setStyle(
+                    "-fx-background-color: white;" +
+                    "-fx-background-radius: 18;" +
+                    "-fx-border-color: #FFB889;" +
+                    "-fx-border-radius: 18;" +
+                    "-fx-border-width: 1;" +
+                    "-fx-cursor: hand;"
+            );
+        });
+
+        card.setOnMouseExited(e -> {
+            card.setTranslateY(0);
+            card.setStyle(
+                    "-fx-background-color: white;" +
+                    "-fx-background-radius: 18;" +
+                    "-fx-border-color: " + BORDER + ";" +
+                    "-fx-border-radius: 18;" +
+                    "-fx-border-width: 1;" +
+                    "-fx-cursor: hand;"
+            );
+        });
+
+        // =========================================================
+        // IMAGE BOX
+        // =========================================================
+        StackPane imageBox = new StackPane();
+
+        imageBox.setPrefSize(246, 165);
+        imageBox.setMinSize(246, 165);
+        imageBox.setMaxSize(246, 165);
+        imageBox.setAlignment(Pos.CENTER);
+
+        imageBox.setStyle(
+                "-fx-background-color: #F8F7F8;" +
+                "-fx-background-radius: 14;"
+        );
+
+        // CATEGORY BADGE
+        Label categoryBadge = new Label(category);
+
+        categoryBadge.setStyle(
+                "-fx-background-color: " + ORANGE_LIGHT + ";" +
+                "-fx-text-fill: " + ORANGE_DARK + ";" +
+                "-fx-font-size: 7px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 10;" +
+                "-fx-padding: 5 8 5 8;"
+        );
+
+        StackPane.setAlignment(categoryBadge, Pos.TOP_LEFT);
+        StackPane.setMargin(categoryBadge, new Insets(9, 0, 0, 9));
+
+        // PRODUCT IMAGE
+        URL imageUrl = getClass().getResource(
+                "/assets/images/Electronics/" + imageName
+        );
+
+        if (imageUrl != null) {
+
+            ImageView imageView = new ImageView(
+                    new Image(imageUrl.toExternalForm())
+            );
+
+            imageView.setFitWidth(205);
+            imageView.setFitHeight(140);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+
+            imageBox.getChildren().add(imageView);
+
+        } else {
+
+            Label fallback = new Label(fallbackIcon);
+            fallback.setStyle("-fx-font-size: 70px;");
+
+            imageBox.getChildren().add(fallback);
         }
 
-   
+        imageBox.getChildren().add(categoryBadge);
 
-    
+        // =========================================================
+        // PRODUCT NAME
+        // =========================================================
+        Label name = new Label(productName);
+
+        name.setWrapText(true);
+        name.setMaxWidth(245);
+
+        name.setStyle(
+                "-fx-font-family: 'Montserrat';" +
+                "-fx-font-size: 14px;" +
+                "-fx-font-weight: 800;" +
+                "-fx-text-fill: " + TEXT + ";"
+        );
+
+        // =========================================================
+        // BRAND + RATING
+        // =========================================================
+        HBox meta = new HBox(6);
+        meta.setAlignment(Pos.CENTER_LEFT);
+
+        Label brandLabel = new Label(brand);
+
+        brandLabel.setStyle(
+                "-fx-font-size: 9px;" +
+                "-fx-text-fill: " + MUTED + ";"
+        );
+
+        Region metaSpacer = new Region();
+        HBox.setHgrow(metaSpacer, Priority.ALWAYS);
+
+        Label ratingLabel = new Label(rating);
+
+        ratingLabel.setStyle(
+                "-fx-font-size: 8px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: " + ORANGE + ";"
+        );
+
+        meta.getChildren().addAll(
+                brandLabel,
+                metaSpacer,
+                ratingLabel
+        );
+
+        // =========================================================
+        // BOTTOM SECTION
+        // =========================================================
+        VBox priceBox = new VBox(1);
+
+        Label priceLabel = new Label(price);
+
+        priceLabel.setStyle(
+                "-fx-font-size: 17px;" +
+                "-fx-font-weight: 900;" +
+                "-fx-text-fill: " + TEXT + ";"
+        );
+
+        Label delivery = new Label("● Fast delivery");
+
+        delivery.setStyle(
+                "-fx-font-size: 7px;" +
+                "-fx-text-fill: #8B888D;"
+        );
+
+        priceBox.getChildren().addAll(
+                priceLabel,
+                delivery
+        );
+
+        // =========================================================
+        // QUANTITY
+        // =========================================================
+        int stockQuantity = 10;
+
+        Label quantityLabel = new Label("1");
+
+        quantityLabel.setPrefWidth(30);
+        quantityLabel.setAlignment(Pos.CENTER);
+
+        quantityLabel.setStyle(
+                "-fx-font-size: 14px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #222222;"
+        );
+
+        String quantityButtonStyle =
+                "-fx-background-color: " + ORANGE + ";" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 14px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 50%;" +
+                "-fx-min-width: 28px;" +
+                "-fx-min-height: 28px;" +
+                "-fx-max-width: 28px;" +
+                "-fx-max-height: 28px;" +
+                "-fx-padding: 0;" +
+                "-fx-cursor: hand;";
+
+        Button minusButton = new Button("-");
+        minusButton.setStyle(quantityButtonStyle);
+
+        Button plusButton = new Button("+");
+        plusButton.setStyle(quantityButtonStyle);
+
+        HBox quantityBox = new HBox(
+                6,
+                minusButton,
+                quantityLabel,
+                plusButton
+        );
+
+        quantityBox.setAlignment(Pos.CENTER);
+
+        minusButton.setOnAction(e -> {
+
+            int quantity = Integer.parseInt(quantityLabel.getText());
+
+            if (quantity > 1) {
+                quantity--;
+                quantityLabel.setText(String.valueOf(quantity));
+            }
+        });
+
+        plusButton.setOnAction(e -> {
+
+            int quantity = Integer.parseInt(quantityLabel.getText());
+
+            if (quantity < stockQuantity) {
+                quantity++;
+                quantityLabel.setText(String.valueOf(quantity));
+            }
+        });
+
+        // =========================================================
+        // ADD TO CART
+        // =========================================================
+        Button addButton = new Button("+ Add");
+
+        addButton.setPrefSize(75, 32);
+        addButton.setMinSize(75, 32);
+
+        addButton.setStyle(
+                "-fx-background-color: " + ORANGE + ";" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 9px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 16;" +
+                "-fx-cursor: hand;"
+        );
+
+        addButton.setOnAction(e -> {
+
+            try {
+
+                int quantity =
+                        Integer.parseInt(quantityLabel.getText());
+
+                // "$1,999" -> 1999.0
+                double priceValue =
+                        Double.parseDouble(
+                                price.replace("$", "")
+                                      .replace(",", "")
+                                      .trim()
+                        );
+
+                CARTcontroller cl =
+                        new CARTcontroller();
+
+                // Electronics page ke liye correct shop/category
+                cl.addTocart(
+                        userId,
+                        productName,
+                        priceValue,
+                        "Electronics",
+                        quantity
+                );
+
+                // Cart counter update
+                cartItems.add(
+                        productName + " x " + quantity
+                );
+
+                cartButton.setText(
+                        "🛒 " + cartItems.size()
+                );
+
+                addButton.setText("✓ Added");
+
+                addButton.setStyle(
+                        "-fx-background-color: #2E9B57;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 9px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 16;" +
+                        "-fx-cursor: hand;"
+                );
+
+            } catch (NumberFormatException ex) {
+
+                System.out.println(
+                        "Invalid product price: " + price
+                );
+
+            } catch (Exception ex) {
+
+                ex.printStackTrace();
+            }
+        });
+
+        // =========================================================
+        // BOTTOM ROW
+        // =========================================================
+        HBox bottom = new HBox(7);
+
+        bottom.setAlignment(Pos.CENTER_LEFT);
+
+        Region bottomSpacer = new Region();
+        HBox.setHgrow(bottomSpacer, Priority.ALWAYS);
+
+        bottom.getChildren().addAll(
+                priceBox,
+                bottomSpacer,
+                quantityBox,
+                addButton
+        );
+
+        // =========================================================
+        // FINAL CARD
+        // =========================================================
+        card.getChildren().addAll(
+                imageBox,
+                name,
+                meta,
+                bottom
+        );
+
+        return card;
+    }
+
+
+    // =============================================================
+    // SIDEBAR ROW
+    // =============================================================
+    private HBox createSidebarRow(
+            String icon,
+            String text
+    ) {
+
+        HBox row =
+                new HBox(15);
+
+        row.setPrefSize(
+                205,
+                42
+        );
+
+        row.setMinSize(
+                205,
+                42
+        );
+
+        row.setMaxSize(
+                205,
+                42
+        );
+
+        row.setPadding(
+                new Insets(2, 8, 2, 13)
+        );
+
+        row.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        row.setStyle(
+                "-fx-background-color: transparent;" +
+                "-fx-background-radius: 12;"
+        );
+
+        Label iconLabel =
+                new Label(icon);
+
+        iconLabel.setPrefWidth(
+                25
+        );
+
+        iconLabel.setStyle(
+                "-fx-font-size: 19px;" +
+                "-fx-text-fill: #242424;"
+        );
+
+        Label textLabel =
+                new Label(text);
+
+        textLabel.setStyle(
+                "-fx-font-family: 'Montserrat';" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: 500;" +
+                "-fx-text-fill: #333333;"
+        );
+
+        row.getChildren().addAll(
+                iconLabel,
+                textLabel
+        );
+
+        row.setOnMouseEntered(e -> {
+
+            row.setStyle(
+                    "-fx-background-color: " + ORANGE + ";" +
+                    "-fx-background-radius: 12;"
+            );
+
+            iconLabel.setStyle(
+                    "-fx-font-size: 19px;" +
+                    "-fx-text-fill: white;"
+            );
+
+            textLabel.setStyle(
+                    "-fx-font-family: 'Montserrat';" +
+                    "-fx-font-size: 12px;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-text-fill: white;"
+            );
+        });
+
+        row.setOnMouseExited(e -> {
+
+            row.setStyle(
+                    "-fx-background-color: transparent;" +
+                    "-fx-background-radius: 12;"
+            );
+
+            iconLabel.setStyle(
+                    "-fx-font-size: 19px;" +
+                    "-fx-text-fill: #242424;"
+            );
+
+            textLabel.setStyle(
+                    "-fx-font-family: 'Montserrat';" +
+                    "-fx-font-size: 12px;" +
+                    "-fx-font-weight: 500;" +
+                    "-fx-text-fill: #333333;"
+            );
+        });
+
+        return row;
+    }
+
+    // =============================================================
+    // SMALL SIDEBAR ROW
+    // =============================================================
+    private HBox createSmallSidebarRow(
+            String icon,
+            String text
+    ) {
+
+        HBox row =
+                new HBox(10);
+
+        row.setPrefSize(
+                205,
+                34
+        );
+
+        row.setMinSize(
+                205,
+                34
+        );
+
+        row.setMaxSize(
+                205,
+                34
+        );
+
+        row.setPadding(
+                new Insets(0, 8, 0, 18)
+        );
+
+        row.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        row.setStyle(
+                "-fx-background-color: transparent;" +
+                "-fx-background-radius: 10;"
+        );
+
+        Label iconLabel =
+                new Label(icon);
+
+        iconLabel.setPrefWidth(
+                20
+        );
+
+        iconLabel.setStyle(
+                "-fx-font-size: 16px;" +
+                "-fx-text-fill: #555555;"
+        );
+
+        Label textLabel =
+                new Label(text);
+
+        textLabel.setStyle(
+                "-fx-font-size: 11px;" +
+                "-fx-font-weight: 500;" +
+                "-fx-text-fill: #666666;"
+        );
+
+        row.getChildren().addAll(
+                iconLabel,
+                textLabel
+        );
+
+        row.setOnMouseEntered(e -> {
+
+            row.setStyle(
+                    "-fx-background-color: rgba(255,105,0,0.10);" +
+                    "-fx-background-radius: 10;"
+            );
+
+            textLabel.setStyle(
+                    "-fx-font-size: 11px;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-text-fill: " + ORANGE + ";"
+            );
+        });
+
+        row.setOnMouseExited(e -> {
+
+            row.setStyle(
+                    "-fx-background-color: transparent;" +
+                    "-fx-background-radius: 10;"
+            );
+
+            textLabel.setStyle(
+                    "-fx-font-size: 11px;" +
+                    "-fx-font-weight: 500;" +
+                    "-fx-text-fill: #666666;"
+            );
+        });
+
+        return row;
+    }
+
+    // =============================================================
+    // FILTER HEADING
+    // =============================================================
+    private Label createFilterHeading(
+            String text
+    ) {
+
+        Label label =
+                new Label(text);
+
+        label.setStyle(
+                "-fx-font-family: 'Montserrat';" +
+                "-fx-font-size: 10px;" +
+                "-fx-font-weight: 900;" +
+                "-fx-text-fill: #333333;" +
+                "-fx-padding: 7 0 3 0;"
+        );
+
+        return label;
+    }
+
+    // =============================================================
+    // FILTER ITEM
+    // =============================================================
+    private HBox createFilterItem(
+            String text
+    ) {
+
+        HBox row =
+                new HBox(8);
+
+        row.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        Label box =
+                new Label("□");
+
+        box.setStyle(
+                "-fx-font-size: 15px;" +
+                "-fx-text-fill: #88838A;"
+        );
+
+        Label label =
+                new Label(text);
+
+        label.setStyle(
+                "-fx-font-size: 11px;" +
+                "-fx-text-fill: #555158;"
+        );
+
+        row.getChildren().addAll(
+                box,
+                label
+        );
+
+        return row;
+    }
+
+    // =============================================================
+    // TOP BUTTON
+    // =============================================================
+    private Button createTopButton(
+            String text
+    ) {
+
+        Button button =
+                new Button(text);
+
+        button.setStyle(
+                "-fx-background-color: transparent;" +
+                "-fx-text-fill: #666666;" +
+                "-fx-font-size: 10px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-padding: 6 8 6 8;" +
+                "-fx-border-width: 0;" +
+                "-fx-cursor: hand;"
+        );
+
+        button.setOnMouseEntered(
+                e -> button.setStyle(
+                        "-fx-background-color: transparent;" +
+                        "-fx-text-fill: " + ORANGE + ";" +
+                        "-fx-font-size: 10px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 6 8 6 8;" +
+                        "-fx-border-width: 0;" +
+                        "-fx-cursor: hand;"
+                )
+        );
+
+        button.setOnMouseExited(
+                e -> button.setStyle(
+                        "-fx-background-color: transparent;" +
+                        "-fx-text-fill: #666666;" +
+                        "-fx-font-size: 10px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 6 8 6 8;" +
+                        "-fx-border-width: 0;" +
+                        "-fx-cursor: hand;"
+                )
+        );
+
+        return button;
+    }
+
+    // =============================================================
+    // ACTION BUTTON
+    // =============================================================
+    private Button createActionButton(
+            String text
+    ) {
+
+        Button button =
+                new Button(text);
+
+        button.setPrefSize(
+                39,
+                39
+        );
+
+        button.setMinSize(
+                39,
+                39
+        );
+
+        button.setMaxSize(
+                39,
+                39
+        );
+
+        String normal =
+                "-fx-background-color: white;" +
+                "-fx-text-fill: #555555;" +
+                "-fx-font-size: 13px;" +
+                "-fx-background-radius: 12;" +
+                "-fx-border-color: #E5DDE4;" +
+                "-fx-border-radius: 12;" +
+                "-fx-border-width: 1;" +
+                "-fx-padding: 0;" +
+                "-fx-cursor: hand;";
+
+        String hover =
+                "-fx-background-color: " + ORANGE_LIGHT + ";" +
+                "-fx-text-fill: " + ORANGE + ";" +
+                "-fx-font-size: 13px;" +
+                "-fx-background-radius: 12;" +
+                "-fx-border-color: #FFBD95;" +
+                "-fx-border-radius: 12;" +
+                "-fx-border-width: 1;" +
+                "-fx-padding: 0;" +
+                "-fx-cursor: hand;";
+
+        button.setStyle(
+                normal
+        );
+
+        button.setOnMouseEntered(
+                e -> button.setStyle(hover)
+        );
+
+        button.setOnMouseExited(
+                e -> button.setStyle(normal)
+        );
+
+        return button;
+    }
+
+    // =============================================================
+    // BACK TO ELECTRONICS
+    // =============================================================
+    public void backToElectronics() {
+
+        if (Electrinicscene != null) {
+
+            Homepage.HomepageStage.setScene(
+                    Electrinicscene
+            );
+        }
+    }
 }
