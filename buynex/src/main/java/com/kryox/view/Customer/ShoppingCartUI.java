@@ -1,5 +1,6 @@
 package com.kryox.view.Customer;
 
+import com.kryox.controller.Customer.PaymentController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -32,6 +33,8 @@ import com.kryox.controller.Customer.CARTcontroller;
 import com.kryox.model.Customer.Productcart;
 
 public class ShoppingCartUI {
+
+        private VBox products;
 
         private Scene addcartScene;
         private String userId;
@@ -748,7 +751,9 @@ public class ShoppingCartUI {
             Label subtotalAmountLabel,
             Label totalAmountLabel,
             int[] itemCount,
-            double[] subtotal
+            double[] subtotal,
+            VBox card,
+            VBox products
     ) {
 
         Button minus = new Button("−");
@@ -788,18 +793,32 @@ public class ShoppingCartUI {
 
             int value = Integer.parseInt(qty.getText());
 
-            if (value > 1) {
-                value--;
+            // =====================================================
+            // IF QUANTITY IS 1, REMOVE THE COMPLETE PRODUCT
+            // =====================================================
 
-                qty.setText(String.valueOf(value));
-                priceLabel.setText(String.format("₹%.2f", unitPrice * value));
-                eachLabel.setText(String.format("₹%.2f / ea", unitPrice));
+            if (value == 1) {
+
+                card.setVisible(false);
+                card.setManaged(false);
 
                 subtotal[0] -= unitPrice;
+
+                if (subtotal[0] < 0) {
+                    subtotal[0] = 0;
+                }
+
                 itemCount[0]--;
 
+                if (itemCount[0] < 0) {
+                    itemCount[0] = 0;
+                }
+
                 subtotalLabel.setText(
-                        String.format("Subtotal (%d items)", itemCount[0])
+                        String.format(
+                                "Subtotal (%d items)",
+                                itemCount[0]
+                        )
                 );
 
                 updateSummaryAmounts(
@@ -807,7 +826,72 @@ public class ShoppingCartUI {
                         subtotalAmountLabel,
                         totalAmountLabel
                 );
+
+                // Show empty-cart message if last product was removed.
+                if (itemCount[0] == 0) {
+
+                    Label emptyLabel =
+                            new Label("Your cart is empty.");
+
+                    emptyLabel.setStyle(
+                            "-fx-font-size: 14px;" +
+                            "-fx-text-fill: #777777;" +
+                            "-fx-font-weight: bold;"
+                    );
+
+                    products.getChildren().clear();
+                    products.getChildren().add(emptyLabel);
+                }
+
+                return;
             }
+
+            // =====================================================
+            // IF QUANTITY IS GREATER THAN 1, DECREASE IT
+            // =====================================================
+
+            value--;
+
+            qty.setText(String.valueOf(value));
+
+            priceLabel.setText(
+                    String.format(
+                            "₹%.2f",
+                            unitPrice * value
+                    )
+            );
+
+            eachLabel.setText(
+                    String.format(
+                            "₹%.2f / ea",
+                            unitPrice
+                    )
+            );
+
+            subtotal[0] -= unitPrice;
+
+            if (subtotal[0] < 0) {
+                subtotal[0] = 0;
+            }
+
+            itemCount[0]--;
+
+            if (itemCount[0] < 0) {
+                itemCount[0] = 0;
+            }
+
+            subtotalLabel.setText(
+                    String.format(
+                            "Subtotal (%d items)",
+                            itemCount[0]
+                    )
+            );
+
+            updateSummaryAmounts(
+                    subtotal,
+                    subtotalAmountLabel,
+                    totalAmountLabel
+            );
         });
 
         plus.setOnAction(e -> {
@@ -852,7 +936,8 @@ public class ShoppingCartUI {
             Label subtotalAmountLabel,
             Label totalAmountLabel,
             int[] itemCount,
-            double[] subtotal
+            double[] subtotal,
+            VBox products
     ) {
 
         VBox card = new VBox(8);
@@ -931,9 +1016,54 @@ public class ShoppingCartUI {
                 "-fx-cursor: hand;"
         );
 
-        deleteButton.setOnAction(e ->
-                card.setVisible(false)
-        );
+        deleteButton.setOnAction(e -> {
+
+            int currentQuantity =
+                    Integer.parseInt(quantity);
+
+            card.setVisible(false);
+            card.setManaged(false);
+
+            subtotal[0] -= unitPrice * currentQuantity;
+
+            if (subtotal[0] < 0) {
+                subtotal[0] = 0;
+            }
+
+            itemCount[0] -= currentQuantity;
+
+            if (itemCount[0] < 0) {
+                itemCount[0] = 0;
+            }
+
+            subtotalLabel.setText(
+                    String.format(
+                            "Subtotal (%d items)",
+                            itemCount[0]
+                    )
+            );
+
+            updateSummaryAmounts(
+                    subtotal,
+                    subtotalAmountLabel,
+                    totalAmountLabel
+            );
+
+            if (itemCount[0] == 0) {
+
+                Label emptyLabel =
+                        new Label("Your cart is empty.");
+
+                emptyLabel.setStyle(
+                        "-fx-font-size: 14px;" +
+                        "-fx-text-fill: #777777;" +
+                        "-fx-font-weight: bold;"
+                );
+
+                products.getChildren().clear();
+                products.getChildren().add(emptyLabel);
+            }
+        });
 
         productTop.getChildren().addAll(
                 productImage,
@@ -977,7 +1107,9 @@ public class ShoppingCartUI {
                         subtotalAmountLabel,
                         totalAmountLabel,
                         itemCount,
-                        subtotal
+                        subtotal,
+                        card,
+                        products
                 );
 
         Region bottomSpacer =
@@ -1319,6 +1451,17 @@ public class ShoppingCartUI {
                 "-fx-cursor: hand;"
         );
 
+        checkout.setOnAction(event -> {
+
+                PaymentController paymentController =
+                        new PaymentController();
+
+                paymentController.startPayment(
+                        totalAmount,
+                        () -> handlePaymentSuccess()
+                );
+        });
+
         // -----------------------------------------------------
         // AI TIP
         // -----------------------------------------------------
@@ -1621,7 +1764,7 @@ public class ShoppingCartUI {
         // CART + SUMMARY
         // -----------------------------------------------------
 
-        VBox products =
+        products =
                 new VBox(12);
 
         products.setPrefWidth(700);
@@ -1705,7 +1848,8 @@ public class ShoppingCartUI {
                                                 subtotalAmountLabel,
                                                 totalAmountLabel,
                                                 itemCount,
-                                                subtotal
+                                                subtotal,
+                                                products
                                         );
 
                                 products.getChildren().add(productCard);
@@ -1790,4 +1934,42 @@ public class ShoppingCartUI {
     
 
 
+
+
+    // =========================================================
+    // CLEAR CART
+    // =========================================================
+
+    private void clearCart() {
+
+        if (products != null) {
+            products.getChildren().clear();
+        }
+
+        System.out.println("Cart cleared successfully.");
+    }
+
+    // =========================================================
+    // PAYMENT SUCCESS
+    // =========================================================
+
+    private void handlePaymentSuccess() {
+
+        System.out.println("================================");
+        System.out.println("ORDER PROCESSING");
+        System.out.println("================================");
+
+        // 1. Order Firestore mein save karna
+        // 2. Cart clear karna
+        // 3. My Orders open karna
+
+        clearCart();
+
+        My_orderAllorder myOrders =
+                new My_orderAllorder(userId);
+
+        Homepage.HomepageStage.setScene(
+                myOrders.getAllorderScene()
+        );
+    }
 }
