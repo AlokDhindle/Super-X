@@ -10,12 +10,12 @@ public class CARTcontroller {
     private Cartdao cartdao = new Cartdao();
 
 
-    public void addTocart(String userId,String name,double price,String name1) {
+    public void addTocart(String userId,String name,double price,String name1,int quantity) {
 
         System.out.println("CONTROLLER USER ID = [" + userId + "]");
 
         Productcart productcart =
-                new Productcart(userId,name,price,name1);
+                new Productcart(userId,name,price,name1,quantity);
                 cartdao.addTocart(productcart);
     }
 

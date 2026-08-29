@@ -6,7 +6,8 @@ import java.util.Map;
 
 
 import com.cloudinary.utils.ObjectUtils;
-import com.kryox.config.Config;
+import com.kryox.config.AdminConfig;
+
 
 public class Controller {
 
@@ -19,7 +20,7 @@ public class Controller {
 
         try {
 
-            Map<?, ?> result = Config.getCloudinary()
+            Map<?, ?> result = AdminConfig.getCloudinary()
                     .uploader()
                     .upload(
                             file,
