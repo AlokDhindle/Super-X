@@ -1,0 +1,27 @@
+mutation SeedDatabase @transaction {
+  user_insertMany(data: [
+    { name: "Alice Johnson", role: "Manager", phone: "123-456-7890", address: "123 Maple St" },
+    { name: "Bob Smith", role: "Staff", phone: "234-567-8901", address: "456 Oak St" },
+    { name: "Charlie Davis", role: "Staff", phone: "345-678-9012", address: "789 Pine St" }
+  ])
+  store_insertMany(data: [
+    { name: "Downtown Tech", location: "100 Main St", operatingHours: "9am-9pm", contactEmail: "dt@tech.com" },
+    { name: "Uptown Books", location: "200 High St", operatingHours: "10am-7pm", contactEmail: "ub@books.com" }
+  ])
+  product_insertMany(data: [
+    { name: "Laptop", price: 999.99, stockQuantity: 10, category: "Electronics", store: { id: "00000000-0000-0000-0000-000000000001" } },
+    { name: "Smartphone", price: 599.99, stockQuantity: 20, category: "Electronics", store: { id: "00000000-0000-0000-0000-000000000001" } },
+    { name: "Novel", price: 19.99, stockQuantity: 100, category: "Books", store: { id: "00000000-0000-0000-0000-000000000002" } }
+  ])
+  order_insertMany(data: [
+    { status: "Pending", totalAmount: 1019.98, createdAt: "2023-10-01T10:00:00Z", customer: { id: "00000000-0000-0000-0000-000000000001" }, store: { id: "00000000-0000-0000-0000-000000000001" } },
+    { status: "Completed", totalAmount: 19.99, createdAt: "2023-10-02T11:00:00Z", customer: { id: "00000000-0000-0000-0000-000000000002" }, store: { id: "00000000-0000-0000-0000-000000000002" } }
+  ])
+  orderItem_insertMany(data: [
+    { quantity: 1, priceAtPurchase: 999.99, order: { id: "00000000-0000-0000-0000-000000000001" }, product: { id: "00000000-0000-0000-0000-000000000001" } },
+    { quantity: 1, priceAtPurchase: 19.99, order: { id: "00000000-0000-0000-0000-000000000002" }, product: { id: "00000000-0000-0000-0000-000000000003" } }
+  ])
+  delivery_insertMany(data: [
+    { status: "In Transit", currentLocation: "Hub A", order: { id: "00000000-0000-0000-0000-000000000001" }, assignedPartner: { id: "00000000-0000-0000-0000-000000000003" } }
+  ])
+}

@@ -1,11 +1,13 @@
 package com.kryox.view.Customer;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -14,1121 +16,259 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-public class SmartAssistantUI extends Application {
+public class SmartAssistantUI {
 
-    @Override
-    public void start(Stage stage) {
+    private Scene SmartAssistantUi;
+
+    // This VBox is the live chat feed.
+    private VBox chatVBox;
+
+    // TextArea is used instead of TextField so API/user messages can be longer.
+    private TextArea inputField;
+
+    private ScrollPane chatScrollPane;
+
+    public Scene getSmartAssisstantui() {
 
         // =========================================================
-        // ROOT HBOX
-        // 1. LEFT SIDEBAR
-        // 2. CENTER AI CHAT
-        // 3. RIGHT AI CAPABILITIES
+        // ROOT
         // =========================================================
-
         HBox root = new HBox();
-
         root.setSpacing(0);
         root.setAlignment(Pos.TOP_LEFT);
-        root.setMaxSize(
-                Double.MAX_VALUE,
-                Double.MAX_VALUE
-        );
-        root.setMaxWidth(Double.MAX_VALUE);
-        root.setMaxHeight(Double.MAX_VALUE);
-        
-
-        root.setStyle(
-                "-fx-background-color: #FFFFFF;"
-        );
-
-
-        // =========================================================
-        // 1. LEFT SIDEBAR
-        // =========================================================
-
-        VBox leftVBox = new VBox();
-
-        leftVBox.setPrefWidth(250);
-        leftVBox.setMinWidth(250);
-        leftVBox.setMaxWidth(250);
-
-        leftVBox.setMaxHeight(Double.MAX_VALUE);
-
-        leftVBox.setPadding(
-                new Insets(48, 13, 25, 13)
-        );
-
-        leftVBox.setSpacing(10);
-
-        leftVBox.setStyle(
-        "-fx-background-color: #EBC9B2;" +
-        "-fx-border-color: #E4DEE7;" +
-        "-fx-border-width: 0 1 0 0;"
-);
-
-        // =========================================================
-        // BUY NEX LOGO
-        // =========================================================
-
-        Text buyNex = new Text("BuyNeX");
-
-        buyNex.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        18
-                )
-        );
-
-        buyNex.setFill(
-                Color.web("#A63F08")
-        );
-
-
-        Text marketplace = new Text(
-                "Hyperlocal Marketplace"
-        );
-
-        marketplace.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.NORMAL,
-                        9
-                )
-        );
-
-        marketplace.setFill(
-                Color.web("#332A27")
-        );
-
-
-        VBox logoVBox = new VBox();
-
-        logoVBox.setSpacing(2);
-
-        logoVBox.getChildren().addAll(
-                buyNex,
-                marketplace
-        );
-
-
-        // =========================================================
-        // SPACE
-        // =========================================================
-
-        Region sideSpace = new Region();
-
-        sideSpace.setPrefHeight(42);
-
-
-        // =========================================================
-        // DASHBOARD
-        // =========================================================
-
-        HBox dashboardHBox = new HBox();
-
-        dashboardHBox.setPrefHeight(36);
-
-        dashboardHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        dashboardHBox.setSpacing(13);
-
-        dashboardHBox.setPadding(
-                new Insets(0, 10, 0, 10)
-        );
-
-
-        Text dashboardIcon = new Text("▦");
-
-        dashboardIcon.setFont(
-                Font.font("Arial", 17)
-        );
-
-        dashboardIcon.setFill(
-                Color.web("#443A36")
-        );
-
-
-        Text dashboardText = new Text(
-                "Dashboard"
-        );
-
-        dashboardText.setFont(
-                Font.font("Arial", 11)
-        );
-
-        dashboardText.setFill(
-                Color.web("#443A36")
-        );
-
-
-        dashboardHBox.getChildren().addAll(
-                dashboardIcon,
-                dashboardText
-        );
-
-
-        // =========================================================
-        // CATEGORIES
-        // =========================================================
-
-        HBox categoriesHBox = new HBox();
-
-        categoriesHBox.setPrefHeight(36);
-
-        categoriesHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        categoriesHBox.setSpacing(13);
-
-        categoriesHBox.setPadding(
-                new Insets(0, 10, 0, 10)
-        );
-
-
-        Text categoriesIcon = new Text("△");
-
-        categoriesIcon.setFont(
-                Font.font("Arial", 16)
-        );
-
-        categoriesIcon.setFill(
-                Color.web("#443A36")
-        );
-
-
-        Text categoriesText = new Text(
-                "Categories"
-        );
-
-        categoriesText.setFont(
-                Font.font("Arial", 11)
-        );
-
-        categoriesText.setFill(
-                Color.web("#443A36")
-        );
-
-
-        categoriesHBox.getChildren().addAll(
-                categoriesIcon,
-                categoriesText
-        );
-
-
-        // =========================================================
-        // DEALS
-        // =========================================================
-
-        HBox dealsHBox = new HBox();
-
-        dealsHBox.setPrefHeight(36);
-
-        dealsHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        dealsHBox.setSpacing(13);
-
-        dealsHBox.setPadding(
-                new Insets(0, 10, 0, 10)
-        );
-
-
-        Text dealsIcon = new Text("◇");
-
-        dealsIcon.setFont(
-                Font.font("Arial", 18)
-        );
-
-        dealsIcon.setFill(
-                Color.web("#443A36")
-        );
-
-
-        Text dealsText = new Text(
-                "Deals"
-        );
-
-        dealsText.setFont(
-                Font.font("Arial", 11)
-        );
-
-        dealsText.setFill(
-                Color.web("#443A36")
-        );
-
-
-        dealsHBox.getChildren().addAll(
-                dealsIcon,
-                dealsText
-        );
-
-
-        // =========================================================
-        // MY ORDERS - ACTIVE
-        // =========================================================
-
-        HBox ordersHBox = new HBox();
-
-        ordersHBox.setPrefHeight(34);
-
-        ordersHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        ordersHBox.setSpacing(13);
-
-        ordersHBox.setPadding(
-                new Insets(0, 10, 0, 10)
-        );
-
-        ordersHBox.setStyle(
-                "-fx-background-color: #FF7109;" +
-                "-fx-background-radius: 7;"
-        );
-
-
-        Text ordersIcon = new Text("♧");
-
-        ordersIcon.setFont(
-                Font.font("Arial", 18)
-        );
-
-        ordersIcon.setFill(
-                Color.web("#332A27")
-        );
-
-
-        Text ordersText = new Text(
-                "My Orders"
-        );
-
-        ordersText.setFont(
-                Font.font("Arial", 11)
-        );
-
-        ordersText.setFill(
-                Color.web("#332A27")
-        );
-
-
-        ordersHBox.getChildren().addAll(
-                ordersIcon,
-                ordersText
-        );
-
-
-        // =========================================================
-        // ANALYTICS
-        // =========================================================
-
-        HBox analyticsHBox = new HBox();
-
-        analyticsHBox.setPrefHeight(36);
-
-        analyticsHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        analyticsHBox.setSpacing(13);
-
-        analyticsHBox.setPadding(
-                new Insets(0, 10, 0, 10)
-        );
-
-
-        Text analyticsIcon = new Text("▣");
-
-        analyticsIcon.setFont(
-                Font.font("Arial", 16)
-        );
-
-        analyticsIcon.setFill(
-                Color.web("#443A36")
-        );
-
-
-        Text analyticsText = new Text(
-                "Analytics"
-        );
-
-        analyticsText.setFont(
-                Font.font("Arial", 11)
-        );
-
-        analyticsText.setFill(
-                Color.web("#443A36")
-        );
-
-
-        analyticsHBox.getChildren().addAll(
-                analyticsIcon,
-                analyticsText
-        );
-
-
-        // =========================================================
-        // ADD ALL SIDEBAR ITEMS
-        // =========================================================
-
-        leftVBox.getChildren().addAll(
-                logoVBox,
-                sideSpace,
-                dashboardHBox,
-                categoriesHBox,
-                dealsHBox,
-                ordersHBox,
-                analyticsHBox
-        );
-
+        root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        root.setStyle("-fx-background-color: #FFFFFF;");
 
         // =========================================================
         // 2. CENTER AI CHAT
         // =========================================================
-
         VBox centerVBox = new VBox();
-
-        centerVBox.setPrefWidth(450);
-        centerVBox.setMinWidth(450);
+        centerVBox.setPrefWidth(700);
+        centerVBox.setMinWidth(560);
         centerVBox.setMaxWidth(Double.MAX_VALUE);
-
-        HBox.setHgrow(
-                centerVBox,
-                Priority.ALWAYS
-        );
-        centerVBox.setMaxHeight(
-                Double.MAX_VALUE
-        );
-
-        HBox.setHgrow(
-                centerVBox,
-                Priority.ALWAYS
-        );
-
+        centerVBox.setMaxHeight(Double.MAX_VALUE);
+        HBox.setHgrow(centerVBox, Priority.ALWAYS);
         centerVBox.setStyle(
-        "-fx-background-color: #EEE5DF;"
+                "-fx-background-color: linear-gradient(to bottom, #FFF9F5, #F4ECE7);"
         );
 
-
         // =========================================================
-        // AI HEADER
+        // AI HEADER - STYLISH + BACK BUTTON
         // =========================================================
-
         HBox headerHBox = new HBox();
-
-        headerHBox.setPrefHeight(68);
-
-        headerHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        headerHBox.setPadding(
-                new Insets(0, 18, 0, 18)
-        );
-
-        headerHBox.setSpacing(12);
-
+        headerHBox.setPrefHeight(76);
+        headerHBox.setMinHeight(76);
+        headerHBox.setAlignment(Pos.CENTER_LEFT);
+        headerHBox.setPadding(new Insets(12, 20, 12, 18));
+        headerHBox.setSpacing(14);
         headerHBox.setStyle(
-                "-fx-border-color: #E7E2E8;" +
+                "-fx-background-color: #ebccb7;" +
+                "-fx-border-color: #E8DDD6;" +
                 "-fx-border-width: 0 0 1 0;"
         );
 
-
-        // AI CIRCLE
-
-        VBox aiCircle = new VBox();
-
-        aiCircle.setPrefSize(30, 30);
-        aiCircle.setMinSize(30, 30);
-        aiCircle.setMaxSize(30, 30);
-
-        aiCircle.setAlignment(
-                Pos.CENTER
+        Button backButton = new Button("←  Back");
+        backButton.setPrefHeight(38);
+        backButton.setMinWidth(82);
+        backButton.setFont(Font.font("Arial", FontWeight.BOLD, 11));
+        backButton.setTextFill(Color.web("#5C3B2E"));
+        backButton.setStyle(
+                "-fx-background-color: #FFF0E7;" +
+                "-fx-background-radius: 19;" +
+                "-fx-border-color: #F1CDBB;" +
+                "-fx-border-radius: 19;" +
+                "-fx-cursor: hand;"
         );
 
-        aiCircle.setStyle(
-                "-fx-background-color: #FF7109;" +
-                "-fx-background-radius: 30;"
-        );
-
-
-        Text aiIcon = new Text("♙");
-
-        aiIcon.setFont(
-                Font.font("Arial", 16)
-        );
-
-        aiIcon.setFill(
-                Color.web("#332A27")
-        );
-
-
-        aiCircle.getChildren().add(
-                aiIcon
-        );
-
-
-        // AI TITLE
-
-        VBox titleVBox = new VBox();
-
-        titleVBox.setSpacing(1);
-
-
-        Text aiTitle = new Text(
-                "BuyNeX Smart Assistant"
-        );
-
-        aiTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.NORMAL,
-                        17
+        backButton.setOnMouseEntered(event ->
+                backButton.setStyle(
+                        "-fx-background-color: #FF7109;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-radius: 19;" +
+                        "-fx-border-color: #FF7109;" +
+                        "-fx-border-radius: 19;" +
+                        "-fx-cursor: hand;"
                 )
         );
 
-        aiTitle.setFill(
-                Color.web("#211D1B")
+        backButton.setOnMouseExited(event ->
+                backButton.setStyle(
+                        "-fx-background-color: #FFF0E7;" +
+                        "-fx-text-fill: #5C3B2E;" +
+                        "-fx-background-radius: 19;" +
+                        "-fx-border-color: #F1CDBB;" +
+                        "-fx-border-radius: 19;" +
+                        "-fx-cursor: hand;"
+                )
         );
 
+        // Change this to your own previous-page navigation if needed.
+        backButton.setOnAction(event -> {
+            if (backButton.getScene() != null &&
+                    backButton.getScene().getWindow() != null) {
+                backButton.getScene().getWindow().hide();
+            }
+        });
 
-        HBox onlineHBox = new HBox();
-
-        onlineHBox.setAlignment(
-                Pos.CENTER_LEFT
+        VBox aiCircle = new VBox();
+        aiCircle.setPrefSize(42, 42);
+        aiCircle.setMinSize(42, 42);
+        aiCircle.setMaxSize(42, 42);
+        aiCircle.setAlignment(Pos.CENTER);
+        aiCircle.setStyle(
+                "-fx-background-color: #FF7109;" +
+                "-fx-background-radius: 30;" +
+                "-fx-effect: dropshadow(gaussian, rgba(166,63,8,0.20), 8, 0, 0, 2);"
         );
 
-        onlineHBox.setSpacing(4);
+        Text aiIcon = new Text("✦");
+        aiIcon.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        aiIcon.setFill(Color.WHITE);
+        aiCircle.getChildren().add(aiIcon);
 
+        Text aiTitle = new Text("BuyNeX Smart Assistant");
+        aiTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        aiTitle.setFill(Color.web("#2E2420"));
+
+        Text aiSubtitle = new Text("Smart local shopping • AI powered");
+        aiSubtitle.setFont(Font.font("Arial", 9));
+        aiSubtitle.setFill(Color.web("#806B61"));
 
         Text onlineDot = new Text("●");
+        onlineDot.setFont(Font.font("Arial", 8));
+        onlineDot.setFill(Color.web("#3E9B55"));
 
-        onlineDot.setFont(
-                Font.font("Arial", 8)
-        );
+        Text onlineText = new Text(" Online");
+        onlineText.setFont(Font.font("Arial", 9));
+        onlineText.setFill(Color.web("#3E7D4B"));
 
-        onlineDot.setFill(
-                Color.web("#A63F08")
-        );
+        HBox onlineHBox = new HBox(2, onlineDot, onlineText);
+        onlineHBox.setAlignment(Pos.CENTER_LEFT);
 
-
-        Text onlineText = new Text(
-                "Online"
-        );
-
-        onlineText.setFont(
-                Font.font("Arial", 8)
-        );
-
-        onlineText.setFill(
-                Color.web("#A63F08")
-        );
-
-
-        onlineHBox.getChildren().addAll(
-                onlineDot,
-                onlineText
-        );
-
-
-        titleVBox.getChildren().addAll(
-                aiTitle,
-                onlineHBox
-        );
-
+        VBox titleVBox = new VBox(3, aiTitle, aiSubtitle, onlineHBox);
 
         Region headerSpace = new Region();
-
-        HBox.setHgrow(
-                headerSpace,
-                Priority.ALWAYS
-        );
-
+        HBox.setHgrow(headerSpace, Priority.ALWAYS);
 
         Text menuIcon = new Text("⋮");
-
-        menuIcon.setFont(
-                Font.font("Arial", 22)
-        );
-
-        menuIcon.setFill(
-                Color.web("#514B48")
-        );
-
+        menuIcon.setFont(Font.font("Arial", 22));
+        menuIcon.setFill(Color.web("#6C5A52"));
 
         headerHBox.getChildren().addAll(
+                backButton,
                 aiCircle,
                 titleVBox,
                 headerSpace,
                 menuIcon
         );
 
-
         // =========================================================
-        // CHAT AREA
+        // LIVE CHAT FEED
         // =========================================================
-
-        VBox chatVBox = new VBox();
-
-        chatVBox.setSpacing(16);
-
-        chatVBox.setPadding(
-                new Insets(18, 18, 15, 18)
-        );
+        chatVBox = new VBox(16);
+        chatVBox.setPadding(new Insets(22, 28, 18, 28));
         chatVBox.setFillWidth(true);
 
-        VBox.setVgrow(
-                chatVBox,
-                Priority.ALWAYS
+        // Initial message only. Static demo conversation is removed.
+        addAiMessage(
+                "Hello! I'm your BuyNeX AI. How can I help you source, " +
+                "compare, or track your local purchases today?"
         );
 
-
-        // =========================================================
-        // AI MESSAGE 1
-        // =========================================================
-
-        HBox aiMessage1HBox = new HBox();
-
-        aiMessage1HBox.setAlignment(
-                Pos.TOP_LEFT
+        chatScrollPane = new ScrollPane(chatVBox);
+        chatScrollPane.setFitToWidth(true);
+        chatScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        chatScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        chatScrollPane.setStyle(
+                "-fx-background-color: transparent;" +
+                "-fx-background: transparent;" +
+                "-fx-border-color: transparent;"
         );
-
-        aiMessage1HBox.setSpacing(9);
-
-
-        VBox smallAiCircle1 = new VBox();
-
-        smallAiCircle1.setPrefSize(23, 23);
-        smallAiCircle1.setMinSize(23, 23);
-        smallAiCircle1.setMaxSize(23, 23);
-
-        smallAiCircle1.setAlignment(
-                Pos.CENTER
-        );
-
-        smallAiCircle1.setStyle(
-                "-fx-background-color: #FF7109;" +
-                "-fx-background-radius: 20;"
-        );
-
-
-        Text smallAiIcon1 = new Text("♙");
-
-        smallAiIcon1.setFont(
-                Font.font("Arial", 12)
-        );
-
-
-        smallAiCircle1.getChildren().add(
-                smallAiIcon1
-        );
-
-
-        Text message1 = new Text(
-                "Hello! I'm your BuyNeX AI. How can I help you source, compare, or\n" +
-                "track your local purchases today?"
-        );
-
-        message1.setFont(
-                Font.font("Arial", 11)
-        );
-
-        message1.setFill(
-                Color.web("#3E3836")
-        );
-
-
-        VBox message1Box = new VBox();
-
-        message1Box.setPadding(
-                new Insets(10, 11, 10, 11)
-        );
-
-        message1Box.setStyle(
-                "-fx-background-color: #F0EDF2;" +
-                "-fx-background-radius: 8;" +
-                "-fx-border-color: #E2DDE4;" +
-                "-fx-border-radius: 8;"
-        );
-
-        message1Box.getChildren().add(
-                message1
-        );
-        message1Box.setMaxWidth(395);
-
-        aiMessage1HBox.getChildren().addAll(
-                smallAiCircle1,
-                message1Box
-        );
-
-
-        // =========================================================
-        // USER MESSAGE
-        // =========================================================
-
-        HBox userMessageHBox = new HBox();
-
-        userMessageHBox.setAlignment(
-                Pos.CENTER_RIGHT
-        );
-
-        userMessageHBox.setMaxWidth(
-        Double.MAX_VALUE
-);
-
-
-        Text userMessage = new Text(
-                "Find the best price for avocados near me."
-        );
-
-        userMessage.setFont(
-                Font.font("Arial", 11)
-        );
-
-        userMessage.setFill(
-                Color.WHITE
-        );
-
-
-        VBox userMessageBox = new VBox();
-
-        userMessageBox.setPadding(
-                new Insets(9, 11, 9, 11)
-        );
-
-        userMessageBox.setStyle(
-                "-fx-background-color: #A94005;" +
-                "-fx-background-radius: 9;"
-        );
-
-        userMessageBox.getChildren().add(
-                userMessage
-        );
-
-
-        userMessageHBox.getChildren().add(
-                userMessageBox
-        );
-
-
-        // =========================================================
-        // AI MESSAGE 2
-        // =========================================================
-
-        HBox aiMessage2HBox = new HBox();
-
-        aiMessage2HBox.setAlignment(
-                Pos.TOP_LEFT
-        );
-
-        aiMessage2HBox.setSpacing(9);
-
-
-        VBox smallAiCircle2 = new VBox();
-
-        smallAiCircle2.setPrefSize(23, 23);
-        smallAiCircle2.setMinSize(23, 23);
-        smallAiCircle2.setMaxSize(23, 23);
-
-        smallAiCircle2.setAlignment(
-                Pos.CENTER
-        );
-
-        smallAiCircle2.setStyle(
-                "-fx-background-color: #FF7109;" +
-                "-fx-background-radius: 20;"
-        );
-
-
-        Text smallAiIcon2 = new Text("♙");
-
-        smallAiIcon2.setFont(
-                Font.font("Arial", 12)
-        );
-
-
-        smallAiCircle2.getChildren().add(
-                smallAiIcon2
-        );
-
-
-        VBox resultBox = new VBox();
-
-        resultBox.setSpacing(7);
-
-        resultBox.setPadding(
-                new Insets(10)
-        );
-        resultBox.setMaxWidth(285);
-
-        resultBox.setStyle(
-                "-fx-background-color: #F0EDF2;" +
-                "-fx-background-radius: 8;" +
-                "-fx-border-color: #E2DDE4;" +
-                "-fx-border-radius: 8;"
-        );
-
-
-        Text resultText = new Text(
-                "I found 3 great options for avocados in your area:"
-        );
-
-        resultText.setFont(
-                Font.font("Arial", 11)
-        );
-
-        resultText.setFill(
-                Color.web("#3E3836")
-        );
-
-
-        // =========================================================
-        // SHOP RESULT 1
-        // =========================================================
-
-        HBox shop1 = new HBox();
-
-        shop1.setPrefHeight(39);
-
-        shop1.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        shop1.setPadding(
-                new Insets(5, 8, 5, 8)
-        );
-
-        shop1.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-color: #E2DDE4;" +
-                "-fx-border-radius: 5;"
-        );
-
-
-        VBox shop1Info = new VBox();
-
-        shop1Info.setSpacing(2);
-
-
-        Text shop1Name = new Text(
-                "Fresh Market Co."
-        );
-
-        shop1Name.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        10
-                )
-        );
-
-
-        Text shop1Distance = new Text(
-                "0.5 miles away"
-        );
-
-        shop1Distance.setFont(
-                Font.font("Arial", 9)
-        );
-
-        shop1Distance.setFill(
-                Color.web("#625A56")
-        );
-
-
-        shop1Info.getChildren().addAll(
-                shop1Name,
-                shop1Distance
-        );
-
-
-        Region shop1Space = new Region();
-
-        HBox.setHgrow(
-                shop1Space,
-                Priority.ALWAYS
-        );
-
-
-        Text shop1Price = new Text(
-                "$1.20/ea"
-        );
-
-        shop1Price.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        shop1Price.setFill(
-                Color.web("#A94005")
-        );
-
-
-        shop1.getChildren().addAll(
-                shop1Info,
-                shop1Space,
-                shop1Price
-        );
-
-
-        // =========================================================
-        // SHOP RESULT 2
-        // =========================================================
-
-        HBox shop2 = new HBox();
-
-        shop2.setPrefHeight(39);
-
-        shop2.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        shop2.setPadding(
-                new Insets(5, 8, 5, 8)
-        );
-
-        shop2.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-color: #E2DDE4;" +
-                "-fx-border-radius: 5;"
-        );
-
-
-        VBox shop2Info = new VBox();
-
-        shop2Info.setSpacing(2);
-
-
-        Text shop2Name = new Text(
-                "Local Grocer"
-        );
-
-        shop2Name.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        10
-                )
-        );
-
-
-        Text shop2Distance = new Text(
-                "1.2 miles away"
-        );
-
-        shop2Distance.setFont(
-                Font.font("Arial", 9)
-        );
-
-        shop2Distance.setFill(
-                Color.web("#625A56")
-        );
-
-
-        shop2Info.getChildren().addAll(
-                shop2Name,
-                shop2Distance
-        );
-
-
-        Region shop2Space = new Region();
-
-        HBox.setHgrow(
-                shop2Space,
-                Priority.ALWAYS
-        );
-
-
-        Text shop2Price = new Text(
-                "$1.45/ea"
-        );
-
-        shop2Price.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        shop2Price.setFill(
-                Color.web("#A94005")
-        );
-
-
-        shop2.getChildren().addAll(
-                shop2Info,
-                shop2Space,
-                shop2Price
-        );
-
-
-        resultBox.getChildren().addAll(
-                resultText,
-                shop1,
-                shop2
-        );
-
-
-        aiMessage2HBox.getChildren().addAll(
-                smallAiCircle2,
-                resultBox
-        );
-
-
-        chatVBox.getChildren().addAll(
-                aiMessage1HBox,
-                userMessageHBox,
-                aiMessage2HBox
-        );
-
+        VBox.setVgrow(chatScrollPane, Priority.ALWAYS);
 
         // =========================================================
         // BOTTOM INPUT AREA
         // =========================================================
-
         HBox inputOuterHBox = new HBox();
-
-        inputOuterHBox.setPrefHeight(72);
-
-        inputOuterHBox.setAlignment(
-                Pos.CENTER
-        );
-        inputOuterHBox.setMaxWidth(
-        Double.MAX_VALUE
-        );
-
-        inputOuterHBox.setFillHeight(true);
-        
-
-        inputOuterHBox.setPadding(
-                new Insets(10, 18, 12, 18)
-        );
-
+        inputOuterHBox.setPrefHeight(78);
+        inputOuterHBox.setAlignment(Pos.CENTER);
+        inputOuterHBox.setPadding(new Insets(12, 24, 14, 24));
         inputOuterHBox.setStyle(
                 "-fx-border-color: #E7E2E8;" +
                 "-fx-border-width: 1 0 0 0;"
         );
 
-
         HBox inputHBox = new HBox();
-
-        inputHBox.setPrefHeight(40);
-
-        inputHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
+        inputHBox.setPrefHeight(50);
+        inputHBox.setAlignment(Pos.CENTER_LEFT);
         inputHBox.setSpacing(8);
-        inputHBox.setMaxWidth(
-        Double.MAX_VALUE
-        );
-
-        HBox.setHgrow(
-                inputHBox,
-                Priority.ALWAYS
-        );
-
-        inputHBox.setPadding(
-                new Insets(0, 8, 0, 10)
-        );
-
+        inputHBox.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(inputHBox, Priority.ALWAYS);
+        inputHBox.setPadding(new Insets(4, 8, 4, 10));
         inputHBox.setStyle(
-                "-fx-background-color: #F0EDF2;" +
-                "-fx-background-radius: 22;" +
-                "-fx-border-color: #DDD7DF;" +
-                "-fx-border-radius: 22;"
+                "-fx-background-color: white;" +
+                "-fx-background-radius: 25;" +
+                "-fx-border-color: #E3D5CD;" +
+                "-fx-border-radius: 25;" +
+                "-fx-effect: dropshadow(gaussian, rgba(80,45,25,0.08), 12, 0, 0, 2);"
         );
 
+        Text attachIcon = new Text("⌕");
+        attachIcon.setFont(Font.font("Arial", 18));
+        attachIcon.setFill(Color.web("#5B5552"));
 
-        Text attachIcon = new Text(
-                "⌕"
-        );
-
-        attachIcon.setFont(
-                Font.font("Arial", 18)
-        );
-
-        attachIcon.setFill(
-                Color.web("#5B5552")
-        );
-
-
-        TextField inputField = new TextField();
-
-        inputField.setPromptText(
-                "Ask BuyNeX AI..."
-        );
-
-        inputField.setFont(
-                Font.font("Arial", 11)
-        );
-
-        inputField.setPrefHeight(34);
-
+        // =========================================================
+        // TEXTAREA - replaces TextField
+        // =========================================================
+        inputField = new TextArea();
+        inputField.setPromptText("Ask BuyNeX AI...");
+        inputField.setFont(Font.font("Arial", 11));
+        inputField.setWrapText(true);
+        inputField.setPrefRowCount(1);
+        inputField.setPrefHeight(38);
+        inputField.setMinHeight(32);
+        inputField.setMaxHeight(55);
         inputField.setStyle(
                 "-fx-background-color: transparent;" +
-                "-fx-border-color: transparent;"
+                "-fx-border-color: transparent;" +
+                "-fx-background-insets: 0;" +
+                "-fx-padding: 8 2 8 2;"
         );
+        HBox.setHgrow(inputField, Priority.ALWAYS);
 
-        HBox.setHgrow(
-                inputField,
-                Priority.ALWAYS
-        );
+        Text micIcon = new Text("♩");
+        micIcon.setFont(Font.font("Arial", 17));
+        micIcon.setFill(Color.web("#5B5552"));
 
-
-        Text micIcon = new Text(
-                "♩"
-        );
-
-        micIcon.setFont(
-                Font.font("Arial", 17)
-        );
-
-        micIcon.setFill(
-                Color.web("#5B5552")
-        );
-
-
-        Button sendButton = new Button(
-                "➤"
-        );
-
-        sendButton.setPrefSize(
-                29,
-                29
-        );
-
-        sendButton.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        15
-                )
-        );
-
-        sendButton.setTextFill(
-                Color.WHITE
-        );
-
+        Button sendButton = new Button("➤");
+        sendButton.setPrefSize(31, 31);
+        sendButton.setMinSize(31, 31);
+        sendButton.setMaxSize(31, 31);
+        sendButton.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        sendButton.setTextFill(Color.WHITE);
         sendButton.setStyle(
                 "-fx-background-color: #A94005;" +
                 "-fx-background-radius: 30;" +
-                "-fx-padding: 0;"
+                "-fx-padding: 0;" +
+                "-fx-cursor: hand;"
         );
 
+        // =========================================================
+        // SEND BUTTON
+        // =========================================================
+        sendButton.setOnAction(event -> sendMessage());
+
+        // Enter = send.
+        // Shift + Enter = new line.
+        inputField.setOnKeyPressed(event -> {
+            if (event.getCode() == javafx.scene.input.KeyCode.ENTER
+                    && !event.isShiftDown()) {
+
+                event.consume();
+                sendMessage();
+            }
+        });
 
         inputHBox.getChildren().addAll(
                 attachIcon,
@@ -1137,438 +277,65 @@ public class SmartAssistantUI extends Application {
                 sendButton
         );
 
-
-        inputOuterHBox.getChildren().add(
-                inputHBox
-        );
-
+        inputOuterHBox.getChildren().add(inputHBox);
 
         centerVBox.getChildren().addAll(
                 headerHBox,
-                chatVBox,
+                chatScrollPane,
                 inputOuterHBox
         );
-
 
         // =========================================================
         // 3. RIGHT AI CAPABILITIES
         // =========================================================
-
         VBox rightVBox = new VBox();
-
-        rightVBox.setPrefWidth(270);
-        rightVBox.setMinWidth(270);
-        rightVBox.setMaxWidth(270);
-
-        rightVBox.setMaxHeight(
-                Double.MAX_VALUE
-        );
-
-        rightVBox.setPadding(
-        new Insets(18, 12, 15, 12)
-);
-
+        rightVBox.setPrefWidth(285);
+        rightVBox.setMinWidth(285);
+        rightVBox.setMaxWidth(285);
+        rightVBox.setMaxHeight(Double.MAX_VALUE);
+        rightVBox.setPadding(new Insets(22, 16, 18, 16));
         rightVBox.setSpacing(10);
-
         rightVBox.setStyle(
-        "-fx-background-color: #EBC9B2;" +
-        "-fx-border-color: #E4DEE7;" +
-        "-fx-border-width: 0 0 0 1;"
+                "-fx-background-color: #ebccb7;" +
+                "-fx-border-color: #E8DDD6;" +
+                "-fx-border-width: 0 0 0 1;"
         );
 
+        Text capabilitiesTitle = new Text("Explore BuyNeX AI");
+        capabilitiesTitle.setFont(Font.font("Arial", FontWeight.BOLD, 17));
+        capabilitiesTitle.setFill(Color.web("#30241F"));
 
-        // =========================================================
-        // AI CAPABILITIES TITLE
-        // =========================================================
-
-        Text capabilitiesTitle = new Text(
-                "AI Capabilities"
+        VBox sourceCard = capabilityCard(
+                "▢",
+                "Source Products",
+                "\"Find the best price for\navocados nearby.\""
         );
 
-        capabilitiesTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.NORMAL,
-                        17
-                )
+        VBox trackCard = capabilityCard(
+                "▣",
+                "Track Orders",
+                "\"Track my current order\nfrom Electronics Hub.\""
         );
 
-        capabilitiesTitle.setFill(
-                Color.web("#282321")
+        VBox compareCard = capabilityCard(
+                "↔",
+                "Compare Shops",
+                "\"Compare electronics\nshops near me.\""
         );
 
-
-        // =========================================================
-        // SOURCE PRODUCTS CARD
-        // =========================================================
-
-        VBox sourceCard = new VBox();
-
-        sourceCard.setPrefHeight(85);
-        sourceCard.setMaxWidth(Double.MAX_VALUE);
-
-        sourceCard.setPadding(
-                new Insets(10)
+        VBox trendsCard = capabilityCard(
+                "▤",
+                "Local Trends",
+                "\"What are the top trending\nitems in my neighborhood\ntoday?\""
         );
-
-        sourceCard.setSpacing(5);
-
-        sourceCard.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 8;" +
-                "-fx-border-color: #EEE9EF;" +
-                "-fx-border-radius: 8;"
-        );
-
-
-        HBox sourceTitleHBox = new HBox();
-
-        sourceTitleHBox.setSpacing(7);
-
-        sourceTitleHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-
-        Text sourceIcon = new Text("▢");
-
-        sourceIcon.setFont(
-                Font.font("Arial", 14)
-        );
-
-        sourceIcon.setFill(
-                Color.web("#A94005")
-        );
-
-
-        Text sourceTitle = new Text(
-                "Source Products"
-        );
-
-        sourceTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        sourceTitle.setFill(
-                Color.web("#A94005")
-        );
-
-
-        sourceTitleHBox.getChildren().addAll(
-                sourceIcon,
-                sourceTitle
-        );
-
-
-        Text sourceText = new Text(
-                "\"Find the best price for\n" +
-                "avocados nearby.\""
-        );
-
-        sourceText.setFont(
-                Font.font("Arial", 9)
-        );
-
-        sourceText.setFill(
-                Color.web("#594C48")
-        );
-
-
-        sourceCard.getChildren().addAll(
-                sourceTitleHBox,
-                sourceText
-        );
-
-
-        // =========================================================
-        // TRACK ORDERS CARD
-        // =========================================================
-
-        VBox trackCard = new VBox();
-
-        trackCard.setPrefHeight(85);
-        trackCard.setMaxWidth(Double.MAX_VALUE);
-
-        trackCard.setPadding(
-                new Insets(10)
-        );
-
-        trackCard.setSpacing(5);
-
-        trackCard.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 8;" +
-                "-fx-border-color: #EEE9EF;" +
-                "-fx-border-radius: 8;"
-        );
-
-
-        HBox trackTitleHBox = new HBox();
-
-        trackTitleHBox.setSpacing(7);
-
-        trackTitleHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-
-        Text trackIcon = new Text("▣");
-
-        trackIcon.setFont(
-                Font.font("Arial", 14)
-        );
-
-        trackIcon.setFill(
-                Color.web("#A94005")
-        );
-
-
-        Text trackTitle = new Text(
-                "Track Orders"
-        );
-
-        trackTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        trackTitle.setFill(
-                Color.web("#A94005")
-        );
-
-
-        trackTitleHBox.getChildren().addAll(
-                trackIcon,
-                trackTitle
-        );
-
-
-        Text trackText = new Text(
-                "\"Track my current order\n" +
-                "from Electronics Hub.\""
-        );
-
-        trackText.setFont(
-                Font.font("Arial", 9)
-        );
-
-        trackText.setFill(
-                Color.web("#594C48")
-        );
-
-
-        trackCard.getChildren().addAll(
-                trackTitleHBox,
-                trackText
-        );
-
-
-        // =========================================================
-        // COMPARE SHOPS CARD
-        // =========================================================
-
-        VBox compareCard = new VBox();
-
-        compareCard.setPrefHeight(85);
-        compareCard.setMaxWidth(Double.MAX_VALUE);
-
-        compareCard.setPadding(
-                new Insets(10)
-        );
-
-        compareCard.setSpacing(5);
-
-        compareCard.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 8;" +
-                "-fx-border-color: #EEE9EF;" +
-                "-fx-border-radius: 8;"
-        );
-
-
-        HBox compareTitleHBox = new HBox();
-
-        compareTitleHBox.setSpacing(7);
-
-        compareTitleHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-
-        Text compareIcon = new Text("↔");
-
-        compareIcon.setFont(
-                Font.font("Arial", 15)
-        );
-
-        compareIcon.setFill(
-                Color.web("#A94005")
-        );
-
-
-        Text compareTitle = new Text(
-                "Compare Shops"
-        );
-
-        compareTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        compareTitle.setFill(
-                Color.web("#A94005")
-        );
-
-
-        compareTitleHBox.getChildren().addAll(
-                compareIcon,
-                compareTitle
-        );
-
-
-        Text compareText = new Text(
-                "\"Compare electronics\n" +
-                "shops near me.\""
-        );
-
-        compareText.setFont(
-                Font.font("Arial", 9)
-        );
-
-        compareText.setFill(
-                Color.web("#594C48")
-        );
-
-
-        compareCard.getChildren().addAll(
-                compareTitleHBox,
-                compareText
-        );
-
-
-        // =========================================================
-        // LOCAL TRENDS CARD
-        // =========================================================
-
-        VBox trendsCard = new VBox();
-
-        trendsCard.setPrefHeight(85);
-        trendsCard.setMaxWidth(Double.MAX_VALUE);
-
-        trendsCard.setPadding(
-                new Insets(10)
-        );
-
-        trendsCard.setSpacing(5);
-
-        trendsCard.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 8;" +
-                "-fx-border-color: #EEE9EF;" +
-                "-fx-border-radius: 8;"
-        );
-
-
-        HBox trendsTitleHBox = new HBox();
-
-        trendsTitleHBox.setSpacing(7);
-
-        trendsTitleHBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-
-        Text trendsIcon = new Text("▤");
-
-        trendsIcon.setFont(
-                Font.font("Arial", 14)
-        );
-
-        trendsIcon.setFill(
-                Color.web("#A94005")
-        );
-
-
-        Text trendsTitle = new Text(
-                "Local Trends"
-        );
-
-        trendsTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        trendsTitle.setFill(
-                Color.web("#A94005")
-        );
-
-
-        trendsTitleHBox.getChildren().addAll(
-                trendsIcon,
-                trendsTitle
-        );
-
-
-        Text trendsText = new Text(
-                "\"What are the top trending\n" +
-                "items in my neighborhood\n" +
-                "today?\""
-        );
-
-        trendsText.setFont(
-                Font.font("Arial", 9)
-        );
-
-        trendsText.setFill(
-                Color.web("#594C48")
-        );
-
-
-        trendsCard.getChildren().addAll(
-                trendsTitleHBox,
-                trendsText
-        );
-
-
-        // =========================================================
-        // SPACE BEFORE INFO BOX
-        // =========================================================
 
         Region rightSpace = new Region();
-
-        VBox.setVgrow(
-                rightSpace,
-                Priority.ALWAYS
-        );
-
-
-        // =========================================================
-        // AI INFO BOX
-        // =========================================================
+        VBox.setVgrow(rightSpace, Priority.ALWAYS);
 
         VBox infoBox = new VBox();
-
         infoBox.setPrefHeight(120);
-
-        infoBox.setPadding(
-                new Insets(10)
-        );
-
+        infoBox.setPadding(new Insets(10));
         infoBox.setSpacing(6);
-
         infoBox.setStyle(
                 "-fx-background-color: #FFF7F3;" +
                 "-fx-border-color: #F0D5C8;" +
@@ -1576,77 +343,28 @@ public class SmartAssistantUI extends Application {
                 "-fx-background-radius: 8;"
         );
 
+        HBox infoTitleHBox = new HBox(7);
+        infoTitleHBox.setAlignment(Pos.TOP_LEFT);
 
-        HBox infoTitleHBox = new HBox();
+        Text infoIcon = new Text("ⓘ");
+        infoIcon.setFont(Font.font("Arial", 15));
+        infoIcon.setFill(Color.web("#A94005"));
 
-        infoTitleHBox.setSpacing(7);
+        Text infoTitle = new Text("The BuyNeX Smart\nAssistant");
+        infoTitle.setFont(Font.font("Arial", 10));
+        infoTitle.setFill(Color.web("#594C48"));
 
-        infoTitleHBox.setAlignment(
-                Pos.TOP_LEFT
-        );
-
-
-        Text infoIcon = new Text(
-                "ⓘ"
-        );
-
-        infoIcon.setFont(
-                Font.font("Arial", 15)
-        );
-
-        infoIcon.setFill(
-                Color.web("#A94005")
-        );
-
-
-        Text infoTitle = new Text(
-                "The BuyNeX Smart\n" +
-                "Assistant"
-        );
-
-        infoTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.NORMAL,
-                        10
-                )
-        );
-
-        infoTitle.setFill(
-                Color.web("#594C48")
-        );
-
-
-        infoTitleHBox.getChildren().addAll(
-                infoIcon,
-                infoTitle
-        );
-
+        infoTitleHBox.getChildren().addAll(infoIcon, infoTitle);
 
         Text infoText = new Text(
                 "uses real-time local data to\n" +
                 "provide the most accurate\n" +
                 "recommendations."
         );
+        infoText.setFont(Font.font("Arial", 9));
+        infoText.setFill(Color.web("#594C48"));
 
-        infoText.setFont(
-                Font.font("Arial", 9)
-        );
-
-        infoText.setFill(
-                Color.web("#594C48")
-        );
-
-
-        infoBox.getChildren().addAll(
-                infoTitleHBox,
-                infoText
-        );
-
-
-        // =========================================================
-        // ADD RIGHT SIDE COMPONENTS
-        // =========================================================
+        infoBox.getChildren().addAll(infoTitleHBox, infoText);
 
         rightVBox.getChildren().addAll(
                 capabilitiesTitle,
@@ -1658,33 +376,416 @@ public class SmartAssistantUI extends Application {
                 infoBox
         );
 
-
         // =========================================================
-        // ADD 3 VBOX INTO ROOT
+        // ROOT
         // =========================================================
-
         root.getChildren().addAll(
-                leftVBox,
                 centerVBox,
                 rightVBox
         );
 
+        SmartAssistantUi = new Scene(root, 1250, 760);
 
-        // =========================================================
-        // SCENE
-        // =========================================================
-
-        Scene scene = new Scene(root);
-
-        stage.setTitle(
-                "BuyNeX - Smart Assistant"
-        );
-
-        stage.setScene(scene);
-
-        stage.setMaximized(true);
-
-        stage.show();
+        return SmartAssistantUi;
     }
 
+    // =============================================================
+    // SEND MESSAGE
+    // =============================================================
+    private void sendMessage() {
+
+        String userText = inputField.getText();
+
+        if (userText == null || userText.trim().isEmpty()) {
+            return;
+        }
+
+        userText = userText.trim();
+
+        // Add user's typed message to the live feed.
+        addUserMessage(userText);
+
+        // Clear input after sending.
+        inputField.clear();
+
+        /*
+         * ==========================================================
+         * FUTURE GROQ / API INTEGRATION
+         * ==========================================================
+         *
+         * Later, API response yaha se milega:
+         *
+         * String apiResponse = callGroqAPI(userText);
+         * addAiMessage(apiResponse);
+         *
+         * Abhi testing ke liye echo response show ho raha hai.
+         */
+        String testResponse =
+                "I found some products related to your request:\n\"" +
+                userText + "\"";
+
+        addAiMessage(testResponse);
+
+        // =========================================================
+        // TEST PRODUCT RESULTS
+        // =========================================================
+        // Later these products can come directly from your API/Groq
+        // response. For now, they are sample dynamic result cards.
+        addProductResult(
+                "Artisan Sourdough",
+                "Freshly baked • 500g",
+                "$5.99",
+                "/assets/images/img1.png"
+        );
+
+        addProductResult(
+                "Organic Avocado",
+                "Fresh produce • 4 pack",
+                "$6.99",
+                "/assets/images/avocado.png"
+        );
+
+        addProductResult(
+                "Wireless Headphones",
+                "Bluetooth • Local store",
+                "$29.99",
+                "/assets/images/headphone.png"
+        );
+    }
+
+    // =============================================================
+    // ADD USER MESSAGE TO FEED
+    // =============================================================
+    private void addUserMessage(String message) {
+
+        HBox userMessageHBox = new HBox();
+        userMessageHBox.setAlignment(Pos.TOP_RIGHT);
+        userMessageHBox.setMaxWidth(Double.MAX_VALUE);
+
+        Text userMessage = new Text(message);
+        userMessage.setFont(Font.font("Arial", 11));
+        userMessage.setFill(Color.WHITE);
+        userMessage.setWrappingWidth(330);
+
+        VBox userMessageBox = new VBox();
+        userMessageBox.setPadding(new Insets(9, 11, 9, 11));
+        userMessageBox.setMaxWidth(360);
+        userMessageBox.setStyle(
+                "-fx-background-color: #A94005;" +
+                "-fx-background-radius: 9;"
+        );
+        userMessageBox.getChildren().add(userMessage);
+
+        userMessageHBox.getChildren().add(userMessageBox);
+
+        chatVBox.getChildren().add(userMessageHBox);
+        scrollToBottom();
+    }
+
+    // =============================================================
+    // ADD AI MESSAGE TO FEED
+    // =============================================================
+    private void addAiMessage(String message) {
+
+        HBox aiMessageHBox = new HBox();
+        aiMessageHBox.setAlignment(Pos.TOP_LEFT);
+        aiMessageHBox.setSpacing(9);
+
+        VBox smallAiCircle = new VBox();
+        smallAiCircle.setPrefSize(23, 23);
+        smallAiCircle.setMinSize(23, 23);
+        smallAiCircle.setMaxSize(23, 23);
+        smallAiCircle.setAlignment(Pos.CENTER);
+        smallAiCircle.setStyle(
+                "-fx-background-color: #FF7109;" +
+                "-fx-background-radius: 20;"
+        );
+
+        Text smallAiIcon = new Text("♙");
+        smallAiIcon.setFont(Font.font("Arial", 12));
+        smallAiCircle.getChildren().add(smallAiIcon);
+
+        Text aiMessage = new Text(message);
+        aiMessage.setFont(Font.font("Arial", 11));
+        aiMessage.setFill(Color.web("#3E3836"));
+        aiMessage.setWrappingWidth(390);
+
+        VBox aiMessageBox = new VBox();
+        aiMessageBox.setPadding(new Insets(10, 11, 10, 11));
+        aiMessageBox.setMaxWidth(410);
+        aiMessageBox.setStyle(
+                "-fx-background-color: #F0EDF2;" +
+                "-fx-background-radius: 8;" +
+                "-fx-border-color: #E2DDE4;" +
+                "-fx-border-radius: 8;"
+        );
+        aiMessageBox.getChildren().add(aiMessage);
+
+        aiMessageHBox.getChildren().addAll(
+                smallAiCircle,
+                aiMessageBox
+        );
+
+        chatVBox.getChildren().add(aiMessageHBox);
+        scrollToBottom();
+    }
+
+    // =============================================================
+    // ADD PRODUCT RESULT CARD TO CHAT
+    // =============================================================
+    private void addProductResult(
+            String productName,
+            String productDescription,
+            String price,
+            String imagePath) {
+
+        HBox aiRow = new HBox();
+        aiRow.setAlignment(Pos.TOP_LEFT);
+        aiRow.setSpacing(9);
+        aiRow.setMaxWidth(Double.MAX_VALUE);
+
+        // AI icon
+        VBox smallAiCircle = new VBox();
+        smallAiCircle.setPrefSize(23, 23);
+        smallAiCircle.setMinSize(23, 23);
+        smallAiCircle.setMaxSize(23, 23);
+        smallAiCircle.setAlignment(Pos.CENTER);
+        smallAiCircle.setStyle(
+                "-fx-background-color: #FF7109;" +
+                "-fx-background-radius: 20;"
+        );
+
+        Text smallAiIcon = new Text("♙");
+        smallAiIcon.setFont(Font.font("Arial", 12));
+        smallAiCircle.getChildren().add(smallAiIcon);
+
+        // =========================================================
+        // PRODUCT CARD
+        // =========================================================
+        VBox productCard = new VBox();
+        productCard.setSpacing(8);
+        productCard.setPadding(new Insets(9));
+        productCard.setMaxWidth(410);
+        productCard.setPrefWidth(390);
+        productCard.setStyle(
+                "-fx-background-color: #F0EDF2;" +
+                "-fx-background-radius: 10;" +
+                "-fx-border-color: #E2DDE4;" +
+                "-fx-border-radius: 10;"
+        );
+
+        HBox productRow = new HBox();
+        productRow.setSpacing(10);
+        productRow.setAlignment(Pos.CENTER_LEFT);
+
+        // =========================================================
+        // PRODUCT IMAGE
+        // =========================================================
+        VBox imageBox = new VBox();
+        imageBox.setPrefSize(82, 76);
+        imageBox.setMinSize(82, 76);
+        imageBox.setMaxSize(82, 76);
+        imageBox.setAlignment(Pos.CENTER);
+        imageBox.setStyle(
+                "-fx-background-color: #FFF8F3;" +
+                "-fx-background-radius: 10;" +
+                "-fx-border-color: #E2DDE4;" +
+                "-fx-border-radius: 8;"
+        );
+
+        try {
+            java.net.URL imageUrl = getClass().getResource(imagePath);
+
+            if (imageUrl != null) {
+                Image image = new Image(
+                        imageUrl.toExternalForm(),
+                        72,
+                        66,
+                        true,
+                        true
+                );
+
+                ImageView imageView = new ImageView(image);
+                imageView.setFitWidth(72);
+                imageView.setFitHeight(66);
+                imageView.setPreserveRatio(true);
+                imageView.setSmooth(true);
+
+                imageBox.getChildren().add(imageView);
+            } else {
+                Text noImage = new Text("No Image");
+                noImage.setFont(Font.font("Arial", 8));
+                noImage.setFill(Color.web("#999999"));
+                imageBox.getChildren().add(noImage);
+            }
+
+        } catch (Exception ex) {
+            Text noImage = new Text("No Image");
+            noImage.setFont(Font.font("Arial", 8));
+            noImage.setFill(Color.web("#999999"));
+            imageBox.getChildren().add(noImage);
+        }
+
+        // =========================================================
+        // PRODUCT DETAILS
+        // =========================================================
+        VBox detailsBox = new VBox();
+        detailsBox.setSpacing(4);
+        detailsBox.setAlignment(Pos.CENTER_LEFT);
+
+        Text name = new Text(productName);
+        name.setFont(
+                Font.font("Arial", FontWeight.BOLD, 12)
+        );
+        name.setFill(Color.web("#302A28"));
+        name.setWrappingWidth(180);
+
+        Text description = new Text(productDescription);
+        description.setFont(Font.font("Arial", 9));
+        description.setFill(Color.web("#625A56"));
+        description.setWrappingWidth(180);
+
+        Text priceText = new Text(price);
+        priceText.setFont(
+                Font.font("Arial", FontWeight.BOLD, 13)
+        );
+        priceText.setFill(Color.web("#A94005"));
+
+        detailsBox.getChildren().addAll(
+                name,
+                description,
+                priceText
+        );
+
+        Region productSpacer = new Region();
+        HBox.setHgrow(productSpacer, Priority.ALWAYS);
+
+        // =========================================================
+        // ADD TO CART BUTTON
+        // =========================================================
+        Button addToCartButton = new Button("Add to Cart");
+        addToCartButton.setPrefWidth(86);
+        addToCartButton.setPrefHeight(31);
+        addToCartButton.setMinWidth(86);
+        addToCartButton.setStyle(
+                "-fx-background-color: #FF7109;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 9px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 8;" +
+                "-fx-cursor: hand;"
+        );
+
+        addToCartButton.setOnMouseEntered(event ->
+                addToCartButton.setStyle(
+                        "-fx-background-color: #D95600;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-family: 'Arial';" +
+                        "-fx-font-size: 9px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-cursor: hand;"
+                )
+        );
+
+        addToCartButton.setOnMouseExited(event -> {
+            if (!addToCartButton.getText().equals("Added ✓")) {
+                addToCartButton.setStyle(
+                        "-fx-background-color: #FF7109;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-family: 'Arial';" +
+                        "-fx-font-size: 9px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-cursor: hand;"
+                );
+            }
+        });
+
+        addToCartButton.setOnAction(event -> {
+            addToCartButton.setText("Added ✓");
+            addToCartButton.setStyle(
+                    "-fx-background-color: #3E8E41;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-font-family: 'Arial';" +
+                    "-fx-font-size: 9px;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-background-radius: 8;"
+            );
+        });
+
+        productRow.getChildren().addAll(
+                imageBox,
+                detailsBox,
+                productSpacer,
+                addToCartButton
+        );
+
+        productCard.getChildren().add(productRow);
+
+        aiRow.getChildren().addAll(
+                smallAiCircle,
+                productCard
+        );
+
+        chatVBox.getChildren().add(aiRow);
+        scrollToBottom();
+    }
+
+    // =============================================================
+    // AUTO SCROLL TO LATEST MESSAGE
+    // =============================================================
+    private void scrollToBottom() {
+
+        if (chatScrollPane == null) {
+            return;
+        }
+
+        javafx.application.Platform.runLater(() ->
+                chatScrollPane.setVvalue(1.0)
+        );
+    }
+
+    // =============================================================
+    // RIGHT CAPABILITY CARD
+    // =============================================================
+    private VBox capabilityCard(
+            String iconText,
+            String titleText,
+            String descriptionText) {
+
+        VBox card = new VBox();
+        card.setPrefHeight(85);
+        card.setMaxWidth(Double.MAX_VALUE);
+        card.setPadding(new Insets(10));
+        card.setSpacing(5);
+        card.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-background-radius: 8;" +
+                "-fx-border-color: #EEE9EF;" +
+                "-fx-border-radius: 8;"
+        );
+
+        HBox titleHBox = new HBox(7);
+        titleHBox.setAlignment(Pos.CENTER_LEFT);
+
+        Text icon = new Text(iconText);
+        icon.setFont(Font.font("Arial", 14));
+        icon.setFill(Color.web("#A94005"));
+
+        Text title = new Text(titleText);
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 11));
+        title.setFill(Color.web("#A94005"));
+
+        titleHBox.getChildren().addAll(icon, title);
+
+        Text description = new Text(descriptionText);
+        description.setFont(Font.font("Arial", 9));
+        description.setFill(Color.web("#594C48"));
+
+        card.getChildren().addAll(titleHBox, description);
+
+        return card;
+    }
 }
