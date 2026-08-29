@@ -1,4 +1,4 @@
-package com.kryox.view;
+package com.kryox.view.Customer;
 
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
@@ -26,8 +26,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class HomePage extends Application {
-        public Stage HomepageStage;
+public class Homepage extends Application {
+        public static Stage HomepageStage;
         private Scene homeScene;
 
         @Override
@@ -86,7 +86,7 @@ public class HomePage extends Application {
                 b1.setTranslateY(165);
                 b1.setMaxSize(50, 20);
 
-                Image i1 = new Image("assects/images/shop.png");
+                Image i1 = new Image("assets/images/shop.png");
                 ImageView iv1 = new ImageView(i1);
 
                 iv1.setFitWidth(35);
@@ -167,12 +167,15 @@ public class HomePage extends Application {
                 });
 
                 // block2
-                Button b2 = new Button("Shopkeeper");
+                Button b2 = new Button("customer");
                 b2.setTranslateX(-330);
                 b2.setTranslateY(165);
                 b2.setMaxSize(50, 20);
-
-                Image i2 = new Image("assects/images/shopper.png");
+                b2.setOnAction(event -> {
+                        CustomerLogin cl = new CustomerLogin();
+                        Homepage.HomepageStage.setScene(cl.getLoginScene());
+                });
+                Image i2 = new Image("assets/images/shopper.png");
                 ImageView iv2 = new ImageView(i2);
 
                 iv2.setFitWidth(35);
@@ -266,7 +269,7 @@ public class HomePage extends Application {
                 b3.setTranslateY(165);
                 b3.setMaxSize(50, 20);
 
-                Image i3 = new Image("assects/images/protection.png");
+                Image i3 = new Image("assets/images/protection.png");
                 ImageView iv3 = new ImageView(i3);
 
                 iv3.setFitWidth(35);
@@ -371,7 +374,7 @@ public class HomePage extends Application {
                 b4.setTranslateY(165);
                 b4.setMaxSize(50, 20);
 
-                Image i4 = new Image("assects/images/man.png");
+                Image i4 = new Image("assets/images/man.png");
                 ImageView iv4 = new ImageView(i4);
 
                 iv4.setFitWidth(35);
@@ -487,7 +490,7 @@ public class HomePage extends Application {
                 hb8.setTranslateX(450);
                 hb8.setTranslateY(190);
 
-                Image im = new Image("assects\\images\\Gemini_Generated_Image_5vc4955vc4955vc4-removebg-preview.png");
+                Image im = new Image("assets\\images\\Gemini_Generated_Image_5vc4955vc4955vc4-removebg-preview.png");
                 ImageView ivi = new ImageView(im);
 
                 ivi.setFitWidth(80);
@@ -513,7 +516,7 @@ public class HomePage extends Application {
                 t5.setTranslateX(1240);
                 t5.setTranslateY(15);
 
-                Image img = new Image("assects\\images\\mark.png");
+                Image img = new Image("assets\\images\\mark.png");
                 ImageView imgv = new ImageView(img);
                 imgv.setFitHeight(30);
                 imgv.setFitWidth(30);
@@ -527,12 +530,12 @@ public class HomePage extends Application {
                 hb1.setEffect(shadowhb4);
 
                 HBox hb = new HBox(t1, t2);
-                hb.setStyle("\"-fx-background-color: transparent;");
+                hb.setStyle("-fx-background-color: transparent;");
                 hb.setTranslateX(580);
                 hb.setTranslateY(80);
 
                 VBox vb = new VBox(hb, t3);
-                vb.setStyle("\"-fx-background-color: transparent;\"");
+                vb.setStyle("-fx-background-color: transparent;");
 
                 t3.setTranslateX(550);
                 t3.setTranslateY(100);
@@ -599,12 +602,13 @@ public class HomePage extends Application {
                                                                 leftBottomGlow,
                                                                 CornerRadii.EMPTY,
                                                                 Insets.EMPTY)));
-                vb1.setStyle("\"-fx-background-color: #eee5df;");
+                vb1.setStyle("-fx-background-color: #eee5df;");
 
                 Scene sc = new Scene(vb1, 1000, 800);
 
                 stage.setTitle("Home page");
                 stage.setScene(sc);
+                stage.setMaximized(true);
                 stage.show();
 
         }
