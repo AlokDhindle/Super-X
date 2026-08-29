@@ -9,12 +9,12 @@ import java.nio.charset.StandardCharsets;
 
 import org.json.JSONObject;
 
-import com.kryox.config.Apikey;
+import com.kryox.config.AdminApikey;
 
 public class ControllerFirebase {
 
     private static final String API_KEY =
-            Apikey.API_KEY;
+            AdminApikey.API_KEY;
 
     private static final String PROJECT_ID =
             "customer-2ab2e";
