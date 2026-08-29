@@ -4,6 +4,8 @@ buynex/src/main/java/com/kryox/config/GeminiConfig.java
 buynex/src/main/java/com/kryox/config/Apikey.java
 buynex/src/main/java/com/kryox/config/APIKEYconfig.java
 buynex/src/main/java/com/kryox/config/Coustomerconfig.java
+buynex/src/main/java/com/kryox/config/AdminApikey.java
+buynex/src/main/java/com/kryox/config/AdminConfig.java
 
 # Firebase / service account secrets
 serviceAccount.json
