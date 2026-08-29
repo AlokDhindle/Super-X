@@ -36,7 +36,7 @@ public class Helppage  {
         BorderPane root = new BorderPane();
 
         root.setStyle(
-        "-fx-background-color: #EEE5DF;"
+        "-fx-background-color: #eee5df;"
         );
 
 
@@ -775,6 +775,7 @@ public class Helppage  {
         root.setCenter(
                 contentBox
         );
+        root.setStyle("-fx-background-color: #eee5df;");
 
 
         // =====================================================

@@ -304,6 +304,7 @@ public class AdminLoginPage {
 
                 vb.setAlignment(Pos.CENTER);
                 vb.setPadding(new Insets(30));
+                vb.setStyle("-fx-background-color: #eee5df;");
 
                 vb.setBackground(
                                 new Background(
