@@ -1,19 +1,17 @@
-
 package com.kryox.view.Customer;
 
 import java.io.File;
-import java.io.InputStream;
 import java.time.LocalDate;
 
 import com.kryox.controller.Customer.Clodnarycontroller;
 import com.kryox.controller.Customer.Userstorecontroller;
-import com.kryox.controller.Customer.controler;
+import com.kryox.model.Customer.User;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -38,6 +36,9 @@ public class Seting {
         this.userId = userId;
     }
         private Scene setingSceene;
+
+        private final Userstorecontroller userController =
+                        new Userstorecontroller();
 
         Scene getSetingscene(Runnable callbacktoDashboard) {
                 // ================= PROFILE IMAGE =================
@@ -99,14 +100,14 @@ public class Seting {
 
                 // ================= USER INFORMATION =================
 
-                Label name = new Label("Saiprasad sable");
+                Label name = new Label("Loading...");
 
                 name.setStyle(
                                 "-fx-font-size: 18px;" +
                                                 "-fx-font-weight: bold;" +
                                                 "-fx-text-fill: #a83f00;");
 
-                Label member = new Label("Premium Member");
+                Label member = new Label("Member");
 
                 member.setStyle(
                                 "-fx-font-size: 11px;" +
@@ -340,6 +341,7 @@ public class Seting {
                 back.setOnAction(even -> {
                         
                         Dashbord ds=new Dashbord(userId);
+                        Homepage.HomepageStage.setScene(ds.getDashbordScene());
                        
                 });
 
@@ -458,11 +460,16 @@ public class Seting {
 
                 helpBtn.setOnAction(event -> {
                         Helppage helppage = new Helppage(userId);
+                        Runnable rn=new Runnable() {
+                                public void run(){
+                                        backToseting();
+                                }
+                        };
 
-                        Homepage.HomepageStage.setScene(helppage.getHelpScene());
+                        Homepage.HomepageStage.setScene(helppage.getHelpScene(rn));
                 });
                 privacyBtn.setOnAction(event -> {
-                        Privacy pc = new Privacy();
+                        Privacy pc = new Privacy(userId);
                         Runnable rn = new Runnable() {
                                 public void run() {
                                         backToseting();
@@ -626,7 +633,7 @@ public class Seting {
                 // NAME
                 // =====================================================
 
-                Label nameLabel = new Label("Alex Rivera");
+                Label nameLabel = new Label("Loading...");
 
                 nameLabel.setStyle(
                                 "-fx-text-fill: #111111;" +
@@ -663,8 +670,7 @@ public class Seting {
                 // EMAIL
                 // =====================================================
 
-                Label emailLabel = new Label(
-                                "alex.rivera@example.com");
+                Label emailLabel = new Label("Loading...");
 
                 emailLabel.setStyle(
                                 "-fx-text-fill: #666666;" +
@@ -710,7 +716,7 @@ public class Seting {
 
                 // ================= FULL NAME =================
 
-                TextField nameField = new TextField("Alex Rivera");
+                TextField nameField = new TextField();
                 nameField.setPrefSize(194, 37);
 
                 VBox nameBox = new VBox(6,
@@ -719,7 +725,7 @@ public class Seting {
 
                 // ================= EMAIL =================
 
-                TextField emailField = new TextField("alex.rivera@example.com");
+                TextField emailField = new TextField();
 
                 emailField.setPrefSize(194, 37);
 
@@ -731,7 +737,7 @@ public class Seting {
 
                 // ================= PHONE =================
 
-                TextField phoneField = new TextField("+1 (555) 123-4567");
+                TextField phoneField = new TextField();
 
                 phoneField.setPrefSize(194, 37);
 
@@ -752,10 +758,82 @@ public class Seting {
 
                 HBox phoneanddob = new HBox(50, phoneBox, dobBox);
 
-                // ================= ADD 4 DATA =================
+                // ================= SAVE BUTTON =================
+
+                Button saveButton = new Button("Save Changes");
+                saveButton.setPrefWidth(150);
+                saveButton.setPrefHeight(38);
+                saveButton.setStyle(
+                                "-fx-background-color: #ff7100;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-font-size: 12px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 8;" +
+                                                "-fx-cursor: hand;");
+
+                saveButton.setOnAction(event -> {
+
+                        String oldEmail = userId == null ? "" : userId.trim();
+                        String updatedName = nameField.getText().trim();
+                        String updatedEmail = emailField.getText().trim();
+                        String updatedMobile = phoneField.getText().trim();
+
+                        if (oldEmail.isEmpty()) {
+                                System.out.println("User email not found.");
+                                return;
+                        }
+
+                        if (updatedName.isEmpty() ||
+                                        updatedEmail.isEmpty() ||
+                                        updatedMobile.isEmpty()) {
+                                System.out.println("Please fill all fields.");
+                                return;
+                        }
+
+                        saveButton.setDisable(true);
+                        saveButton.setText("Saving...");
+
+                        String oldUserEmail = oldEmail;
+
+                        new Thread(() -> {
+
+                                boolean updated = userController.updateUser(
+                                                oldUserEmail,
+                                                updatedName,
+                                                updatedEmail,
+                                                updatedMobile);
+
+                                Platform.runLater(() -> {
+
+                                        saveButton.setDisable(false);
+                                        saveButton.setText("Save Changes");
+
+                                        if (updated) {
+
+                                                userId = updatedEmail;
+                                                nameLabel.setText(updatedName);
+                                                emailLabel.setText(updatedEmail);
+                                                name.setText(updatedName);
+
+                                                System.out.println(
+                                                                "Profile updated successfully.");
+
+                                        } else {
+
+                                                System.out.println(
+                                                                "Profile update failed.");
+                                        }
+                                });
+
+                        }).start();
+                });
+
+                // ================= ADD PERSONAL DATA =================
 
                 personalInfo.getChildren().addAll(
-                                nameAndEmail, phoneanddob);
+                                nameAndEmail,
+                                phoneanddob,
+                                saveButton);
 
                 // ========================================================
                 // ACCOUNT SECURITY
@@ -836,6 +914,20 @@ public class Seting {
                                 spacer,
                                 arrow);
                 accessibilityBtn.setTranslateX(200);
+
+                // =========================================================
+                // LOAD USER DATA FROM FIREBASE
+                // =========================================================
+
+                loadUserData(
+                                name,
+                                nameLabel,
+                                emailLabel,
+                                nameField,
+                                emailField,
+                                phoneField,
+                                member,
+                                saveButton);
 
                 VBox contentBox = new VBox(20, title, subtitle, profileCard, personalInfo, accountSecurity);
                 contentBox.setPrefWidth(1250);
@@ -938,6 +1030,85 @@ public class Seting {
 
                 return setingSceene;
         }
+
+        // =========================================================
+        // LOAD USER DATA
+        // =========================================================
+
+        private void loadUserData(
+                        Label headerName,
+                        Label profileName,
+                        Label profileEmail,
+                        TextField nameField,
+                        TextField emailField,
+                        TextField phoneField,
+                        Label member,
+                        Button saveButton) {
+
+                if (userId == null || userId.trim().isEmpty()) {
+
+                        headerName.setText("User");
+                        profileName.setText("User");
+                        profileEmail.setText("Email not found");
+                        saveButton.setDisable(true);
+                        return;
+                }
+
+                new Thread(() -> {
+
+                        User user = userController.getUser(userId.trim());
+
+                        Platform.runLater(() -> {
+
+                                if (user == null) {
+
+                                        headerName.setText("User not found");
+                                        profileName.setText("User not found");
+                                        profileEmail.setText(userId);
+                                        saveButton.setDisable(true);
+                                        return;
+                                }
+
+                                String userName = user.getName();
+                                String userEmail = user.getEmail();
+                                String userMobile = user.getMobile();
+                                String userRole = user.getRole();
+
+                                if (userName == null || userName.trim().isEmpty()) {
+                                        userName = "User";
+                                }
+
+                                if (userEmail == null || userEmail.trim().isEmpty()) {
+                                        userEmail = userId;
+                                }
+
+                                if (userMobile == null) {
+                                        userMobile = "";
+                                }
+
+                                if (userRole == null || userRole.trim().isEmpty()) {
+                                        userRole = "Member";
+                                }
+
+                                headerName.setText(userName);
+                                profileName.setText(userName);
+                                profileEmail.setText(userEmail);
+                                member.setText(userRole);
+
+                                nameField.setText(userName);
+                                emailField.setText(userEmail);
+                                phoneField.setText(userMobile);
+
+                                saveButton.setDisable(false);
+                        });
+
+                }).start();
+        }
+
+
+        // =========================================================
+        // BACK TO SETTINGS
+        // =========================================================
 
         public void backToseting() {
                 Homepage.HomepageStage.setScene(setingSceene);
