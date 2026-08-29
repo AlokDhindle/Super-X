@@ -1,5 +1,7 @@
 package com.kryox.view.Customer;
 
+import com.kryox.view.Admin.AdminLoginPage;
+
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
@@ -40,7 +42,7 @@ public class Homepage extends Application {
     // =========================================================
 
     private static final String VIDEO_PATH =
-            "C:\\test\\test\\src\\main\\resources\\assets\\vedio\\Videio1.mp4";
+            "C:\\Java_26\\testing\\Super-X\\buynex\\src\\main\\resources\\assets\\vedio\\Videio1.mp4";
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -751,6 +753,10 @@ public class Homepage extends Application {
                 "-fx-background-color: #e6690f;" +
                 "-fx-background-radius: 15;"
         );
+        b3.setOnAction(event->{
+               AdminLoginPage login = new AdminLoginPage();
+               Homepage.HomepageStage.setScene(login.getLoginScene()); 
+        });
 
         Region adminSpacer =
                 new Region();

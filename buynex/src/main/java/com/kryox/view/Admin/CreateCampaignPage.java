@@ -48,10 +48,10 @@ public class CreateCampaignPage {
         Label backButton = new Label("←");
 
         backButton.setAlignment(Pos.CENTER);
-        backButton.setPrefSize(40, 40);
+        backButton.setPrefSize(46, 46);
 
         backButton.setStyle(
-                "-fx-font-size:25px;" +
+                "-fx-font-size:29px;" +
                 "-fx-font-weight:bold;" +
                 "-fx-background-color:#F3E3D3;" +
                 "-fx-text-fill:#A83E00;" +
@@ -66,7 +66,7 @@ public class CreateCampaignPage {
 
         Label heading = new Label("Create Global Campaign");
         heading.setStyle(
-                "-fx-font-size:27px;" +
+                "-fx-font-size:31px;" +
                 "-fx-font-weight:bold;" +
                 "-fx-text-fill:#242124;"
         );
@@ -75,7 +75,7 @@ public class CreateCampaignPage {
                 "Create an offer that will be available across the marketplace."
         );
         subHeading.setStyle(
-                "-fx-font-size:14px;" +
+                "-fx-font-size:18px;" +
                 "-fx-text-fill:#777277;"
         );
 
@@ -90,7 +90,8 @@ public class CreateCampaignPage {
                 "-fx-background-color:#FFF0E7;" +
                 "-fx-background-radius:18;" +
                 "-fx-text-fill:#C64A00;" +
-                "-fx-font-weight:bold;"
+                "-fx-font-weight:bold;" +
+                "-fx-font-size:14px;"
         );
 
         topBar.getChildren().addAll(
@@ -125,26 +126,27 @@ public class CreateCampaignPage {
 
         Label campaignDetails = new Label("Campaign Details");
         campaignDetails.setStyle(
-                "-fx-font-size:21px;" +
+                "-fx-font-size:24px;" +
                 "-fx-font-weight:bold;"
         );
 
         Label nameLabel = new Label("Campaign Name *");
-        nameLabel.setStyle("-fx-font-weight:bold;");
+        nameLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         TextField campaignName = new TextField();
         campaignName.setPromptText("Example: Summer Tech Fest");
-        campaignName.setPrefHeight(45);
+        campaignName.setPrefHeight(50);
         campaignName.setStyle(
                 "-fx-background-color:#FAF8FA;" +
                 "-fx-border-color:#D8D1D7;" +
                 "-fx-border-radius:7;" +
                 "-fx-background-radius:7;" +
-                "-fx-padding:0 14;"
+                "-fx-padding:0 14;" +
+                "-fx-font-size:14px;"
         );
 
         Label descriptionLabel = new Label("Description *");
-        descriptionLabel.setStyle("-fx-font-weight:bold;");
+        descriptionLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         TextArea description = new TextArea();
         description.setPromptText("Enter campaign description...");
@@ -154,7 +156,8 @@ public class CreateCampaignPage {
                 "-fx-background-color:#FAF8FA;" +
                 "-fx-border-color:#D8D1D7;" +
                 "-fx-border-radius:7;" +
-                "-fx-background-radius:7;"
+                "-fx-background-radius:7;" +
+                "-fx-font-size:14px;"
         );
 
         // =====================================================
@@ -167,7 +170,7 @@ public class CreateCampaignPage {
         HBox.setHgrow(discountTypeBox, Priority.ALWAYS);
 
         Label discountTypeLabel = new Label("Discount Type *");
-        discountTypeLabel.setStyle("-fx-font-weight:bold;");
+        discountTypeLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         ComboBox<String> discountType = new ComboBox<>();
         discountType.getItems().addAll(
@@ -176,8 +179,9 @@ public class CreateCampaignPage {
                 "Free Delivery"
         );
         discountType.setPromptText("Select discount type");
-        discountType.setPrefHeight(45);
+        discountType.setPrefHeight(50);
         discountType.setMaxWidth(Double.MAX_VALUE);
+        discountType.setStyle("-fx-font-size:14px;");
 
         discountTypeBox.getChildren().addAll(
                 discountTypeLabel,
@@ -188,11 +192,12 @@ public class CreateCampaignPage {
         HBox.setHgrow(discountValueBox, Priority.ALWAYS);
 
         Label discountValueLabel = new Label("Discount Value *");
-        discountValueLabel.setStyle("-fx-font-weight:bold;");
+        discountValueLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         TextField discountValue = new TextField();
         discountValue.setPromptText("Example: 15");
-        discountValue.setPrefHeight(45);
+        discountValue.setPrefHeight(50);
+        discountValue.setStyle("-fx-font-size:14px;");
 
         discountValueBox.getChildren().addAll(
                 discountValueLabel,
@@ -214,7 +219,7 @@ public class CreateCampaignPage {
         HBox.setHgrow(categoryBox, Priority.ALWAYS);
 
         Label categoryLabel = new Label("Category *");
-        categoryLabel.setStyle("-fx-font-weight:bold;");
+        categoryLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         ComboBox<String> category = new ComboBox<>();
         category.getItems().addAll(
@@ -227,8 +232,9 @@ public class CreateCampaignPage {
                 "Pet Supplies"
         );
         category.setPromptText("Select category");
-        category.setPrefHeight(45);
+        category.setPrefHeight(50);
         category.setMaxWidth(Double.MAX_VALUE);
+        category.setStyle("-fx-font-size:14px;");
 
         categoryBox.getChildren().addAll(categoryLabel, category);
 
@@ -236,11 +242,12 @@ public class CreateCampaignPage {
         HBox.setHgrow(minimumOrderBox, Priority.ALWAYS);
 
         Label minimumOrderLabel = new Label("Minimum Order Amount");
-        minimumOrderLabel.setStyle("-fx-font-weight:bold;");
+        minimumOrderLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         TextField minimumOrder = new TextField();
         minimumOrder.setPromptText("₹ Example: 500");
-        minimumOrder.setPrefHeight(45);
+        minimumOrder.setPrefHeight(50);
+        minimumOrder.setStyle("-fx-font-size:14px;");
 
         minimumOrderBox.getChildren().addAll(
                 minimumOrderLabel,
@@ -262,11 +269,12 @@ public class CreateCampaignPage {
         HBox.setHgrow(startDateBox, Priority.ALWAYS);
 
         Label startDateLabel = new Label("Start Date *");
-        startDateLabel.setStyle("-fx-font-weight:bold;");
+        startDateLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         DatePicker startDate = new DatePicker();
-        startDate.setPrefHeight(45);
+        startDate.setPrefHeight(50);
         startDate.setMaxWidth(Double.MAX_VALUE);
+        startDate.setStyle("-fx-font-size:14px;");
 
         startDateBox.getChildren().addAll(
                 startDateLabel,
@@ -277,11 +285,12 @@ public class CreateCampaignPage {
         HBox.setHgrow(endDateBox, Priority.ALWAYS);
 
         Label endDateLabel = new Label("End Date *");
-        endDateLabel.setStyle("-fx-font-weight:bold;");
+        endDateLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         DatePicker endDate = new DatePicker();
-        endDate.setPrefHeight(45);
+        endDate.setPrefHeight(50);
         endDate.setMaxWidth(Double.MAX_VALUE);
+        endDate.setStyle("-fx-font-size:14px;");
 
         endDateBox.getChildren().addAll(
                 endDateLabel,
@@ -295,7 +304,7 @@ public class CreateCampaignPage {
         // =====================================================
 
         Label applyLabel = new Label("Apply Campaign To *");
-        applyLabel.setStyle("-fx-font-weight:bold;");
+        applyLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         ToggleGroup shopGroup = new ToggleGroup();
 
@@ -304,11 +313,13 @@ public class CreateCampaignPage {
         );
         allShops.setToggleGroup(shopGroup);
         allShops.setSelected(true);
+        allShops.setStyle("-fx-font-size:14px;");
 
         RadioButton selectedShops = new RadioButton(
                 "Only selected shops"
         );
         selectedShops.setToggleGroup(shopGroup);
+        selectedShops.setStyle("-fx-font-size:14px;");
 
         VBox applyBox = new VBox(13);
         applyBox.setPadding(new Insets(16));
@@ -325,20 +336,21 @@ public class CreateCampaignPage {
         // =====================================================
 
         Label imageLabel = new Label("Campaign Banner");
-        imageLabel.setStyle("-fx-font-weight:bold;");
+        imageLabel.setStyle("-fx-font-weight:bold;-fx-font-size:14px;");
 
         Label selectedFileLabel = new Label(
                 "PNG or JPG image. Maximum size 5 MB."
         );
-        selectedFileLabel.setStyle("-fx-text-fill:#777277;");
+        selectedFileLabel.setStyle("-fx-text-fill:#777277;-fx-font-size:13px;");
 
         Button chooseImageButton = new Button("Choose Image");
-        chooseImageButton.setPrefHeight(40);
+        chooseImageButton.setPrefHeight(46);
         chooseImageButton.setStyle(
                 "-fx-background-color:#FFF0E7;" +
                 "-fx-text-fill:#C64A00;" +
                 "-fx-font-weight:bold;" +
                 "-fx-background-radius:7;" +
+                "-fx-font-size:14px;" +
                 "-fx-cursor:hand;"
         );
 
@@ -394,7 +406,7 @@ public class CreateCampaignPage {
         HBox.setHgrow(buttonSpace, Priority.ALWAYS);
 
         Button cancelButton = new Button("Cancel");
-        cancelButton.setPrefSize(120, 45);
+        cancelButton.setPrefSize(130, 50);
         cancelButton.setStyle(
                 "-fx-background-color:white;" +
                 "-fx-border-color:#C84B00;" +
@@ -402,16 +414,18 @@ public class CreateCampaignPage {
                 "-fx-background-radius:7;" +
                 "-fx-text-fill:#C84B00;" +
                 "-fx-font-weight:bold;" +
+                "-fx-font-size:14px;" +
                 "-fx-cursor:hand;"
         );
 
         Button createButton = new Button("Create Campaign");
-        createButton.setPrefSize(170, 45);
+        createButton.setPrefSize(185, 50);
         createButton.setStyle(
                 "-fx-background-color:#C84B00;" +
                 "-fx-background-radius:7;" +
                 "-fx-text-fill:white;" +
                 "-fx-font-weight:bold;" +
+                "-fx-font-size:14px;" +
                 "-fx-cursor:hand;"
         );
 
@@ -444,7 +458,7 @@ public class CreateCampaignPage {
         // =====================================================
 
         VBox previewCard = new VBox(16);
-        previewCard.setPrefWidth(290);
+        previewCard.setPrefWidth(320);
         previewCard.setPadding(new Insets(25));
         previewCard.setStyle(
                 "-fx-background-color:white;" +
@@ -456,7 +470,7 @@ public class CreateCampaignPage {
 
         Label previewTitle = new Label("Campaign Preview");
         previewTitle.setStyle(
-                "-fx-font-size:20px;" +
+                "-fx-font-size:23px;" +
                 "-fx-font-weight:bold;"
         );
 
@@ -466,13 +480,14 @@ public class CreateCampaignPage {
                 "-fx-background-color:#FFF0E7;" +
                 "-fx-background-radius:15;" +
                 "-fx-text-fill:#C84B00;" +
-                "-fx-font-weight:bold;"
+                "-fx-font-weight:bold;" +
+                "-fx-font-size:13px;"
         );
 
         Label previewName = new Label("Campaign name");
         previewName.setWrapText(true);
         previewName.setStyle(
-                "-fx-font-size:18px;" +
+                "-fx-font-size:21px;" +
                 "-fx-font-weight:bold;"
         );
 
@@ -480,7 +495,7 @@ public class CreateCampaignPage {
                 "Campaign description will appear here."
         );
         previewDescription.setWrapText(true);
-        previewDescription.setStyle("-fx-text-fill:#777277;");
+        previewDescription.setStyle("-fx-text-fill:#777277;-fx-font-size:14px;");
 
         Label previewDiscount = new Label("Discount: --");
         previewDiscount.setStyle(
@@ -490,7 +505,9 @@ public class CreateCampaignPage {
         );
 
         Label previewCategory = new Label("Category: --");
+        previewCategory.setStyle("-fx-font-size:14px;");
         Label previewDates = new Label("Campaign dates: --");
+        previewDates.setStyle("-fx-font-size:14px;");
         previewDates.setWrapText(true);
 
         previewCard.getChildren().addAll(

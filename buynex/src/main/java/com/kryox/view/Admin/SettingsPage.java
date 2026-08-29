@@ -36,11 +36,11 @@ public class SettingsPage {
         left.setStyle("-fx-background-color:#F3E3D3;");
 
         Text logo = new Text("Admin Panel");
-        logo.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+        logo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         logo.setFill(Color.web("#A83E00"));
 
         Text subLogo = new Text("Marketplace Controller");
-        subLogo.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        subLogo.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         subLogo.setFill(Color.web("#999999"));
 
         VBox logoBox = new VBox(4);
@@ -51,23 +51,23 @@ public class SettingsPage {
         Image dashboardImage = new Image(getClass().getResource("/assets/images/admin/dashboard.png").toExternalForm());
         ImageView dashboardIcon = new ImageView(dashboardImage);
         Text dashboardText = new Text("Dashboard");
-        dashboardIcon.setFitWidth(18);
-        dashboardIcon.setFitHeight(18);
+        dashboardIcon.setFitWidth(21);
+        dashboardIcon.setFitHeight(21);
         dashboardIcon.setPreserveRatio(true);
-        dashboardText.setFont(Font.font("Arial", 12));
+        dashboardText.setFont(Font.font("Arial", 14));
         HBox dashboard = new HBox(10);
         dashboard.setAlignment(Pos.CENTER_LEFT);
         dashboard.setPadding(new Insets(10, 12, 10, 12));
         dashboard.setStyle("-fx-background-color:transparent;");
         dashboard.getChildren().addAll(dashboardIcon, dashboardText);
 
-        Image usersImage = new Image(getClass().getResource("/assets/images/admin/admin logo.png").toExternalForm());
+        Image usersImage = new Image("assets\\images\\admin\\admin_logo.png");
         ImageView usersIcon = new ImageView(usersImage);
         Text usersText = new Text("Users");
-        usersIcon.setFitWidth(18);
-        usersIcon.setFitHeight(18);
+        usersIcon.setFitWidth(21);
+        usersIcon.setFitHeight(21);
         usersIcon.setPreserveRatio(true);
-        usersText.setFont(Font.font("Arial", 12));
+        usersText.setFont(Font.font("Arial", 14));
         HBox users = new HBox(10);
         users.setAlignment(Pos.CENTER_LEFT);
         users.setPadding(new Insets(10, 12, 10, 12));
@@ -77,10 +77,10 @@ public class SettingsPage {
         Image shopsImage = new Image(getClass().getResource("/assets/images/admin/shop.png").toExternalForm());
         ImageView shopsIcon = new ImageView(shopsImage);
         Text shopsText = new Text("Shops");
-        shopsIcon.setFitWidth(18);
-        shopsIcon.setFitHeight(18);
+        shopsIcon.setFitWidth(21);
+        shopsIcon.setFitHeight(21);
         shopsIcon.setPreserveRatio(true);
-        shopsText.setFont(Font.font("Arial", 12));
+        shopsText.setFont(Font.font("Arial", 14));
         HBox shops = new HBox(10);
         shops.setAlignment(Pos.CENTER_LEFT);
         shops.setPadding(new Insets(10, 12, 10, 12));
@@ -90,10 +90,10 @@ public class SettingsPage {
         Image offersImage = new Image(getClass().getResource("/assets/images/admin/tag.png").toExternalForm());
         ImageView offersIcon = new ImageView(offersImage);
         Text offersText = new Text("Offers");
-        offersIcon.setFitWidth(18);
-        offersIcon.setFitHeight(18);
+        offersIcon.setFitWidth(21);
+        offersIcon.setFitHeight(21);
         offersIcon.setPreserveRatio(true);
-        offersText.setFont(Font.font("Arial", 12));
+        offersText.setFont(Font.font("Arial", 14));
         HBox offers = new HBox(10);
         offers.setAlignment(Pos.CENTER_LEFT);
         offers.setPadding(new Insets(10, 12, 10, 12));
@@ -103,10 +103,10 @@ public class SettingsPage {
         Image analyticsImage = new Image(getClass().getResource("/assets/images/admin/stats.png").toExternalForm());
         ImageView analyticsIcon = new ImageView(analyticsImage);
         Text analyticsText = new Text("Analytics");
-        analyticsIcon.setFitWidth(18);
-        analyticsIcon.setFitHeight(18);
+        analyticsIcon.setFitWidth(21);
+        analyticsIcon.setFitHeight(21);
         analyticsIcon.setPreserveRatio(true);
-        analyticsText.setFont(Font.font("Arial", 12));
+        analyticsText.setFont(Font.font("Arial", 14));
         HBox analytics = new HBox(10);
         analytics.setAlignment(Pos.CENTER_LEFT);
         analytics.setPadding(new Insets(10, 12, 10, 12));
@@ -116,10 +116,10 @@ public class SettingsPage {
         Image settingsImage = new Image(getClass().getResource("/assets/images/admin/setting.png").toExternalForm());
         ImageView settingsIcon = new ImageView(settingsImage);
         Text settingsText = new Text("Settings");
-        settingsIcon.setFitWidth(18);
-        settingsIcon.setFitHeight(18);
+        settingsIcon.setFitWidth(21);
+        settingsIcon.setFitHeight(21);
         settingsIcon.setPreserveRatio(true);
-        settingsText.setFont(Font.font("Arial", 12));
+        settingsText.setFont(Font.font("Arial", 14));
         HBox settings = new HBox(10);
         settings.setAlignment(Pos.CENTER_LEFT);
         settings.setPadding(new Insets(10, 12, 10, 12));
@@ -132,10 +132,10 @@ public class SettingsPage {
         Image supportImage = new Image(getClass().getResource("/assets/images/admin/service-call.png").toExternalForm());
         ImageView supportIcon = new ImageView(supportImage);
         Text supportText = new Text("Support");
-        supportIcon.setFitWidth(18);
-        supportIcon.setFitHeight(18);
+        supportIcon.setFitWidth(21);
+        supportIcon.setFitHeight(21);
         supportIcon.setPreserveRatio(true);
-        supportText.setFont(Font.font("Arial", 12));
+        supportText.setFont(Font.font("Arial", 14));
         HBox support = new HBox(10);
         support.setAlignment(Pos.CENTER_LEFT);
         support.setPadding(new Insets(10, 12, 10, 12));
@@ -146,7 +146,7 @@ public class SettingsPage {
         dashboard.setOnMouseEntered(e -> {
             dashboard.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
             dashboardText.setFill(Color.WHITE);
-            dashboardText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            dashboardText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
             ScaleTransition dashboardAnimation = new ScaleTransition(
                     Duration.millis(120), dashboard);
@@ -158,7 +158,7 @@ public class SettingsPage {
         dashboard.setOnMouseExited(e -> {
             dashboard.setStyle("-fx-background-color:transparent;");
             dashboardText.setFill(Color.web("#333333"));
-            dashboardText.setFont(Font.font("Arial", 12));
+            dashboardText.setFont(Font.font("Arial", 14));
 
             ScaleTransition dashboardAnimation = new ScaleTransition(
                     Duration.millis(120), dashboard);
@@ -170,7 +170,7 @@ public class SettingsPage {
         users.setOnMouseEntered(e -> {
             users.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
             usersText.setFill(Color.WHITE);
-            usersText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            usersText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
             ScaleTransition usersAnimation = new ScaleTransition(
                     Duration.millis(120), users);
@@ -182,7 +182,7 @@ public class SettingsPage {
         users.setOnMouseExited(e -> {
             users.setStyle("-fx-background-color:transparent;");
             usersText.setFill(Color.web("#333333"));
-            usersText.setFont(Font.font("Arial", 12));
+            usersText.setFont(Font.font("Arial", 14));
 
             ScaleTransition usersAnimation = new ScaleTransition(
                     Duration.millis(120), users);
@@ -194,7 +194,7 @@ public class SettingsPage {
         shops.setOnMouseEntered(e -> {
             shops.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
             shopsText.setFill(Color.WHITE);
-            shopsText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            shopsText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
             ScaleTransition shopsAnimation = new ScaleTransition(
                     Duration.millis(120), shops);
@@ -206,7 +206,7 @@ public class SettingsPage {
         shops.setOnMouseExited(e -> {
             shops.setStyle("-fx-background-color:transparent;");
             shopsText.setFill(Color.web("#333333"));
-            shopsText.setFont(Font.font("Arial", 12));
+            shopsText.setFont(Font.font("Arial", 14));
 
             ScaleTransition shopsAnimation = new ScaleTransition(
                     Duration.millis(120), shops);
@@ -218,7 +218,7 @@ public class SettingsPage {
         offers.setOnMouseEntered(e -> {
             offers.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
             offersText.setFill(Color.WHITE);
-            offersText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            offersText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
             ScaleTransition offersAnimation = new ScaleTransition(
                     Duration.millis(120), offers);
@@ -230,7 +230,7 @@ public class SettingsPage {
         offers.setOnMouseExited(e -> {
             offers.setStyle("-fx-background-color:transparent;");
             offersText.setFill(Color.web("#333333"));
-            offersText.setFont(Font.font("Arial", 12));
+            offersText.setFont(Font.font("Arial", 14));
 
             ScaleTransition offersAnimation = new ScaleTransition(
                     Duration.millis(120), offers);
@@ -242,7 +242,7 @@ public class SettingsPage {
         analytics.setOnMouseEntered(e -> {
             analytics.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
             analyticsText.setFill(Color.WHITE);
-            analyticsText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            analyticsText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
             ScaleTransition analyticsAnimation = new ScaleTransition(
                     Duration.millis(120), analytics);
@@ -254,7 +254,7 @@ public class SettingsPage {
         analytics.setOnMouseExited(e -> {
             analytics.setStyle("-fx-background-color:transparent;");
             analyticsText.setFill(Color.web("#333333"));
-            analyticsText.setFont(Font.font("Arial", 12));
+            analyticsText.setFont(Font.font("Arial", 14));
 
             ScaleTransition analyticsAnimation = new ScaleTransition(
                     Duration.millis(120), analytics);
@@ -266,7 +266,7 @@ public class SettingsPage {
         settings.setOnMouseEntered(e -> {
             settings.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
             settingsText.setFill(Color.WHITE);
-            settingsText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            settingsText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
             ScaleTransition settingsAnimation = new ScaleTransition(
                     Duration.millis(120), settings);
@@ -278,7 +278,7 @@ public class SettingsPage {
         settings.setOnMouseExited(e -> {
             settings.setStyle("-fx-background-color:#FF6500; -fx-background-radius:10;");
             settingsText.setFill(Color.web("#333333"));
-            settingsText.setFont(Font.font("Arial", 12));
+            settingsText.setFont(Font.font("Arial", 14));
 
             ScaleTransition settingsAnimation = new ScaleTransition(
                     Duration.millis(120), settings);
@@ -290,7 +290,7 @@ public class SettingsPage {
         support.setOnMouseEntered(e -> {
             support.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
             supportText.setFill(Color.WHITE);
-            supportText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+            supportText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
             ScaleTransition supportAnimation = new ScaleTransition(
                     Duration.millis(120), support);
@@ -302,7 +302,7 @@ public class SettingsPage {
         support.setOnMouseExited(e -> {
             support.setStyle("-fx-background-color:transparent;");
             supportText.setFill(Color.web("#333333"));
-            supportText.setFont(Font.font("Arial", 12));
+            supportText.setFont(Font.font("Arial", 14));
 
             ScaleTransition supportAnimation = new ScaleTransition(
                     Duration.millis(120), support);
@@ -345,7 +345,7 @@ public class SettingsPage {
         VBox.setVgrow(leftGrow, Priority.ALWAYS);
 
         Text profile = new Text("Alex Rivera\nSuper Admin");
-        profile.setFont(Font.font("Arial", 11));
+        profile.setFont(Font.font("Arial", 13));
 
         Separator leftSeparator = new Separator();
         left.getChildren().addAll(logoBox, menu, leftSeparator, bottomMenu, leftGrow, profile);
@@ -359,25 +359,25 @@ public class SettingsPage {
 
         TextField search = new TextField();
         search.setPromptText("Search orders, shops, or users...");
-        search.setPrefSize(340, 38);
-        search.setStyle("-fx-background-color:#F2F0F5; -fx-background-radius:20;");
+        search.setPrefSize(360, 42);
+        search.setStyle("-fx-background-color:#F2F0F5; -fx-background-radius:20; -fx-font-size:14px;");
 
         Region topGrow = new Region();
         HBox.setHgrow(topGrow, Priority.ALWAYS);
 
         Image messageImage = new Image(getClass().getResource("/assets/images/admin/message.png").toExternalForm());
         ImageView message = new ImageView(messageImage);
-        message.setFitWidth(18);
-        message.setFitHeight(18);
+        message.setFitWidth(22);
+        message.setFitHeight(22);
         message.setPreserveRatio(true);
 
         Image bellImage = new Image(getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
         ImageView bell = new ImageView(bellImage);
-        bell.setFitWidth(18);
-        bell.setFitHeight(18);
+        bell.setFitWidth(22);
+        bell.setFitHeight(22);
         bell.setPreserveRatio(true);
         Text admin = new Text("Admin Portal");
-        admin.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+        admin.setFont(Font.font("Arial", FontWeight.BOLD, 15));
 
         HBox topRight = new HBox(20, message, bell, admin);
         topRight.setAlignment(Pos.CENTER_RIGHT);
@@ -387,11 +387,11 @@ public class SettingsPage {
         content.setPadding(new Insets(5, 5, 25, 5));
 
         Text title = new Text("Platform Configuration");
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 34));
 
         Text subtitle = new Text(
                 "Manage core system parameters, financial structures, and security protocols for the BuyNeX ecosystem.");
-        subtitle.setFont(Font.font("Arial", 14));
+        subtitle.setFont(Font.font("Arial", 16));
         subtitle.setFill(Color.web("#666666"));
 
         VBox heading = new VBox(6, title, subtitle);
@@ -411,20 +411,20 @@ public class SettingsPage {
         Button payoutButton = new Button("⟳  Payout Cycles");
 
         identityButton.setMaxWidth(Double.MAX_VALUE);
-        identityButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
+        identityButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13; -fx-font-size:14px;");
 
         commissionButton.setMaxWidth(Double.MAX_VALUE);
         commissionButton.setStyle("-fx-background-color:#F3F1F7; -fx-text-fill:#9B3100;"
                 + "-fx-font-weight:bold; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
 
         securityButton.setMaxWidth(Double.MAX_VALUE);
-        securityButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
+        securityButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13; -fx-font-size:14px;");
 
         apiButton.setMaxWidth(Double.MAX_VALUE);
-        apiButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
+        apiButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13; -fx-font-size:14px;");
 
         payoutButton.setMaxWidth(Double.MAX_VALUE);
-        payoutButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13;");
+        payoutButton.setStyle("-fx-background-color:transparent; -fx-alignment:CENTER-LEFT; -fx-padding:13; -fx-font-size:14px;");
 
         settingMenu.getChildren().addAll(
                 identityButton,
@@ -442,15 +442,18 @@ public class SettingsPage {
         commissionCard.setStyle("-fx-background-color:white; -fx-background-radius:15;"
                 + "-fx-border-color:#EEE5E0; -fx-border-radius:15;");
         Text commissionTitle = new Text("Category Commission Rates");
-        commissionTitle.setFont(Font.font("Arial", FontWeight.BOLD, 23));
+        commissionTitle.setFont(Font.font("Arial", FontWeight.BOLD, 26));
         Text commissionSub = new Text("Set the default percentage taken per transaction by category.");
+        commissionSub.setFont(Font.font("Arial", 14));
         commissionSub.setFill(Color.web("#666666"));
         Text groceryIcon = new Text("◉");
+        groceryIcon.setFont(Font.font("Arial", 18));
         Text groceryText = new Text("Grocery & Daily Essentials");
+        groceryText.setFont(Font.font("Arial", 14));
         TextField groceryRate = new TextField("2.5  %");
         Region groceryGrow = new Region();
         HBox.setHgrow(groceryGrow, Priority.ALWAYS);
-        groceryRate.setPrefWidth(100);
+        groceryRate.setPrefWidth(110);
         groceryRate.setAlignment(Pos.CENTER_RIGHT);
         groceryRate.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
                 + "-fx-border-radius:8; -fx-background-radius:8;");
@@ -462,11 +465,13 @@ public class SettingsPage {
         groceryBox.getChildren().addAll(groceryIcon, groceryText, groceryGrow, groceryRate);
 
         Text electronicsIcon = new Text("▣");
+        electronicsIcon.setFont(Font.font("Arial", 18));
         Text electronicsText = new Text("Electronics & Gadgets");
+        electronicsText.setFont(Font.font("Arial", 14));
         TextField electronicsRate = new TextField("4.0  %");
         Region electronicsGrow = new Region();
         HBox.setHgrow(electronicsGrow, Priority.ALWAYS);
-        electronicsRate.setPrefWidth(100);
+        electronicsRate.setPrefWidth(110);
         electronicsRate.setAlignment(Pos.CENTER_RIGHT);
         electronicsRate.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
                 + "-fx-border-radius:8; -fx-background-radius:8;");
@@ -479,11 +484,13 @@ public class SettingsPage {
                 electronicsIcon, electronicsText, electronicsGrow, electronicsRate);
 
         Text fashionIcon = new Text("♧");
+        fashionIcon.setFont(Font.font("Arial", 18));
         Text fashionText = new Text("Fashion & Apparel");
+        fashionText.setFont(Font.font("Arial", 14));
         TextField fashionRate = new TextField("5.5  %");
         Region fashionGrow = new Region();
         HBox.setHgrow(fashionGrow, Priority.ALWAYS);
-        fashionRate.setPrefWidth(100);
+        fashionRate.setPrefWidth(110);
         fashionRate.setAlignment(Pos.CENTER_RIGHT);
         fashionRate.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
                 + "-fx-border-radius:8; -fx-background-radius:8;");
@@ -507,22 +514,24 @@ public class SettingsPage {
         financialCard.setStyle("-fx-background-color:white; -fx-background-radius:15;"
                 + "-fx-border-color:#EEE5E0; -fx-border-radius:15;");
         Text financialTitle = new Text("Financial Thresholds");
-        financialTitle.setFont(Font.font("Arial", FontWeight.BOLD, 22));
+        financialTitle.setFont(Font.font("Arial", FontWeight.BOLD, 25));
 
         TextField payout = new TextField("$  50.00");
         TextField fee = new TextField("$  0.30");
-        payout.setPrefHeight(45);
-        fee.setPrefHeight(45);
+        payout.setPrefHeight(50);
+        fee.setPrefHeight(50);
         payout.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
                 + "-fx-border-radius:8; -fx-background-radius:8;");
         fee.setStyle("-fx-background-color:white; -fx-border-color:#E5CDC1;"
                 + "-fx-border-radius:8; -fx-background-radius:8;");
 
         Text payoutLabel = new Text("Minimum Payout Threshold");
+        payoutLabel.setFont(Font.font("Arial", 14));
         VBox payoutBox = new VBox(7);
         payoutBox.getChildren().addAll(payoutLabel, payout);
 
         Text feeLabel = new Text("Standard Platform Fee (Flat)");
+        feeLabel.setFont(Font.font("Arial", 14));
         VBox feeBox = new VBox(7);
         feeBox.getChildren().addAll(feeLabel, fee);
         HBox.setHgrow(payoutBox, Priority.ALWAYS);
@@ -540,27 +549,30 @@ public class SettingsPage {
         systemCard.setStyle("-fx-background-color:white; -fx-background-radius:15;"
                 + "-fx-border-color:#EEE5E0; -fx-border-radius:15;");
         Text systemTitle = new Text("●  System Status");
-        systemTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        systemTitle.setFont(Font.font("Arial", FontWeight.BOLD, 23));
         systemTitle.setFill(Color.web("#9B3100"));
         Text uptimeText = new Text("Server Uptime");
+        uptimeText.setFont(Font.font("Arial", 14));
         Text uptimeValue = new Text("99.99%");
-        uptimeValue.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        uptimeValue.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         Region uptimeGrow = new Region();
         HBox.setHgrow(uptimeGrow, Priority.ALWAYS);
         HBox uptimeBox = new HBox();
         uptimeBox.getChildren().addAll(uptimeText, uptimeGrow, uptimeValue);
 
         Text sessionText = new Text("Active Sessions");
+        sessionText.setFont(Font.font("Arial", 14));
         Text sessionValue = new Text("12");
-        sessionValue.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        sessionValue.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         Region sessionGrow = new Region();
         HBox.setHgrow(sessionGrow, Priority.ALWAYS);
         HBox sessionBox = new HBox();
         sessionBox.getChildren().addAll(sessionText, sessionGrow, sessionValue);
 
         Text latencyText = new Text("API Latency");
+        latencyText.setFont(Font.font("Arial", 14));
         Text latencyValue = new Text("42ms");
-        latencyValue.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        latencyValue.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         Region latencyGrow = new Region();
         HBox.setHgrow(latencyGrow, Priority.ALWAYS);
         HBox latencyBox = new HBox();
@@ -583,14 +595,18 @@ public class SettingsPage {
         auditCard.setStyle("-fx-background-color:white; -fx-background-radius:15;"
                 + "-fx-border-color:#EEE5E0; -fx-border-radius:15;");
         Text auditTitle = new Text("Security Audit");
-        auditTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        auditTitle.setFont(Font.font("Arial", FontWeight.BOLD, 23));
         Text score = new Text("98 / 100");
-        score.setFont(Font.font("Arial", FontWeight.BOLD, 35));
+        score.setFont(Font.font("Arial", FontWeight.BOLD, 40));
         Button report = new Button("View Full Report");
         report.setMaxWidth(Double.MAX_VALUE);
+        report.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
         Text mfaText = new Text("⊙  MFA enforced for Admins");
+        mfaText.setFont(Font.font("Arial", 13));
         Text encryptionText = new Text("⊙  Data encryption active");
+        encryptionText.setFont(Font.font("Arial", 13));
         Text apiPendingText = new Text("ⓘ  1 API key pending");
+        apiPendingText.setFont(Font.font("Arial", 13));
 
         auditCard.getChildren().addAll(
                 auditTitle,
@@ -604,10 +620,11 @@ public class SettingsPage {
         settingBoxes.getChildren().addAll(settingMenu, centerBox, statusBox);
 
         Button discard = new Button("Discard Changes");
+        discard.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
         Button save = new Button("Save Configuration");
-        discard.setPrefSize(180, 45);
-        save.setPrefSize(200, 45);
-        save.setStyle("-fx-background-color:#D94F00; -fx-text-fill:white; -fx-font-weight:bold;");
+        discard.setPrefSize(190, 50);
+        save.setPrefSize(215, 50);
+        save.setStyle("-fx-background-color:#D94F00; -fx-text-fill:white; -fx-font-weight:bold; -fx-font-size:14px;");
         HBox actions = new HBox(15, discard, save);
         actions.setAlignment(Pos.CENTER);
 
