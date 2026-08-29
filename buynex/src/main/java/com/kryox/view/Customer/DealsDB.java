@@ -1,6 +1,6 @@
 package com.kryox.view.Customer;
 
-import javafx.application.Application;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,13 +26,27 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
-import javafx.stage.Stage;
+import java.net.URL;
 
-public class DealsDB extends Application {
 
-    @Override
-    public void start(Stage stage) throws Exception {
+public class DealsDB  {
 
+    private Image loadImage(String path) {
+        URL url = getClass().getResource(path);
+
+        if (url == null) {
+            System.err.println("❌ Resource not found: " + path);
+            return new Image(
+                "data:image/png;base64,"
+                + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+            );
+        }
+
+        return new Image(url.toExternalForm());
+    }
+        private Scene dealsScene;
+        Scene getDealScene(Runnable callbacktodashboar){
+                
         // =====================================================
         // SHADOWS
         // =====================================================
@@ -105,7 +119,7 @@ public class DealsDB extends Application {
         // DASHBOARD
         // =====================================================
 
-        Image di = new Image("assets\\images\\Dashbord\\dashboard.png");
+        Image di = loadImage("/assets/images/Dashbord/dashboard.png");
         ImageView div = new ImageView(di);
         div.setFitHeight(21);
         div.setFitWidth(21);
@@ -125,6 +139,10 @@ public class DealsDB extends Application {
                 "-fx-alignment: CENTER_LEFT;" +
                 "-fx-cursor: hand;"
         );
+        lefButton1.setOnAction(event->{
+                callbacktodashboar.run();
+                
+        });
 
         HBox hbInDashboard = new HBox(17, div, lefButton1);
         hbInDashboard.setPrefWidth(205);
@@ -172,7 +190,7 @@ public class DealsDB extends Application {
         // NEARBY SHOPS
         // =====================================================
 
-        Image di2 = new Image("assets\\images\\store.png");
+        Image di2 = loadImage("/assets/images/store.png");
         ImageView div2 = new ImageView(di2);
         div2.setFitHeight(23);
         div2.setFitWidth(23);
@@ -238,7 +256,7 @@ public class DealsDB extends Application {
         // DEALS
         // =====================================================
 
-        Image di3 = new Image("assets\\images\\Dashbord\\hot-sale.png");
+        Image di3 = loadImage("/assets/images/Dashbord/hot-sale.png");
         ImageView div3 = new ImageView(di3);
         div3.setFitHeight(23);
         div3.setFitWidth(23);
@@ -304,7 +322,7 @@ public class DealsDB extends Application {
         // MY ORDERS
         // =====================================================
 
-        Image di4 = new Image("assets\\images\\Dashbord\\package.png");
+        Image di4 = loadImage("/assets/images/Dashbord/package.png");
         ImageView div4 = new ImageView(di4);
         div4.setFitHeight(23);
         div4.setFitWidth(23);
@@ -324,6 +342,10 @@ public class DealsDB extends Application {
                 "-fx-alignment: CENTER_LEFT;" +
                 "-fx-cursor: hand;"
         );
+        lefButton4.setOnAction(event->{
+                My_orderAllorder my=new My_orderAllorder();
+                Homepage.HomepageStage.setScene(my.getAllorderScene());
+        });
 
         HBox hbInDashboard4 = new HBox(17, div4, lefButton4);
         hbInDashboard4.setPrefWidth(205);
@@ -370,7 +392,7 @@ public class DealsDB extends Application {
         // ANALYTICS
         // =====================================================
 
-        Image di5 = new Image("assets\\images\\Dashbord\\line-chart.png");
+        Image di5 = loadImage("/assets/images/Dashbord/line-chart.png");
         ImageView div5 = new ImageView(di5);
         div5.setFitHeight(23);
         div5.setFitWidth(23);
@@ -390,6 +412,10 @@ public class DealsDB extends Application {
                 "-fx-alignment: CENTER_LEFT;" +
                 "-fx-cursor: hand;"
         );
+        lefButton5.setOnAction(e->{
+                Analytics as=new Analytics();
+                Homepage.HomepageStage.setScene(as.getAnalyticscene(callbacktodashboar));
+        });
 
         HBox hbInDashboard5 = new HBox(17, div5, lefButton5);
         hbInDashboard5.setPrefWidth(205);
@@ -492,7 +518,7 @@ public class DealsDB extends Application {
         // SETTINGS
         // =====================================================
 
-        Image di6 = new Image("assets\\images\\Dashbord\\category.png");
+        Image di6 = loadImage("/assets/images/Dashbord/category.png");
         ImageView div6 = new ImageView(di6);
         div6.setFitHeight(19);
         div6.setFitWidth(19);
@@ -524,7 +550,7 @@ public class DealsDB extends Application {
         // HELP
         // =====================================================
 
-        Image di7 = new Image("assets\\images\\Dashbord\\question.png");
+        Image di7 = loadImage("/assets/images/Dashbord/question.png");
         ImageView div7 = new ImageView(di7);
         div7.setFitHeight(19);
         div7.setFitWidth(19);
@@ -912,9 +938,7 @@ public class DealsDB extends Application {
         "-fx-background-radius:18;"
         );
 
-        Image heroImg = new Image(
-    getClass().getResource("/assets/images/image.png").toExternalForm()
-);
+        Image heroImg = loadImage("/assets/images/image.png");
 
         ImageView heroImageView = new ImageView(heroImg);
         heroImageView.setFitWidth(530);
@@ -1047,9 +1071,7 @@ public class DealsDB extends Application {
 
 
         // Image
-        Image productImg1 = new Image(
-                getClass().getResource("/assets/images/img1.png").toExternalForm()
-        );
+        Image productImg1 = loadImage("/assets/images/img1.png");
 
         ImageView productView1 = new ImageView(productImg1);
         productView1.setFitWidth(264);
@@ -1158,9 +1180,7 @@ public class DealsDB extends Application {
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);"
         );
 
-        Image productImg2 = new Image(
-                getClass().getResource("/assets/images/avocado.png").toExternalForm()
-        );
+        Image productImg2 = loadImage("/assets/images/avocado.png");
 
         ImageView productView2 = new ImageView(productImg2);
         productView2.setFitWidth(264);
@@ -1260,9 +1280,7 @@ public class DealsDB extends Application {
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);"
         );
 
-        Image productImg3 = new Image(
-                getClass().getResource("/assets/images/headphone.png").toExternalForm()
-        );
+        Image productImg3 = loadImage("/assets/images/headphone.png");
 
         ImageView productView3 = new ImageView(productImg3);
         productView3.setFitWidth(264);
@@ -1378,11 +1396,8 @@ public class DealsDB extends Application {
 
         Rightvbox.getChildren().add(mainContent);
 
-        Scene sc = new Scene(mainBox,1500,800);
-        stage.setTitle("BuyNeX Premium Dashboard");
-        stage.setScene(sc);
-        stage.setMinWidth(1250);
-        stage.setMinHeight(720);
-        stage.show();
-    }
+        dealsScene = new Scene(mainBox, 1500, 800);
+                return dealsScene;
+        }
+
 }
