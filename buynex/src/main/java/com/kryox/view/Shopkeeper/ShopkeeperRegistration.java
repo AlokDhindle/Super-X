@@ -1,7 +1,8 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.ShopkeeperLogController;
+import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -500,7 +501,7 @@ public class ShopkeeperRegistration {
 
             ShopkeeperLogController.resetRegistration();
 
-            Main.primaryStage.setScene(
+            Homepage.HomepageStage.setScene(
                     ShopkeeperLogin.loginscene());
         });
 

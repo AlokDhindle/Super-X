@@ -7,9 +7,10 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
-import com.kryox.Main;
+import com.kryox.config.APIKEYconfig;
 import com.kryox.dao.Shopkeeper.ShopkeeperDAO;
 import com.kryox.model.Shopkeeper.ShopkeeperModel;
+import com.kryox.view.Customer.Homepage;
 import com.kryox.view.Shopkeeper.ShopkeeperDetails;
 import com.kryox.view.Shopkeeper.ViewConstants;
 
@@ -19,7 +20,7 @@ import javafx.scene.control.Button;
 
 public class ShopkeeperLogController {
 
-        private static final String FIREBASE_API_KEY = "AIzaSyBRA0kMvTDKzb23ryBvIc3vnQ3CX-J8Dso";
+        private static final String FIREBASE_API_KEY = APIKEYconfig.API_KEY;
         public static JSONObject responseJson;
         static String firebaseIdToken;
         static String firebaseUid;
@@ -553,7 +554,7 @@ public class ShopkeeperLogController {
                 System.out.println(
                                 "Firebase UID: " + firebaseUid);
 
-                Main.primaryStage.setScene(
+                Homepage.HomepageStage.setScene(
                                 ShopkeeperDetails.detailsScene());
         }
 

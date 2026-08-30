@@ -163,14 +163,22 @@ public class ShoppingCartUI {
                 new Button("Dashboard");
 
         dashboard.setOnAction(event->{
-                Dashbord ds=new Dashbord(null);
+                Dashbord ds=new Dashbord(userId);
                 Homepage.HomepageStage.setScene(ds.getDashbordScene());
         });
 
         Button nearby =
                 new Button("Nearby Shops");
                 neaby_shope ns=new neaby_shope(userId);
-                Homepage.HomepageStage.setScene(ns.getNearby_shopes(null));
+                Runnable rn=new Runnable() {
+                        public void run(){
+                                backTodashboard();
+                                
+                                
+
+                        }
+                };
+                Homepage.HomepageStage.setScene(ns.getNearby_shopes(rn));
 
         Button deals =
                 new Button("Deals");
@@ -1971,5 +1979,8 @@ public class ShoppingCartUI {
         Homepage.HomepageStage.setScene(
                 myOrders.getAllorderScene()
         );
+    }
+    public void backTodashboard(){
+        Homepage.HomepageStage.setScene(addcartScene);
     }
 }
