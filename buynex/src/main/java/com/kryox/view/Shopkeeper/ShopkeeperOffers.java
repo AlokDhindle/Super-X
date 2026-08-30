@@ -1,8 +1,9 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.OfferController;
+import com.kryox.controller.Shopkeeper.OfferController;
 import com.kryox.model.Shopkeeper.OfferModel;
+import com.kryox.view.Customer.Homepage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -322,7 +323,7 @@ public class ShopkeeperOffers {
         // ============================================================
 
         createOfferButton.setOnAction(
-                e -> Main.primaryStage.setScene(
+                e -> Homepage.HomepageStage.setScene(
                         ShopkeeperOffersCreateNew
                                 .createNewOfferScene()
                 )
@@ -777,33 +778,33 @@ public class ShopkeeperOffers {
                 );
 
                 dashboardButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperDashboard
                                                                 .dashboardScene()));
                 inventoryButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory
                                                                 .inventoryScene()));
 
                 ordersButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperOrderReady
                                                                 .ordersScene()));
 
 
 
                 analyticsButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperAnalytics
                                                                 .analyticsScene()));
 
                 settingsButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperSettings
                                                                 .settingsScene()));
 
                 supportButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperSupport
                                                                 .supportScene()));
 

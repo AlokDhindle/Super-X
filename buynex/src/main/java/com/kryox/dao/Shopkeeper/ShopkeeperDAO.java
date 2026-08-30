@@ -6,13 +6,13 @@ import java.util.Map;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
-import com.kryox.config.FirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
 import com.kryox.model.Shopkeeper.ShopkeeperModel;
 
 public class ShopkeeperDAO {
 
-    private Firestore db = FirebaseConfig.getFirestore();
+    private Firestore db = Firebaseconfig.gFirestore();
 
     public void addShop(ShopkeeperModel shopkeeperModel) {
         System.out.println("Adding Shopkeeper");

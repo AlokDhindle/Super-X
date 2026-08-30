@@ -2,8 +2,9 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.ShopkeeperLogController;
+import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
 import com.kryox.dao.Shopkeeper.ShopkeeperDAO;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -145,7 +146,7 @@ public class ShopkeeperDeleteAccountConfirmation {
                     shopkeeperDAO.deleteAccount();
                     ShopkeeperLogController.resetRegistration();
                     System.out.println("Account deleted");
-                    Main.primaryStage.setScene(            
+                    Homepage.HomepageStage.setScene(            
                             ShopkeeperLogin.loginscene());  
         });
 
@@ -172,7 +173,7 @@ public class ShopkeeperDeleteAccountConfirmation {
 
             System.out.println("Back button clicked");
 
-            Main.primaryStage.setScene(
+            Homepage.HomepageStage.setScene(
                     ShopkeeperSettings.settingsScene());
 
         });
