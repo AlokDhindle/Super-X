@@ -10,7 +10,7 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
-import com.kryox.config.FirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
 import com.kryox.model.Shopkeeper.OrderModel;
 
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class OrderDAO {
 
     private final Firestore db =
-            FirebaseConfig.getFirestore();
+            Firebaseconfig.gFirestore();
 
 
     // ============================================================

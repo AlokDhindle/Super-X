@@ -1,6 +1,7 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -112,7 +113,7 @@ public class ShopkeeperRegisterSucess {
                                                 "-fx-cursor: hand;");
                 loginButton.setOnAction(e -> {
                         System.out.println("go to login button clicked");
-                        Main.primaryStage.setScene(ShopkeeperLogin.loginscene());
+                        Homepage.HomepageStage.setScene(ShopkeeperLogin.loginscene());
                 });
                 // SUCCESS CARD
 
@@ -162,8 +163,8 @@ public class ShopkeeperRegisterSucess {
 
                 registrationSuccessScene = new Scene(
                                 borderPane,
-                                1280,
-                                650);
+                                1550,
+                                850);
 
                 registrationSuccessScene.setFill(
                                 Color.web("#F8FBF8"));

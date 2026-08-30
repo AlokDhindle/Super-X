@@ -1,8 +1,9 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.ConstantsMethods;
-import com.kryox.control.Shopkeeper.ShopkeeperLogController;
+import com.kryox.controller.Shopkeeper.ConstantsMethods;
+import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -496,7 +497,7 @@ public class ShopkeeperLoginSendOtp {
 
                 backToLogin.setOnAction(e -> {
 
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                         ShopkeeperLogin.loginscene());
 
                 });

@@ -1,9 +1,10 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.OrderController;
+import com.kryox.controller.Shopkeeper.OrderController;
 import com.kryox.model.Shopkeeper.OrderItemModel;
 import com.kryox.model.Shopkeeper.OrderModel;
+import com.kryox.view.Customer.Homepage;
 
 import java.util.ArrayList;
 
@@ -208,35 +209,35 @@ public class ShopkeeperOrderNew {
         // ============================================================
 
         newOrderButton.setOnAction(e ->
-                Main.primaryStage.setScene(
+                Homepage.HomepageStage.setScene(
                         ShopkeeperOrderNew.ordersScene()
                 )
         );
 
 
         preparingButton.setOnAction(e ->
-                Main.primaryStage.setScene(
+                Homepage.HomepageStage.setScene(
                         ShopkeeperOrderPreparing.ordersScene()
                 )
         );
 
 
         readyButton.setOnAction(e ->
-                Main.primaryStage.setScene(
+                Homepage.HomepageStage.setScene(
                         ShopkeeperOrderReady.ordersScene()
                 )
         );
 
 
         deliveryButton.setOnAction(e ->
-                Main.primaryStage.setScene(
+                Homepage.HomepageStage.setScene(
                         ShopkeeperOrderOut.ordersScene()
                 )
         );
 
 
         completedButton.setOnAction(e ->
-                Main.primaryStage.setScene(
+                Homepage.HomepageStage.setScene(
                         ShopkeeperOrderCompleted.ordersScene()
                 )
         );
@@ -1075,29 +1076,29 @@ public class ShopkeeperOrderNew {
                 );
 
                 dashboardButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperDashboard
                                                                 .dashboardScene()));
                 inventoryButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory
                                                                 .inventoryScene()));
 
 
 
                 offersButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperOffers
                                                                 .offersScene()));
 
 
                 settingsButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperSettings
                                                                 .settingsScene()));
 
                 supportButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperSupport
                                                                 .supportScene()));
 

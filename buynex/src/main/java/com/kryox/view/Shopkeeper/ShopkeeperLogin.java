@@ -1,9 +1,10 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.ConstantsMethods;
-import com.kryox.control.Shopkeeper.ShopkeeperLogController;
+import com.kryox.controller.Shopkeeper.ConstantsMethods;
+import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
 import com.kryox.model.Shopkeeper.ShopkeeperModel;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -411,7 +412,7 @@ public class ShopkeeperLogin {
                         System.out.println(
                                         "Forgot Password button clicked");
 
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                         ShopkeeperLoginSendOtp.sendOtpScene());
                 });
 
@@ -659,9 +660,9 @@ public class ShopkeeperLogin {
                                 if (role.equals("Shopkeeper")) {
                                         if (shopkeeperModel.isApproved()) {
                                                 ViewConstants.shopkeeperModel = shopkeeperModel;
-                                                Main.primaryStage.setScene(ShopkeeperDashboard.dashboardScene());
+                                                Homepage.HomepageStage.setScene(ShopkeeperDashboard.dashboardScene());
                                         }else{
-                                                Main.primaryStage.setScene(ShopkeeperRegisterSucess.registeredScene());                                }
+                                                Homepage.HomepageStage.setScene(ShopkeeperRegisterSucess.registeredScene());                                }
                                 } else {
                                         ConstantsMethods.showAlert(
                                                         Alert.AlertType.ERROR,
@@ -765,7 +766,7 @@ public class ShopkeeperLogin {
                         System.out.println(
                                         "Register button clicked");
 
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                         ShopkeeperRegistration.loginscene());
                 });
 

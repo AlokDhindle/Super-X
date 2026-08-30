@@ -5,12 +5,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.OfferController;
-import com.kryox.control.Shopkeeper.OrderController;
-import com.kryox.control.Shopkeeper.ProductController;
+import com.kryox.controller.Shopkeeper.OfferController;
+import com.kryox.controller.Shopkeeper.OrderController;
+import com.kryox.controller.Shopkeeper.ProductController;
 import com.kryox.model.Shopkeeper.OfferModel;
 import com.kryox.model.Shopkeeper.OrderModel;
 import com.kryox.model.Shopkeeper.ProductModel;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -724,7 +725,7 @@ public class ShopkeeperDashboard {
 
         dashboardButton.setOnAction(
                 e ->
-                        Main.primaryStage.setScene(
+                       Homepage.HomepageStage.setScene(
                                 ShopkeeperDashboard.dashboardScene()
                         )
         );
@@ -732,7 +733,7 @@ public class ShopkeeperDashboard {
 
         ordersButton.setOnAction(
                 e ->
-                        Main.primaryStage.setScene(
+                Homepage.HomepageStage.setScene(
                                 ShopkeeperOrderNew.ordersScene()
                         )
         );
@@ -740,7 +741,7 @@ public class ShopkeeperDashboard {
 
         inventoryButton.setOnAction(
                 e ->
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                 ShopkeeperInventory.inventoryScene()
                         )
         );
@@ -748,7 +749,7 @@ public class ShopkeeperDashboard {
 
         offersButton.setOnAction(
                 e ->
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                 ShopkeeperOffers.offersScene()
                         )
         );
@@ -756,7 +757,7 @@ public class ShopkeeperDashboard {
 
         analyticsButton.setOnAction(
                 e ->
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                 ShopkeeperAnalytics.analyticsScene()
                         )
         );
@@ -764,7 +765,7 @@ public class ShopkeeperDashboard {
 
         settingsButton.setOnAction(
                 e ->
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                 ShopkeeperSettings.settingsScene()
                         )
         );
@@ -772,7 +773,7 @@ public class ShopkeeperDashboard {
 
         supportButton.setOnAction(
                 e ->
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                 ShopkeeperSupport.supportScene()
                         )
         );

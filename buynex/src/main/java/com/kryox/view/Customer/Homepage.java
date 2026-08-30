@@ -1,6 +1,8 @@
 package com.kryox.view.Customer;
 
+
 import com.kryox.view.Admin.AdminLoginPage;
+import com.kryox.view.Shopkeeper.ShopkeeperLogin;
 
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
@@ -441,6 +443,10 @@ public class Homepage extends Application {
                 "-fx-background-color: #e6690f;" +
                 "-fx-background-radius: 15;"
         );
+        b1.setOnAction(event->{
+                ShopkeeperLogin sl=new ShopkeeperLogin();
+                Homepage.HomepageStage.setScene(sl.loginscene());
+        });
 
         Region shopSpacer =
                 new Region();
@@ -907,6 +913,10 @@ public class Homepage extends Application {
                 "-fx-background-color: #e6690f;" +
                 "-fx-background-radius: 15;"
         );
+        b4.setOnAction(event->{
+                // Deliverylogin dl=new Deliverylogin();
+                // Homepage.HomepageStage.setScene(dl.getDelivaryScene());
+        });
 
         Region deliverySpacer =
                 new Region();

@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.ProductController;
+import com.kryox.controller.Shopkeeper.ProductController;
 import com.kryox.model.Shopkeeper.ProductModel;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -443,7 +444,7 @@ public class ShopkeeperInventory {
         // ============================================================
 
         addProductButton.setOnAction(
-                event -> Main.primaryStage.setScene(
+                event -> Homepage.HomepageStage.setScene(
                         ShopkeeperInventoryAddProduct
                                 .addProductScene()
                 )
@@ -770,7 +771,7 @@ public class ShopkeeperInventory {
         );
 
         actionButton.setOnAction(
-                event -> Main.primaryStage.setScene(
+                event -> Homepage.HomepageStage.setScene(
                         ShopkeeperProductDetails.productDetailsScene(product)
                 )
         );
@@ -1713,7 +1714,7 @@ public class ShopkeeperInventory {
 
 
         dashboardButton.setOnAction(
-                event -> Main.primaryStage.setScene(
+                event -> Homepage.HomepageStage.setScene(
                         ShopkeeperDashboard
                                 .dashboardScene()
                 )
@@ -1721,7 +1722,7 @@ public class ShopkeeperInventory {
 
 
         ordersButton.setOnAction(
-                event -> Main.primaryStage.setScene(
+                event -> Homepage.HomepageStage.setScene(
                         ShopkeeperOrderReady
                                 .ordersScene()
                 )
@@ -1729,7 +1730,7 @@ public class ShopkeeperInventory {
 
 
         offersButton.setOnAction(
-                event -> Main.primaryStage.setScene(
+                event -> Homepage.HomepageStage.setScene(
                         ShopkeeperOffers
                                 .offersScene()
                 )
@@ -1737,7 +1738,7 @@ public class ShopkeeperInventory {
 
 
         analyticsButton.setOnAction(
-                event -> Main.primaryStage.setScene(
+                event -> Homepage.HomepageStage.setScene(
                         ShopkeeperAnalytics
                                 .analyticsScene()
                 )
@@ -1745,7 +1746,7 @@ public class ShopkeeperInventory {
 
 
         settingsButton.setOnAction(
-                event -> Main.primaryStage.setScene(
+                event -> Homepage.HomepageStage.setScene(
                         ShopkeeperSettings
                                 .settingsScene()
                 )
@@ -1753,7 +1754,7 @@ public class ShopkeeperInventory {
 
 
         supportButton.setOnAction(
-                event -> Main.primaryStage.setScene(
+                event -> Homepage.HomepageStage.setScene(
                         ShopkeeperSupport
                                 .supportScene()
                 )

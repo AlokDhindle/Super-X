@@ -4,8 +4,9 @@ import java.io.File;
 import java.util.UUID;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.ImageUploadController;
-import com.kryox.control.Shopkeeper.ShopkeeperLogController;
+import com.kryox.controller.Shopkeeper.ImageUploadController;
+import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -855,7 +856,7 @@ public class ShopkeeperDetails {
 
                     File selectedFile =
                             fileChooser.showOpenDialog(
-                                    Main.primaryStage);
+                                    Homepage.HomepageStage);
 
                     if (selectedFile != null) {
 
@@ -897,7 +898,7 @@ public class ShopkeeperDetails {
 
                     File selectedFile =
                             fileChooser.showOpenDialog(
-                                    Main.primaryStage);
+                                    Homepage.HomepageStage);
 
                     if (selectedFile != null) {
 
@@ -939,7 +940,7 @@ public class ShopkeeperDetails {
 
                     File selectedFile =
                             fileChooser.showOpenDialog(
-                                    Main.primaryStage);
+                                    Homepage.HomepageStage);
 
                     if (selectedFile != null) {
 
@@ -981,7 +982,7 @@ public class ShopkeeperDetails {
 
                     File selectedFile =
                             fileChooser.showOpenDialog(
-                                    Main.primaryStage);
+                                    Homepage.HomepageStage);
 
                     if (selectedFile != null) {
 
@@ -1034,7 +1035,7 @@ public class ShopkeeperDetails {
 
             ShopkeeperLogController.resetRegistration();
 
-            Main.primaryStage.setScene(
+            Homepage.HomepageStage.setScene(
                     ShopkeeperRegistration.loginscene());
         });
 
@@ -1333,7 +1334,7 @@ public class ShopkeeperDetails {
             System.out.println(
                     "Shop registration data validated.");
 
-            Main.primaryStage.setScene(
+            Homepage.HomepageStage.setScene(
                     ShopkeeperRegisterSucess.registeredScene());
         });
 
