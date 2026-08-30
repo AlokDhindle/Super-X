@@ -2,6 +2,7 @@ package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
 import com.kryox.model.Shopkeeper.ShopkeeperModel;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -158,17 +159,17 @@ public class ViewConstants {
                 // ============================================================
                 notificationIcon.setOnMouseClicked(e -> {
                         System.out.println("Notification Icon clicked");
-                        Main.primaryStage.setScene(ShopkeeperNotification.notificationScene());
+                        Homepage.HomepageStage.setScene(ShopkeeperNotification.notificationScene());
                 });
 
                 botIcon.setOnMouseClicked(e -> {
                         System.out.println("ChatBot Icon clicked");
-                        Main.primaryStage.setScene(ShopkeeperChatbot.chatbotScene());
+                        Homepage.HomepageStage.setScene(ShopkeeperChatbot.chatbotScene());
                 });
 
                 profileIcon.setOnMouseClicked(e -> {
                         System.out.println("Profile Icon clicked");
-                        Main.primaryStage.setScene(ShopkeeperProfile.profileScene());
+                        Homepage.HomepageStage.setScene(ShopkeeperProfile.profileScene());
                 });
 
                 return headerMainBox;

@@ -1,6 +1,6 @@
 package com.kryox.dao.Delivery;
 
-import com.kryox.config.FirebaseConfig;
+import com.kryox.config.DelivrayFirebaseConfig;
 import com.kryox.model.Delivery.DeliveryPartner;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -25,7 +25,7 @@ public class DeliveryPartnerDAO {
 
         new Thread(() -> {
             try {
-                Firestore db = FirebaseConfig.getFireStore();
+                Firestore db = DelivrayFirebaseConfig.getFireStore();
 
                 UserRecord.CreateRequest request = new UserRecord.CreateRequest()
                         .setEmail(partner.getEmail().trim())
@@ -92,7 +92,7 @@ public class DeliveryPartnerDAO {
 
         new Thread(() -> {
             try {
-                String url = "" + FirebaseConfig.WEB_API_KEY;
+                String url = "" + DelivrayFirebaseConfig.WEB_API_KEY;
                 String jsonPayload = String.format("{\"email\":\"%s\",\"password\":\"%s\",\"returnSecureToken\":true}", email, password);
 
                 HttpClient client = HttpClient.newHttpClient();
@@ -111,7 +111,7 @@ public class DeliveryPartnerDAO {
                     int endIndex = body.indexOf("\"", startIndex);
                     String uid = body.substring(startIndex, endIndex);
 
-                    Firestore db = FirebaseConfig.getFireStore();
+                    Firestore db = DelivrayFirebaseConfig.getFireStore();
                     DocumentSnapshot snapshot = db.collection(COLLECTION_NAME).document(uid).get().get();
 
                     if (snapshot.exists()) {

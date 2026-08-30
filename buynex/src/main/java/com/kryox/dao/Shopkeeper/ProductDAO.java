@@ -6,13 +6,13 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.kryox.config.FirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
 import com.kryox.model.Shopkeeper.ProductModel;
 
 public class ProductDAO {
 
-        private Firestore db = FirebaseConfig.getFirestore();
+        private Firestore db = Firebaseconfig.gFirestore();
 
 
     public void addProduct(ProductModel productModel) {
