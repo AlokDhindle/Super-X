@@ -5,10 +5,11 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.ConstantsMethods;
-import com.kryox.control.Shopkeeper.ImageUploadController;
-import com.kryox.control.Shopkeeper.ProductController;
+import com.kryox.controller.Shopkeeper.ConstantsMethods;
+import com.kryox.controller.Shopkeeper.ImageUploadController;
+import com.kryox.controller.Shopkeeper.ProductController;
 import com.kryox.model.Shopkeeper.ProductModel;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -1194,7 +1195,7 @@ public class ShopkeeperInventoryAddProduct {
                                                         "*.webp"));
 
                         selectedFile = fileChooser.showOpenDialog(
-                                        Main.primaryStage);
+                                        Homepage.HomepageStage);
 
                         if (selectedFile != null) {
 
@@ -1226,7 +1227,7 @@ public class ShopkeeperInventoryAddProduct {
                 // DISCARD
                 // ================================================================
 
-                discardButton.setOnAction(e -> Main.primaryStage.setScene(
+                discardButton.setOnAction(e -> Homepage.HomepageStage.setScene(
                                 ShopkeeperInventory.inventoryScene()));
 
                 // ================================================================
@@ -1358,7 +1359,7 @@ public class ShopkeeperInventoryAddProduct {
                                 ConstantsMethods.showAlert(Alert.AlertType.INFORMATION, "Success",
                                                 "Product added successfully.");
 
-                                Main.primaryStage.setScene(
+                                Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory.inventoryScene());
 
                         } catch (NumberFormatException ex) {
@@ -1377,8 +1378,8 @@ public class ShopkeeperInventoryAddProduct {
 
                 Scene addProductScene = new Scene(
                                 borderPane,
-                                STAGE_WIDTH,
-                                STAGE_HEIGHT);
+                                1550,
+                                850);
 
                 addProductScene.setFill(
                                 Color.web("#F8F7FC"));
@@ -1630,7 +1631,7 @@ public class ShopkeeperInventoryAddProduct {
                 );
 
                 inventoryButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory
                                                                 .inventoryScene()));
 
