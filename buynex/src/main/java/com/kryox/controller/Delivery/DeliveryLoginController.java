@@ -4,14 +4,16 @@ import com.kryox.dao.Delivery.DeliveryPartnerDAO;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.kryox.view.Delivery.PartnerDashboard;
 import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
+import javafx.scene.control.Alert.AlertType;
+import com.kryox.view.Delivery.PartnerDashboard; 
 
 public class DeliveryLoginController {
 
     private final DeliveryPartnerDAO partnerDAO = new DeliveryPartnerDAO();
 
-    public void handleLogin(String identifier, String password, Stage primaryStage) {
+    public void handleLogin(String identifier, String password, Scene scene) {
         if (identifier == null || identifier.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Login Error", "Please enter your Phone Number/Email and Password.");
             return;
@@ -48,7 +50,7 @@ public class DeliveryLoginController {
                             }
 
                             // Open Main Dashboard with user photo & data loaded
-                            PartnerDashboard.show(primaryStage);
+                            PartnerDashboard.show(scene);
                         } else {
                             showAlert(Alert.AlertType.ERROR, "Authentication Failed", "Incorrect email or password.");
                         }

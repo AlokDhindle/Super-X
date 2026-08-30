@@ -1,6 +1,6 @@
 package com.kryox.view.Delivery;
 
-import com.buynex.config.FirebaseConfig;
+import com.kryox.config.FirebaseConfig;
 import com.kryox.controller.Delivery.ImageUploadController;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.google.cloud.firestore.Firestore;
@@ -25,7 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.util.HashMap;
@@ -38,19 +38,19 @@ public class PartnerProfile {
     private static final String BG_COLOR = "#fbfbfe";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, new PartnerSettings.SettingsData());
+    public static void show(Scene scene) {
+        show(scene, new PartnerSettings.SettingsData());
     }
 
-    public static void show(Stage primaryStage, PartnerSettings.SettingsData settingsData) {
+    public static void show(Scene scene, PartnerSettings.SettingsData settingsData) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Header with Back to Settings Button
-        root.setTop(createTopHeader(primaryStage, settingsData));
+        root.setTop(createTopHeader(scene, settingsData));
 
         // 2. Center Content inside ScrollPane
-        VBox mainContent = createMainContent(primaryStage, settingsData);
+        VBox mainContent = createMainContent(scene, settingsData);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -58,19 +58,12 @@ public class PartnerProfile {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Partner Full Profile");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
-    private static BorderPane createTopHeader(Stage primaryStage, PartnerSettings.SettingsData settingsData) {
+    private static BorderPane createTopHeader(Scene scene, PartnerSettings.SettingsData settingsData) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -94,7 +87,7 @@ public class PartnerProfile {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
-        btnBack.setOnAction(e -> PartnerSettings.show(primaryStage, settingsData));
+        btnBack.setOnAction(e -> PartnerSettings.show(scene, settingsData));
 
         Text title = new Text("Partner Account Profile");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -106,7 +99,7 @@ public class PartnerProfile {
         return topBar;
     }
 
-    private static VBox createMainContent(Stage primaryStage, PartnerSettings.SettingsData settingsData) {
+    private static VBox createMainContent(Scene scene, PartnerSettings.SettingsData settingsData) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(26, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);
@@ -152,7 +145,8 @@ public class PartnerProfile {
                     new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
             );
 
-            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+            Window window = (scene != null) ? scene.getWindow() : null;
+            File selectedFile = fileChooser.showOpenDialog(window);
             if (selectedFile != null) {
                 btnUploadPhoto.setText("Uploading...");
                 btnUploadPhoto.setDisable(true);
@@ -183,7 +177,7 @@ public class PartnerProfile {
                                 btnUploadPhoto.setText("📷 Change Photo");
                                 btnUploadPhoto.setDisable(false);
                                 // Reload scene to immediately display the updated Cloudinary photo
-                                PartnerProfile.show(primaryStage, settingsData);
+                                PartnerProfile.show(scene, settingsData);
                             });
                         } else {
                             Platform.runLater(() -> {

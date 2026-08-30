@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class ChangePayout {
 
@@ -61,19 +60,19 @@ public class ChangePayout {
         }
     }
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, new PartnerSettings.SettingsData());
+    public static void show(Scene scene) {
+        show(scene, new PartnerSettings.SettingsData());
     }
 
-    public static void show(Stage primaryStage, PartnerSettings.SettingsData settingsData) {
+    public static void show(Scene scene, PartnerSettings.SettingsData settingsData) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(primaryStage, settingsData));
+        root.setTop(createTopHeader(scene, settingsData));
 
         // 2. Center Content inside ScrollPane
-        VBox mainContent = createMainContent(primaryStage, settingsData);
+        VBox mainContent = createMainContent(scene, settingsData);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -81,22 +80,15 @@ public class ChangePayout {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Update Payout Method");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Stage primaryStage, PartnerSettings.SettingsData settingsData) {
+    private static BorderPane createTopHeader(Scene scene, PartnerSettings.SettingsData settingsData) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -120,7 +112,7 @@ public class ChangePayout {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
-        btnBack.setOnAction(e -> PartnerSettings.show(primaryStage, settingsData));
+        btnBack.setOnAction(e -> PartnerSettings.show(scene, settingsData));
 
         Text title = new Text("Change Payout Account");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -143,7 +135,7 @@ public class ChangePayout {
     // =========================================================================
     // MAIN CONTENT
     // =========================================================================
-    private static VBox createMainContent(Stage primaryStage, PartnerSettings.SettingsData settingsData) {
+    private static VBox createMainContent(Scene scene, PartnerSettings.SettingsData settingsData) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(26, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);
@@ -253,7 +245,7 @@ public class ChangePayout {
             btnSaveAccount.setStyle("-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 8;");
 
             // Smooth transition back to Settings after update
-            PartnerSettings.show(primaryStage, settingsData);
+            PartnerSettings.show(scene, settingsData);
         });
 
         formCard.getChildren().addAll(

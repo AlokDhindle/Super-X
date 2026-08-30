@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,19 +74,19 @@ public class NearbyDeliveries {
         }
     }
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, new NearbyData());
+    public static void show(Scene scene) {
+        show(scene, new NearbyData());
     }
 
-    public static void show(Stage primaryStage, NearbyData data) {
+    public static void show(Scene scene, NearbyData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(primaryStage, data));
+        root.setTop(createTopHeader(scene, data));
 
         // 2. Center Content
-        VBox mainContent = createMainContent(primaryStage, data);
+        VBox mainContent = createMainContent(scene, data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -95,22 +94,15 @@ public class NearbyDeliveries {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Nearby Instant Delivery Requests");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Stage primaryStage, NearbyData data) {
+    private static BorderPane createTopHeader(Scene scene, NearbyData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -134,7 +126,7 @@ public class NearbyDeliveries {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
-        btnBack.setOnAction(e -> PartnerDeliveries.show(primaryStage));
+        btnBack.setOnAction(e -> PartnerDeliveries.show(scene));
 
         Text title = new Text("Nearby Delivery Requests");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -157,7 +149,7 @@ public class NearbyDeliveries {
     // =========================================================================
     // MAIN CONTENT VIEW
     // =========================================================================
-    private static VBox createMainContent(Stage primaryStage, NearbyData data) {
+    private static VBox createMainContent(Scene scene, NearbyData data) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(24, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);
@@ -207,7 +199,7 @@ public class NearbyDeliveries {
         // Orders List Grid / Cards Container
         VBox ordersContainer = new VBox(14);
         for (NearbyOrderItem order : data.orders) {
-            ordersContainer.getChildren().add(createNearbyOrderCard(primaryStage, data, order));
+            ordersContainer.getChildren().add(createNearbyOrderCard(scene, data, order));
         }
 
         wrapper.getChildren().addAll(filterCard, ordersContainer);
@@ -218,7 +210,7 @@ public class NearbyDeliveries {
     // =========================================================================
     // NEARBY ORDER ITEM CARD (WITH LIVE ACCEPT TO NAVIGATION)
     // =========================================================================
-    private static VBox createNearbyOrderCard(Stage primaryStage, NearbyData data, NearbyOrderItem item) {
+    private static VBox createNearbyOrderCard(Scene scene, NearbyData data, NearbyOrderItem item) {
         VBox card = new VBox(12);
         card.setPadding(new Insets(18));
         card.setStyle(
@@ -306,7 +298,7 @@ public class NearbyDeliveries {
                 trip.dropoffName = item.customerName;
                 trip.dropoffAddress = item.customerAddress;
                 trip.orderEarnings = item.payout;
-                PartnerNavigation.show(primaryStage, trip);
+                PartnerNavigation.show(scene, trip);
             });
             footer.setRight(btnNavigate);
         } else {
@@ -318,7 +310,7 @@ public class NearbyDeliveries {
             btnDecline.setStyle("-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #4b5563; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 0 12 0 12; -fx-cursor: hand;");
             btnDecline.setOnAction(e -> {
                 data.orders.remove(item);
-                show(primaryStage, data);
+                show(scene, data);
             });
 
             Button btnAccept = new Button("Accept (₹" + (int)item.payout + ")");
@@ -326,7 +318,7 @@ public class NearbyDeliveries {
             btnAccept.setStyle("-fx-background-color: " + ORANGE_GRADIENT + "; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 0 16 0 16; -fx-cursor: hand;");
             btnAccept.setOnAction(e -> {
                 item.isAccepted = true;
-                show(primaryStage, data);
+                show(scene, data);
             });
 
             actBtns.getChildren().addAll(btnDecline, btnAccept);

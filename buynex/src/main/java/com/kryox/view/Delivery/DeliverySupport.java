@@ -15,7 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.awt.Desktop;
 import java.net.URI;
@@ -34,20 +33,20 @@ public class DeliverySupport {
         public String activePartner = "Alex Walker";
     }
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, "LOGIN", new SupportData());
+    public static void show(Scene scene) {
+        show(scene, "LOGIN", new SupportData());
     }
 
-    public static void show(Stage primaryStage, String returnSource) {
-        show(primaryStage, returnSource, new SupportData());
+    public static void show(Scene scene, String returnSource) {
+        show(scene, returnSource, new SupportData());
     }
 
-    public static void show(Stage primaryStage, String returnSource, SupportData data) {
+    public static void show(Scene scene, String returnSource, SupportData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar with Dynamic Back Button
-        root.setTop(createTopHeader(primaryStage, returnSource));
+        root.setTop(createTopHeader(scene, returnSource));
 
         // 2. Center Scrollable Content
         VBox mainContent = createMainContent(data);
@@ -62,19 +61,12 @@ public class DeliverySupport {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Partner Help & Support Center");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
-    private static BorderPane createTopHeader(Stage primaryStage, String returnSource) {
+    private static BorderPane createTopHeader(Scene scene, String returnSource) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -114,13 +106,13 @@ public class DeliverySupport {
             @Override
             public void run() {
                 if ("REGISTRATION".equalsIgnoreCase(returnSource)) {
-                    DeliveryRegistration2.show(primaryStage);
+                    DeliveryRegistration2.show(scene);
                 } else if ("SUCCESS".equalsIgnoreCase(returnSource)) {
-                    RegistrationSuccess.show(primaryStage);
+                    RegistrationSuccess.show(scene);
                 } else if ("SETTINGS".equalsIgnoreCase(returnSource)) {
-                    PartnerSettings.show(primaryStage);
+                    PartnerSettings.show(scene);
                 } else {
-                    Deliverylogin.show(primaryStage);
+                    Deliverylogin.show(scene);
                 }
             }
         };
@@ -141,7 +133,7 @@ public class DeliverySupport {
         liveDeskPill.setAlignment(Pos.CENTER_RIGHT);
         Circle greenDot = new Circle(4, Color.web("#22c55e"));
         Label liveText = new Label("24x7 Live Desk Active");
-        liveText.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #15803d;" );
+        liveText.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #15803d;");
         liveDeskPill.getChildren().addAll(greenDot, liveText);
 
         topBar.setRight(liveDeskPill);

@@ -16,7 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.InputStream;
@@ -30,16 +29,16 @@ public class RegistrationSuccess {
     private static final String BG_COLOR = "#fbfbfe";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, DEFAULT_IMAGE_PATH);
+    public static void show(Scene scene) {
+        show(scene, DEFAULT_IMAGE_PATH);
     }
 
-    public static void show(Stage primaryStage, String customImagePath) {
+    public static void show(Scene scene, String customImagePath) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(primaryStage));
+        root.setTop(createTopHeader(scene));
 
         // 2. Main Content Container
         HBox mainContainer = new HBox(60);
@@ -47,28 +46,21 @@ public class RegistrationSuccess {
         mainContainer.setPadding(new Insets(50, 70, 70, 70));
 
         VBox leftColumn = createLeftColumn(customImagePath);
-        VBox rightColumn = createRightColumn(primaryStage);
+        VBox rightColumn = createRightColumn(scene);
 
         mainContainer.getChildren().addAll(leftColumn, rightColumn);
         root.setCenter(mainContainer);
 
         // Smooth Scene Transition
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Application Submitted");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Stage primaryStage) {
+    private static BorderPane createTopHeader(Scene scene) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -90,14 +82,14 @@ public class RegistrationSuccess {
         Runnable openSupportTask = new Runnable() {
             @Override
             public void run() {
-                DeliverySupport.show(primaryStage, "SUCCESS");
+                DeliverySupport.show(scene, "SUCCESS");
             }
         };
 
         Runnable openLoginTask = new Runnable() {
             @Override
             public void run() {
-                Deliverylogin.show(primaryStage);
+                Deliverylogin.show(scene);
             }
         };
 
@@ -223,7 +215,7 @@ public class RegistrationSuccess {
     // =========================================================================
     // RIGHT COLUMN (ACTIONS & REDIRECTS)
     // =========================================================================
-    private static VBox createRightColumn(Stage primaryStage) {
+    private static VBox createRightColumn(Scene scene) {
         VBox col = new VBox(20);
         col.setPrefWidth(520);
         col.setMaxWidth(520);
@@ -259,11 +251,9 @@ public class RegistrationSuccess {
         Runnable navigateToLoginTask = new Runnable() {
             @Override
             public void run() {
-                Deliverylogin.show(primaryStage);
+                Deliverylogin.show(scene);
             }
         };
-
-    
 
         Button btnGoToLogin = new Button("Go to Login  →");
         btnGoToLogin.setPrefHeight(46);
@@ -277,21 +267,6 @@ public class RegistrationSuccess {
                 "-fx-cursor: hand;"
         );
         btnGoToLogin.setOnAction(e -> navigateToLoginTask.run());
-
-        Button btnViewSubmission = new Button("View Submission");
-        btnViewSubmission.setPrefHeight(46);
-        btnViewSubmission.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-border-color: #d1d5db;" +
-                "-fx-border-radius: 8;" +
-                "-fx-background-radius: 8;" +
-                "-fx-text-fill: #374151;" +
-                "-fx-font-size: 14px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 0 22 0 22;" +
-                "-fx-cursor: hand;"
-        );
-        
 
         btnRow.getChildren().add(btnGoToLogin);
 

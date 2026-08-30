@@ -24,7 +24,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class PartnerSettings {
 
@@ -90,22 +89,22 @@ public class PartnerSettings {
         }
     }
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, new SettingsData());
+    public static void show(Scene scene) {
+        show(scene, new SettingsData());
     }
 
-    public static void show(Stage primaryStage, SettingsData data) {
+    public static void show(Scene scene, SettingsData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Search Header
-        root.setTop(createTopHeader(primaryStage, data));
+        root.setTop(createTopHeader(scene, data));
 
         // 2. Left Navigation Sidebar
-        root.setLeft(createSidebar(primaryStage, data));
+        root.setLeft(createSidebar(scene, data));
 
         // 3. Main Settings Content
-        VBox profileContent = createProfileContent(primaryStage, data);
+        VBox profileContent = createProfileContent(scene, data);
         ScrollPane scrollPane = new ScrollPane(profileContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
@@ -120,22 +119,15 @@ public class PartnerSettings {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Partner Profile & Settings");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // TOP SEARCH HEADER BAR
     // =========================================================================
-    private static BorderPane createTopHeader(Stage primaryStage, SettingsData data) {
+    private static BorderPane createTopHeader(Scene scene, SettingsData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -177,11 +169,11 @@ public class PartnerSettings {
 
         Label notifIcon = new Label("🔔");
         notifIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #4b5563; -fx-cursor: hand;");
-        notifIcon.setOnMouseClicked(e -> PartnerNotifications.show(primaryStage, "SETTINGS"));
+        notifIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "SETTINGS"));
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #4b5563; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(primaryStage, "SETTINGS"));
+        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "SETTINGS"));
 
         StackPane userAvatarPane = createAvatarNode(16);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -197,17 +189,17 @@ public class PartnerSettings {
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerProfile.show(primaryStage, data));
+        itemProfile.setOnAction(e -> PartnerProfile.show(scene, data));
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(primaryStage));
+        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
             PartnerConstants.clear();
-            Deliverylogin.show(primaryStage);
+            Deliverylogin.show(scene);
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
@@ -229,7 +221,7 @@ public class PartnerSettings {
     // =========================================================================
     // 1. LEFT SIDEBAR
     // =========================================================================
-    private static VBox createSidebar(Stage primaryStage, SettingsData data) {
+    private static VBox createSidebar(Scene scene, SettingsData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -246,15 +238,15 @@ public class PartnerSettings {
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(primaryStage);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(primaryStage);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(primaryStage);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(primaryStage);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(primaryStage);
+        Runnable openDashboardTask = () -> PartnerDashboard.show(scene);
+        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene);
+        Runnable openNavigationTask = () -> PartnerNavigation.show(scene);
+        Runnable openEarningsTask = () -> PartnerEarnings.show(scene);
+        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene);
         
         Runnable logoutTask = () -> {
             PartnerConstants.clear();
-            Deliverylogin.show(primaryStage);
+            Deliverylogin.show(scene);
         };
 
         Button btnDashboard = createSidebarNavButton("▤   Dashboard", false);
@@ -304,7 +296,7 @@ public class PartnerSettings {
         userBox.getChildren().addAll(avatar, userDetails);
         profileCard.getChildren().add(userBox);
 
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(primaryStage, data));
+        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene, data));
 
         Button btnLogout = new Button("↪   Logout");
         btnLogout.setMaxWidth(Double.MAX_VALUE);
@@ -321,7 +313,7 @@ public class PartnerSettings {
     // =========================================================================
     // 2. MAIN PROFILE BODY
     // =========================================================================
-    private static VBox createProfileContent(Stage primaryStage, SettingsData data) {
+    private static VBox createProfileContent(Scene scene, SettingsData data) {
         VBox main = new VBox(22);
         main.setPadding(new Insets(26, 35, 60, 35));
         main.setFillWidth(true);
@@ -340,7 +332,7 @@ public class PartnerSettings {
         VBox leftCol = new VBox(18);
         leftCol.getChildren().addAll(
                 createShiftAvailabilityCard(data),
-                createPersonalAndVehicleCard(primaryStage, data),
+                createPersonalAndVehicleCard(scene, data),
                 createComplianceCard(data),
                 createAppPreferencesCard(data)
         );
@@ -352,8 +344,8 @@ public class PartnerSettings {
         rightCol.setMaxWidth(310);
         rightCol.getChildren().addAll(
                 createRatingCard(data),
-                createPayoutMethodCard(primaryStage, data),
-                createHelpSupportCard(primaryStage)
+                createPayoutMethodCard(scene, data),
+                createHelpSupportCard(scene)
         );
         HBox.setHgrow(rightCol, Priority.NEVER);
 
@@ -417,7 +409,7 @@ public class PartnerSettings {
         return card;
     }
 
-    private static VBox createPersonalAndVehicleCard(Stage primaryStage, SettingsData data) {
+    private static VBox createPersonalAndVehicleCard(Scene scene, SettingsData data) {
         VBox card = createCard();
 
         HBox split = new HBox(24);
@@ -429,7 +421,7 @@ public class PartnerSettings {
         pTitle.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #111827;");
         Label editLbl = new Label("Edit Profile");
         editLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: " + ORANGE_PRIMARY + "; -fx-font-weight: bold; -fx-cursor: hand;");
-        editLbl.setOnMouseClicked(e -> PartnerProfile.show(primaryStage, data));
+        editLbl.setOnMouseClicked(e -> PartnerProfile.show(scene, data));
         personalHeader.setLeft(pTitle);
         personalHeader.setRight(editLbl);
 
@@ -587,7 +579,7 @@ public class PartnerSettings {
         return card;
     }
 
-    private static VBox createPayoutMethodCard(Stage primaryStage, SettingsData data) {
+    private static VBox createPayoutMethodCard(Scene scene, SettingsData data) {
         VBox card = createCard();
 
         BorderPane titleRow = new BorderPane();
@@ -630,13 +622,13 @@ public class PartnerSettings {
                 "-fx-cursor: hand;"
         );
 
-        btnChange.setOnAction(e -> ChangePayout.show(primaryStage));
+        btnChange.setOnAction(e -> ChangePayout.show(scene));
 
         card.getChildren().addAll(titleRow, debitCard, btnChange);
         return card;
     }
 
-    private static VBox createHelpSupportCard(Stage primaryStage) {
+    private static VBox createHelpSupportCard(Scene scene) {
         VBox card = createCard();
 
         Label title = new Label("Help & Support");
@@ -662,7 +654,7 @@ public class PartnerSettings {
                 "-fx-font-size: 11px;" +
                 "-fx-cursor: hand;"
         );
-        btnContact.setOnAction(e -> PartnerChatSupport.show(primaryStage, "SETTINGS"));
+        btnContact.setOnAction(e -> PartnerChatSupport.show(scene, "SETTINGS"));
 
         card.getChildren().addAll(title, accordion, btnContact);
         return card;

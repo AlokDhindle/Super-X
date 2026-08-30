@@ -12,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,19 +64,19 @@ public class PastWeeksHistory {
         }
     }
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, new PastWeeksData());
+    public static void show(Scene scene) {
+        show(scene, new PastWeeksData());
     }
 
-    public static void show(Stage primaryStage, PastWeeksData data) {
+    public static void show(Scene scene, PastWeeksData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(primaryStage));
+        root.setTop(createTopHeader(scene));
 
         // 2. Center Content inside ScrollPane
-        VBox mainContent = createMainContent(primaryStage, data);
+        VBox mainContent = createMainContent(scene, data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -85,22 +84,15 @@ public class PastWeeksHistory {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Historical Availability & Shifts");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Stage primaryStage) {
+    private static BorderPane createTopHeader(Scene scene) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -124,7 +116,7 @@ public class PastWeeksHistory {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
-        btnBack.setOnAction(e -> PartnerAvailability.show(primaryStage));
+        btnBack.setOnAction(e -> PartnerAvailability.show(scene));
 
         Text title = new Text("Past Weeks Shift History");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -139,7 +131,7 @@ public class PastWeeksHistory {
     // =========================================================================
     // MAIN CONTENT
     // =========================================================================
-    private static VBox createMainContent(Stage primaryStage, PastWeeksData data) {
+    private static VBox createMainContent(Scene scene, PastWeeksData data) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(24, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);

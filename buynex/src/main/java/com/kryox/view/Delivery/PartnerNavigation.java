@@ -27,7 +27,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.awt.Desktop;
 import java.net.URI;
@@ -105,21 +104,21 @@ public class PartnerNavigation {
         }
     }
 
-    public static void show(Stage primaryStage) {
+    public static void show(Scene scene) {
         TripData data = new TripData();
-        show(primaryStage, data);
-        attachRealtimeNavListener(primaryStage, data);
+        show(scene, data);
+        attachRealtimeNavListener(scene, data);
     }
 
-    public static void show(Stage primaryStage, TripData tripData) {
+    public static void show(Scene scene, TripData tripData) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(primaryStage, tripData));
+        root.setTop(createTopHeader(scene, tripData));
 
         // 2. Left Sidebar Navigation
-        root.setLeft(createSidebar(primaryStage, tripData));
+        root.setLeft(createSidebar(scene, tripData));
 
         // 3. Center Live Map View
         root.setCenter(createMapArea(tripData));
@@ -127,22 +126,15 @@ public class PartnerNavigation {
         // 4. Right Dynamic Trip Details Panel
         root.setRight(createTripDetailsPanel(tripData));
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Live Order Navigation");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // REALTIME FIRESTORE ORDER SYNC (SMART FALLBACK)
     // =========================================================================
-    private static void attachRealtimeNavListener(Stage primaryStage, TripData data) {
+    private static void attachRealtimeNavListener(Scene scene, TripData data) {
         try {
             if (navOrderListener != null) {
                 navOrderListener.remove();
@@ -195,7 +187,7 @@ public class PartnerNavigation {
                         data.loadDummyRoute();
                     }
 
-                    PartnerNavigation.show(primaryStage, data);
+                    PartnerNavigation.show(scene, data);
                 });
             });
         } catch (Exception ex) {
@@ -204,7 +196,7 @@ public class PartnerNavigation {
     }
 
     // --- TOP HEADER ---
-    private static BorderPane createTopHeader(Stage primaryStage, TripData data) {
+    private static BorderPane createTopHeader(Scene scene, TripData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -236,11 +228,11 @@ public class PartnerNavigation {
 
         Label bellIcon = new Label("🔔");
         bellIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        bellIcon.setOnMouseClicked(e -> PartnerNotifications.show(primaryStage, "NAVIGATION"));
+        bellIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "NAVIGATION"));
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(primaryStage, "NAVIGATION"));
+        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "NAVIGATION"));
 
         StackPane userAvatarPane = createAvatarNode(15);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -255,18 +247,18 @@ public class PartnerNavigation {
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerSettings.show(primaryStage));
+        itemProfile.setOnAction(e -> PartnerSettings.show(scene));
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(primaryStage));
+        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
             if (navOrderListener != null) navOrderListener.remove();
             PartnerConstants.clear();
-            Deliverylogin.show(primaryStage);
+            Deliverylogin.show(scene);
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
@@ -286,7 +278,7 @@ public class PartnerNavigation {
     }
 
     // --- LEFT SIDEBAR ---
-    private static VBox createSidebar(Stage primaryStage, TripData data) {
+    private static VBox createSidebar(Scene scene, TripData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -302,16 +294,16 @@ public class PartnerNavigation {
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(primaryStage);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(primaryStage);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(primaryStage, data);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(primaryStage);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(primaryStage);
-        Runnable openSettingsTask = () -> PartnerSettings.show(primaryStage);
+        Runnable openDashboardTask = () -> PartnerDashboard.show(scene);
+        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene);
+        Runnable openNavigationTask = () -> PartnerNavigation.show(scene, data);
+        Runnable openEarningsTask = () -> PartnerEarnings.show(scene);
+        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene);
+        Runnable openSettingsTask = () -> PartnerSettings.show(scene);
         Runnable logoutTask = () -> {
             if (navOrderListener != null) navOrderListener.remove();
             PartnerConstants.clear();
-            Deliverylogin.show(primaryStage);
+            Deliverylogin.show(scene);
         };
 
         Button btnDashboard = createNavButton("▤   Dashboard", false);
@@ -339,10 +331,10 @@ public class PartnerNavigation {
         profileCard.setPadding(new Insets(10, 12, 10, 12));
         profileCard.setStyle(
                 "-fx-background-color: #f8f8fb;" +
-                "-fx-background-radius: 10;" +
-                "-fx-border-color: #e5e7eb;" +
-                "-fx-border-radius: 10;" +
-                "-fx-cursor: hand;"
+                        "-fx-background-radius: 10;" +
+                        "-fx-border-color: #e5e7eb;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-cursor: hand;"
         );
 
         HBox userBox = new HBox(8);
@@ -359,7 +351,7 @@ public class PartnerNavigation {
 
         userBox.getChildren().addAll(avatar, userDetails);
         profileCard.getChildren().add(userBox);
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(primaryStage));
+        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene));
 
         Button btnSettings = createNavButton("⚙   Settings", false);
         btnSettings.setOnAction(e -> openSettingsTask.run());
@@ -384,7 +376,7 @@ public class PartnerNavigation {
                         "-fx-cursor: hand;");
         btnGoOnline.setOnAction(e -> {
             data.isOnline = !data.isOnline;
-            PartnerNavigation.show(primaryStage, data);
+            PartnerNavigation.show(scene, data);
         });
 
         VBox bottomNav = new VBox(6, profileCard, btnSettings, btnLogout, btnGoOnline);

@@ -28,7 +28,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,22 +107,22 @@ public class PartnerAvailability {
         }
     }
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, new AvailabilityData());
+    public static void show(Scene scene) {
+        show(scene, new AvailabilityData());
     }
 
-    public static void show(Stage primaryStage, AvailabilityData data) {
+    public static void show(Scene scene, AvailabilityData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(primaryStage, data));
+        root.setTop(createTopHeader(scene, data));
 
         // 2. Left Sidebar Navigation
-        root.setLeft(createSidebar(primaryStage, data));
+        root.setLeft(createSidebar(scene, data));
 
         // 3. Main Content Area
-        VBox mainContent = createMainContent(primaryStage, data);
+        VBox mainContent = createMainContent(scene, data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
@@ -137,22 +136,15 @@ public class PartnerAvailability {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Manage Availability");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Stage primaryStage, AvailabilityData data) {
+    private static BorderPane createTopHeader(Scene scene, AvailabilityData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -184,11 +176,11 @@ public class PartnerAvailability {
 
         Label bellIcon = new Label("🔔");
         bellIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        bellIcon.setOnMouseClicked(e -> PartnerNotifications.show(primaryStage, "AVAILABILITY"));
+        bellIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "AVAILABILITY"));
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(primaryStage, "AVAILABILITY"));
+        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "AVAILABILITY"));
 
         StackPane userAvatarPane = createAvatarNode(15);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -203,17 +195,17 @@ public class PartnerAvailability {
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerSettings.show(primaryStage));
+        itemProfile.setOnAction(e -> PartnerSettings.show(scene));
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(primaryStage));
+        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
             PartnerConstants.clear();
-            Deliverylogin.show(primaryStage);
+            Deliverylogin.show(scene);
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
@@ -235,7 +227,7 @@ public class PartnerAvailability {
     // =========================================================================
     // 1. LEFT SIDEBAR
     // =========================================================================
-    private static VBox createSidebar(Stage primaryStage, AvailabilityData data) {
+    private static VBox createSidebar(Scene scene, AvailabilityData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -251,15 +243,15 @@ public class PartnerAvailability {
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(primaryStage);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(primaryStage);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(primaryStage);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(primaryStage);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(primaryStage, data);
-        Runnable openSettingsTask = () -> PartnerSettings.show(primaryStage);
+        Runnable openDashboardTask = () -> PartnerDashboard.show(scene);
+        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene);
+        Runnable openNavigationTask = () -> PartnerNavigation.show(scene);
+        Runnable openEarningsTask = () -> PartnerEarnings.show(scene);
+        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene, data);
+        Runnable openSettingsTask = () -> PartnerSettings.show(scene);
         Runnable logoutTask = () -> {
             PartnerConstants.clear();
-            Deliverylogin.show(primaryStage);
+            Deliverylogin.show(scene);
         };
 
         Button btnDashboard = createNavButton("▤   Dashboard", false);
@@ -306,7 +298,7 @@ public class PartnerAvailability {
         userBox.getChildren().addAll(avatar, userDetails);
         profileCard.getChildren().add(userBox);
 
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(primaryStage));
+        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene));
 
         Button btnSettings = createNavButton("⚙   Settings", false);
         btnSettings.setOnAction(e -> openSettingsTask.run());
@@ -327,7 +319,7 @@ public class PartnerAvailability {
     // =========================================================================
     // 2. MAIN CONTENT
     // =========================================================================
-    private static VBox createMainContent(Stage primaryStage, AvailabilityData data) {
+    private static VBox createMainContent(Scene scene, AvailabilityData data) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(24, 35, 60, 35));
         content.setFillWidth(true);
@@ -404,7 +396,7 @@ public class PartnerAvailability {
         VBox leftColumn = new VBox(20);
         leftColumn.getChildren().addAll(
                 createPreferencesCard(data),
-                createInteractiveWeeklyGrid(primaryStage, data));
+                createInteractiveWeeklyGrid(scene, data));
         HBox.setHgrow(leftColumn, Priority.ALWAYS);
 
         // Right Column: Dynamic Projected Earnings + Dynamic Week Summary + View Past Weeks Button
@@ -415,7 +407,7 @@ public class PartnerAvailability {
         rightColumn.getChildren().addAll(
                 createProjectedEarningsCard(data),
                 createWeekSummaryCard(data),
-                createPastWeeksButton(primaryStage));
+                createPastWeeksButton(scene));
         HBox.setHgrow(rightColumn, Priority.NEVER);
 
         bodyColumns.getChildren().addAll(leftColumn, rightColumn);
@@ -503,7 +495,7 @@ public class PartnerAvailability {
     // =========================================================================
     // 3. INTERACTIVE 7-DAY SHIFT SCHEDULER
     // =========================================================================
-    private static VBox createInteractiveWeeklyGrid(Stage primaryStage, AvailabilityData data) {
+    private static VBox createInteractiveWeeklyGrid(Scene scene, AvailabilityData data) {
         VBox card = createCard();
         card.setPadding(new Insets(0));
 
@@ -570,7 +562,7 @@ public class PartnerAvailability {
                     boolean newState = !Boolean.TRUE.equals(data.activeShifts.get(shiftKey));
                     data.activeShifts.put(shiftKey, newState);
                     data.recalculateMetrics();
-                    PartnerAvailability.show(primaryStage, data);
+                    PartnerAvailability.show(scene, data);
                 });
 
                 grid.add(slotBtn, col + 1, row + 1);
@@ -746,7 +738,7 @@ public class PartnerAvailability {
     // =========================================================================
     // 6. DYNAMIC "VIEW PAST WEEKS" ACTION BUTTON
     // =========================================================================
-    private static Button createPastWeeksButton(Stage primaryStage) {
+    private static Button createPastWeeksButton(Scene scene) {
         Button btn = new Button("↺   View Past Weeks");
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setPrefHeight(40);
@@ -759,7 +751,7 @@ public class PartnerAvailability {
                         "-fx-font-size: 12px;" +
                         "-fx-font-weight: bold;" +
                         "-fx-cursor: hand;");
-        btn.setOnAction(e -> PastWeeksHistory.show(primaryStage));
+        btn.setOnAction(e -> PastWeeksHistory.show(scene));
         return btn;
     }
 

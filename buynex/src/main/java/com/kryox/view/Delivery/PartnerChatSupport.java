@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,49 +112,41 @@ public class PartnerChatSupport {
         }
     }
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, "DASHBOARD", new ChatWorkspaceData());
+    public static void show(Scene scene) {
+        show(scene, "DASHBOARD", new ChatWorkspaceData());
     }
 
-    public static void show(Stage primaryStage, String returnScreen) {
-        show(primaryStage, returnScreen, new ChatWorkspaceData());
+    public static void show(Scene scene, String returnScreen) {
+        show(scene, returnScreen, new ChatWorkspaceData());
     }
 
-    public static void show(Stage primaryStage, String returnScreen, ChatWorkspaceData data) {
+    public static void show(Scene scene, String returnScreen, ChatWorkspaceData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Header with Back Navigation
-        root.setTop(createTopHeader(primaryStage, returnScreen, data));
+        root.setTop(createTopHeader(scene, returnScreen, data));
 
-        // 2. Center Two-Column Split: Channel List + Active Chat Window
+        // 2. Center Two Column Split: Channel List + Active Chat Window
         HBox chatBody = new HBox();
         chatBody.setFillHeight(true);
 
-        VBox channelCol = createChannelSidebar(primaryStage, returnScreen, data);
-        VBox activeChatCol = createConversationView(primaryStage, returnScreen, data);
-
-        chatBody.getChildren().addAll(channelCol, activeChatCol);
+        VBox channelCol = createChannelSidebar(scene, returnScreen, data);
+        VBox activeChatCol = createConversationView(scene, returnScreen, data);
         HBox.setHgrow(activeChatCol, Priority.ALWAYS);
 
+        chatBody.getChildren().addAll(channelCol, activeChatCol);
         root.setCenter(chatBody);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Partner Live Support Chat");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Stage primaryStage, String returnScreen, ChatWorkspaceData data) {
+    private static BorderPane createTopHeader(Scene scene, String returnScreen, ChatWorkspaceData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -180,7 +171,7 @@ public class PartnerChatSupport {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
-        btnBack.setOnAction(e -> navigateBack(primaryStage, returnScreen));
+        btnBack.setOnAction(e -> navigateBack(scene, returnScreen));
 
         Text title = new Text("Live Partner Support & Dispatcher Chat");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -204,7 +195,7 @@ public class PartnerChatSupport {
     // =========================================================================
     // LEFT CHANNEL SELECTION COLUMN
     // =========================================================================
-    private static VBox createChannelSidebar(Stage primaryStage, String returnScreen, ChatWorkspaceData data) {
+    private static VBox createChannelSidebar(Scene scene, String returnScreen, ChatWorkspaceData data) {
         VBox col = new VBox(10);
         col.setPrefWidth(320);
         col.setMinWidth(320);
@@ -218,7 +209,7 @@ public class PartnerChatSupport {
 
         VBox channelList = new VBox(8);
         for (ChatChannel channel : data.channels) {
-            channelList.getChildren().add(createChannelItem(primaryStage, returnScreen, data, channel));
+            channelList.getChildren().add(createChannelItem(scene, returnScreen, data, channel));
         }
 
         ScrollPane scroll = new ScrollPane(channelList);
@@ -230,10 +221,10 @@ public class PartnerChatSupport {
         return col;
     }
 
-    private static VBox createChannelItem(Stage primaryStage, String returnScreen, ChatWorkspaceData data, ChatChannel channel) {
+    private static VBox createChannelItem(Scene scene, String returnScreen, ChatWorkspaceData data, ChatChannel channel) {
         VBox card = new VBox(4);
         card.setPadding(new Insets(12));
-        card.setPickOnBounds(true); // Ensures the entire bounding box captures mouse clicks
+        card.setPickOnBounds(true);
 
         boolean isSelected = channel.id.equalsIgnoreCase(data.activeChannelId);
 
@@ -283,9 +274,9 @@ public class PartnerChatSupport {
                 ch.isSelected = false;
             }
             channel.isSelected = true;
-            channel.unreadCount = 0; // Mark read on click
+            channel.unreadCount = 0;
             data.activeChannelId = channel.id;
-            show(primaryStage, returnScreen, data);
+            show(scene, returnScreen, data);
         });
 
         return card;
@@ -294,7 +285,7 @@ public class PartnerChatSupport {
     // =========================================================================
     // RIGHT CONVERSATION & INPUT VIEW
     // =========================================================================
-    private static VBox createConversationView(Stage primaryStage, String returnScreen, ChatWorkspaceData data) {
+    private static VBox createConversationView(Scene scene, String returnScreen, ChatWorkspaceData data) {
         VBox view = new VBox();
         view.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
@@ -311,7 +302,7 @@ public class PartnerChatSupport {
         scrollThread.setFitToWidth(true);
         scrollThread.setPannable(true);
         scrollThread.setStyle("-fx-background-color: transparent; -fx-background: " + BG_COLOR + "; -fx-border-color: transparent;");
-        scrollThread.setVvalue(1.0); // Auto-scroll to bottom
+        scrollThread.setVvalue(1.0);
         VBox.setVgrow(scrollThread, Priority.ALWAYS);
 
         // Input Toolbar Area
@@ -344,7 +335,6 @@ public class PartnerChatSupport {
                 ChatMessage newMsg = new ChatMessage("M-" + (currentMsgs.size() + 1), "PARTNER", data.partnerName, text.trim(), "Just now");
                 currentMsgs.add(newMsg);
 
-                // Update last message in the selected channel
                 ChatChannel activeCh = data.getActiveChannel();
                 if (activeCh != null) {
                     activeCh.lastMessage = text.trim();
@@ -352,12 +342,12 @@ public class PartnerChatSupport {
                 }
 
                 txtInput.clear();
-                show(primaryStage, returnScreen, data);
+                show(scene, returnScreen, data);
             }
         };
 
         btnSend.setOnAction(e -> sendTask.run());
-        txtInput.setOnAction(e -> sendTask.run()); // Allows pressing Enter to send
+        txtInput.setOnAction(e -> sendTask.run());
 
         inputBar.setRight(btnSend);
         view.getChildren().addAll(scrollThread, inputBar);
@@ -405,12 +395,12 @@ public class PartnerChatSupport {
         return "Dashboard";
     }
 
-    private static void navigateBack(Stage primaryStage, String returnScreen) {
-        if ("DELIVERIES".equalsIgnoreCase(returnScreen)) PartnerDeliveries.show(primaryStage);
-        else if ("NAVIGATION".equalsIgnoreCase(returnScreen)) PartnerNavigation.show(primaryStage);
-        else if ("EARNINGS".equalsIgnoreCase(returnScreen)) PartnerEarnings.show(primaryStage);
-        else if ("AVAILABILITY".equalsIgnoreCase(returnScreen)) PartnerAvailability.show(primaryStage);
-        else if ("SETTINGS".equalsIgnoreCase(returnScreen)) PartnerSettings.show(primaryStage);
-        else PartnerDashboard.show(primaryStage);
+    private static void navigateBack(Scene scene, String returnScreen) {
+        if ("DELIVERIES".equalsIgnoreCase(returnScreen)) PartnerDeliveries.show(scene);
+        else if ("NAVIGATION".equalsIgnoreCase(returnScreen)) PartnerNavigation.show(scene);
+        else if ("EARNINGS".equalsIgnoreCase(returnScreen)) PartnerEarnings.show(scene);
+        else if ("AVAILABILITY".equalsIgnoreCase(returnScreen)) PartnerAvailability.show(scene);
+        else if ("SETTINGS".equalsIgnoreCase(returnScreen)) PartnerSettings.show(scene);
+        else PartnerDashboard.show(scene);
     }
 }

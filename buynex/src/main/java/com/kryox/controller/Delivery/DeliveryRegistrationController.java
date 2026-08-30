@@ -6,13 +6,13 @@ import com.kryox.model.Delivery.PartnerConstants;
 import com.kryox.view.Delivery.RegistrationSuccess;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 public class DeliveryRegistrationController {
 
     private final DeliveryPartnerDAO partnerDAO = new DeliveryPartnerDAO();
 
-    public void handleRegistration(DeliveryPartner partner, String password, String confirmPassword, boolean termsAccepted, Stage primaryStage) {
+    public void handleRegistration(DeliveryPartner partner, String password, String confirmPassword, boolean termsAccepted, Scene scene) {
         if (!termsAccepted) {
             showAlert(Alert.AlertType.WARNING, "Terms & Conditions", "Please accept the terms & conditions to proceed.");
             return;
@@ -67,7 +67,7 @@ public class DeliveryRegistrationController {
                         PartnerConstants.PROFILE_PHOTO_URL = partner.getProfilePhotoPath();
                     }
 
-                    RegistrationSuccess.show(primaryStage);
+                    RegistrationSuccess.show(scene);
                 }))
                 .exceptionally(ex -> {
                     Platform.runLater(() -> {

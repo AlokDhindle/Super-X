@@ -27,7 +27,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,24 +114,24 @@ public class PartnerDashboard {
         }
     }
 
-    public static void show(Stage primaryStage) {
+    public static void show(Scene scene) {
         DashboardData data = new DashboardData();
-        show(primaryStage, data);
-        attachRealtimeDashboardListener(primaryStage, data);
+        show(scene, data);
+        attachRealtimeDashboardListener(scene, data);
     }
 
-    public static void show(Stage primaryStage, DashboardData data) {
+    public static void show(Scene scene, DashboardData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(primaryStage, data));
+        root.setTop(createTopHeader(scene, data));
 
         // 2. Sidebar
-        root.setLeft(createSidebar(primaryStage, data));
+        root.setLeft(createSidebar(scene, data));
 
         // 3. Center Dashboard View inside ScrollPane
-        VBox dashboardContent = createDashboardView(primaryStage, data);
+        VBox dashboardContent = createDashboardView(scene, data);
         ScrollPane scrollPane = new ScrollPane(dashboardContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
@@ -146,22 +145,15 @@ public class PartnerDashboard {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Partner Dashboard");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // REALTIME FIRESTORE LISTENER
     // =========================================================================
-    private static void attachRealtimeDashboardListener(Stage primaryStage, DashboardData data) {
+    private static void attachRealtimeDashboardListener(Scene scene, DashboardData data) {
         try {
             if (dashboardOrderListener != null) {
                 dashboardOrderListener.remove();
@@ -184,7 +176,7 @@ public class PartnerDashboard {
 
                         String partnerId = doc.getString("deliveryPartnerId");
                         boolean isForMe = partnerId == null || partnerId.isEmpty()
-                                || (PartnerConstants.UID != null && partnerId.equals(partnerId));
+                                || (PartnerConstants.UID != null && partnerId.equals(PartnerConstants.UID));
 
                         if (isForMe) {
                             String orderId = doc.getId();
@@ -222,7 +214,7 @@ public class PartnerDashboard {
                         data.recentOrders = liveOrders;
                         data.todayDeliveries = deliveredCount > 0 ? deliveredCount : liveOrders.size();
                         data.currentEarnings = earned > 0 ? earned : data.currentEarnings;
-                        PartnerDashboard.show(primaryStage, data);
+                        PartnerDashboard.show(scene, data);
                     }
                 });
             });
@@ -234,7 +226,7 @@ public class PartnerDashboard {
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Stage primaryStage, DashboardData data) {
+    private static BorderPane createTopHeader(Scene scene, DashboardData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -267,11 +259,11 @@ public class PartnerDashboard {
 
         Label bellIcon = new Label("🔔");
         bellIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        bellIcon.setOnMouseClicked(e -> PartnerNotifications.show(primaryStage, "DASHBOARD"));
+        bellIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "DASHBOARD"));
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(primaryStage, "DASHBOARD"));
+        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "DASHBOARD"));
 
         StackPane userAvatarPane = createAvatarNode(15);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -286,18 +278,18 @@ public class PartnerDashboard {
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerSettings.show(primaryStage));
+        itemProfile.setOnAction(e -> PartnerSettings.show(scene));
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(primaryStage));
+        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
             if (dashboardOrderListener != null) dashboardOrderListener.remove();
             PartnerConstants.clear();
-            Deliverylogin.show(primaryStage);
+            Deliverylogin.show(scene);
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
@@ -319,7 +311,7 @@ public class PartnerDashboard {
     // =========================================================================
     // 1. SIDEBAR NAVIGATION
     // =========================================================================
-    private static VBox createSidebar(Stage primaryStage, DashboardData data) {
+    private static VBox createSidebar(Scene scene, DashboardData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -337,16 +329,16 @@ public class PartnerDashboard {
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(primaryStage, data);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(primaryStage);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(primaryStage);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(primaryStage);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(primaryStage);
-        Runnable openSettingsTask = () -> PartnerSettings.show(primaryStage);
+        Runnable openDashboardTask = () -> PartnerDashboard.show(scene, data);
+        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene);
+        Runnable openNavigationTask = () -> PartnerNavigation.show(scene);
+        Runnable openEarningsTask = () -> PartnerEarnings.show(scene);
+        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene);
+        Runnable openSettingsTask = () -> PartnerSettings.show(scene);
         Runnable logoutTask = () -> {
             if (dashboardOrderListener != null) dashboardOrderListener.remove();
             PartnerConstants.clear();
-            Deliverylogin.show(primaryStage);
+            Deliverylogin.show(scene);
         };
 
         Button btnDashboard = createNavButton("▤   Dashboard");
@@ -425,7 +417,7 @@ public class PartnerDashboard {
         userBox.getChildren().addAll(avatar, userDetails);
 
         profileCard.getChildren().addAll(statusBox, userBox);
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(primaryStage));
+        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene));
 
         Button btnLogout = new Button("↪   Logout");
         btnLogout.setMaxWidth(Double.MAX_VALUE);
@@ -443,7 +435,7 @@ public class PartnerDashboard {
     // =========================================================================
     // 2. MAIN DASHBOARD CONTENT AREA
     // =========================================================================
-    private static VBox createDashboardView(Stage primaryStage, DashboardData data) {
+    private static VBox createDashboardView(Scene scene, DashboardData data) {
         VBox main = new VBox(22);
         main.setPadding(new Insets(24, 35, 60, 35));
         main.setFillWidth(true);
@@ -467,14 +459,14 @@ public class PartnerDashboard {
                 + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; -fx-background-radius: 8; -fx-padding: 0 16 0 16; -fx-cursor: hand;");
         btnGoOnline.setOnAction(e -> {
             data.isOnline = !data.isOnline;
-            PartnerDashboard.show(primaryStage, data);
+            PartnerDashboard.show(scene, data);
         });
 
         Button btnTasks = new Button("▤ View Tasks");
         btnTasks.setPrefHeight(36);
         btnTasks.setStyle(
                 "-fx-background-color: white; -fx-border-color: #d1d5db; -fx-text-fill: #374151; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-border-radius: 8; -fx-padding: 0 16 0 16; -fx-cursor: hand;");
-        btnTasks.setOnAction(e -> PartnerDeliveries.show(primaryStage));
+        btnTasks.setOnAction(e -> PartnerDeliveries.show(scene));
 
         actionBtns.getChildren().addAll(btnGoOnline, btnTasks);
         header.setRight(actionBtns);
@@ -492,7 +484,7 @@ public class PartnerDashboard {
 
         HBox lowerRow = new HBox(20);
         lowerRow.setFillHeight(true);
-        VBox recentOrdersCol = createRecentOrdersSection(primaryStage, data);
+        VBox recentOrdersCol = createRecentOrdersSection(scene, data);
         VBox sideWidgetsCol = createSideWidgetsSection(data);
         lowerRow.getChildren().addAll(recentOrdersCol, sideWidgetsCol);
         HBox.setHgrow(recentOrdersCol, Priority.ALWAYS);
@@ -505,7 +497,7 @@ public class PartnerDashboard {
     // =========================================================================
     // 3. DYNAMIC RECENT ORDERS SECTION
     // =========================================================================
-    private static VBox createRecentOrdersSection(Stage primaryStage, DashboardData data) {
+    private static VBox createRecentOrdersSection(Scene scene, DashboardData data) {
         VBox container = new VBox(12);
 
         BorderPane titleRow = new BorderPane();
@@ -516,19 +508,19 @@ public class PartnerDashboard {
         Label viewAll = new Label("View All");
         viewAll.setStyle(
                 "-fx-font-size: 11px; -fx-text-fill: " + ORANGE_PRIMARY + "; -fx-font-weight: bold; -fx-cursor: hand;");
-        viewAll.setOnMouseClicked(e -> PartnerDeliveries.show(primaryStage));
+        viewAll.setOnMouseClicked(e -> PartnerDeliveries.show(scene));
         titleRow.setRight(viewAll);
 
         container.getChildren().add(titleRow);
 
         for (RecentOrderRecord order : data.recentOrders) {
-            container.getChildren().add(createOrderCard(primaryStage, order));
+            container.getChildren().add(createOrderCard(scene, order));
         }
 
         return container;
     }
 
-    private static VBox createOrderCard(Stage primaryStage, RecentOrderRecord order) {
+    private static VBox createOrderCard(Scene scene, RecentOrderRecord order) {
         VBox card = new VBox();
         card.setPadding(new Insets(12, 16, 12, 16));
         card.setStyle(
@@ -575,7 +567,7 @@ public class PartnerDashboard {
         detailsBtn.setPrefHeight(28);
         detailsBtn.setStyle(
                 "-fx-background-color: #1f2937; -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;");
-        detailsBtn.setOnAction(e -> PartnerDeliveries.show(primaryStage));
+        detailsBtn.setOnAction(e -> PartnerDeliveries.show(scene));
 
         right.getChildren().addAll(priceInfo, detailsBtn);
         row.setRight(right);

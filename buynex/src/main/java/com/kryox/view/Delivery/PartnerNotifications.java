@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,23 +60,23 @@ public class PartnerNotifications {
         }
     }
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, "DASHBOARD", new NotificationData());
+    public static void show(Scene scene) {
+        show(scene, "DASHBOARD", new NotificationData());
     }
 
-    public static void show(Stage primaryStage, String returnScreen) {
-        show(primaryStage, returnScreen, new NotificationData());
+    public static void show(Scene scene, String returnScreen) {
+        show(scene, returnScreen, new NotificationData());
     }
 
-    public static void show(Stage primaryStage, String returnScreen, NotificationData data) {
+    public static void show(Scene scene, String returnScreen, NotificationData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(primaryStage, returnScreen, data));
+        root.setTop(createTopHeader(scene, returnScreen, data));
 
         // 2. Center Notifications Content
-        VBox mainContent = createMainContent(primaryStage, data);
+        VBox mainContent = createMainContent(scene, returnScreen, data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -85,22 +84,15 @@ public class PartnerNotifications {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Partner Notifications");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Stage primaryStage, String returnScreen, NotificationData data) {
+    private static BorderPane createTopHeader(Scene scene, String returnScreen, NotificationData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -127,7 +119,7 @@ public class PartnerNotifications {
                 "-fx-padding: 6 14 6 14;"
         );
 
-        btnBack.setOnAction(e -> navigateBack(primaryStage, returnScreen));
+        btnBack.setOnAction(e -> navigateBack(scene, returnScreen));
 
         Text logo = new Text("Notifications Center");
         logo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -149,7 +141,7 @@ public class PartnerNotifications {
             for (NotificationItem item : data.notifications) {
                 item.isRead = true;
             }
-            show(primaryStage, returnScreen, data);
+            show(scene, returnScreen, data);
         });
 
         topBar.setRight(btnMarkAllRead);
@@ -161,7 +153,7 @@ public class PartnerNotifications {
     // =========================================================================
     // MAIN NOTIFICATIONS FEED
     // =========================================================================
-    private static VBox createMainContent(Stage primaryStage, NotificationData data) {
+    private static VBox createMainContent(Scene scene, String returnScreen, NotificationData data) {
         VBox content = new VBox(20);
         content.setPadding(new Insets(24, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);
@@ -174,25 +166,22 @@ public class PartnerNotifications {
         filterBar.setAlignment(Pos.CENTER_LEFT);
 
         filterBar.getChildren().addAll(
-                createFilterPill(primaryStage, data, "ALL", "All Notifications"),
-                createFilterPill(primaryStage, data, "UNREAD", "Unread"),
-                createFilterPill(primaryStage, data, "ORDERS", "Orders"),
-                createFilterPill(primaryStage, data, "PAYOUTS", "Payouts")
+                createFilterPill(scene, returnScreen, data, "ALL", "All Notifications"),
+                createFilterPill(scene, returnScreen, data, "UNREAD", "Unread"),
+                createFilterPill(scene, returnScreen, data, "ORDERS", "Orders"),
+                createFilterPill(scene, returnScreen, data, "PAYOUTS", "Payouts")
         );
 
         // Dynamic Notifications Card Container
         VBox listContainer = new VBox(10);
-        int unreadCount = 0;
 
         for (NotificationItem item : data.notifications) {
-            if (!item.isRead) unreadCount++;
-
             // Apply filter logic
             if ("UNREAD".equals(data.activeFilter) && item.isRead) continue;
             if ("ORDERS".equals(data.activeFilter) && !"ORDER".equals(item.type)) continue;
             if ("PAYOUTS".equals(data.activeFilter) && !"PAYOUT".equals(item.type)) continue;
 
-            listContainer.getChildren().add(createNotificationCard(primaryStage, item));
+            listContainer.getChildren().add(createNotificationCard(scene, item));
         }
 
         if (listContainer.getChildren().isEmpty()) {
@@ -212,7 +201,7 @@ public class PartnerNotifications {
         return content;
     }
 
-    private static Button createFilterPill(Stage primaryStage, NotificationData data, String filterKey, String title) {
+    private static Button createFilterPill(Scene scene, String returnScreen, NotificationData data, String filterKey, String title) {
         boolean active = filterKey.equalsIgnoreCase(data.activeFilter);
         Button pill = new Button(title);
         pill.setPrefHeight(32);
@@ -224,13 +213,13 @@ public class PartnerNotifications {
 
         pill.setOnAction(e -> {
             data.activeFilter = filterKey;
-            show(primaryStage, "DASHBOARD", data);
+            show(scene, returnScreen, data);
         });
 
         return pill;
     }
 
-    private static HBox createNotificationCard(Stage primaryStage, NotificationItem item) {
+    private static HBox createNotificationCard(Scene scene, NotificationItem item) {
         HBox card = new HBox(14);
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(14, 18, 14, 18));
@@ -292,9 +281,9 @@ public class PartnerNotifications {
         card.setOnMouseClicked(e -> {
             item.isRead = true;
             if ("ORDER".equals(item.type)) {
-                PartnerDeliveries.show(primaryStage);
+                PartnerDeliveries.show(scene);
             } else if ("PAYOUT".equals(item.type)) {
-                PartnerEarnings.show(primaryStage);
+                PartnerEarnings.show(scene);
             }
         });
 
@@ -310,12 +299,12 @@ public class PartnerNotifications {
         return "Dashboard";
     }
 
-    private static void navigateBack(Stage primaryStage, String returnScreen) {
-        if ("DELIVERIES".equalsIgnoreCase(returnScreen)) PartnerDeliveries.show(primaryStage);
-        else if ("NAVIGATION".equalsIgnoreCase(returnScreen)) PartnerNavigation.show(primaryStage);
-        else if ("EARNINGS".equalsIgnoreCase(returnScreen)) PartnerEarnings.show(primaryStage);
-        else if ("AVAILABILITY".equalsIgnoreCase(returnScreen)) PartnerAvailability.show(primaryStage);
-        else if ("SETTINGS".equalsIgnoreCase(returnScreen)) PartnerSettings.show(primaryStage);
-        else PartnerDashboard.show(primaryStage);
+    private static void navigateBack(Scene scene, String returnScreen) {
+        if ("DELIVERIES".equalsIgnoreCase(returnScreen)) PartnerDeliveries.show(scene);
+        else if ("NAVIGATION".equalsIgnoreCase(returnScreen)) PartnerNavigation.show(scene);
+        else if ("EARNINGS".equalsIgnoreCase(returnScreen)) PartnerEarnings.show(scene);
+        else if ("AVAILABILITY".equalsIgnoreCase(returnScreen)) PartnerAvailability.show(scene);
+        else if ("SETTINGS".equalsIgnoreCase(returnScreen)) PartnerSettings.show(scene);
+        else PartnerDashboard.show(scene);
     }
 }

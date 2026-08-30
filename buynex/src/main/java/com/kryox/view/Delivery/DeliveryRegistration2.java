@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.util.HashMap;
@@ -57,11 +57,11 @@ public class DeliveryRegistration2 {
     private static CheckBox termsCheckbox;
     private static final DeliveryRegistrationController controller = new DeliveryRegistrationController();
 
-    public static void show(Stage primaryStage) {
+    public static void show(Scene scene) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        root.setTop(createTopBar(primaryStage));
+        root.setTop(createTopBar(scene));
 
         VBox content = new VBox(22);
         content.setAlignment(Pos.TOP_CENTER);
@@ -73,10 +73,10 @@ public class DeliveryRegistration2 {
                 createHeading(),
                 createPersonalDetails(),
                 createVehicleInformation(),
-                createDocuments(primaryStage),
+                createDocuments(scene),
                 createPayoutSecurity(),
                 createSecuritySection(),
-                createSubmissionSection(primaryStage));
+                createSubmissionSection(scene));
 
         ScrollPane scrollPane = new ScrollPane(content);
         scrollPane.setFitToWidth(true);
@@ -91,18 +91,12 @@ public class DeliveryRegistration2 {
 
         root.setCenter(scrollPane);
 
-        if (primaryStage.getScene() == null) {
-            primaryStage.setScene(new Scene(root));
-        } else {
-            primaryStage.getScene().setRoot(root);
+        if (scene != null) {
+            scene.setRoot(root);
         }
-
-        primaryStage.setTitle("BuyNeX - Delivery Partner Registration");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
     }
 
-    private static BorderPane createTopBar(Stage primaryStage) {
+    private static BorderPane createTopBar(Scene scene) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(55);
         topBar.setMinHeight(55);
@@ -126,7 +120,7 @@ public class DeliveryRegistration2 {
                 "-fx-background-color: transparent;" +
                 "-fx-font-weight: bold;" +
                 "-fx-cursor: hand;");
-        partnerLogin.setOnAction(e -> Deliverylogin.show(primaryStage));
+        partnerLogin.setOnAction(e -> Deliverylogin.show(scene));
 
         HBox rightBox = new HBox(8, needHelp, partnerLogin);
         rightBox.setAlignment(Pos.CENTER_RIGHT);
@@ -216,7 +210,7 @@ public class DeliveryRegistration2 {
     // ==========================================
     // 3. DOCUMENT UPLOADS (CLOUDINARY & ADMIN ROUTING)
     // ==========================================
-    private static VBox createDocuments(Stage primaryStage) {
+    private static VBox createDocuments(Scene scene) {
         VBox card = createCard();
         Text title = createSectionTitle("3. Document Uploads");
 
@@ -224,19 +218,19 @@ public class DeliveryRegistration2 {
         documents.setAlignment(Pos.CENTER);
 
         // Profile Photo: Uploads to Cloudinary & sets PartnerConstants immediately
-        Button profile = createDocumentUploadButton(primaryStage, "Profile Photo\n(Live Avatar)", "profilePhoto", true);
+        Button profile = createDocumentUploadButton(scene, "Profile Photo\n(Live Avatar)", "profilePhoto", true);
 
         // Verification Documents: Uploaded to Cloudinary and routed to Admin for review
-        Button idCard = createDocumentUploadButton(primaryStage, "Government ID Proof\n(Needs Admin Review)", "idCard", false);
-        Button license = createDocumentUploadButton(primaryStage, "Driving License\n(Front & Back)", "licenseDoc", false);
-        Button rc = createDocumentUploadButton(primaryStage, "Vehicle RC Book\n(Registration Copy)", "rcBook", false);
+        Button idCard = createDocumentUploadButton(scene, "Government ID Proof\n(Needs Admin Review)", "idCard", false);
+        Button license = createDocumentUploadButton(scene, "Driving License\n(Front & Back)", "licenseDoc", false);
+        Button rc = createDocumentUploadButton(scene, "Vehicle RC Book\n(Registration Copy)", "rcBook", false);
 
         documents.getChildren().addAll(profile, idCard, license, rc);
         card.getChildren().addAll(title, documents);
         return card;
     }
 
-    private static Button createDocumentUploadButton(Stage primaryStage, String label, String key, boolean isProfileAvatar) {
+    private static Button createDocumentUploadButton(Scene scene, String label, String key, boolean isProfileAvatar) {
         Button button = new Button("Upload\n" + label);
         button.setPrefWidth(200);
         button.setPrefHeight(80);
@@ -261,7 +255,8 @@ public class DeliveryRegistration2 {
                     new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.pdf")
             );
 
-            File file = chooser.showOpenDialog(primaryStage);
+            Window window = (scene != null) ? scene.getWindow() : null;
+            File file = chooser.showOpenDialog(window);
             if (file != null) {
                 button.setText("Uploading to Cloud...");
                 button.setDisable(true);
@@ -375,7 +370,7 @@ public class DeliveryRegistration2 {
     // ==========================================
     // SUBMISSION SECTION & REGISTRATION DISPATCH
     // ==========================================
-    private static VBox createSubmissionSection(Stage primaryStage) {
+    private static VBox createSubmissionSection(Scene scene) {
         VBox section = new VBox(16);
         section.setMaxWidth(920);
         section.setAlignment(Pos.CENTER_LEFT);
@@ -449,7 +444,7 @@ public class DeliveryRegistration2 {
             }
 
             // Execute Controller flow (saves partner document with admin verification flags in Firestore)
-            controller.handleRegistration(partner, password, confirmPassword, termsCheckbox.isSelected(), primaryStage);
+            controller.handleRegistration(partner, password, confirmPassword, termsCheckbox.isSelected(), scene);
         });
 
         section.getChildren().addAll(termsCheckbox, registerButton);
