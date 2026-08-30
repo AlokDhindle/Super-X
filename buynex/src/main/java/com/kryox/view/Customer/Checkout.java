@@ -268,8 +268,8 @@ public class Checkout extends Application {
         Scene scene =
                 new Scene(
                         root,
-                        940,
-                        750
+                        1550,
+                        850
                 );
 
         stage.setTitle(
