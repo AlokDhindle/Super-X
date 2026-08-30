@@ -54,7 +54,7 @@ public class ShopkeeperInventory {
     public static Scene inventoryScene() {
 
         allProducts = new ArrayList<>(
-                ProductController.getProducts()
+                ProductController.fetchProducts()
         );
 
 

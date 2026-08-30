@@ -1354,7 +1354,7 @@ public class ShopkeeperInventoryAddProduct {
                                                 tax, stockQuantity, lowStockLimit, unit, status, batchNumber,
                                                 expiryTracking, manufacturingDate, expiryDate, imageUrl);
 
-                                ProductController.addNewProduct(productModel);
+                                ProductController.addProduct(productModel);
 
                                 ConstantsMethods.showAlert(Alert.AlertType.INFORMATION, "Success",
                                                 "Product added successfully.");
