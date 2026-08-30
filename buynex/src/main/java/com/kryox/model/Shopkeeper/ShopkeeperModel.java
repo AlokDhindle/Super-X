@@ -202,5 +202,6 @@ public class ShopkeeperModel {
 
     public void setGstCertificateURL(String gstCertificateURL) {
         this.gstCertificateURL = gstCertificateURL;
-    }   
+    }
+
 }

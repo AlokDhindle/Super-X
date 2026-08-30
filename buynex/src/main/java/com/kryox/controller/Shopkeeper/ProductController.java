@@ -6,43 +6,179 @@ import com.kryox.dao.Shopkeeper.ProductDAO;
 import com.kryox.model.Shopkeeper.ProductModel;
 
 public class ProductController {
-    private static ProductDAO productDAO = new ProductDAO();
 
-    public static void addNewProduct(ProductModel productModel) {
+    private static ProductDAO productDAO;
 
-        new Thread() {
-            @Override
-            public void run() {
-                System.out.println("Add new product");
-                productDAO.addProduct(productModel);
-            }
-        }.start();
+    // ============================================================
+    // CONSTRUCTOR
+    // ============================================================
+
+    public ProductController() {
+
+        productDAO = new ProductDAO();
+
     }
 
-    public static ArrayList<ProductModel> getProducts() {
-        System.out.println("Get products");
-        ArrayList<ProductModel> products = productDAO.getProducts();
-        System.out.println("Products retrieved");
+    // ============================================================
+    // FETCH PRODUCTS
+    // ============================================================
+
+    public static ArrayList<ProductModel> fetchProducts() {
+
+        System.out.println("========================================");
+        System.out.println("PRODUCT CONTROLLER");
+        System.out.println("FETCHING PRODUCTS");
+        System.out.println("========================================");
+
+        ArrayList<ProductModel> products =
+                new ArrayList<>();
+
+        try {
+
+            // DAO se products fetch
+            products = productDAO.getProducts();
+
+            if (products == null) {
+
+                products = new ArrayList<>();
+
+            }
+
+            System.out.println(
+                    "Products fetched: "
+                            + products.size()
+            );
+
+            // Debug
+            for (ProductModel product : products) {
+
+                if (product != null) {
+
+                    System.out.println(
+                            "Product: "
+                                    + product.getProductName()
+                    );
+                }
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ProductController fetch error."
+            );
+
+            e.printStackTrace();
+        }
+
         return products;
     }
-    
-    public static void updateProduct(ProductModel productModel) {
-        new Thread() {
-            @Override
-            public void run() {
-                System.out.println("Update product");
-                productDAO.updateProduct(productModel);
-            }
-        }.start();
+
+    // ============================================================
+    // ADD PRODUCT
+    // ============================================================
+
+    public static void addProduct(
+            ProductModel productModel) {
+
+        if (productModel == null) {
+
+            System.out.println(
+                    "ProductModel is null."
+            );
+
+            return;
+        }
+
+        try {
+
+            productDAO.addProduct(
+                    productModel
+            );
+
+            System.out.println(
+                    "Product added successfully."
+            );
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ProductController add error."
+            );
+
+            e.printStackTrace();
+        }
     }
 
-    public static void deleteProduct(String productId) {        
-        new Thread() {
-            @Override
-            public void run() {
-                System.out.println("Delete product");
-                productDAO.deleteProduct(productId);
-            }
-        }.start();
+    // ============================================================
+    // UPDATE PRODUCT
+    // ============================================================
+
+    public static void updateProduct(
+            ProductModel productModel) {
+
+        if (productModel == null) {
+
+            System.out.println(
+                    "ProductModel is null."
+            );
+
+            return;
+        }
+
+        try {
+
+            productDAO.updateProduct(
+                    productModel
+            );
+
+            System.out.println(
+                    "Product updated successfully."
+            );
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ProductController update error."
+            );
+
+            e.printStackTrace();
+        }
+    }
+
+    // ============================================================
+    // DELETE PRODUCT
+    // ============================================================
+
+    public static void deleteProduct(
+            String productId) {
+
+        if (productId == null ||
+                productId.trim().isEmpty()) {
+
+            System.out.println(
+                    "Product ID is missing."
+            );
+
+            return;
+        }
+
+        try {
+
+            productDAO.deleteProduct(
+                    productId
+            );
+
+            System.out.println(
+                    "Product deleted successfully."
+            );
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "ProductController delete error."
+            );
+
+            e.printStackTrace();
+        }
     }
 }
