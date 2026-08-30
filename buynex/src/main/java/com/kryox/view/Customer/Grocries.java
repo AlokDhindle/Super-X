@@ -27,12 +27,19 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.kryox.controller.Customer.CARTcontroller;
+import com.kryox.controller.Shopkeeper.ProductController;
+import com.kryox.model.Shopkeeper.ProductModel;
 import javafx.scene.text.Text;
 
 public class Grocries {
         public String userId;
+
+        private final ProductController productController =
+                        new ProductController();
 
         public Grocries(String userId) {
                 this.userId = userId;
@@ -40,33 +47,517 @@ public class Grocries {
 
         private Scene GrocriesScene;
 
-        private HBox createProductImage(String imagePath, String fallbackEmoji) {
+        private HBox createProductImage(
+                        String imagePath,
+                        String fallbackEmoji) {
+
                 HBox box = new HBox();
+
                 box.setPrefSize(90, 90);
                 box.setMinSize(90, 90);
                 box.setMaxSize(90, 90);
                 box.setAlignment(Pos.CENTER);
+
                 box.setStyle(
                                 "-fx-background-color: #FFF7F2;" +
-                                                "-fx-background-radius: 14;" +
-                                                "-fx-border-color: #FFE2D2;" +
-                                                "-fx-border-radius: 14;" +
-                                                "-fx-border-width: 1;");
+                                "-fx-background-radius: 14;" +
+                                "-fx-border-color: #FFE2D2;" +
+                                "-fx-border-radius: 14;" +
+                                "-fx-border-width: 1;");
 
-                URL imageUrl = getClass().getResource(imagePath);
-                if (imageUrl != null) {
-                        ImageView imageView = new ImageView(new Image(imageUrl.toExternalForm()));
-                        imageView.setFitWidth(78);
-                        imageView.setFitHeight(78);
-                        imageView.setPreserveRatio(true);
-                        box.getChildren().add(imageView);
-                } else {
-                        Label fallback = new Label(fallbackEmoji);
-                        fallback.setStyle("-fx-font-size: 42px;");
-                        box.getChildren().add(fallback);
+                try {
+
+                        Image image = null;
+
+                        if (imagePath != null &&
+                                        !imagePath.trim().isEmpty()) {
+
+                                String path =
+                                                imagePath.trim();
+
+                                // First try local resources.
+                                URL resource =
+                                                getClass().getResource(path);
+
+                                if (resource != null) {
+
+                                        image =
+                                                        new Image(
+                                                                        resource.toExternalForm(),
+                                                                        78,
+                                                                        78,
+                                                                        true,
+                                                                        true);
+                                }
+
+                                // If not a local resource, try URL.
+                                if (image == null &&
+                                                (path.startsWith("http://") ||
+                                                path.startsWith("https://"))) {
+
+                                        image =
+                                                        new Image(
+                                                                        path,
+                                                                        78,
+                                                                        78,
+                                                                        true,
+                                                                        true,
+                                                                        true);
+                                }
+                        }
+
+                        if (image != null &&
+                                        !image.isError()) {
+
+                                ImageView imageView =
+                                                new ImageView(image);
+
+                                imageView.setFitWidth(78);
+                                imageView.setFitHeight(78);
+                                imageView.setPreserveRatio(true);
+
+                                box.getChildren().add(
+                                                imageView);
+
+                                return box;
+                        }
+
+                } catch (Exception e) {
+
+                        System.out.println(
+                                        "Product image could not be loaded: "
+                                                        + imagePath);
                 }
 
+                Label fallback =
+                                new Label(
+                                                fallbackEmoji == null ||
+                                                fallbackEmoji.isEmpty()
+                                                                ? "🛒"
+                                                                : fallbackEmoji);
+
+                fallback.setStyle(
+                                "-fx-font-size: 42px;");
+
+                box.getChildren().add(fallback);
+
                 return box;
+        }
+
+
+        // ============================================================
+        // VIEW PRODUCT MODEL
+        //
+        // Only the required 11 fields are used by this View.
+        // ============================================================
+
+        private static class Product {
+
+                private final String imageUrl;
+                private final String status;
+                private final int stockQuantity;
+                private final int lowStockLimit;
+
+                private final Double costPrice;
+                private final Double sellingPrice;
+                private final Double discount;
+
+                private final String productName;
+                private final String category;
+                private final String brand;
+                private final String descriptionValue;
+
+                Product(
+                                String imageUrl,
+                                String status,
+                                int stockQuantity,
+                                int lowStockLimit,
+                                Double costPrice,
+                                Double sellingPrice,
+                                Double discount,
+                                String productName,
+                                String category,
+                                String brand,
+                                String descriptionValue) {
+
+                        this.imageUrl = imageUrl;
+                        this.status = status;
+                        this.stockQuantity = stockQuantity;
+                        this.lowStockLimit = lowStockLimit;
+                        this.costPrice = costPrice;
+                        this.sellingPrice = sellingPrice;
+                        this.discount = discount;
+                        this.productName = productName;
+                        this.category = category;
+                        this.brand = brand;
+                        this.descriptionValue = descriptionValue;
+                }
+        }
+
+        // ============================================================
+        // FETCH PRODUCTS THROUGH CONTROLLER
+        // ============================================================
+
+        private List<Product> getProducts() {
+
+                List<Product> products =
+                                new ArrayList<>();
+
+                try {
+
+                        ArrayList<ProductModel> firebaseProducts =
+                                        productController.fetchProducts();
+
+                        if (firebaseProducts == null ||
+                                        firebaseProducts.isEmpty()) {
+
+                                System.out.println(
+                                                "No products found for shopkeeper UID: "
+                                                                + com.kryox.controller.Shopkeeper.ShopkeeperLogController
+                                                                                .getShopkeeperUid());
+
+                                return products;
+                        }
+
+                        for (ProductModel productModel :
+                                        firebaseProducts) {
+
+                                if (productModel == null) {
+                                        continue;
+                                }
+
+                                Product product =
+                                                new Product(
+
+                                                                productModel.getImageUrl(),
+
+                                                                productModel.getStatus(),
+
+                                                                productModel.getStockQuantity(),
+
+                                                                productModel.getLowStockLimit(),
+
+                                                                productModel.getCostPrice(),
+
+                                                                productModel.getSellingPrice(),
+
+                                                                productModel.getDiscount(),
+
+                                                                productModel.getProductName(),
+
+                                                                productModel.getCategory(),
+
+                                                                productModel.getBrand(),
+
+                                                                productModel.getDescriptionValue()
+                                                );
+
+                                products.add(product);
+                        }
+
+                        System.out.println(
+                                        "Products loaded in Groceries View: "
+                                                        + products.size());
+
+                } catch (Exception e) {
+
+                        System.out.println(
+                                        "ERROR: Unable to fetch products.");
+
+                        e.printStackTrace();
+                }
+
+                return products;
+        }
+
+        // ============================================================
+        // CREATE PRODUCT CARD DYNAMICALLY
+        // ============================================================
+        private VBox createProductCard(Product product,
+                                        DropShadow cardShadow3) {
+
+                VBox card = new VBox(5);
+                card.setPrefWidth(280);
+                card.setMinWidth(280);
+                card.setMaxWidth(280);
+                card.setPrefHeight(380);
+                card.setPadding(new Insets(15, 16, 15, 16));
+
+                String normalStyle =
+                                "-fx-background-color: white;" +
+                                "-fx-background-radius: 12;" +
+                                "-fx-border-color: #EAE6EC;" +
+                                "-fx-border-radius: 12;" +
+                                "-fx-border-width: 1;";
+
+                String hoverStyle =
+                                "-fx-background-color: #FFFFFF;" +
+                                "-fx-background-radius: 12;" +
+                                "-fx-border-color: #FFD8C4;" +
+                                "-fx-border-radius: 12;" +
+                                "-fx-border-width: 1.5;";
+
+                card.setStyle(normalStyle);
+                card.setEffect(cardShadow3);
+
+                VBox productRow = new VBox(12);
+                productRow.setAlignment(Pos.CENTER);
+
+                HBox imagePlaceholder =
+                                createProductImage(
+                                                product.imageUrl,
+                                                "🛒");
+
+                VBox productDetails = new VBox(3);
+                productDetails.setAlignment(Pos.CENTER);
+
+                Label nameLabel = new Label(
+                                product.productName == null
+                                                ? "Unnamed Product"
+                                                : product.productName);
+                nameLabel.setWrapText(true);
+                nameLabel.setAlignment(Pos.CENTER);
+                nameLabel.setMaxWidth(240);
+                nameLabel.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-weight: 700;" +
+                                "-fx-text-fill: #222222;");
+
+                Label descLabel = new Label(
+                                product.descriptionValue == null
+                                                ? ""
+                                                : product.descriptionValue);
+                descLabel.setWrapText(true);
+                descLabel.setAlignment(Pos.CENTER);
+                descLabel.setMaxWidth(240);
+                descLabel.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 11px;" +
+                                "-fx-text-fill: #777777;");
+
+                HBox priceRow = new HBox(8);
+                priceRow.setAlignment(Pos.CENTER);
+
+                double sellingPrice =
+                                product.sellingPrice == null
+                                                ? 0.0
+                                                : product.sellingPrice;
+
+                double costPrice =
+                                product.costPrice == null
+                                                ? sellingPrice
+                                                : product.costPrice;
+
+                Label priceLabel =
+                                new Label(
+                                                "$" +
+                                                String.format(
+                                                                "%.2f",
+                                                                sellingPrice));
+
+                priceLabel.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 16px;" +
+                                "-fx-font-weight: 800;" +
+                                "-fx-text-fill: #222222;");
+
+                priceRow.getChildren().add(priceLabel);
+
+                if (costPrice > sellingPrice) {
+
+                        double discount =
+                                        product.discount != null
+                                                        ? product.discount
+                                                        : ((costPrice > 0)
+                                                                        ? ((costPrice - sellingPrice) /
+                                                                                costPrice) * 100.0
+                                                                        : 0.0);
+
+                        Label discountLabel =
+                                        new Label(String.format("%.0f%% OFF", discount));
+
+                        discountLabel.setStyle(
+                                        "-fx-background-color: #FFE8E0;" +
+                                        "-fx-text-fill: #FF6900;" +
+                                        "-fx-font-size: 10px;" +
+                                        "-fx-font-weight: 700;" +
+                                        "-fx-background-radius: 12;" +
+                                        "-fx-padding: 2 10 2 10;");
+
+                        Label originalPriceLabel =
+                                        new Label("$" +
+                                                        String.format("%.2f",
+                                                                        costPrice));
+
+                        originalPriceLabel.setStyle(
+                                        "-fx-font-size: 11px;" +
+                                        "-fx-text-fill: #AAAAAA;" +
+                                        "-fx-strikethrough: true;");
+
+                        priceRow.getChildren().addAll(
+                                        discountLabel,
+                                        originalPriceLabel);
+                }
+
+
+                String statusText =
+                                product.status == null ||
+                                product.status.isEmpty()
+                                                ? "Available"
+                                                : product.status;
+
+                Label stockLabel = new Label(
+                                statusText +
+                                " • Stock: " +
+                                product.stockQuantity);
+
+                stockLabel.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 10px;" +
+                                "-fx-text-fill: #777777;");
+
+                productDetails.getChildren().add(stockLabel);
+
+                productDetails.getChildren().addAll(
+                                nameLabel,
+                                descLabel,
+                                priceRow);
+
+                // ====================================================
+                // QUANTITY CONTROLS
+                // ====================================================
+                int availableStock =
+                                Math.max(0, product.stockQuantity);
+
+                Label quantityLabel =
+                                new Label(
+                                                availableStock > 0
+                                                                ? "1"
+                                                                : "0");
+                quantityLabel.setPrefWidth(30);
+                quantityLabel.setAlignment(Pos.CENTER);
+                quantityLabel.setStyle(
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-text-fill: #222222;");
+
+                Button minusButton = new Button("-");
+                minusButton.setPrefSize(30, 30);
+                minusButton.setStyle(
+                                "-fx-background-color: #FF6900;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-size: 15px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 50%;" +
+                                "-fx-cursor: hand;");
+
+                Button plusButton = new Button("+");
+                plusButton.setPrefSize(30, 30);
+                plusButton.setStyle(
+                                "-fx-background-color: #FF6900;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-size: 15px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 50%;" +
+                                "-fx-cursor: hand;");
+
+                minusButton.setOnAction(e -> {
+                        int quantity =
+                                        Integer.parseInt(quantityLabel.getText());
+
+                        if (quantity > 1) {
+                                quantity--;
+                                quantityLabel.setText(
+                                                String.valueOf(quantity));
+                        }
+                });
+
+                plusButton.setOnAction(e -> {
+                        int quantity =
+                                        Integer.parseInt(quantityLabel.getText());
+
+                        if (quantity < availableStock) {
+                                quantity++;
+                                quantityLabel.setText(
+                                                String.valueOf(quantity));
+                        }
+                });
+
+                HBox quantityBox =
+                                new HBox(8, minusButton, quantityLabel, plusButton);
+                quantityBox.setAlignment(Pos.CENTER);
+
+                // ====================================================
+                // ADD TO CART
+                // ====================================================
+                Button addToCart = new Button("Add to Cart");
+                addToCart.setPrefHeight(36);
+                addToCart.setMaxWidth(Double.MAX_VALUE);
+                addToCart.setStyle(
+                                "-fx-background-color: #FF6900;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-size: 11px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 18;" +
+                                "-fx-padding: 8 18 8 18;" +
+                                "-fx-cursor: hand;");
+
+                addToCart.setOnAction(e -> {
+                        int quantity =
+                                        Integer.parseInt(quantityLabel.getText());
+
+                        if (quantity <= 0 ||
+                                        availableStock <= 0) {
+
+                                System.out.println(
+                                                "Product is out of stock: "
+                                                                + product.productName);
+
+                                return;
+                        }
+
+                        CARTcontroller cl =
+                                        new CARTcontroller();
+
+                        cl.addTocart(
+                                        userId,
+                                        product.productName,
+                                        sellingPrice,
+                                        product.brand,
+                                        quantity);
+                });
+
+                productRow.getChildren().addAll(
+                                imagePlaceholder,
+                                productDetails,
+                                quantityBox,
+                                addToCart);
+
+                card.getChildren().add(productRow);
+
+                // ====================================================
+                // HOVER EFFECT
+                // ====================================================
+                card.setOnMouseEntered(e -> {
+                        card.setStyle(hoverStyle);
+
+                        DropShadow hoverShadow = new DropShadow();
+                        hoverShadow.setRadius(12);
+                        hoverShadow.setOffsetY(4);
+                        hoverShadow.setSpread(0.04);
+                        hoverShadow.setColor(
+                                        Color.rgb(0, 0, 0, 0.10));
+
+                        card.setEffect(hoverShadow);
+                });
+
+                card.setOnMouseExited(e -> {
+                        card.setStyle(normalStyle);
+                        card.setEffect(cardShadow3);
+                });
+
+                return card;
         }
 
         Scene getGrocriescene(Runnable callbacktoRunnable) {
@@ -964,7 +1455,13 @@ public class Grocries {
                                                 "-fx-font-weight: 800;" +
                                                 "-fx-text-fill: #222222;");
 
-                Label subtitle1 = new Label("120+ Items found in Manhattan, NY");
+                List<Product> products =
+                                getProducts();
+
+                Label subtitle1 =
+                                new Label(
+                                                products.size()
+                                                                + " Items found");
                 subtitle1.setStyle(
                                 "-fx-font-family: 'Montserrat';" +
                                                 "-fx-font-size: 12px;" +
@@ -996,611 +1493,126 @@ public class Grocries {
                 VBox content = new VBox(12);
                 content.setPadding(new Insets(0, 20, 20, 20));
 
-                VBox card1 = new VBox(5);
-                card1.setPrefWidth(280);
-                card1.setMinWidth(280);
-                card1.setMaxWidth(280);
-                card1.setPrefHeight(380);
-                card1.setPadding(new Insets(15, 16, 15, 16));
-                card1.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 12;" +
-                                                "-fx-border-color: #EAE6EC;" +
-                                                "-fx-border-radius: 12;" +
-                                                "-fx-border-width: 1;");
-                card1.setEffect(cardShadow3);
-
-                VBox productRow1 = new VBox(12);
-                productRow1.setAlignment(Pos.CENTER);
-
-                HBox imagePlaceholder1 = createProductImage(
-                                "/assets/images/products/avocado.png",
-                                "🥑");
-
-                VBox productDetails1 = new VBox(3);
-                productDetails1.setAlignment(Pos.CENTER);
-
-                Label name1 = new Label("Organic Hass Avocados");
-                name1.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 14px;" +
-                                                "-fx-font-weight: 700;" +
-                                                "-fx-text-fill: #222222;");
-
-                Label desc1 = new Label("Pack of 4 • Fresh Produce");
-                desc1.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-text-fill: #777777;");
-
-                HBox priceRow1 = new HBox(8);
-                priceRow1.setAlignment(Pos.CENTER_LEFT);
-                Label price1 = new Label("$6.99");
-
-                price1.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 16px;" +
-                                                "-fx-font-weight: 800;" +
-                                                "-fx-text-fill: #222222;");
-
-                double pricevalu1 = Double.parseDouble(
-                                price1.getText().replace("$", ""));
-
-                Label l1 = new Label("p001");
-
-                Label discount1 = new Label("20% OFF");
-                discount1.setStyle(
-                                "-fx-background-color: #FFE8E0;" +
-                                                "-fx-text-fill: #FF6900;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: 700;" +
-                                                "-fx-background-radius: 12;" +
-                                                "-fx-padding: 2 10 2 10;");
-
-                Label originalPrice1 = new Label("$8.99");
-                originalPrice1.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-text-fill: #AAAAAA;" +
-                                                "-fx-strikethrough: true;");
-
-                priceRow1.getChildren().addAll(price1, discount1, originalPrice1);
-                productDetails1.getChildren().addAll(name1, desc1, priceRow1);
-                int stockQuantity1 = 10;
-
-                
-                Label quantityLabel1 = new Label("1");
-                
-
-                String quantityButtonStyle1 = "-fx-background-color: #FF6900;" +
-                                "-fx-text-fill: white;" +
-                                "-fx-font-size: 15px;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-background-radius: 50%;" +
-                                "-fx-cursor: hand;";
-
-                
-                quantityLabel1.setPrefWidth(30);
-                quantityLabel1.setAlignment(Pos.CENTER);
-                quantityLabel1.setStyle(
-                                "-fx-font-size: 14px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #222222;");
-
-               
-               
-
-                HBox quantityBox1 = new HBox(8,  quantityLabel1);
-                quantityBox1.setAlignment(Pos.CENTER);
-
-                Button addToCart1 = new Button("Add to Cart");
-                addToCart1.setPrefHeight(36);
-                addToCart1.setStyle(
-                                "-fx-background-color: #FF6900;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 18;" +
-                                                "-fx-padding: 8 18 8 18;" +
-                                                "-fx-cursor: hand;");
-                int stockQuantity3 = 15;
-
-                Label quantityLabel3 = new Label("10");
-
-                String quantityButtonStyle3 = "-fx-background-color: #FF6900;" +
-                                "-fx-text-fill: white;" +
-                                "-fx-font-size: 15px;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-background-radius: 50%;" +
-                                "-fx-cursor: hand;";
-
-                quantityLabel3.setPrefWidth(30);
-                quantityLabel3.setAlignment(Pos.CENTER);
-                quantityLabel3.setStyle(
-                                "-fx-font-size: 14px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #222222;");
-
-                addToCart1.setOnAction(e -> {
-                        int quantity = Integer.parseInt(quantityLabel3.getText());
-
-                        if (quantity > 1) {
-                                quantity--;
-                                quantityLabel3.setText(String.valueOf(quantity));
-                        }
-
-                        CARTcontroller cl = new CARTcontroller();
-                        int quantity1 = Integer.parseInt(quantityLabel1.getText());
-                        cl.addTocart(userId, "Organic Hass Avocados", pricevalu1, "Green Grocer", quantity1);
-                });
-
-                productRow1.getChildren().addAll(imagePlaceholder1, productDetails1, quantityBox1, addToCart1);
-                card1.getChildren().add(productRow1);
-
-                card1.setOnMouseEntered(e -> {
-                        card1.setStyle(
-                                        "-fx-background-color: #FFFFFF;" +
-                                                        "-fx-background-radius: 12;" +
-                                                        "-fx-border-color: #FFD8C4;" +
-                                                        "-fx-border-radius: 12;" +
-                                                        "-fx-border-width: 1.5;");
-                        DropShadow hoverShadow = new DropShadow();
-                        hoverShadow.setRadius(12);
-                        hoverShadow.setOffsetY(4);
-                        hoverShadow.setSpread(0.04);
-                        hoverShadow.setColor(Color.rgb(0, 0, 0, 0.10));
-                        card1.setEffect(hoverShadow);
-                });
-
-                card1.setOnMouseExited(e -> {
-                        card1.setStyle(
-                                        "-fx-background-color: white;" +
-                                                        "-fx-background-radius: 12;" +
-                                                        "-fx-border-color: #EAE6EC;" +
-                                                        "-fx-border-radius: 12;" +
-                                                        "-fx-border-width: 1;");
-                        card1.setEffect(cardShadow3);
-
-                });
-
-                VBox card2 = new VBox(5);
-                card2.setPrefWidth(280);
-                card2.setMinWidth(280);
-                card2.setMaxWidth(280);
-                card2.setPrefHeight(380);
-                card2.setPadding(new Insets(15, 16, 15, 16));
-                card2.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 12;" +
-                                                "-fx-border-color: #EAE6EC;" +
-                                                "-fx-border-radius: 12;" +
-                                                "-fx-border-width: 1;");
-                card2.setEffect(cardShadow3);
-
-                VBox productRow2 = new VBox(12);
-                productRow2.setAlignment(Pos.CENTER);
-
-                HBox imagePlaceholder2 = createProductImage(
-                                "/assets/images/products/milk.png",
-                                "🥛");
-                Text l2 = new Text("p002");
-
-                VBox productDetails2 = new VBox(3);
-                productDetails2.setAlignment(Pos.CENTER);
-
-                Text name2 = new Text("Fresh Farm Whole Milk");
-                name2.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 14px;" +
-                                                "-fx-font-weight: 700;" +
-                                                "-fx-text-fill: #222222;");
-
-                Label desc2 = new Label("1L Bottle • Dairy");
-                desc2.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-text-fill: #777777;");
-
-                HBox priceRow2 = new HBox(8);
-                priceRow2.setAlignment(Pos.CENTER_LEFT);
-
-                Label price2 = new Label("$3.29");
-                price2.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 16px;" +
-                                                "-fx-font-weight: 800;" +
-                                                "-fx-text-fill: #222222;");
-                double pricevalu2 = Double.parseDouble(
-                                price2.getText().replace("$", ""));
-
-                priceRow2.getChildren().addAll(price2);
-                productDetails2.getChildren().addAll(name2, desc2, priceRow2);
-                int stockQuantity2 = 20;
-
-                Label quantityLabel2 = new Label("1");
-
-                String quantityButtonStyle2 = "-fx-background-color: #FF6900;" +
-                                "-fx-text-fill: white;" +
-                                "-fx-font-size: 15px;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-background-radius: 50%;" +
-                                "-fx-cursor: hand;";
-
-                quantityLabel2.setPrefWidth(30);
-                quantityLabel2.setAlignment(Pos.CENTER);
-                quantityLabel2.setStyle(
-                                "-fx-font-size: 14px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #222222;");
-
-                HBox quantityBox2 = new HBox(8,  quantityLabel2);
-                quantityBox2.setAlignment(Pos.CENTER);
-
-                Button addToCart2 = new Button("Add to Cart");
-                addToCart2.setPrefHeight(36);
-                addToCart2.setStyle(
-                                "-fx-background-color: #FF6900;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 18;" +
-                                                "-fx-padding: 8 18 8 18;" +
-                                                "-fx-cursor: hand;");
-
-                addToCart2.setOnAction(e -> {
-                        CARTcontroller cl = new CARTcontroller();
-
-                        int quantity = Integer.parseInt(quantityLabel3.getText());
-
-                        if (quantity > 1) {
-                                quantity--;
-                                quantityLabel3.setText(String.valueOf(quantity));
-                        }
-
-                        cl.addTocart(userId, name2.getText(), pricevalu2, l2.getText(), quantity);
-                });
-
-                productRow2.getChildren().addAll(imagePlaceholder2, productDetails2, quantityBox2, addToCart2);
-                card2.getChildren().add(productRow2);
-
-                card2.setOnMouseEntered(e -> {
-                        card2.setStyle(
-                                        "-fx-background-color: #FFFFFF;" +
-                                                        "-fx-background-radius: 12;" +
-                                                        "-fx-border-color: #FFD8C4;" +
-                                                        "-fx-border-radius: 12;" +
-                                                        "-fx-border-width: 1.5;");
-                        DropShadow hoverShadow = new DropShadow();
-                        hoverShadow.setRadius(12);
-                        hoverShadow.setOffsetY(4);
-                        hoverShadow.setSpread(0.04);
-                        hoverShadow.setColor(Color.rgb(0, 0, 0, 0.10));
-                        card2.setEffect(hoverShadow);
-                });
-
-                card2.setOnMouseExited(e -> {
-                        card2.setStyle(
-                                        "-fx-background-color: white;" +
-                                                        "-fx-background-radius: 12;" +
-                                                        "-fx-border-color: #EAE6EC;" +
-                                                        "-fx-border-radius: 12;" +
-                                                        "-fx-border-width: 1;");
-                        card2.setEffect(cardShadow3);
-                });
-
-                VBox card3 = new VBox(5);
-                card3.setPrefWidth(280);
-                card3.setMinWidth(280);
-                card3.setMaxWidth(280);
-                card3.setPrefHeight(380);
-                card3.setPadding(new Insets(15, 16, 15, 16));
-                card3.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 12;" +
-                                                "-fx-border-color: #EAE6EC;" +
-                                                "-fx-border-radius: 12;" +
-                                                "-fx-border-width: 1;");
-                card3.setEffect(cardShadow3);
-
-                VBox productRow3 = new VBox(12);
-                productRow3.setAlignment(Pos.CENTER);
-
-                HBox imagePlaceholder3 = createProductImage(
-                                "/assets/images/products/bread.png",
-                                "🍞");
-
-                VBox productDetails3 = new VBox(3);
-                productDetails3.setAlignment(Pos.CENTER);
-
-                Label name3 = new Label("Artisan Sourdough Loaf");
-                name3.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 14px;" +
-                                                "-fx-font-weight: 700;" +
-                                                "-fx-text-fill: #222222;");
-
-                Label desc3 = new Label("500g • Bakery");
-                desc3.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-text-fill: #777777;");
-
-                HBox priceRow3 = new HBox(8);
-                priceRow3.setAlignment(Pos.CENTER_LEFT);
-
-                Label price3 = new Label("$6.50");
-                price3.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 16px;" +
-                                                "-fx-font-weight: 800;" +
-                                                "-fx-text-fill: #222222;");
-                double pricevalu3 = Double.parseDouble(
-                                price3.getText().replace("$", ""));
-
-                priceRow3.getChildren().addAll(price3);
-                productDetails3.getChildren().addAll(name3, desc3, priceRow3);
-
-                HBox quantityBox3 = new HBox(8, quantityLabel3);
-                quantityBox3.setAlignment(Pos.CENTER);
-
-                Button addToCart3 = new Button("Add to Cart");
-                addToCart3.setPrefHeight(36);
-                addToCart3.setStyle(
-                                "-fx-background-color: #FF6900;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 18;" +
-                                                "-fx-padding: 8 18 8 18;" +
-                                                "-fx-cursor: hand;");
-
-                addToCart3.setOnAction(e -> {
-                        int quantity = Integer.parseInt(quantityLabel3.getText());
-
-                        if (quantity > 1) {
-                                quantity--;
-                                quantityLabel3.setText(String.valueOf(quantity));
-                        }
-
-                        CARTcontroller cl = new CARTcontroller();
-                        int quantity1 = Integer.parseInt(quantityLabel3.getText());
-                        cl.addTocart(userId, name3.getText(), pricevalu3, "Green Grocer", quantity1);
-                });
-
-                productRow3.getChildren().addAll(imagePlaceholder3, productDetails3, quantityBox3, addToCart3);
-                card3.getChildren().add(productRow3);
-
-                card3.setOnMouseEntered(e -> {
-                        card3.setStyle(
-                                        "-fx-background-color: #FFFFFF;" +
-                                                        "-fx-background-radius: 12;" +
-                                                        "-fx-border-color: #FFD8C4;" +
-                                                        "-fx-border-radius: 12;" +
-                                                        "-fx-border-width: 1.5;");
-                        DropShadow hoverShadow = new DropShadow();
-                        hoverShadow.setRadius(12);
-                        hoverShadow.setOffsetY(4);
-                        hoverShadow.setSpread(0.04);
-                        hoverShadow.setColor(Color.rgb(0, 0, 0, 0.10));
-                        card3.setEffect(hoverShadow);
-                });
-
-                card3.setOnMouseExited(e -> {
-                        card3.setStyle(
-                                        "-fx-background-color: white;" +
-                                                        "-fx-background-radius: 12;" +
-                                                        "-fx-border-color: #EAE6EC;" +
-                                                        "-fx-border-radius: 12;" +
-                                                        "-fx-border-width: 1;");
-                        card3.setEffect(cardShadow3);
-                });
-
-                HBox deliveryBanner = new HBox(15);
-                deliveryBanner.setAlignment(Pos.CENTER_LEFT);
-                deliveryBanner.setPadding(new Insets(18, 20, 18, 20));
-                deliveryBanner.setStyle(
-                                "-fx-background-color: #FFF3EA;" +
-                                                "-fx-background-radius: 12;" +
-                                                "-fx-border-color: #FFD8C4;" +
-                                                "-fx-border-radius: 12;" +
-                                                "-fx-border-width: 1;");
-                deliveryBanner.setEffect(cardShadow3);
-
-                Label lightningIcon = new Label("⚡");
-                lightningIcon.setStyle(
-                                "-fx-font-size: 28px;" +
-                                                "-fx-padding: 0 5 0 0;");
-
-                VBox deliveryText = new VBox(2);
-                Label deliveryTitle = new Label("LIGHTNING DELIVERY");
-                deliveryTitle.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 13px;" +
-                                                "-fx-font-weight: 800;" +
-                                                "-fx-text-fill: #FF6900;");
-
-                Label deliveryDesc = new Label("Freshness delivered in 15 minutes.");
-                deliveryDesc.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-text-fill: #444444;");
-
-                deliveryText.getChildren().addAll(deliveryTitle, deliveryDesc);
-
-                Region deliverySpacer = new Region();
-                HBox.setHgrow(deliverySpacer, Priority.ALWAYS);
-
-                Button shopExpress = new Button("Shop Express →");
-                shopExpress.setStyle(
-                                "-fx-background-color: #FF6900;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 20;" +
-                                                "-fx-padding: 8 18 8 18;" +
-                                                "-fx-cursor: hand;");
-                shopExpress.setEffect(buttonShadow);
-
-                shopExpress.setOnMouseEntered(e -> {
-                        shopExpress.setStyle(
-                                        "-fx-background-color: #E85A00;" +
-                                                        "-fx-text-fill: white;" +
-                                                        "-fx-font-size: 11px;" +
-                                                        "-fx-font-weight: bold;" +
-                                                        "-fx-background-radius: 20;" +
-                                                        "-fx-padding: 8 18 8 18;" +
-                                                        "-fx-cursor: hand;");
-                });
-
-                shopExpress.setOnMouseExited(e -> {
-                        shopExpress.setStyle(
-                                        "-fx-background-color: #FF6900;" +
-                                                        "-fx-text-fill: white;" +
-                                                        "-fx-font-size: 11px;" +
-                                                        "-fx-font-weight: bold;" +
-                                                        "-fx-background-radius: 20;" +
-                                                        "-fx-padding: 8 18 8 18;" +
-                                                        "-fx-cursor: hand;");
-                });
-
-                deliveryBanner.getChildren().addAll(lightningIcon, deliveryText, deliverySpacer, shopExpress);
-
-                VBox card4 = new VBox(5);
-                card4.setPrefWidth(280);
-                card4.setMinWidth(280);
-                card4.setMaxWidth(280);
-                card4.setPrefHeight(380);
-                card4.setPadding(new Insets(15, 16, 15, 16));
-                card4.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 12;" +
-                                                "-fx-border-color: #EAE6EC;" +
-                                                "-fx-border-radius: 12;" +
-                                                "-fx-border-width: 1;");
-                card4.setEffect(cardShadow3);
-
-                VBox productRow4 = new VBox(12);
-                productRow4.setAlignment(Pos.CENTER);
-
-                HBox imagePlaceholder4 = createProductImage(
-                                "/assets/images/products/banana.png",
-                                "🍌");
-
-                VBox productDetails4 = new VBox(3);
-                productDetails4.setAlignment(Pos.CENTER);
-
-                Label name4 = new Label("Premium Yellow Bananas");
-                name4.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 14px;" +
-                                                "-fx-font-weight: 700;" +
-                                                "-fx-text-fill: #222222;");
-
-                Label desc4 = new Label("1 Bunch (Approx 1kg) • Fruits");
-                desc4.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-text-fill: #777777;");
-
-                HBox priceRow4 = new HBox(8);
-                priceRow4.setAlignment(Pos.CENTER_LEFT);
-
-                Label price4 = new Label("$1.99");
-                price4.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 16px;" +
-                                                "-fx-font-weight: 800;" +
-                                                "-fx-text-fill: #222222;");
-
-                priceRow4.getChildren().addAll(price4);
-                productDetails4.getChildren().addAll(name4, desc4, priceRow4);
-
-                double pricevalu4 = Double.parseDouble(price4.getText().replace("$", ""));
-                int stockQuantity4 = 12;
-
-                
-                Label quantityLabel4 = new Label("8");
-                
-
-                String quantityButtonStyle4 = "-fx-background-color: #FF6900;" +
-                                "-fx-text-fill: white;" +
-                                "-fx-font-size: 15px;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-background-radius: 50%;" +
-                                "-fx-cursor: hand;";
-
-                
-                quantityLabel4.setPrefWidth(30);
-                quantityLabel4.setAlignment(Pos.CENTER);
-                quantityLabel4.setStyle(
-                                "-fx-font-size: 14px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #222222;");
-
-                
-
-                
-
-                HBox quantityBox4 = new HBox(8,  quantityLabel4);
-                quantityBox4.setAlignment(Pos.CENTER);
-
-                Button addToCart4 = new Button("Add to Cart");
-                addToCart4.setPrefHeight(36);
-                addToCart4.setStyle(
-                                "-fx-background-color: #FF6900;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 18;" +
-                                                "-fx-padding: 8 18 8 18;" +
-                                                "-fx-cursor: hand;");
-
-                addToCart4.setOnAction(e -> {
-                        int quantity = Integer.parseInt(quantityLabel3.getText());
-
-                        if (quantity > 1) {
-                                quantity--;
-                                quantityLabel3.setText(String.valueOf(quantity));
-                        }
-
-                        CARTcontroller cl = new CARTcontroller();
-                        int quantity1 = Integer.parseInt(quantityLabel4.getText());
-                        cl.addTocart(userId, name4.getText(), pricevalu4, "Green Grocer", quantity1);
-                });
-
-                productRow4.getChildren().addAll(imagePlaceholder4, productDetails4, quantityBox4, addToCart4);
-                card4.getChildren().add(productRow4);
-
-                card4.setOnMouseEntered(e -> {
-                        card4.setStyle(
-                                        "-fx-background-color: #FFFFFF;" +
-                                                        "-fx-background-radius: 12;" +
-                                                        "-fx-border-color: #FFD8C4;" +
-                                                        "-fx-border-radius: 12;" +
-                                                        "-fx-border-width: 1.5;");
-                        DropShadow hoverShadow = new DropShadow();
-                        hoverShadow.setRadius(12);
-                        hoverShadow.setOffsetY(4);
-                        hoverShadow.setSpread(0.04);
-                        hoverShadow.setColor(Color.rgb(0, 0, 0, 0.10));
-                        card4.setEffect(hoverShadow);
-                });
-
-                card4.setOnMouseExited(e -> {
-                        card4.setStyle(
-                                        "-fx-background-color: white;" +
-                                                        "-fx-background-radius: 12;" +
-                                                        "-fx-border-color: #EAE6EC;" +
-                                                        "-fx-border-radius: 12;" +
-                                                        "-fx-border-width: 1;");
-                        card4.setEffect(cardShadow3);
-                });
-
+                // ============================================================
+                // DYNAMIC PRODUCT LIST / GRID
+                // Products are already fetched through ProductController.
+                // ============================================================
                 FlowPane productsGrid = new FlowPane(15, 15);
                 productsGrid.setAlignment(Pos.TOP_LEFT);
                 productsGrid.setPadding(new Insets(10, 0, 10, 0));
                 productsGrid.setStyle("-fx-background-color: transparent;");
                 productsGrid.setPrefWrapLength(1400);
-                productsGrid.getChildren().addAll(card1, card2, card3, card4);
+
+                if (products.isEmpty()) {
+
+                        Label emptyLabel =
+                                        new Label(
+                                                        "No products available right now.");
+
+                        emptyLabel.setStyle(
+                                        "-fx-font-family: 'Montserrat';" +
+                                        "-fx-font-size: 14px;" +
+                                        "-fx-text-fill: #777777;" +
+                                        "-fx-padding: 30;");
+
+                        productsGrid.getChildren().add(
+                                        emptyLabel);
+
+                } else {
+
+                        for (Product product : products) {
+
+                                productsGrid.getChildren().add(
+                                                createProductCard(
+                                                                product,
+                                                                cardShadow3));
+                        }
+                }
+
+                // ============================================================
+                // DELIVERY BANNER
+                // ============================================================
+                HBox deliveryBanner = new HBox(15);
+                deliveryBanner.setAlignment(Pos.CENTER_LEFT);
+                deliveryBanner.setPadding(new Insets(18, 20, 18, 20));
+                deliveryBanner.setStyle(
+                                "-fx-background-color: #FFF3EA;" +
+                                "-fx-background-radius: 12;" +
+                                "-fx-border-color: #FFD8C4;" +
+                                "-fx-border-radius: 12;" +
+                                "-fx-border-width: 1;");
+                deliveryBanner.setEffect(cardShadow3);
+
+                Label lightningIcon = new Label("⚡");
+                lightningIcon.setStyle(
+                                "-fx-font-size: 28px;" +
+                                "-fx-padding: 0 5 0 0;");
+
+                VBox deliveryText = new VBox(2);
+
+                Label deliveryTitle =
+                                new Label("LIGHTNING DELIVERY");
+                deliveryTitle.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 13px;" +
+                                "-fx-font-weight: 800;" +
+                                "-fx-text-fill: #FF6900;");
+
+                Label deliveryDesc =
+                                new Label("Freshness delivered in 15 minutes.");
+                deliveryDesc.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 11px;" +
+                                "-fx-text-fill: #444444;");
+
+                deliveryText.getChildren().addAll(
+                                deliveryTitle,
+                                deliveryDesc);
+
+                Region deliverySpacer = new Region();
+                HBox.setHgrow(deliverySpacer, Priority.ALWAYS);
+
+                Button shopExpress =
+                                new Button("Shop Express →");
+
+                shopExpress.setStyle(
+                                "-fx-background-color: #FF6900;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-size: 11px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 20;" +
+                                "-fx-padding: 8 18 8 18;" +
+                                "-fx-cursor: hand;");
+
+                shopExpress.setEffect(buttonShadow);
+
+                shopExpress.setOnMouseEntered(e -> {
+                        shopExpress.setStyle(
+                                        "-fx-background-color: #E85A00;" +
+                                        "-fx-text-fill: white;" +
+                                        "-fx-font-size: 11px;" +
+                                        "-fx-font-weight: bold;" +
+                                        "-fx-background-radius: 20;" +
+                                        "-fx-padding: 8 18 8 18;" +
+                                        "-fx-cursor: hand;");
+                });
+
+                shopExpress.setOnMouseExited(e -> {
+                        shopExpress.setStyle(
+                                        "-fx-background-color: #FF6900;" +
+                                        "-fx-text-fill: white;" +
+                                        "-fx-font-size: 11px;" +
+                                        "-fx-font-weight: bold;" +
+                                        "-fx-background-radius: 20;" +
+                                        "-fx-padding: 8 18 8 18;" +
+                                        "-fx-cursor: hand;");
+                });
+
+                deliveryBanner.getChildren().addAll(
+                                lightningIcon,
+                                deliveryText,
+                                deliverySpacer,
+                                shopExpress);
 
                 Button loadMore = new Button("Load More Items");
                 loadMore.setPrefWidth(200);
@@ -1672,7 +1684,7 @@ public class Grocries {
 
                 mainBox.setStyle("-fx-background-color: #F7F5F8;");
 
-                Scene sc = new Scene(mainBox, 1530, 850);
+                Scene sc = new Scene(mainBox, 1550, 850);
 
                 GrocriesScene = sc;
 

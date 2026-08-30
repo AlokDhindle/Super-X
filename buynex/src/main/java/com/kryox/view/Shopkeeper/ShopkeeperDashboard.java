@@ -39,7 +39,7 @@ public class ShopkeeperDashboard {
         // ============================================================
 
         ArrayList<ProductModel> products =
-                ProductController.getProducts();
+                ProductController.fetchProducts();
 
         if (products == null) {
             products = new ArrayList<>();
