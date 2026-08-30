@@ -1,6 +1,9 @@
 package com.kryox.view.Shopkeeper;
 
+import org.checkerframework.checker.lock.qual.Holding;
+
 import com.kryox.Main;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -179,25 +182,25 @@ public class ShopkeeperOrderCompleted {
 
                 newOrderButton.setOnAction(e -> {
 
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                         ShopkeeperOrderNew.ordersScene());
                 });
 
                 preparingButton.setOnAction(e -> {
 
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                         ShopkeeperOrderPreparing.ordersScene());
                 });
 
                 readyButton.setOnAction(e -> {
 
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                         ShopkeeperOrderReady.ordersScene());
                 });
 
                 deliveryButton.setOnAction(e -> {
 
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                         ShopkeeperOrderOut.ordersScene());
                 });
 
@@ -802,29 +805,29 @@ public class ShopkeeperOrderCompleted {
                 );
 
                 dashboardButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperDashboard
                                                                 .dashboardScene()));
                 inventoryButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory
                                                                 .inventoryScene()));
 
 
 
                 offersButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperOffers
                                                                 .offersScene()));
 
 
                 settingsButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperSettings
                                                                 .settingsScene()));
 
                 supportButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperSupport
                                                                 .supportScene()));
 

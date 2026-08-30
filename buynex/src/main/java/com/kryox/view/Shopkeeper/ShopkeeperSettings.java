@@ -1,8 +1,9 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.ShopkeeperDetailsController;
-import com.kryox.control.Shopkeeper.ConstantsMethods;
+import com.kryox.controller.Shopkeeper.ConstantsMethods;
+import com.kryox.controller.Shopkeeper.ShopkeeperDetailsController;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -952,7 +953,6 @@ public class ShopkeeperSettings {
                 // MAIN CONTENT
                 // ============================================================
 
-
                 settingsNavigation.setAlignment(
                                 Pos.CENTER_LEFT);
 
@@ -1202,9 +1202,8 @@ public class ShopkeeperSettings {
 
                 Scene settingsScene = new Scene(
                                 borderPane,
-                                ViewConstants.STAGE_WIDTH,
-                                ViewConstants.STAGE_HEIGHT
-                                                );
+                                1550,
+                                850);
 
                 settingsScene.setFill(
                                 Color.web("#F8F7FC"));
@@ -1305,33 +1304,31 @@ public class ShopkeeperSettings {
                 );
 
                 dashboardButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperDashboard
                                                                 .dashboardScene()));
                 inventoryButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory
                                                                 .inventoryScene()));
 
                 ordersButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperOrderReady
                                                                 .ordersScene()));
 
                 offersButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperOffers
                                                                 .offersScene()));
 
                 analyticsButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperAnalytics
                                                                 .analyticsScene()));
 
- 
-
                 supportButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperSupport
                                                                 .supportScene()));
 

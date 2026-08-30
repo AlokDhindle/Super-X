@@ -1,6 +1,7 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -390,7 +391,7 @@ public class ShopkeeperProfile {
 
                 changePasswordButton.setOnAction(e -> {
                         System.out.println("Change Password clicked");
-                        Main.primaryStage.setScene(ShopkeeperLoginSendOtp.sendOtpScene());
+                        Homepage.HomepageStage.setScene(ShopkeeperLoginSendOtp.sendOtpScene());
                 });
 
                 HBox.setHgrow(passwordTextBox, Priority.ALWAYS);
@@ -469,7 +470,7 @@ public class ShopkeeperProfile {
                 deleteButton.setOnAction(e -> {
                         System.out.println(
                                         "Delete Account clicked");
-                        Main.primaryStage.setScene(ShopkeeperDeleteAccountConfirmation.deleteAccountScene());
+                        Homepage.HomepageStage.setScene(ShopkeeperDeleteAccountConfirmation.deleteAccountScene());
                 });
 
                 HBox.setHgrow(deleteTextBox, Priority.ALWAYS);
@@ -728,7 +729,7 @@ public class ShopkeeperProfile {
                 secureLogoutButton.setOnAction(e -> {
                         System.out.println(
                                         "Secure Log Out clicked");
-                        Main.primaryStage.setScene(ShopkeeperLogin.loginscene());
+                        Homepage.HomepageStage.setScene(ShopkeeperLogin.loginscene());
                 });
 
                 rightColumn.getChildren().addAll(
@@ -896,36 +897,36 @@ public class ShopkeeperProfile {
                 );
 
                 dashboardButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperDashboard
                                                                 .dashboardScene()));
                 inventoryButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory
                                                                 .inventoryScene()));
 
                 ordersButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperOrderReady
                                                                 .ordersScene()));
 
                 offersButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperOffers
                                                                 .offersScene()));
 
                 analyticsButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperAnalytics
                                                                 .analyticsScene()));
 
                 settingsButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperSettings
                                                                 .settingsScene()));
 
                 supportButton.setOnAction(
-                                event -> Main.primaryStage.setScene(
+                                event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperSupport
                                                                 .supportScene()));
 

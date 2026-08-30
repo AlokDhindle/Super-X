@@ -3,8 +3,9 @@ package com.kryox.view.Shopkeeper;
 import java.time.LocalDate;
 
 import com.kryox.Main;
-import com.kryox.control.Shopkeeper.ProductController;
+import com.kryox.controller.Shopkeeper.ProductController;
 import com.kryox.model.Shopkeeper.ProductModel;
+import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -159,7 +160,7 @@ public class ShopkeeperProductDetails {
         backButton.setOnAction(
                 event -> {
 
-                    Main.primaryStage.setScene(
+                    Homepage.HomepageStage.setScene(
                             ShopkeeperInventory.inventoryScene()
                     );
                 }
@@ -1114,7 +1115,7 @@ public class ShopkeeperProductDetails {
                         );
 
 
-                        Main.primaryStage.setScene(
+                        Homepage.HomepageStage.setScene(
                                 ShopkeeperInventory.inventoryScene()
                         );
 
@@ -1181,7 +1182,7 @@ public class ShopkeeperProductDetails {
                                                     );
 
 
-                                            Main.primaryStage
+                                            Homepage.HomepageStage
                                                     .setScene(
 
                                                             ShopkeeperInventory
