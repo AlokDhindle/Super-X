@@ -30,7 +30,7 @@ public class CreateCampaignPage {
     public Scene getCampaignScene() {
 
         VBox root = new VBox();
-        root.setStyle("-fx-background-color:#F9F7FB;");
+        root.setStyle("-fx-background-color: #eee5df;");
 
         // =====================================================
         // TOP BAR
@@ -657,6 +657,7 @@ public class CreateCampaignPage {
 
         root.getChildren().addAll(topBar, scrollPane);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        root.setStyle("-fx-background-color: #eee5df;");
 
         return new Scene(root, 1550, 850);
     }

@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import org.json.JSONObject;
 
 import com.kryox.config.Apikey;
+import com.kryox.model.Admin.AdminSession;
 
 public class ControllerFirebase {
 
@@ -120,6 +121,15 @@ public class ControllerFirebase {
                         "Admin Authentication account created"
                 );
 
+                String idToken =
+                        json.getString(
+                                "idToken"
+                        );
+
+                sendEmailVerification(
+                        idToken
+                );
+
                 return json;
             }
 
@@ -168,6 +178,8 @@ public class ControllerFirebase {
             String email,
             String password
     ) {
+
+        clearAdminSession();
 
         try {
 
@@ -225,9 +237,33 @@ public class ControllerFirebase {
             // Firebase Authentication failed
             if (response.statusCode() != 200) {
 
-                System.out.println(
-                        "Invalid Email or Password"
-                );
+                try {
+
+                    JSONObject errorJson =
+                            new JSONObject(
+                                    response.body()
+                            );
+
+                    String firebaseMessage =
+                            errorJson
+                                    .getJSONObject("error")
+                                    .optString(
+                                            "message",
+                                            "UNKNOWN_ERROR"
+                                    );
+
+                    System.out.println(
+                            "Firebase Login Error: "
+                                    + firebaseMessage
+                    );
+
+                } catch (Exception ex) {
+
+                    System.out.println(
+                            "Firebase Login Error Body: "
+                                    + response.body()
+                    );
+                }
 
                 return false;
             }
@@ -255,6 +291,33 @@ public class ControllerFirebase {
             System.out.println(
                     "Authentication successful"
             );
+
+
+            // =================================================
+            // REAL EMAIL VERIFICATION CHECK
+            // User must click verification link sent to email
+            // =================================================
+
+            boolean emailVerified =
+                    isEmailVerified(
+                            idToken
+                    );
+
+
+            if (!emailVerified) {
+
+                System.out.println(
+                        "Access Denied: Email is not verified"
+                );
+
+                return false;
+            }
+
+
+            System.out.println(
+                    "Email verified successfully"
+            );
+
 
             System.out.println(
                     "Checking Admin permission..."
@@ -389,8 +452,50 @@ public class ControllerFirebase {
             }
 
 
+            // =================================================
+            // LOGGED-IN ADMIN DATA -> SESSION
+            // Same admin who logged in will appear in profile
+            // =================================================
+
+            AdminSession.fullName =
+                    getStringField(
+                            fields,
+                            "fullName",
+                            "Admin"
+                    );
+
+            AdminSession.email =
+                    adminEmail;
+
+            AdminSession.mobile =
+                    getStringField(
+                            fields,
+                            "mobile",
+                            "-"
+                    );
+
+            AdminSession.employeeId =
+                    getStringField(
+                            fields,
+                            "employeeId",
+                            "-"
+                    );
+
+            AdminSession.role =
+                    role;
+
+
             System.out.println(
                     "Admin verified successfully"
+            );
+
+            System.out.println(
+                    "Logged Admin: "
+                            + AdminSession.fullName
+                            + " | "
+                            + AdminSession.email
+                            + " | "
+                            + AdminSession.role
             );
 
             return true;
@@ -400,6 +505,532 @@ public class ControllerFirebase {
 
             System.out.println(
                     "Login Error: "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+
+
+
+    // =========================================================
+    // GOOGLE SIGN-IN -> FIREBASE AUTH -> ADMIN CHECK
+    // =========================================================
+    public boolean loginWithGoogleIdToken(
+            String googleIdToken
+    ) {
+
+        clearAdminSession();
+
+        try {
+
+            if (googleIdToken == null
+                    || googleIdToken.isBlank()) {
+
+                return false;
+            }
+
+
+            JSONObject payload =
+                    new JSONObject();
+
+
+            payload.put(
+                    "postBody",
+                    "id_token="
+                            + googleIdToken
+                            + "&providerId=google.com"
+            );
+
+
+            payload.put(
+                    "requestUri",
+                    "http://localhost"
+            );
+
+
+            payload.put(
+                    "returnSecureToken",
+                    true
+            );
+
+
+            payload.put(
+                    "returnIdpCredential",
+                    true
+            );
+
+
+            String url =
+                    "https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key="
+                            + API_KEY;
+
+
+            HttpRequest request =
+                    HttpRequest.newBuilder()
+                            .uri(
+                                    URI.create(
+                                            url
+                                    )
+                            )
+                            .header(
+                                    "Content-Type",
+                                    "application/json"
+                            )
+                            .POST(
+                                    HttpRequest.BodyPublishers.ofString(
+                                            payload.toString()
+                                    )
+                            )
+                            .build();
+
+
+            HttpResponse<String> response =
+                    client.send(
+                            request,
+                            HttpResponse.BodyHandlers.ofString()
+                    );
+
+
+            System.out.println(
+                    "Firebase Google Login Status: "
+                            + response.statusCode()
+            );
+
+
+            if (response.statusCode() != 200) {
+
+                System.out.println(
+                        "Firebase Google Login Error: "
+                                + response.body()
+                );
+
+                return false;
+            }
+
+
+            JSONObject json =
+                    new JSONObject(
+                            response.body()
+                    );
+
+
+            String uid =
+                    json.getString(
+                            "localId"
+                    );
+
+
+            String firebaseIdToken =
+                    json.getString(
+                            "idToken"
+                    );
+
+
+            String firebaseEmail =
+                    json.getString(
+                            "email"
+                    );
+
+
+            System.out.println(
+                    "Google Authentication successful: "
+                            + firebaseEmail
+            );
+
+
+            return verifyGoogleAdminAccess(
+                    uid,
+                    firebaseIdToken,
+                    firebaseEmail
+            );
+
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Google Firebase Login Error: "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+
+    // =========================================================
+    // GOOGLE USER MUST ALSO EXIST IN Firestore admins/{UID}
+    // =========================================================
+    private boolean verifyGoogleAdminAccess(
+            String uid,
+            String firebaseIdToken,
+            String firebaseEmail
+    ) {
+
+        try {
+
+            String adminUrl =
+                    "https://firestore.googleapis.com/v1/projects/"
+                            + PROJECT_ID
+                            + "/databases/(default)/documents/admins/"
+                            + uid;
+
+
+            HttpRequest adminRequest =
+                    HttpRequest.newBuilder()
+                            .uri(
+                                    URI.create(
+                                            adminUrl
+                                    )
+                            )
+                            .header(
+                                    "Authorization",
+                                    "Bearer "
+                                            + firebaseIdToken
+                            )
+                            .GET()
+                            .build();
+
+
+            HttpResponse<String> adminResponse =
+                    client.send(
+                            adminRequest,
+                            HttpResponse.BodyHandlers.ofString()
+                    );
+
+
+            System.out.println(
+                    "Google Admin Check Status: "
+                            + adminResponse.statusCode()
+            );
+
+
+            if (adminResponse.statusCode() != 200) {
+
+                System.out.println(
+                        "Access Denied: Google account is not registered as Admin"
+                );
+
+                return false;
+            }
+
+
+            JSONObject adminJson =
+                    new JSONObject(
+                            adminResponse.body()
+                    );
+
+
+            if (!adminJson.has("fields")) {
+
+                return false;
+            }
+
+
+            JSONObject fields =
+                    adminJson.getJSONObject(
+                            "fields"
+                    );
+
+
+            String role =
+                    getStringField(
+                            fields,
+                            "role",
+                            ""
+                    );
+
+
+            String adminEmail =
+                    getStringField(
+                            fields,
+                            "email",
+                            ""
+                    );
+
+
+            if (!role.equalsIgnoreCase(
+                    "Admin"
+            )) {
+
+                System.out.println(
+                        "Access Denied: Role is "
+                                + role
+                );
+
+                return false;
+            }
+
+
+            if (!adminEmail.equalsIgnoreCase(
+                    firebaseEmail
+            )) {
+
+                System.out.println(
+                        "Access Denied: Google email does not match Admin email"
+                );
+
+                return false;
+            }
+
+
+            AdminSession.fullName =
+                    getStringField(
+                            fields,
+                            "fullName",
+                            "Admin"
+                    );
+
+
+            AdminSession.email =
+                    adminEmail;
+
+
+            AdminSession.mobile =
+                    getStringField(
+                            fields,
+                            "mobile",
+                            "-"
+                    );
+
+
+            AdminSession.employeeId =
+                    getStringField(
+                            fields,
+                            "employeeId",
+                            "-"
+                    );
+
+
+            AdminSession.role =
+                    role;
+
+
+            System.out.println(
+                    "Google Admin verified successfully"
+            );
+
+
+            System.out.println(
+                    "Logged Admin: "
+                            + AdminSession.fullName
+                            + " | "
+                            + AdminSession.email
+                            + " | "
+                            + AdminSession.role
+            );
+
+
+            return true;
+
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Google Admin Verification Error: "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+
+
+    // =========================================================
+    // SEND EMAIL VERIFICATION LINK
+    // =========================================================
+    public boolean sendEmailVerification(
+            String idToken
+    ) {
+
+        try {
+
+            JSONObject payload =
+                    new JSONObject();
+
+            payload.put(
+                    "requestType",
+                    "VERIFY_EMAIL"
+            );
+
+            payload.put(
+                    "idToken",
+                    idToken
+            );
+
+
+            String url =
+                    "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key="
+                            + API_KEY;
+
+
+            HttpRequest request =
+                    HttpRequest.newBuilder()
+                            .uri(
+                                    URI.create(
+                                            url
+                                    )
+                            )
+                            .header(
+                                    "Content-Type",
+                                    "application/json"
+                            )
+                            .POST(
+                                    HttpRequest.BodyPublishers.ofString(
+                                            payload.toString()
+                                    )
+                            )
+                            .build();
+
+
+            HttpResponse<String> response =
+                    client.send(
+                            request,
+                            HttpResponse.BodyHandlers.ofString()
+                    );
+
+
+            System.out.println(
+                    "Verification Email Status: "
+                            + response.statusCode()
+            );
+
+            System.out.println(
+                    "Verification Email Response: "
+                            + response.body()
+            );
+
+
+            if (response.statusCode() == 200) {
+
+                System.out.println(
+                        "Verification email sent successfully"
+                );
+
+                return true;
+            }
+
+
+            System.out.println(
+                    "Verification email send failed: "
+                            + response.body()
+            );
+
+            return false;
+
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Verification Email Error: "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+
+    // =========================================================
+    // CHECK WHETHER EMAIL WAS ACTUALLY VERIFIED
+    // =========================================================
+    public boolean isEmailVerified(
+            String idToken
+    ) {
+
+        try {
+
+            JSONObject payload =
+                    new JSONObject();
+
+            payload.put(
+                    "idToken",
+                    idToken
+            );
+
+
+            String url =
+                    "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key="
+                            + API_KEY;
+
+
+            HttpRequest request =
+                    HttpRequest.newBuilder()
+                            .uri(
+                                    URI.create(
+                                            url
+                                    )
+                            )
+                            .header(
+                                    "Content-Type",
+                                    "application/json"
+                            )
+                            .POST(
+                                    HttpRequest.BodyPublishers.ofString(
+                                            payload.toString()
+                                    )
+                            )
+                            .build();
+
+
+            HttpResponse<String> response =
+                    client.send(
+                            request,
+                            HttpResponse.BodyHandlers.ofString()
+                    );
+
+
+            if (response.statusCode() != 200) {
+
+                System.out.println(
+                        "Email verification lookup failed: "
+                                + response.body()
+                );
+
+                return false;
+            }
+
+
+            JSONObject json =
+                    new JSONObject(
+                            response.body()
+                    );
+
+
+            if (!json.has("users")
+                    || json.getJSONArray("users").isEmpty()) {
+
+                return false;
+            }
+
+
+            JSONObject user =
+                    json
+                            .getJSONArray("users")
+                            .getJSONObject(0);
+
+
+            return user.optBoolean(
+                    "emailVerified",
+                    false
+            );
+
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Email Verification Check Error: "
                             + e.getMessage()
             );
 
@@ -613,4 +1244,60 @@ public class ControllerFirebase {
             return false;
         }
     }
+
+    // =========================================================
+    // READ FIRESTORE STRING FIELD SAFELY
+    // =========================================================
+    private String getStringField(
+            JSONObject fields,
+            String key,
+            String defaultValue
+    ) {
+
+        try {
+
+            if (!fields.has(key)) {
+                return defaultValue;
+            }
+
+            JSONObject field =
+                    fields.optJSONObject(key);
+
+            if (field == null) {
+                return defaultValue;
+            }
+
+            String value =
+                    field.optString(
+                            "stringValue",
+                            defaultValue
+                    );
+
+            if (value == null
+                    || value.isBlank()) {
+
+                return defaultValue;
+            }
+
+            return value;
+
+        } catch (Exception e) {
+
+            return defaultValue;
+        }
+    }
+
+
+    // =========================================================
+    // CLEAR OLD ADMIN SESSION
+    // =========================================================
+    public static void clearAdminSession() {
+
+        AdminSession.fullName = null;
+        AdminSession.email = null;
+        AdminSession.mobile = null;
+        AdminSession.employeeId = null;
+        AdminSession.role = null;
+    }
+
 }

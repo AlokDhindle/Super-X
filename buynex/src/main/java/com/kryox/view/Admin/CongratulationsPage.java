@@ -25,7 +25,7 @@ public class CongratulationsPage {
         StackPane root = new StackPane();
 
         root.setStyle(
-                "-fx-background-color:linear-gradient(to bottom right,#FFFFFF,#FFF5EF);"
+                "-fx-background-color: #eee5df;"
         );
 
         VBox main = new VBox();
@@ -164,20 +164,20 @@ public class CongratulationsPage {
         // DASHBOARD BUTTON
         // =========================
 
-        Button dashboardButton =
+        Button loginButton =
                 new Button(
-                        "Go to Admin Dashboard"
+                        "login"
                 );
 
-        dashboardButton.setPrefWidth(
+        loginButton.setPrefWidth(
                 370
         );
 
-        dashboardButton.setPrefHeight(
+        loginButton.setPrefHeight(
                 54
         );
 
-        dashboardButton.setStyle(
+        loginButton.setStyle(
                 "-fx-background-color:linear-gradient(to right,#C64F00,#FFAE81);" +
                 "-fx-text-fill:white;" +
                 "-fx-font-size:16px;" +
@@ -249,7 +249,7 @@ public class CongratulationsPage {
                 title,
                 description,
                 features,
-                dashboardButton,
+                loginButton,
                 inviteBox
         );
 
@@ -322,9 +322,9 @@ public class CongratulationsPage {
         // BUTTON HOVER
         // =========================
 
-        dashboardButton.setOnMouseEntered(e -> {
+        loginButton.setOnMouseEntered(e -> {
 
-            dashboardButton.setStyle(
+            loginButton.setStyle(
                     "-fx-background-color:#C64F00;" +
                     "-fx-text-fill:white;" +
                     "-fx-font-size:16px;" +
@@ -335,9 +335,9 @@ public class CongratulationsPage {
 
         });
 
-        dashboardButton.setOnMouseExited(e -> {
+        loginButton.setOnMouseExited(e -> {
 
-            dashboardButton.setStyle(
+                loginButton.setStyle(
                     "-fx-background-color:linear-gradient(to right,#C64F00,#FFAE81);" +
                     "-fx-text-fill:white;" +
                     "-fx-font-size:16px;" +
@@ -353,13 +353,13 @@ public class CongratulationsPage {
         // GO TO DASHBOARD
         // =========================
 
-        dashboardButton.setOnAction(e -> {
+        loginButton.setOnAction(e -> {
 
-            AdminDashboardPage dashboard =
-                    new AdminDashboardPage();
+            AdminLoginPage dashboard =
+                    new AdminLoginPage();
 
             Homepage.HomepageStage.setScene(
-                    dashboard.getUserScene()
+                    dashboard.getLoginScene()
             );
 
         });

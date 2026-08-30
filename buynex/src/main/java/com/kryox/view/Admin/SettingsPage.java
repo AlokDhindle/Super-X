@@ -28,12 +28,12 @@ public class SettingsPage {
     public Scene getUserScene() {
 
         BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color:#F9F7FB;");
+        root.setStyle("-fx-background-color: #eee5df;");
 
         VBox left = new VBox(25);
         left.setPrefWidth(210);
         left.setPadding(new Insets(30, 15, 20, 15));
-        left.setStyle("-fx-background-color:#F3E3D3;");
+        left.setStyle("-fx-background-color: #ebccb7");
 
         Text logo = new Text("Admin Panel");
         logo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -55,6 +55,7 @@ public class SettingsPage {
         dashboardIcon.setFitHeight(21);
         dashboardIcon.setPreserveRatio(true);
         dashboardText.setFont(Font.font("Arial", 14));
+        
         HBox dashboard = new HBox(10);
         dashboard.setAlignment(Pos.CENTER_LEFT);
         dashboard.setPadding(new Insets(10, 12, 10, 12));
@@ -86,6 +87,42 @@ public class SettingsPage {
         shops.setPadding(new Insets(10, 12, 10, 12));
         shops.setStyle("-fx-background-color:transparent;");
         shops.getChildren().addAll(shopsIcon, shopsText);
+
+        Text deliveryIcon = new Text("🚚");
+        deliveryIcon.setFont(Font.font("Arial", 18));
+
+        Text deliveryText = new Text("Delivery");
+        deliveryText.setFont(Font.font("Arial", 14));
+
+        HBox delivery = new HBox(10);
+        delivery.setAlignment(Pos.CENTER_LEFT);
+        delivery.setPadding(new Insets(10, 12, 10, 12));
+        delivery.setStyle("-fx-background-color:transparent;");
+        delivery.getChildren().addAll(deliveryIcon, deliveryText);
+
+        delivery.setOnMouseEntered(e -> {
+            delivery.setStyle("-fx-background-color:#D94F00; -fx-background-radius:10;");
+            deliveryText.setFill(Color.WHITE);
+            deliveryText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+
+            ScaleTransition deliveryAnimation = new ScaleTransition(
+                    Duration.millis(120), delivery);
+            deliveryAnimation.setToX(1.03);
+            deliveryAnimation.setToY(1.03);
+            deliveryAnimation.play();
+        });
+
+        delivery.setOnMouseExited(e -> {
+            delivery.setStyle("-fx-background-color:transparent;");
+            deliveryText.setFill(Color.web("#333333"));
+            deliveryText.setFont(Font.font("Arial", 14));
+
+            ScaleTransition deliveryAnimation = new ScaleTransition(
+                    Duration.millis(120), delivery);
+            deliveryAnimation.setToX(1);
+            deliveryAnimation.setToY(1);
+            deliveryAnimation.play();
+        });
 
         Image offersImage = new Image(getClass().getResource("/assets/images/admin/tag.png").toExternalForm());
         ImageView offersIcon = new ImageView(offersImage);
@@ -126,7 +163,7 @@ public class SettingsPage {
         settings.setStyle("-fx-background-color:#FF6500; -fx-background-radius:10;");
         settings.getChildren().addAll(settingsIcon, settingsText);
 
-        menu.getChildren().addAll(dashboard, users, shops, offers, analytics, settings);
+        menu.getChildren().addAll(dashboard, users, shops, delivery, offers, analytics, settings);
 
         VBox bottomMenu = new VBox(4);
         Image supportImage = new Image(getClass().getResource("/assets/images/admin/service-call.png").toExternalForm());
@@ -326,6 +363,11 @@ public class SettingsPage {
             Homepage.HomepageStage.setScene(shopPage.getUserScene());
         });
 
+        delivery.setOnMouseClicked(e -> {
+            DeliveryVerificationPage deliveryPage = new DeliveryVerificationPage();
+            Homepage.HomepageStage.setScene(deliveryPage.getUserScene());
+        });
+
         offers.setOnMouseClicked(e -> {
             OfferPage offerPage = new OfferPage();
             Homepage.HomepageStage.setScene(offerPage.getUserScene());
@@ -340,19 +382,39 @@ public class SettingsPage {
             SettingsPage settingsPage = new SettingsPage();
             Homepage.HomepageStage.setScene(settingsPage.getUserScene());
         });
+        support.setOnMouseClicked(e->{
+                SupportPage supports = new SupportPage();
+                Homepage.HomepageStage.setScene(supports.getUserScene());
+        });
 
         Region leftGrow = new Region();
         VBox.setVgrow(leftGrow, Priority.ALWAYS);
 
-        Text profile = new Text("Alex Rivera\nSuper Admin");
-        profile.setFont(Font.font("Arial", 13));
+        
+        // PROFILE
+        // =========================
+
+        AdminProfileCard adminProfileCard =
+                new AdminProfileCard();
+
+        HBox profile =
+                adminProfileCard.getProfileCard();
 
         Separator leftSeparator = new Separator();
-        left.getChildren().addAll(logoBox, menu, leftSeparator, bottomMenu, leftGrow, profile);
+
+        left.getChildren().addAll(
+                logoBox,
+                menu,
+                leftSeparator,
+                bottomMenu,
+                leftGrow,
+                profile
+        );
         root.setLeft(left);
 
-        VBox right = new VBox(20);
-        right.setPadding(new Insets(25));
+        VBox rightBox = new VBox(20);
+        rightBox.setPadding(new Insets(25));
+        rightBox.setStyle("-fx-background-color: #eee5df;");
 
         HBox top = new HBox(20);
         top.setAlignment(Pos.CENTER_LEFT);
@@ -636,8 +698,8 @@ public class SettingsPage {
         scroll.setStyle("-fx-background:#F9F7FB; -fx-border-color:transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        right.getChildren().addAll(top, scroll);
-        root.setCenter(right);
+        rightBox.getChildren().addAll(top, scroll);
+        root.setCenter(rightBox);
 
         return new Scene(root, 1550, 850);
     }

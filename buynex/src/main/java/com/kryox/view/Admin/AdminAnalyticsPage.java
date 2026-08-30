@@ -39,7 +39,7 @@ public class AdminAnalyticsPage {
                 left.setPrefWidth(210);
                 left.setSpacing(28);
                 left.setPadding(new Insets(30, 15, 20, 15));
-                left.setStyle("-fx-background-color:#F3E3D3;");
+                left.setStyle("-fx-background-color: #ebccb7");
 
                 Text logo = new Text("Admin Panel");
                 logo.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -252,6 +252,74 @@ public class AdminAnalyticsPage {
                                         shopPage.getUserScene());
                 });
 
+                // =========================
+                // DELIVERY
+                // =========================
+
+                HBox delivery = new HBox();
+                delivery.setSpacing(10);
+                delivery.setAlignment(Pos.CENTER_LEFT);
+                delivery.setPadding(new Insets(10, 12, 10, 12));
+                delivery.setPrefWidth(180);
+                delivery.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-background-radius:10;");
+
+                Text deliveryIcon = new Text("🚚");
+                deliveryIcon.setFont(Font.font("Arial", 18));
+
+                Text deliveryText = new Text("Delivery");
+                deliveryText.setFill(Color.web("#333333"));
+                deliveryText.setFont(Font.font("Arial", 14));
+
+                delivery.getChildren().addAll(
+                                deliveryIcon,
+                                deliveryText);
+
+                delivery.setOnMouseEntered(e -> {
+                        delivery.setStyle(
+                                        "-fx-background-color:#D94F00;" +
+                                                        "-fx-background-radius:10;");
+
+                        deliveryText.setFill(Color.WHITE);
+                        deliveryText.setFont(
+                                        Font.font("Arial", FontWeight.BOLD, 14));
+
+                        ScaleTransition st = new ScaleTransition(
+                                        Duration.millis(120),
+                                        delivery);
+
+                        st.setToX(1.03);
+                        st.setToY(1.03);
+                        st.play();
+                });
+
+                delivery.setOnMouseExited(e -> {
+                        delivery.setStyle(
+                                        "-fx-background-color:transparent;" +
+                                                        "-fx-background-radius:10;");
+
+                        deliveryText.setFill(Color.web("#333333"));
+                        deliveryText.setFont(Font.font("Arial", 14));
+
+                        ScaleTransition st = new ScaleTransition(
+                                        Duration.millis(120),
+                                        delivery);
+
+                        st.setToX(1);
+                        st.setToY(1);
+                        st.play();
+                });
+
+                delivery.setOnMouseClicked(e -> {
+
+                        DeliveryVerificationPage deliveryPage =
+                                        new DeliveryVerificationPage();
+
+                        Homepage.HomepageStage.setScene(
+                                        deliveryPage.getUserScene());
+                });
+
                 HBox offers = new HBox();
                 offers.setSpacing(10);
                 offers.setAlignment(Pos.CENTER_LEFT);
@@ -382,6 +450,7 @@ public class AdminAnalyticsPage {
                                 dashboard,
                                 users,
                                 shops,
+                                delivery,
                                 offers,
                                 analytics);
 
@@ -519,16 +588,11 @@ public class AdminAnalyticsPage {
                 // PROFILE
                 // =========================
 
-                Button exit = new Button("Exit");
+                AdminProfileCard adminProfileCard =
+                                new AdminProfileCard();
 
-                HBox profile = new HBox(
-                                exit);
-
-                profile.setAlignment(Pos.CENTER_LEFT);
-                profile.setPadding(new Insets(10));
-                profile.setStyle(
-                                "-fx-background-color:#E4E2E7;" +
-                                                "-fx-background-radius:12;");
+                HBox profile =
+                                adminProfileCard.getProfileCard();
 
                 Region leftGrow = new Region();
                 VBox.setVgrow(
@@ -555,7 +619,7 @@ public class AdminAnalyticsPage {
                 rightBox.setPadding(new Insets(25));
 
                 rightBox.setStyle(
-                                "-fx-background-color:#FBF9FC;");
+                                "-fx-background-color: #eee5df;");
 
                 // =========================================================
                 // HEADER
@@ -1293,7 +1357,7 @@ public class AdminAnalyticsPage {
                 root.setCenter(scrollPane);
 
                 root.setStyle(
-                                "-fx-background-color:#FBF9FC;");
+                                "-fx-background-color: #eee5df;");
 
                 // =========================================================
                 // SCENE

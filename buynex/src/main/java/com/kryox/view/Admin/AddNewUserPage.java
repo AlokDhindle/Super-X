@@ -1,10 +1,16 @@
 package com.kryox.view.Admin;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.cloud.firestore.Firestore;
+import com.kryox.config.Firebaseconfig;
+import com.kryox.controller.Admin.Controller;
+import com.kryox.controller.Admin.ControllerFirebase;
 import com.kryox.view.Customer.Homepage;
 
-import com.kryox.controller.Admin.Controller;
-
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -270,6 +276,7 @@ public class AddNewUserPage {
                                                 "-fx-background-radius:7;" +
                                                 "-fx-font-size:13px;");
                 Controller controller1 = new Controller();
+                final String[] uploadedProfileUrl = { "" };
 
                 uploadPhoto.setOnAction(event -> {
 
@@ -300,6 +307,8 @@ public class AddNewUserPage {
 
                                         System.out.println(
                                                         "Cloudinary URL: " + cloudinaryUrl);
+
+                                        uploadedProfileUrl[0] = cloudinaryUrl;
 
                                         Image image = new Image(cloudinaryUrl, true);
                                         profileImage.setImage(image);
@@ -473,10 +482,87 @@ public class AddNewUserPage {
                                 return;
                         }
 
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setHeaderText(null);
-                        alert.setContentText("User details are ready to save in database.");
-                        alert.showAndWait();
+                        String nameValue = fullName.getText().trim();
+                        String emailValue = email.getText().trim().toLowerCase();
+                        String phoneValue = phone.getText().trim();
+                        String roleValue = role.getValue().trim();
+                        String statusValue = status.getValue().trim();
+                        String addressValue = address.getText().trim();
+                        String passwordValue = password.getText();
+                        String profileUrlValue = uploadedProfileUrl[0] == null
+                                        ? ""
+                                        : uploadedProfileUrl[0].trim();
+
+                        save.setDisable(true);
+                        save.setText("Saving...");
+
+                        Thread saveThread = new Thread(() -> {
+                                try {
+                                        ControllerFirebase authController = new ControllerFirebase();
+
+                                        String authToken = authController.signUp(
+                                                        emailValue,
+                                                        passwordValue);
+
+                                        if (authToken == null) {
+                                                Platform.runLater(() -> {
+                                                        save.setDisable(false);
+                                                        save.setText("Save User");
+
+                                                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                                                        alert.setHeaderText(null);
+                                                        alert.setContentText(
+                                                                        "Authentication account could not be created. Email may already exist.");
+                                                        alert.showAndWait();
+                                                });
+                                                return;
+                                        }
+
+                                        Map<String, Object> userData = new HashMap<>();
+                                        userData.put("name", nameValue);
+                                        userData.put("email", emailValue);
+                                        userData.put("mobile", phoneValue);
+                                        userData.put("role", roleValue);
+                                        userData.put("status", statusValue);
+                                        userData.put("address", addressValue);
+                                        userData.put("profileImageUrl", profileUrlValue);
+
+                                        Firestore db = Firebaseconfig.gFirestore();
+
+                                        db.collection("User")
+                                                        .document(emailValue)
+                                                        .set(userData)
+                                                        .get();
+
+                                        Platform.runLater(() -> {
+                                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                                alert.setHeaderText(null);
+                                                alert.setContentText(
+                                                                "User saved successfully as " + roleValue + ".");
+                                                alert.showAndWait();
+
+                                                UserManagementPage page = new UserManagementPage();
+                                                Homepage.HomepageStage.setScene(page.getUserScene());
+                                        });
+
+                                } catch (Exception ex) {
+                                        ex.printStackTrace();
+
+                                        Platform.runLater(() -> {
+                                                save.setDisable(false);
+                                                save.setText("Save User");
+
+                                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                                alert.setHeaderText(null);
+                                                alert.setContentText(
+                                                                "User could not be saved: " + ex.getMessage());
+                                                alert.showAndWait();
+                                        });
+                                }
+                        });
+
+                        saveThread.setDaemon(true);
+                        saveThread.start();
                 });
 
                 rightBox.getChildren().addAll(top, heading, formCard);

@@ -1,9 +1,18 @@
 package com.kryox.view.Admin;
 
+import java.util.List;
+
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.kryox.config.Firebaseconfig;
+import com.kryox.controller.Customer.Userstorecontroller;
+import com.kryox.model.Customer.User;
 import com.kryox.view.Customer.Homepage;
 
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
@@ -17,6 +26,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -37,7 +47,7 @@ public class UserManagementPage {
                 left.setPadding(new Insets(30, 15, 20, 15));
 
                 left.setStyle(
-                                "-fx-background-color:#F3E3D3;");
+                                "-fx-background-color: #ebccb7");
 
                 Text logo = new Text("Admin Panel");
 
@@ -309,6 +319,74 @@ public class UserManagementPage {
                                         shopPage.getUserScene());
                 });
 
+                // =========================
+                // DELIVERY
+                // =========================
+
+                HBox delivery = new HBox();
+                delivery.setSpacing(10);
+                delivery.setAlignment(Pos.CENTER_LEFT);
+                delivery.setPadding(new Insets(10, 12, 10, 12));
+                delivery.setPrefWidth(180);
+                delivery.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-background-radius:10;");
+
+                Text deliveryIcon = new Text("🚚");
+                deliveryIcon.setFont(Font.font("Arial", 18));
+
+                Text deliveryText = new Text("Delivery");
+                deliveryText.setFill(Color.web("#333333"));
+                deliveryText.setFont(Font.font("Arial", 15));
+
+                delivery.getChildren().addAll(
+                                deliveryIcon,
+                                deliveryText);
+
+                delivery.setOnMouseEntered(e -> {
+                        delivery.setStyle(
+                                        "-fx-background-color:#D94F00;" +
+                                                        "-fx-background-radius:10;");
+
+                        deliveryText.setFill(Color.WHITE);
+                        deliveryText.setFont(
+                                        Font.font("Arial", FontWeight.BOLD, 15));
+
+                        ScaleTransition st = new ScaleTransition(
+                                        Duration.millis(120),
+                                        delivery);
+
+                        st.setToX(1.03);
+                        st.setToY(1.03);
+                        st.play();
+                });
+
+                delivery.setOnMouseExited(e -> {
+                        delivery.setStyle(
+                                        "-fx-background-color:transparent;" +
+                                                        "-fx-background-radius:10;");
+
+                        deliveryText.setFill(Color.web("#333333"));
+                        deliveryText.setFont(Font.font("Arial", 15));
+
+                        ScaleTransition st = new ScaleTransition(
+                                        Duration.millis(120),
+                                        delivery);
+
+                        st.setToX(1);
+                        st.setToY(1);
+                        st.play();
+                });
+
+                delivery.setOnMouseClicked(e -> {
+
+                        DeliveryVerificationPage deliveryPage =
+                                        new DeliveryVerificationPage();
+
+                        Homepage.HomepageStage.setScene(
+                                        deliveryPage.getUserScene());
+                });
+
                 HBox offers = new HBox();
 
                 offers.setSpacing(10);
@@ -475,6 +553,7 @@ public class UserManagementPage {
                                 dashboard,
                                 users,
                                 shops,
+                                delivery,
                                 offers,
                                 analytics);
 
@@ -597,6 +676,10 @@ public class UserManagementPage {
                         st.setToY(1);
                         st.play();
                 });
+                settings.setOnMouseClicked(e->{
+                        SettingsPage setting = new SettingsPage();
+                        Homepage.HomepageStage.setScene(setting.getUserScene());
+                });
 
                 support.setOnMouseEntered(e -> {
 
@@ -641,47 +724,19 @@ public class UserManagementPage {
                         st.setToY(1);
                         st.play();
                 });
+                support.setOnMouseClicked(e->{
+                        SupportPage supports = new SupportPage();
+                        Homepage.HomepageStage.setScene(supports.getUserScene());
+                });
 
-                javafx.scene.shape.Circle avatar = new javafx.scene.shape.Circle(
-                                19,
-                                Color.web("#D9B79C"));
+                // PROFILE
+                // =========================
 
-                Text alex = new Text("Alex Rivera");
+                AdminProfileCard adminProfileCard =
+                                new AdminProfileCard();
 
-                alex.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                14));
-
-                Text superAdmin = new Text(
-                                "Super Admin");
-
-                superAdmin.setFont(
-                                Font.font("Arial", 12));
-
-                superAdmin.setFill(
-                                Color.web("#777777"));
-
-                VBox names = new VBox(
-                                2,
-                                alex,
-                                superAdmin);
-
-                HBox profile = new HBox(
-                                10,
-                                avatar,
-                                names);
-
-                profile.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                profile.setPadding(
-                                new Insets(10));
-
-                profile.setStyle(
-                                "-fx-background-color:#E4E2E7;" +
-                                                "-fx-background-radius:12;");
+                HBox profile =
+                                adminProfileCard.getProfileCard();
 
                 Region leftGrow = new Region();
 
@@ -696,12 +751,11 @@ public class UserManagementPage {
                                 bottomMenu,
                                 leftGrow,
                                 profile);
-
+                
                 VBox rightBox = new VBox();
 
                 rightBox.setSpacing(20);
-                rightBox.setPadding(
-                                new Insets(20, 25, 20, 25));
+                rightBox.setPadding(new Insets(20, 25, 20, 25));
 
                 rightBox.setStyle(
                                 "-fx-background-color:#FAF8FC;");
@@ -1147,80 +1201,16 @@ public class UserManagementPage {
                 shopTableHeader.setPadding(new Insets(12));
                 shopTableHeader.setStyle("-fx-background-color:#F8F5FA;");
 
-                Image userImage1 = null;
-                ImageView userImageView1 = new ImageView(userImage1);
-                userImageView1.setFitWidth(40);
-                userImageView1.setFitHeight(40);
-                userImageView1.setPreserveRatio(false);
-                userImageView1.setClip(new Circle(20, 20, 20));
+                VBox shopkeeperRows = new VBox();
 
-                Text user1 = new Text("Marcus Kinsley\nmarcus@localhost.com");
-                user1.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
-
-                HBox userBox1 = new HBox(10, userImageView1, user1);
-                userBox1.setAlignment(Pos.CENTER_LEFT);
-                userBox1.setPrefWidth(220);
-
-                Text role1 = new Text("Shopkeeper");
-                role1.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
-                role1.setWrappingWidth(150);
-
-                Text status1 = new Text("● Active");
-                status1.setStyle("-fx-font-size:14px;-fx-fill:#1FA64B;-fx-font-weight:bold;");
-                status1.setWrappingWidth(140);
-
-                Text login1 = new Text("2 hours ago");
-                login1.setFont(Font.font("Arial", 14));
-                login1.setWrappingWidth(160);
-
-                Text action1 = new Text("◉   ✎   ⊘");
-                action1.setStyle("-fx-font-size:20px;-fx-fill:#666666;");
-                action1.setWrappingWidth(150);
-
-                HBox row1 = new HBox(userBox1, role1, status1, login1, action1);
-                row1.setAlignment(Pos.CENTER_LEFT);
-                row1.setPadding(new Insets(12));
-                row1.setStyle("-fx-border-color:transparent transparent #F0EDF2 transparent;");
-
-                Image userImage4 = null;
-                ImageView userImageView4 = new ImageView(userImage4);
-                userImageView4.setFitWidth(40);
-                userImageView4.setFitHeight(40);
-                userImageView4.setPreserveRatio(false);
-                userImageView4.setClip(new Circle(20, 20, 20));
-
-                Text user4 = new Text("Elena Rodriguez\nelena@freshfoods.io");
-                user4.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
-
-                HBox userBox4 = new HBox(10, userImageView4, user4);
-                userBox4.setAlignment(Pos.CENTER_LEFT);
-                userBox4.setPrefWidth(220);
-
-                Text role4 = new Text("Shopkeeper");
-                role4.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
-                role4.setWrappingWidth(150);
-
-                Text status4 = new Text("● Active");
-                status4.setStyle("-fx-font-size:14px;-fx-fill:#1FA64B;-fx-font-weight:bold;");
-                status4.setWrappingWidth(140);
-
-                Text login4 = new Text("3 mins ago");
-                login4.setFont(Font.font("Arial", 14));
-                login4.setWrappingWidth(160);
-
-                Text action4 = new Text("◉   ✎   ⊘");
-                action4.setStyle("-fx-font-size:20px;-fx-fill:#666666;");
-                action4.setWrappingWidth(150);
-
-                HBox row4 = new HBox(userBox4, role4, status4, login4, action4);
-                row4.setAlignment(Pos.CENTER_LEFT);
-                row4.setPadding(new Insets(12));
+                Text loadingShopkeepers = new Text("Loading shopkeepers...");
+                loadingShopkeepers.setStyle("-fx-font-size:14px;-fx-fill:#777777;");
+                shopkeeperRows.getChildren().add(loadingShopkeepers);
 
                 VBox shopkeeperTable = new VBox(
                                 shopkeeperSectionTitle,
                                 shopTableHeader,
-                                row1,
-                                row4);
+                                shopkeeperRows);
 
                 shopkeeperTable.setSpacing(0);
                 shopkeeperTable.setPadding(new Insets(15));
@@ -1272,80 +1262,16 @@ public class UserManagementPage {
                 customerTableHeader.setPadding(new Insets(12));
                 customerTableHeader.setStyle("-fx-background-color:#F8F5FA;");
 
-                Image userImage2 = null;
-                ImageView userImageView2 = new ImageView(userImage2);
-                userImageView2.setFitWidth(40);
-                userImageView2.setFitHeight(40);
-                userImageView2.setPreserveRatio(false);
-                userImageView2.setClip(new Circle(20, 20, 20));
+                VBox customerRows = new VBox();
 
-                Text user2 = new Text("Sarah Chen\nsarah.c@gmail.com");
-                user2.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
-
-                HBox userBox2 = new HBox(10, userImageView2, user2);
-                userBox2.setAlignment(Pos.CENTER_LEFT);
-                userBox2.setPrefWidth(220);
-
-                Text role2 = new Text("Customer");
-                role2.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
-                role2.setWrappingWidth(150);
-
-                Text status2 = new Text("● Suspended");
-                status2.setStyle("-fx-font-size:14px;-fx-fill:#E53935;-fx-font-weight:bold;");
-                status2.setWrappingWidth(140);
-
-                Text login2 = new Text("Yesterday, 4:15 PM");
-                login2.setFont(Font.font("Arial", 14));
-                login2.setWrappingWidth(160);
-
-                Text action2 = new Text("◉   ✎   ↶");
-                action2.setStyle("-fx-font-size:20px;-fx-fill:#666666;");
-                action2.setWrappingWidth(150);
-
-                HBox row2 = new HBox(userBox2, role2, status2, login2, action2);
-                row2.setAlignment(Pos.CENTER_LEFT);
-                row2.setPadding(new Insets(12));
-                row2.setStyle("-fx-border-color:transparent transparent #F0EDF2 transparent;");
-
-                Image userImage3 = null;
-                ImageView userImageView3 = new ImageView(userImage3);
-                userImageView3.setFitWidth(40);
-                userImageView3.setFitHeight(40);
-                userImageView3.setPreserveRatio(false);
-                userImageView3.setClip(new Circle(20, 20, 20));
-
-                Text user3 = new Text("Ben Jameson\nben.j@outlook.com");
-                user3.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
-
-                HBox userBox3 = new HBox(10, userImageView3, user3);
-                userBox3.setAlignment(Pos.CENTER_LEFT);
-                userBox3.setPrefWidth(220);
-
-                Text role3 = new Text("Customer");
-                role3.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
-                role3.setWrappingWidth(150);
-
-                Text status3 = new Text("● Active");
-                status3.setStyle("-fx-font-size:14px;-fx-fill:#1FA64B;-fx-font-weight:bold;");
-                status3.setWrappingWidth(140);
-
-                Text login3 = new Text("Jun 12, 09:30 AM");
-                login3.setFont(Font.font("Arial", 14));
-                login3.setWrappingWidth(160);
-
-                Text action3 = new Text("◉   ✎   ⊘");
-                action3.setStyle("-fx-font-size:20px;-fx-fill:#666666;");
-                action3.setWrappingWidth(150);
-
-                HBox row3 = new HBox(userBox3, role3, status3, login3, action3);
-                row3.setAlignment(Pos.CENTER_LEFT);
-                row3.setPadding(new Insets(12));
+                Text loadingCustomers = new Text("Loading customers...");
+                loadingCustomers.setStyle("-fx-font-size:14px;-fx-fill:#777777;");
+                customerRows.getChildren().add(loadingCustomers);
 
                 VBox customerTable = new VBox(
                                 customerSectionTitle,
                                 customerTableHeader,
-                                row2,
-                                row3);
+                                customerRows);
 
                 customerTable.setSpacing(0);
                 customerTable.setPadding(new Insets(15));
@@ -1354,6 +1280,111 @@ public class UserManagementPage {
                                                 "-fx-border-color:#E8E4EA;" +
                                                 "-fx-border-radius:10;" +
                                                 "-fx-background-radius:10;");
+
+                Thread userThread = new Thread(() -> {
+
+                        try {
+                                Firestore db = Firebaseconfig.gFirestore();
+
+                                QuerySnapshot snapshot = db
+                                                .collection("User")
+                                                .get()
+                                                .get();
+
+                                List<QueryDocumentSnapshot> allUsers = snapshot.getDocuments();
+
+                                Platform.runLater(() -> {
+
+                                        shopkeeperRows.getChildren().clear();
+                                        customerRows.getChildren().clear();
+
+                                        int shopkeeperCount = 0;
+                                        int customerCount = 0;
+
+                                        for (QueryDocumentSnapshot document : allUsers) {
+
+                                                String userRole = getStringValue(
+                                                                document,
+                                                                "role");
+
+                                                if (userRole.isBlank()) {
+                                                        userRole = "Customer";
+                                                }
+
+                                                if (userRole.equalsIgnoreCase("Shopkeeper")) {
+                                                        shopkeeperCount++;
+
+                                                        HBox row = createDatabaseUserRow(
+                                                                        document,
+                                                                        "Shopkeeper");
+
+                                                        shopkeeperRows.getChildren().add(row);
+
+                                                } else if (userRole.equalsIgnoreCase("Customer")) {
+                                                        customerCount++;
+
+                                                        HBox row = createDatabaseUserRow(
+                                                                        document,
+                                                                        "Customer");
+
+                                                        customerRows.getChildren().add(row);
+                                                }
+                                        }
+
+                                        if (shopkeeperCount == 0) {
+                                                Text noShopkeeper = new Text(
+                                                                "No shopkeepers found in Firebase.");
+
+                                                noShopkeeper.setStyle(
+                                                                "-fx-font-size:14px;" +
+                                                                                "-fx-fill:#777777;");
+
+                                                shopkeeperRows.getChildren().add(noShopkeeper);
+                                        }
+
+                                        if (customerCount == 0) {
+                                                Text noCustomer = new Text(
+                                                                "No customers found in Firebase.");
+
+                                                noCustomer.setStyle(
+                                                                "-fx-font-size:14px;" +
+                                                                                "-fx-fill:#777777;");
+
+                                                customerRows.getChildren().add(noCustomer);
+                                        }
+                                });
+
+                        } catch (Exception exception) {
+
+                                exception.printStackTrace();
+
+                                Platform.runLater(() -> {
+
+                                        shopkeeperRows.getChildren().clear();
+                                        customerRows.getChildren().clear();
+
+                                        Text shopError = new Text(
+                                                        "Unable to load shopkeepers.");
+
+                                        shopError.setStyle(
+                                                        "-fx-font-size:14px;" +
+                                                                        "-fx-fill:#E53935;");
+
+                                        Text customerError = new Text(
+                                                        "Unable to load customers.");
+
+                                        customerError.setStyle(
+                                                        "-fx-font-size:14px;" +
+                                                                        "-fx-fill:#E53935;");
+
+                                        shopkeeperRows.getChildren().add(shopError);
+                                        customerRows.getChildren().add(customerError);
+                                });
+                        }
+                });
+
+                userThread.setDaemon(true);
+                userThread.start();
 
                 Text deliverySectionTitle = new Text("Delivery Partners");
                 deliverySectionTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -1616,13 +1647,174 @@ public class UserManagementPage {
                 root.setCenter(centerScroll);
 
                 root.setStyle(
-                                "-fx-background-color:#FAF8FC;");
+                                "-fx-background-color: #eee5df;");
 
                 Scene scene = new Scene(
                                 root,
                                 1550,
                                 850);
                 return scene;
+        }
+
+
+        private HBox createDatabaseUserRow(
+                        QueryDocumentSnapshot document,
+                        String fallbackRole) {
+
+                String name = getStringValue(document, "name");
+                String email = getStringValue(document, "email");
+                String role = getStringValue(document, "role");
+                String status = getStringValue(document, "status");
+                String profileUrl = getStringValue(document, "profileImageUrl");
+
+                if (name.isBlank()) {
+                        name = "Unknown";
+                }
+
+                if (email.isBlank()) {
+                        email = "-";
+                }
+
+                if (role.isBlank()) {
+                        role = fallbackRole;
+                }
+
+                if (status.isBlank()) {
+                        status = "Active";
+                }
+
+                StackPane avatar = new StackPane();
+                avatar.setPrefSize(40, 40);
+                avatar.setMinSize(40, 40);
+                avatar.setMaxSize(40, 40);
+
+                Circle avatarCircle = new Circle(
+                                20,
+                                Color.web("#FFE5D5"));
+
+                avatar.getChildren().add(avatarCircle);
+
+                if (!profileUrl.isBlank()) {
+                        try {
+                                Image image = new Image(
+                                                profileUrl,
+                                                40,
+                                                40,
+                                                false,
+                                                true,
+                                                true);
+
+                                ImageView imageView = new ImageView(image);
+                                imageView.setFitWidth(40);
+                                imageView.setFitHeight(40);
+                                imageView.setPreserveRatio(false);
+                                imageView.setClip(new Circle(20, 20, 20));
+
+                                avatar.getChildren().add(imageView);
+
+                        } catch (Exception ignored) {
+                                String firstLetter = name.substring(0, 1).toUpperCase();
+
+                                Text avatarText = new Text(firstLetter);
+                                avatarText.setFont(
+                                                Font.font(
+                                                                "Arial",
+                                                                FontWeight.BOLD,
+                                                                15));
+
+                                avatarText.setFill(Color.web("#A83E00"));
+                                avatar.getChildren().add(avatarText);
+                        }
+
+                } else {
+                        String firstLetter = name.substring(0, 1).toUpperCase();
+
+                        Text avatarText = new Text(firstLetter);
+                        avatarText.setFont(
+                                        Font.font(
+                                                        "Arial",
+                                                        FontWeight.BOLD,
+                                                        15));
+
+                        avatarText.setFill(Color.web("#A83E00"));
+                        avatar.getChildren().add(avatarText);
+                }
+
+                Text userInfo = new Text(
+                                name + "\n" + email);
+
+                userInfo.setStyle(
+                                "-fx-font-size:14px;" +
+                                                "-fx-font-weight:bold;");
+
+                HBox nameBox = new HBox(
+                                10,
+                                avatar,
+                                userInfo);
+
+                nameBox.setAlignment(Pos.CENTER_LEFT);
+                nameBox.setPrefWidth(220);
+
+                Text roleText = new Text(role);
+                roleText.setStyle(
+                                "-fx-font-size:14px;" +
+                                                "-fx-background-color:#E5E3E4;" +
+                                                "-fx-padding:5px 10px;" +
+                                                "-fx-background-radius:12;");
+                roleText.setWrappingWidth(150);
+
+                Text statusText = new Text("● " + status);
+
+                if (status.equalsIgnoreCase("Active")) {
+                        statusText.setStyle(
+                                        "-fx-font-size:14px;" +
+                                                        "-fx-fill:#1FA64B;" +
+                                                        "-fx-font-weight:bold;");
+                } else {
+                        statusText.setStyle(
+                                        "-fx-font-size:14px;" +
+                                                        "-fx-fill:#D9534F;" +
+                                                        "-fx-font-weight:bold;");
+                }
+
+                statusText.setWrappingWidth(140);
+
+                Text lastLogin = new Text("-");
+                lastLogin.setFont(Font.font("Arial", 14));
+                lastLogin.setWrappingWidth(160);
+
+                Text action = new Text("◉   ✎   ⊘");
+                action.setStyle(
+                                "-fx-font-size:20px;" +
+                                                "-fx-fill:#666666;");
+                action.setWrappingWidth(150);
+
+                HBox row = new HBox(
+                                nameBox,
+                                roleText,
+                                statusText,
+                                lastLogin,
+                                action);
+
+                row.setAlignment(Pos.CENTER_LEFT);
+                row.setPadding(new Insets(12));
+                row.setStyle(
+                                "-fx-border-color:transparent transparent #F0EDF2 transparent;");
+
+                return row;
+        }
+
+        private String getStringValue(
+                        QueryDocumentSnapshot document,
+                        String fieldName) {
+
+                Object value = document.get(fieldName);
+
+                if (value == null) {
+                        return "";
+                }
+
+                return String.valueOf(value).trim();
         }
 
 }

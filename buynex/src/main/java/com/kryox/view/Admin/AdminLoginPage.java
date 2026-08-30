@@ -5,9 +5,12 @@ package com.kryox.view.Admin;
 
 
 import com.kryox.controller.Admin.ControllerFirebase;
+import com.kryox.controller.Admin.GoogleAuthController;
+import com.kryox.model.Admin.AdminSession;
 import com.kryox.view.Customer.Homepage;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,6 +27,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -37,6 +41,51 @@ public class AdminLoginPage {
         private Scene LoginScene;
 
         public Scene getLoginScene() {
+
+                Button backButton = new Button("←  Back");
+                backButton.setPrefSize(95, 40);
+                backButton.setStyle(
+                                "-fx-background-color:#FFF0E7;" +
+                                                "-fx-text-fill:#8A3600;" +
+                                                "-fx-font-size:13px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:20;" +
+                                                "-fx-border-color:#E7BDA6;" +
+                                                "-fx-border-radius:20;" +
+                                                "-fx-cursor:hand;");
+
+                backButton.setOnMouseEntered(e -> {
+                        backButton.setStyle(
+                                        "-fx-background-color:#FF6500;" +
+                                                        "-fx-text-fill:white;" +
+                                                        "-fx-font-size:13px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-background-radius:20;" +
+                                                        "-fx-border-color:#FF6500;" +
+                                                        "-fx-border-radius:20;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                backButton.setOnMouseExited(e -> {
+                        backButton.setStyle(
+                                        "-fx-background-color:#FFF0E7;" +
+                                                        "-fx-text-fill:#8A3600;" +
+                                                        "-fx-font-size:13px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-background-radius:20;" +
+                                                        "-fx-border-color:#E7BDA6;" +
+                                                        "-fx-border-radius:20;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                backButton.setOnAction(e -> {
+                        try {
+                                Homepage homePage = new Homepage();
+                                homePage.start(Homepage.HomepageStage);
+                        } catch (Exception ex) {
+                                ex.printStackTrace();
+                        }
+                });
 
                 Text logo = new Text("🚀 BuyNeX");
                 logo.setStyle(
@@ -180,6 +229,10 @@ public class AdminLoginPage {
 
                                 System.out.println("Admin Login successful");
 
+                                System.out.println(
+                                                "Profile loaded for: "
+                                                                + AdminSession.fullName);
+
                                 AdminDashboardPage dashboardPage =
                                                 new AdminDashboardPage();
 
@@ -192,7 +245,7 @@ public class AdminLoginPage {
                                 System.out.println("Admin Login failed");
 
                                 errorMessage.setText(
-                                                "Invalid Admin Email or Password.");
+                                                "Invalid login, email not verified, or Admin access not found.");
                                 errorMessage.setVisible(true);
                                 errorMessage.setManaged(true);
                         }
@@ -256,6 +309,69 @@ public class AdminLoginPage {
                                                 "-fx-border-radius:8;" +
                                                 "-fx-background-radius:8;" +
                                                 "-fx-font-size:14px;");
+
+
+                google.setOnAction(event -> {
+
+                        google.setDisable(true);
+                        google.setText(
+                                        "Opening Google..."
+                        );
+
+                        errorMessage.setVisible(false);
+                        errorMessage.setManaged(false);
+
+
+                        Thread googleLoginThread =
+                                        new Thread(() -> {
+
+                                                GoogleAuthController googleAuth =
+                                                                new GoogleAuthController();
+
+
+                                                boolean googleLoginSuccess =
+                                                                googleAuth.loginWithGoogle();
+
+
+                                                Platform.runLater(() -> {
+
+                                                        google.setDisable(false);
+                                                        google.setText(
+                                                                        "Google Workspace"
+                                                        );
+
+
+                                                        if (googleLoginSuccess) {
+
+                                                                System.out.println(
+                                                                                "Google Admin Login successful"
+                                                                );
+
+
+                                                                AdminDashboardPage dashboardPage =
+                                                                                new AdminDashboardPage();
+
+
+                                                                Homepage.HomepageStage.setScene(
+                                                                                dashboardPage.getUserScene()
+                                                                );
+
+                                                        } else {
+
+                                                                errorMessage.setText(
+                                                                                "Google account is not registered as an Admin."
+                                                                );
+
+                                                                errorMessage.setVisible(true);
+                                                                errorMessage.setManaged(true);
+                                                        }
+                                                });
+                                        });
+
+
+                        googleLoginThread.setDaemon(true);
+                        googleLoginThread.start();
+                });
 
                 VBox card = new VBox(14);
 
@@ -367,8 +483,36 @@ public class AdminLoginPage {
                                 footer,
                                 textD);
 
-                Scene scene= new Scene(vb, 1550, 850);
-                LoginScene=scene;
+                StackPane root = new StackPane();
+
+                root.getChildren().addAll(
+                                vb,
+                                backButton
+                );
+
+                StackPane.setAlignment(
+                                backButton,
+                                Pos.TOP_LEFT
+                );
+
+                StackPane.setMargin(
+                                backButton,
+                                new Insets(
+                                                25,
+                                                0,
+                                                0,
+                                                30
+                                )
+                );
+
+                Scene scene = new Scene(
+                                root,
+                                1550,
+                                850
+                );
+
+                LoginScene = scene;
+
                 return LoginScene;
 
         }

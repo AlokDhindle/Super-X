@@ -34,7 +34,7 @@ public class OfferPage {
                 left.setPadding(new Insets(30, 15, 20, 15));
 
                 left.setStyle(
-                                "-fx-background-color:#F3E3D3;");
+                                "-fx-background-color: #ebccb7");
 
                 Text logo = new Text("Admin Panel");
 
@@ -317,6 +317,74 @@ public class OfferPage {
                                         shopPage.getUserScene());
                 });
 
+                // =========================
+                // DELIVERY
+                // =========================
+
+                HBox delivery = new HBox();
+                delivery.setSpacing(10);
+                delivery.setAlignment(Pos.CENTER_LEFT);
+                delivery.setPadding(new Insets(10, 12, 10, 12));
+                delivery.setPrefWidth(180);
+                delivery.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-background-radius:10;");
+
+                Text deliveryIcon = new Text("🚚");
+                deliveryIcon.setFont(Font.font("Arial", 18));
+
+                Text deliveryText = new Text("Delivery");
+                deliveryText.setFill(Color.web("#333333"));
+                deliveryText.setFont(Font.font("Arial", 14));
+
+                delivery.getChildren().addAll(
+                                deliveryIcon,
+                                deliveryText);
+
+                delivery.setOnMouseEntered(e -> {
+                        delivery.setStyle(
+                                        "-fx-background-color:#D94F00;" +
+                                                        "-fx-background-radius:10;");
+
+                        deliveryText.setFill(Color.WHITE);
+                        deliveryText.setFont(
+                                        Font.font("Arial", FontWeight.BOLD, 14));
+
+                        ScaleTransition st = new ScaleTransition(
+                                        Duration.millis(120),
+                                        delivery);
+
+                        st.setToX(1.03);
+                        st.setToY(1.03);
+                        st.play();
+                });
+
+                delivery.setOnMouseExited(e -> {
+                        delivery.setStyle(
+                                        "-fx-background-color:transparent;" +
+                                                        "-fx-background-radius:10;");
+
+                        deliveryText.setFill(Color.web("#333333"));
+                        deliveryText.setFont(Font.font("Arial", 14));
+
+                        ScaleTransition st = new ScaleTransition(
+                                        Duration.millis(120),
+                                        delivery);
+
+                        st.setToX(1);
+                        st.setToY(1);
+                        st.play();
+                });
+
+                delivery.setOnMouseClicked(e -> {
+
+                        DeliveryVerificationPage deliveryPage =
+                                        new DeliveryVerificationPage();
+
+                        Homepage.HomepageStage.setScene(
+                                        deliveryPage.getUserScene());
+                });
+
                 HBox offers = new HBox();
 
                 offers.setSpacing(10);
@@ -490,6 +558,7 @@ public class OfferPage {
                                 dashboard,
                                 users,
                                 shops,
+                                delivery,
                                 offers,
                                 analytics);
 
@@ -669,46 +738,16 @@ public class OfferPage {
                                         userPage.getUserScene());
                 });
 
-                javafx.scene.shape.Circle avatar = new javafx.scene.shape.Circle(
-                                19,
-                                Color.web("#D9B79C"));
+                
+                // =========================
+                // PROFILE
+                // =========================
 
-                Text alex = new Text("Alex Rivera");
+                AdminProfileCard adminProfileCard =
+                                new AdminProfileCard();
 
-                alex.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                13));
-
-                Text superAdmin = new Text(
-                                "Super Admin");
-
-                superAdmin.setFont(
-                                Font.font("Arial", 11));
-
-                superAdmin.setFill(
-                                Color.web("#777777"));
-
-                VBox names = new VBox(
-                                2,
-                                alex,
-                                superAdmin);
-
-                HBox profile = new HBox(
-                                10,
-                                avatar,
-                                names);
-
-                profile.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                profile.setPadding(
-                                new Insets(10));
-
-                profile.setStyle(
-                                "-fx-background-color:#E4E2E7;" +
-                                                "-fx-background-radius:12;");
+                HBox profile =
+                                adminProfileCard.getProfileCard();
 
                 Region leftGrow = new Region();
 
@@ -731,7 +770,7 @@ public class OfferPage {
                 VBox centerContent = new VBox();
                 centerContent.setSpacing(20);
                 centerContent.setPadding(new Insets(30));
-                centerContent.setStyle("-fx-background-color:#F8F7FB;");
+                centerContent.setStyle("-fx-background-color: #eee5df;");
 
                 // =========================
                 // PAGE TITLE
@@ -1242,6 +1281,7 @@ public class OfferPage {
                 root.setLeft(left);
 
                 root.setCenter(centerContent);
+                root.setStyle("-fx-background-color: #eee5df;");
 
                 Scene scene = new Scene(root, 1550, 850);
 

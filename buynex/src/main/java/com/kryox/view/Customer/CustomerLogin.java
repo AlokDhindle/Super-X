@@ -31,6 +31,70 @@ public class CustomerLogin {
 
         // ================= HEADER =================
 
+        Button backButton = new Button("←  Back");
+
+        backButton.setPrefSize(
+                90,
+                38
+        );
+
+        backButton.setStyle(
+                "-fx-background-color:#FFF0E7;" +
+                "-fx-text-fill:#8A3600;" +
+                "-fx-font-size:13px;" +
+                "-fx-font-weight:bold;" +
+                "-fx-background-radius:19;" +
+                "-fx-border-color:#E7BDA6;" +
+                "-fx-border-radius:19;" +
+                "-fx-cursor:hand;"
+        );
+
+        backButton.setOnMouseEntered(event -> {
+
+            backButton.setStyle(
+                    "-fx-background-color:#FF6500;" +
+                    "-fx-text-fill:white;" +
+                    "-fx-font-size:13px;" +
+                    "-fx-font-weight:bold;" +
+                    "-fx-background-radius:19;" +
+                    "-fx-border-color:#FF6500;" +
+                    "-fx-border-radius:19;" +
+                    "-fx-cursor:hand;"
+            );
+        });
+
+        backButton.setOnMouseExited(event -> {
+
+            backButton.setStyle(
+                    "-fx-background-color:#FFF0E7;" +
+                    "-fx-text-fill:#8A3600;" +
+                    "-fx-font-size:13px;" +
+                    "-fx-font-weight:bold;" +
+                    "-fx-background-radius:19;" +
+                    "-fx-border-color:#E7BDA6;" +
+                    "-fx-border-radius:19;" +
+                    "-fx-cursor:hand;"
+            );
+        });
+
+        backButton.setOnAction(event -> {
+
+            try {
+
+                Homepage homePage =
+                        new Homepage();
+
+                homePage.start(
+                        Homepage.HomepageStage
+                );
+
+            } catch (Exception exception) {
+
+                exception.printStackTrace();
+            }
+        });
+
+
         Text t1 = new Text("BuyNeX");
 
         t1.setStyle(
@@ -39,8 +103,15 @@ public class CustomerLogin {
                 "-fx-fill:#9C3700;"
         );
 
-        HBox hb1 = new HBox(t1);
-        hb1.setAlignment(Pos.CENTER_LEFT);
+        HBox hb1 = new HBox(
+                18,
+                backButton,
+                t1
+        );
+
+        hb1.setAlignment(
+                Pos.CENTER_LEFT
+        );
 
         Text t2 = new Text("Support");
 
@@ -589,4 +660,4 @@ public class CustomerLogin {
 
         return LoginScene;
     }
-}
+}       

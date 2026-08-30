@@ -18,35 +18,58 @@ public class Firebaseconfig {
 
         try {
 
+            if (!FirebaseApp.getApps().isEmpty()) {
+                return;
+            }
+
             FileInputStream serviceAccount =
                     new FileInputStream(
-                            "C:\\BuyNex\\Super-X\\buynex\\src\\main\\resources\\serviceAccount.json"
+                            "C:\\Java_26\\testing\\Super-X\\buynex\\src\\main\\resources\\assets\\serviceAccount.json.json"
                     );
 
             FirebaseOptions options =
-                    new FirebaseOptions.Builder()
+                    FirebaseOptions.builder()
                             .setCredentials(
-                                    GoogleCredentials.fromStream(serviceAccount)
+                                    GoogleCredentials.fromStream(
+                                            serviceAccount
+                                    )
                             )
                             .build();
 
-            // Firebase already initialized hai to dobara initialize nahi karega
-            if (FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
-            }
+            FirebaseApp.initializeApp(
+                    options
+            );
 
             serviceAccount.close();
 
-            System.out.println("Firebase Connected Successfully!");
+            System.out.println(
+                    "Firebase Connected Successfully!"
+            );
 
         } catch (Exception e) {
 
-            System.out.println("Firebase Connection Failed!");
+            System.out.println(
+                    "Firebase Connection Failed!"
+            );
+
             e.printStackTrace();
         }
     }
 
     public static Firestore gFirestore() {
+
+        if (FirebaseApp.getApps().isEmpty()) {
+
+            getFirebaseConfig();
+        }
+
+        if (FirebaseApp.getApps().isEmpty()) {
+
+            throw new IllegalStateException(
+                    "Firebase is not initialized."
+            );
+        }
+
         return FirestoreClient.getFirestore();
     }
 }

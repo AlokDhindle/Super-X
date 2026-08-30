@@ -498,9 +498,7 @@ public class AdminRegistrationPage {
         );
 
         left.setStyle(
-                "-fx-background-color:#e85b00;" +
-                "-fx-background-radius:12 0 0 12;"
-        );
+                "-fx-background-color: #cf5606");
 
         left.getChildren().addAll(
                 logo,
@@ -521,10 +519,7 @@ public class AdminRegistrationPage {
                 new Insets(42, 45, 35, 45)
         );
 
-        right.setStyle(
-                "-fx-background-color:white;" +
-                "-fx-background-radius:0 12 12 0;"
-        );
+        right.setStyle("-fx-background-color: #eee5df;");
 
         right.getChildren().addAll(
                 title,
@@ -577,7 +572,7 @@ public class AdminRegistrationPage {
         );
 
         rootBox.setStyle(
-                "-fx-background-color:#fafafa;"
+                "-fx-background-color: #eee5df;"
         );
 
         rootBox.getChildren().add(mainBox);
