@@ -16,6 +16,11 @@
     "java.compile.nullAnalysis.mode": "automatic"
 =======
     "java.compile.nullAnalysis.mode": "automatic",
+<<<<<<< HEAD
     "java.debug.settings.onBuildFailureProceed": true
 >>>>>>> f5a4c14ed2bacf6ba6e6e4cb4e7c3d667086c715
+=======
+    "java.debug.settings.onBuildFailureProceed": true,
+    "java.configuration.updateBuildConfiguration": "interactive"
+>>>>>>> dda83b5efe2dacfb38a719025ea4fa4495a466f9
 }

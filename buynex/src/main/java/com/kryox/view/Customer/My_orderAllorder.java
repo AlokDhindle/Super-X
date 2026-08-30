@@ -28,6 +28,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class My_orderAllorder  {
+        public String userId;
+        public My_orderAllorder(String userId) {
+        this.userId = userId;
+    }
 
         private Scene orderAllScene;
 
@@ -381,7 +385,7 @@ public class My_orderAllorder  {
                                                 "-fx-alignment: CENTER_LEFT;" +
                                                 "-fx-cursor: hand;");
                         lefButton5.setOnAction(event->{
-                                Analytics an=new Analytics();
+                                Analytics an=new Analytics(userId);
                                 Homepage.HomepageStage.setScene(an.getAnalyticscene(null));
                         });
 
@@ -774,7 +778,7 @@ public class My_orderAllorder  {
                                                 "-fx-border-width: 0;" +
                                                 "-fx-cursor: hand;");
                 ongoing.setOnAction(event -> {
-                        My_orderOngoing mo=new My_orderOngoing();
+                        My_orderOngoing mo=new My_orderOngoing(userId);
                         Runnable callbacktoallorder=new Runnable() {
                                 public void run(){
                                         backtoallorder();
@@ -944,7 +948,7 @@ public class My_orderAllorder  {
                 // SCENE
                 // =====================================================
 
-                Scene sc = new Scene(mainBox, 1500, 800);
+                Scene sc = new Scene(mainBox, 1530, 850);
                 orderAllScene=sc;
                 return orderAllScene;
         }
