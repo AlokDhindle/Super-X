@@ -758,7 +758,7 @@ public class UserManagementPage {
                 rightBox.setPadding(new Insets(20, 25, 20, 25));
 
                 rightBox.setStyle(
-                                "-fx-background-color:#FAF8FC;");
+                                "-fx-background-color: #eee5df;");
 
                 Text searchIcon = new Text("⌕");
 

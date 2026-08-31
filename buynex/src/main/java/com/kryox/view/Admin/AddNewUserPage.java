@@ -191,7 +191,7 @@ public class AddNewUserPage {
 
                 VBox rightBox = new VBox(20);
                 rightBox.setPadding(new Insets(20, 25, 20, 25));
-                rightBox.setStyle("-fx-background-color:#FAF8FC;");
+                rightBox.setStyle("-fx-background-color: #eee5df;");
 
                 Text searchIcon = new Text("⌕");
                 searchIcon.setFont(Font.font(24));

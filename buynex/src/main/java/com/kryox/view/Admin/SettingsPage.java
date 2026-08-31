@@ -695,7 +695,7 @@ public class SettingsPage {
         ScrollPane scroll = new ScrollPane(content);
         scroll.setFitToWidth(true);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setStyle("-fx-background:#F9F7FB; -fx-border-color:transparent;");
+        scroll.setStyle("-fx-background-color: #eee5df; -fx-border-color:transparent;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
         rightBox.getChildren().addAll(top, scroll);

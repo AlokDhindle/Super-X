@@ -1,8 +1,13 @@
 package com.kryox.view.Admin;
 
+import java.util.ArrayList;
+
+import com.kryox.controller.Shopkeeper.OfferController;
+import com.kryox.model.Shopkeeper.OfferModel;
 import com.kryox.view.Customer.Homepage;
 
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -1082,10 +1087,6 @@ public class AdminAnalyticsPage {
                 offerTop.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                // =========================================================
-                // TABLE HEADER
-                // =========================================================
-
                 Text h1 = new Text("CAMPAIGN NAME");
                 Text h2 = new Text("CATEGORY");
                 Text h3 = new Text("REDEMPTIONS");
@@ -1109,8 +1110,14 @@ public class AdminAnalyticsPage {
                                         Color.web("#654A3E"));
                 }
 
+                h1.setWrappingWidth(190);
+                h2.setWrappingWidth(145);
+                h3.setWrappingWidth(140);
+                h4.setWrappingWidth(200);
+                h5.setWrappingWidth(145);
+                h6.setWrappingWidth(120);
+
                 HBox header = new HBox(
-                                65,
                                 h1,
                                 h2,
                                 h3,
@@ -1118,194 +1125,73 @@ public class AdminAnalyticsPage {
                                 h5,
                                 h6);
 
+                header.setAlignment(
+                                Pos.CENTER_LEFT);
+
                 header.setPadding(
                                 new Insets(
                                                 15,
-                                                8,
+                                                12,
                                                 15,
-                                                10));
+                                                12));
 
-                // =========================================================
-                // ROW 1
-                // =========================================================
+                VBox offerRows = new VBox();
+                offerRows.setSpacing(0);
 
-                Text c1 = new Text(
-                                "Fresh Monday Sale");
+                Text loadingOffers = new Text(
+                                "Loading offers from Firestore...");
 
-                Label cat1 = createCategoryLabel("Grocery");
+                loadingOffers.setFont(
+                                Font.font(
+                                                "Arial",
+                                                13));
 
-                Text red1 = new Text("2,492");
+                loadingOffers.setFill(
+                                Color.web("#777777"));
 
-                Rectangle bar1 = new Rectangle(
-                                40,
-                                5);
+                VBox loadingBox = new VBox(
+                                loadingOffers);
 
-                bar1.setFill(
-                                Color.web("#A83E00"));
+                loadingBox.setPadding(
+                                new Insets(
+                                                20,
+                                                12,
+                                                20,
+                                                12));
 
-                HBox conversion1 = new HBox(
-                                10,
-                                bar1,
-                                new Text("68%"));
+                offerRows.getChildren().add(
+                                loadingBox);
 
-                conversion1.setAlignment(
-                                Pos.CENTER_LEFT);
+                ScrollPane offerScroll =
+                                new ScrollPane(
+                                                offerRows);
 
-                Text profit1 = new Text(
-                                "+$12,400");
-
-                profit1.setFill(
-                                Color.web("#A83E00"));
-
-                Label status1 = createStatusLabel(
-                                "Active",
+                offerScroll.setFitToWidth(
                                 true);
 
-                HBox row1 = new HBox(
-                                65,
-                                c1,
-                                cat1,
-                                red1,
-                                conversion1,
-                                profit1,
-                                status1);
+                offerScroll.setPrefHeight(
+                                260);
 
-                row1.setAlignment(
-                                Pos.CENTER_LEFT);
+                offerScroll.setMaxHeight(
+                                320);
 
-                row1.setPadding(
-                                new Insets(
-                                                15,
-                                                8,
-                                                15,
-                                                10));
+                offerScroll.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
 
-                // =========================================================
-                // ROW 2
-                // =========================================================
+                offerScroll.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-                Text c2 = new Text(
-                                "Tech-Up Weekend");
-
-                Label cat2 = createCategoryLabel(
-                                "Electronics");
-
-                Text red2 = new Text("840");
-
-                Rectangle bar2 = new Rectangle(
-                                25,
-                                5);
-
-                bar2.setFill(
-                                Color.web("#A83E00"));
-
-                HBox conversion2 = new HBox(
-                                10,
-                                bar2,
-                                new Text("42%"));
-
-                conversion2.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Text profit2 = new Text(
-                                "+$45,200");
-
-                profit2.setFill(
-                                Color.web("#A83E00"));
-
-                Label status2 = createStatusLabel(
-                                "Scheduled",
-                                false);
-
-                HBox row2 = new HBox(
-                                65,
-                                c2,
-                                cat2,
-                                red2,
-                                conversion2,
-                                profit2,
-                                status2);
-
-                row2.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                row2.setPadding(
-                                new Insets(
-                                                15,
-                                                8,
-                                                15,
-                                                10));
-
-                // =========================================================
-                // ROW 3
-                // =========================================================
-
-                Text c3 = new Text(
-                                "Local Delights Tour");
-
-                Label cat3 = createCategoryLabel(
-                                "Food");
-
-                Text red3 = new Text("1,120");
-
-                Rectangle bar3 = new Rectangle(
-                                50,
-                                5);
-
-                bar3.setFill(
-                                Color.web("#A83E00"));
-
-                HBox conversion3 = new HBox(
-                                10,
-                                bar3,
-                                new Text("82%"));
-
-                conversion3.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Text profit3 = new Text(
-                                "+$8,900");
-
-                profit3.setFill(
-                                Color.web("#A83E00"));
-
-                Label status3 = createStatusLabel(
-                                "Active",
-                                true);
-
-                HBox row3 = new HBox(
-                                65,
-                                c3,
-                                cat3,
-                                red3,
-                                conversion3,
-                                profit3,
-                                status3);
-
-                row3.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                row3.setPadding(
-                                new Insets(
-                                                15,
-                                                8,
-                                                15,
-                                                10));
-
-                // =========================================================
-                // OFFER TABLE
-                // =========================================================
+                offerScroll.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-background:transparent;" +
+                                                "-fx-border-color:transparent;");
 
                 VBox offer = new VBox(
                                 0,
                                 offerTop,
                                 header,
                                 new Separator(),
-                                row1,
-                                new Separator(),
-                                row2,
-                                new Separator(),
-                                row3);
+                                offerScroll);
 
                 offer.setPadding(
                                 new Insets(15));
@@ -1317,6 +1203,83 @@ public class AdminAnalyticsPage {
                                                 "-fx-border-color:#EEEEEE;" +
                                                 "-fx-border-radius:10;" +
                                                 "-fx-background-radius:10;");
+
+                new Thread(() -> {
+
+                        ArrayList<OfferModel> allOffers =
+                                        OfferController
+                                                        .getAllOffersForAdmin();
+
+                        Platform.runLater(() -> {
+
+                                offerRows
+                                                .getChildren()
+                                                .clear();
+
+                                if (allOffers == null ||
+                                                allOffers.isEmpty()) {
+
+                                        Text emptyText =
+                                                        new Text(
+                                                                        "No offers found.");
+
+                                        emptyText.setFont(
+                                                        Font.font(
+                                                                        "Arial",
+                                                                        13));
+
+                                        emptyText.setFill(
+                                                        Color.web(
+                                                                        "#777777"));
+
+                                        VBox emptyBox =
+                                                        new VBox(
+                                                                        emptyText);
+
+                                        emptyBox.setPadding(
+                                                        new Insets(
+                                                                        20,
+                                                                        12,
+                                                                        20,
+                                                                        12));
+
+                                        offerRows
+                                                        .getChildren()
+                                                        .add(
+                                                                        emptyBox);
+
+                                        return;
+                                }
+
+                                for (int i = 0;
+                                                i < allOffers.size();
+                                                i++) {
+
+                                        OfferModel offerModel =
+                                                        allOffers.get(i);
+
+                                        HBox row =
+                                                        createOfferPerformanceRow(
+                                                                        offerModel);
+
+                                        offerRows
+                                                        .getChildren()
+                                                        .add(
+                                                                        row);
+
+                                        if (i <
+                                                        allOffers.size()
+                                                                        - 1) {
+
+                                                offerRows
+                                                                .getChildren()
+                                                                .add(
+                                                                                new Separator());
+                                        }
+                                }
+                        });
+
+                }).start();
 
                 rightBox.getChildren().addAll(
                                 top,
@@ -1369,6 +1332,227 @@ public class AdminAnalyticsPage {
                                 850);
 
                 return scene;
+        }
+
+        private HBox createOfferPerformanceRow(
+                        OfferModel offerModel) {
+
+                String campaignName =
+                                safeText(
+                                                offerModel.getOfferName(),
+                                                "Unnamed Offer");
+
+                String category =
+                                safeText(
+                                                offerModel.getCategory(),
+                                                "General");
+
+                int redemptions =
+                                Math.max(
+                                                0,
+                                                offerModel.getRedemptions());
+
+                int totalViews =
+                                Math.max(
+                                                0,
+                                                offerModel.getTotalViews());
+
+                double conversionRate = 0;
+
+                if (totalViews > 0) {
+
+                        conversionRate =
+                                        (redemptions * 100.0)
+                                                        / totalViews;
+                }
+
+                double netProfit =
+                                offerModel.getNetProfit();
+
+                String status =
+                                resolveOfferStatus(
+                                                offerModel);
+
+                Text campaignText =
+                                new Text(
+                                                campaignName);
+
+                campaignText.setWrappingWidth(
+                                190);
+
+                campaignText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                13));
+
+                Label categoryLabel =
+                                createCategoryLabel(
+                                                category);
+
+                VBox categoryBox =
+                                new VBox(
+                                                categoryLabel);
+
+                categoryBox.setPrefWidth(
+                                145);
+
+                Text redemptionText =
+                                new Text(
+                                                String.format(
+                                                                "%,d",
+                                                                redemptions));
+
+                redemptionText.setWrappingWidth(
+                                140);
+
+                Rectangle conversionBar =
+                                new Rectangle(
+                                                Math.max(
+                                                                2,
+                                                                Math.min(
+                                                                                75,
+                                                                                conversionRate
+                                                                                                * 0.75)),
+                                                5);
+
+                conversionBar.setFill(
+                                Color.web(
+                                                "#A83E00"));
+
+                Text conversionText =
+                                new Text(
+                                                String.format(
+                                                                "%.0f%%",
+                                                                conversionRate));
+
+                HBox conversionBox =
+                                new HBox(
+                                                10,
+                                                conversionBar,
+                                                conversionText);
+
+                conversionBox.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                conversionBox.setPrefWidth(
+                                200);
+
+                String profitValue =
+                                String.format(
+                                                "%s$%,.2f",
+                                                netProfit >= 0
+                                                                ? "+"
+                                                                : "-",
+                                                Math.abs(
+                                                                netProfit));
+
+                Text profitText =
+                                new Text(
+                                                profitValue);
+
+                profitText.setWrappingWidth(
+                                145);
+
+                profitText.setFill(
+                                netProfit >= 0
+                                                ? Color.web(
+                                                                "#A83E00")
+                                                : Color.web(
+                                                                "#C0392B"));
+
+                boolean active =
+                                "Active"
+                                                .equalsIgnoreCase(
+                                                                status);
+
+                Label statusLabel =
+                                createStatusLabel(
+                                                status,
+                                                active);
+
+                VBox statusBox =
+                                new VBox(
+                                                statusLabel);
+
+                statusBox.setPrefWidth(
+                                120);
+
+                HBox row =
+                                new HBox(
+                                                campaignText,
+                                                categoryBox,
+                                                redemptionText,
+                                                conversionBox,
+                                                profitText,
+                                                statusBox);
+
+                row.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                row.setPadding(
+                                new Insets(
+                                                15,
+                                                12,
+                                                15,
+                                                12));
+
+                return row;
+        }
+
+        private String safeText(
+                        String value,
+                        String defaultValue) {
+
+                if (value == null ||
+                                value.trim().isEmpty()) {
+
+                        return defaultValue;
+                }
+
+                return value.trim();
+        }
+
+        private String resolveOfferStatus(
+                        OfferModel offerModel) {
+
+                String status =
+                                offerModel.getStatus();
+
+                if (status == null ||
+                                status.trim().isEmpty()) {
+
+                        return "Inactive";
+                }
+
+                if ("ACTIVE"
+                                .equalsIgnoreCase(
+                                                status)) {
+
+                        return "Active";
+                }
+
+                if ("SCHEDULED"
+                                .equalsIgnoreCase(
+                                                status)) {
+
+                        return "Scheduled";
+                }
+
+                if ("EXPIRED"
+                                .equalsIgnoreCase(
+                                                status)) {
+
+                        return "Expired";
+                }
+
+                if ("INACTIVE"
+                                .equalsIgnoreCase(
+                                                status)) {
+
+                        return "Inactive";
+                }
+
+                return status;
         }
 
         // =============================================================

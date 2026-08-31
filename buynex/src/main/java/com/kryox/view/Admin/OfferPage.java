@@ -317,74 +317,6 @@ public class OfferPage {
                                         shopPage.getUserScene());
                 });
 
-                // =========================
-                // DELIVERY
-                // =========================
-
-                HBox delivery = new HBox();
-                delivery.setSpacing(10);
-                delivery.setAlignment(Pos.CENTER_LEFT);
-                delivery.setPadding(new Insets(10, 12, 10, 12));
-                delivery.setPrefWidth(180);
-                delivery.setStyle(
-                                "-fx-background-color:transparent;" +
-                                                "-fx-background-radius:10;");
-
-                Text deliveryIcon = new Text("🚚");
-                deliveryIcon.setFont(Font.font("Arial", 18));
-
-                Text deliveryText = new Text("Delivery");
-                deliveryText.setFill(Color.web("#333333"));
-                deliveryText.setFont(Font.font("Arial", 14));
-
-                delivery.getChildren().addAll(
-                                deliveryIcon,
-                                deliveryText);
-
-                delivery.setOnMouseEntered(e -> {
-                        delivery.setStyle(
-                                        "-fx-background-color:#D94F00;" +
-                                                        "-fx-background-radius:10;");
-
-                        deliveryText.setFill(Color.WHITE);
-                        deliveryText.setFont(
-                                        Font.font("Arial", FontWeight.BOLD, 14));
-
-                        ScaleTransition st = new ScaleTransition(
-                                        Duration.millis(120),
-                                        delivery);
-
-                        st.setToX(1.03);
-                        st.setToY(1.03);
-                        st.play();
-                });
-
-                delivery.setOnMouseExited(e -> {
-                        delivery.setStyle(
-                                        "-fx-background-color:transparent;" +
-                                                        "-fx-background-radius:10;");
-
-                        deliveryText.setFill(Color.web("#333333"));
-                        deliveryText.setFont(Font.font("Arial", 14));
-
-                        ScaleTransition st = new ScaleTransition(
-                                        Duration.millis(120),
-                                        delivery);
-
-                        st.setToX(1);
-                        st.setToY(1);
-                        st.play();
-                });
-
-                delivery.setOnMouseClicked(e -> {
-
-                        DeliveryVerificationPage deliveryPage =
-                                        new DeliveryVerificationPage();
-
-                        Homepage.HomepageStage.setScene(
-                                        deliveryPage.getUserScene());
-                });
-
                 HBox offers = new HBox();
 
                 offers.setSpacing(10);
@@ -558,7 +490,6 @@ public class OfferPage {
                                 dashboard,
                                 users,
                                 shops,
-                                delivery,
                                 offers,
                                 analytics);
 
@@ -797,6 +728,8 @@ public class OfferPage {
 
                 HBox mainContent = new HBox();
                 mainContent.setSpacing(25);
+                mainContent.setPrefHeight(650);
+                mainContent.setMinHeight(650);
 
                 // =========================
                 // LEFT FILTER BOX
@@ -806,6 +739,8 @@ public class OfferPage {
                 filterBox.setSpacing(10);
                 filterBox.setPadding(new Insets(10));
                 filterBox.setPrefWidth(175);
+                filterBox.setPrefHeight(650);
+                filterBox.setMinHeight(650);
                 filterBox.setStyle(
                                 "-fx-background-color:white;" +
                                                 "-fx-background-radius:14;" +
@@ -894,6 +829,8 @@ public class OfferPage {
                 VBox promotions = new VBox();
                 promotions.setSpacing(18);
                 promotions.setPrefWidth(630);
+                promotions.setPrefHeight(650);
+                promotions.setMinHeight(650);
 
                 // =========================
                 // CREATE CAMPAIGN HEADER
@@ -902,6 +839,8 @@ public class OfferPage {
                 HBox campaignHeader = new HBox();
                 campaignHeader.setAlignment(Pos.CENTER_LEFT);
                 campaignHeader.setPadding(new Insets(18));
+                campaignHeader.setPrefHeight(90);
+                campaignHeader.setMinHeight(90);
 
                 Text showing = new Text(
                                 "Showing Active Marketwide promotions");
@@ -945,6 +884,8 @@ public class OfferPage {
                 VBox promotion1 = new VBox();
                 promotion1.setSpacing(12);
                 promotion1.setPadding(new Insets(20));
+                promotion1.setPrefHeight(250);
+                promotion1.setMinHeight(250);
                 promotion1.setStyle(
                                 "-fx-background-color:white;" +
                                                 "-fx-background-radius:14;" +
@@ -1037,9 +978,15 @@ public class OfferPage {
                                 shopsCount,
                                 networkLift);
 
+                Region promotionGrow1 = new Region();
+                VBox.setVgrow(
+                                promotionGrow1,
+                                Priority.ALWAYS);
+
                 promotion1.getChildren().addAll(
                                 promotionTitle1,
                                 summerDescription,
+                                promotionGrow1,
                                 separator1,
                                 stats1);
 
@@ -1050,6 +997,8 @@ public class OfferPage {
                 VBox promotion2 = new VBox();
                 promotion2.setSpacing(12);
                 promotion2.setPadding(new Insets(20));
+                promotion2.setPrefHeight(250);
+                promotion2.setMinHeight(250);
                 promotion2.setStyle(
                                 "-fx-background-color:white;" +
                                                 "-fx-background-radius:14;" +
@@ -1142,9 +1091,15 @@ public class OfferPage {
                                 shopsCount2,
                                 networkLift2);
 
+                Region promotionGrow2 = new Region();
+                VBox.setVgrow(
+                                promotionGrow2,
+                                Priority.ALWAYS);
+
                 promotion2.getChildren().addAll(
                                 promotionTitle2,
                                 groceryDescription,
+                                promotionGrow2,
                                 separator2,
                                 stats2);
 
@@ -1158,6 +1113,8 @@ public class OfferPage {
                 aiPromotion.setSpacing(15);
                 aiPromotion.setPadding(new Insets(20));
                 aiPromotion.setPrefWidth(275);
+                aiPromotion.setPrefHeight(650);
+                aiPromotion.setMinHeight(650);
 
                 aiPromotion.setStyle(
                                 "-fx-background-color:white;" +

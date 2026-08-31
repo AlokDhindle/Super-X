@@ -658,11 +658,24 @@ public class ShopkeeperLogin {
                         }else{
                                 String role = shopkeeperModel.getRole();
                                 if (role.equals("Shopkeeper")) {
+
                                         if (shopkeeperModel.isApproved()) {
+
                                                 ViewConstants.shopkeeperModel = shopkeeperModel;
-                                                Homepage.HomepageStage.setScene(ShopkeeperDashboard.dashboardScene());
-                                        }else{
-                                                Homepage.HomepageStage.setScene(ShopkeeperRegisterSucess.registeredScene());                                }
+
+                                                Homepage.HomepageStage.setScene(
+                                                                ShopkeeperDashboard.dashboardScene());
+
+                                        } else {
+
+                                                ConstantsMethods.showAlert(
+                                                                Alert.AlertType.WARNING,
+                                                                "Approval Pending",
+                                                                "Your shop is pending for approval.");
+
+                                                return;
+                                        }
+
                                 } else {
                                         ConstantsMethods.showAlert(
                                                         Alert.AlertType.ERROR,

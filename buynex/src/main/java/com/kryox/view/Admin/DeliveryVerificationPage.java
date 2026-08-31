@@ -2,10 +2,19 @@ package com.kryox.view.Admin;
 
 import java.awt.Desktop;
 import java.net.URI;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Map;
+
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.kryox.dao.Delivery.DeliveryPartnerDAO;
 
 import com.kryox.view.Customer.Homepage;
 
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -442,13 +451,19 @@ public class DeliveryVerificationPage {
 
         VBox pending = createCountBox(
                 "PENDING",
-                "09",
+                "0",
                 false);
+
+        Text pendingValue =
+                (Text) pending.getChildren().get(1);
 
         VBox today = createCountBox(
                 "TODAY",
-                "03",
+                "0",
                 true);
+
+        Text todayValue =
+                (Text) today.getChildren().get(1);
 
         pageHeader.getChildren().addAll(
                 headingText,
@@ -494,46 +509,27 @@ public class DeliveryVerificationPage {
         VBox deliveryCards = new VBox(14);
         deliveryCards.setPrefWidth(520);
 
-        VBox card1 = createDeliveryCard(
-                "Rahul Patil",
-                "Pune • Registered 1h ago",
-                "BIKE",
-                "▧ ID Proof",
-                "▧ Driving License",
-                false);
+        Text loadingText =
+                new Text(
+                        "Loading pending delivery partners..."
+                );
 
-        VBox card2 = createDeliveryCard(
-                "Sneha More",
-                "Pimpri • Registered 4h ago",
-                "SCOOTER",
-                "▧ ID Proof",
-                "▧ Driving License",
-                false);
+        loadingText.setFont(
+                Font.font(
+                        "Arial",
+                        13
+                )
+        );
 
-        VBox card3 = createDeliveryCard(
-                "Aman Shaikh",
-                "Katraj • Registered Yesterday",
-                "BIKE",
-                "▧ ID Proof",
-                "▧ Driving License",
-                false);
+        loadingText.setFill(
+                Color.GRAY
+        );
 
-        Button view1 = (Button) ((HBox) card1.getChildren().get(1))
+        deliveryCards
                 .getChildren()
-                .get(((HBox) card1.getChildren().get(1)).getChildren().size() - 1);
-
-        Button view2 = (Button) ((HBox) card2.getChildren().get(1))
-                .getChildren()
-                .get(((HBox) card2.getChildren().get(1)).getChildren().size() - 1);
-
-        Button view3 = (Button) ((HBox) card3.getChildren().get(1))
-                .getChildren()
-                .get(((HBox) card3.getChildren().get(1)).getChildren().size() - 1);
-
-        deliveryCards.getChildren().addAll(
-                card1,
-                card2,
-                card3);
+                .add(
+                        loadingText
+                );
 
         VBox reviewPanel = new VBox(12);
         reviewPanel.setPrefWidth(560);
@@ -578,47 +574,122 @@ public class DeliveryVerificationPage {
                 reviewPanel,
                 Priority.ALWAYS);
 
-        view1.setOnAction(e -> {
-            selectCard(card1, card2, card3);
+        DeliveryPartnerDAO deliveryPartnerDAO =
+                new DeliveryPartnerDAO();
 
-            showDeliveryReview(
-                    reviewPanel,
-                    "Rahul Patil",
-                    "Pune • 9876543210",
-                    "BIKE",
-                    "MH12AB1234",
-                    "ID_PROOF_CLOUDINARY_URL",
-                    "DRIVING_LICENSE_CLOUDINARY_URL",
-                    "RC_CLOUDINARY_URL");
-        });
+        Thread pendingDeliveryThread =
+                new Thread(() -> {
 
-        view2.setOnAction(e -> {
-            selectCard(card2, card1, card3);
+                    List<QueryDocumentSnapshot> pendingPartners =
+                            deliveryPartnerDAO
+                                    .getPendingPartners();
 
-            showDeliveryReview(
-                    reviewPanel,
-                    "Sneha More",
-                    "Pimpri • 9876501234",
-                    "SCOOTER",
-                    "MH14CD5678",
-                    "ID_PROOF_CLOUDINARY_URL",
-                    "DRIVING_LICENSE_CLOUDINARY_URL",
-                    "RC_CLOUDINARY_URL");
-        });
+                    int todayCount = 0;
 
-        view3.setOnAction(e -> {
-            selectCard(card3, card1, card2);
+                    LocalDate todayDate =
+                            LocalDate.now();
 
-            showDeliveryReview(
-                    reviewPanel,
-                    "Aman Shaikh",
-                    "Katraj • 9822012345",
-                    "BIKE",
-                    "MH12EF9087",
-                    "ID_PROOF_CLOUDINARY_URL",
-                    "DRIVING_LICENSE_CLOUDINARY_URL",
-                    "RC_CLOUDINARY_URL");
-        });
+                    for (QueryDocumentSnapshot document :
+                            pendingPartners) {
+
+                        Long createdAt =
+                                document.getLong(
+                                        "createdAt"
+                                );
+
+                        if (createdAt != null) {
+
+                            LocalDate createdDate =
+                                    Instant.ofEpochMilli(
+                                            createdAt
+                                    )
+                                            .atZone(
+                                                    ZoneId.systemDefault()
+                                            )
+                                            .toLocalDate();
+
+                            if (todayDate.equals(
+                                    createdDate
+                            )) {
+
+                                todayCount++;
+                            }
+                        }
+                    }
+
+                    int finalTodayCount =
+                            todayCount;
+
+                    Platform.runLater(() -> {
+
+                        deliveryCards
+                                .getChildren()
+                                .clear();
+
+                        pendingValue.setText(
+                                String.valueOf(
+                                        pendingPartners.size()
+                                )
+                        );
+
+                        todayValue.setText(
+                                String.valueOf(
+                                        finalTodayCount
+                                )
+                        );
+
+                        if (pendingPartners.isEmpty()) {
+
+                            Text noPending =
+                                    new Text(
+                                            "No pending delivery partner verifications."
+                                    );
+
+                            noPending.setFont(
+                                    Font.font(
+                                            "Arial",
+                                            FontWeight.BOLD,
+                                            14
+                                    )
+                            );
+
+                            noPending.setFill(
+                                    Color.GRAY
+                            );
+
+                            deliveryCards
+                                    .getChildren()
+                                    .add(
+                                            noPending
+                                    );
+
+                            return;
+                        }
+
+                        for (QueryDocumentSnapshot document :
+                                pendingPartners) {
+
+                            VBox card =
+                                    createPendingDeliveryCard(
+                                            document,
+                                            reviewPanel,
+                                            deliveryCards
+                                    );
+
+                            deliveryCards
+                                    .getChildren()
+                                    .add(
+                                            card
+                                    );
+                        }
+                    });
+                });
+
+        pendingDeliveryThread
+                .setDaemon(true);
+
+        pendingDeliveryThread
+                .start();
 
         mainContent.getChildren().addAll(
                 deliveryCards,
@@ -807,26 +878,278 @@ public class DeliveryVerificationPage {
         return card;
     }
 
-    private void selectCard(
-            VBox selected,
-            VBox other1,
-            VBox other2) {
+    private VBox createPendingDeliveryCard(
+            QueryDocumentSnapshot document,
+            VBox reviewPanel,
+            VBox deliveryCards
+    ) {
 
-        selected.setStyle(
-                "-fx-background-color:white;" +
-                "-fx-background-radius:12;" +
-                "-fx-border-color:#FF6500;" +
-                "-fx-border-width:2;" +
-                "-fx-border-radius:12;");
+        String uid =
+                document.getId();
 
-        other1.setStyle(
-                "-fx-background-color:white;" +
-                "-fx-background-radius:12;");
+        String fullName =
+                getString(
+                        document,
+                        "fullName"
+                );
 
-        other2.setStyle(
-                "-fx-background-color:white;" +
-                "-fx-background-radius:12;");
+        if (fullName == null ||
+                fullName.isBlank()) {
+
+            fullName =
+                    "Delivery Partner";
+        }
+
+        String mobile =
+                getString(
+                        document,
+                        "mobile"
+                );
+
+        String address =
+                getString(
+                        document,
+                        "address"
+                );
+
+        String vehicleType =
+                getString(
+                        document,
+                        "vehicleType"
+                );
+
+        String vehicleNumber =
+                getString(
+                        document,
+                        "vehicleNumber"
+                );
+
+        Map<String, Object> adminVerification =
+                getAdminVerification(
+                        document
+                );
+
+        String idProofUrl =
+                getMapString(
+                        adminVerification,
+                        "idCardUrl"
+                );
+
+        String drivingLicenseUrl =
+                getMapString(
+                        adminVerification,
+                        "licenseDocUrl"
+                );
+
+        String rcUrl =
+                getMapString(
+                        adminVerification,
+                        "rcBookUrl"
+                );
+
+        if (idProofUrl == null ||
+                idProofUrl.isBlank()) {
+
+            idProofUrl =
+                    getString(
+                            document,
+                            "idCardPath"
+                    );
+        }
+
+        if (drivingLicenseUrl == null ||
+                drivingLicenseUrl.isBlank()) {
+
+            drivingLicenseUrl =
+                    getString(
+                            document,
+                            "licenseDocPath"
+                    );
+        }
+
+        if (rcUrl == null ||
+                rcUrl.isBlank()) {
+
+            rcUrl =
+                    getString(
+                            document,
+                            "rcBookPath"
+                    );
+        }
+
+        String details = "";
+
+        if (address != null &&
+                !address.isBlank()) {
+
+            details += address;
+        }
+
+        if (mobile != null &&
+                !mobile.isBlank()) {
+
+            if (!details.isBlank()) {
+                details += " • ";
+            }
+
+            details += mobile;
+        }
+
+        if (details.isBlank()) {
+            details = "Pending verification";
+        }
+
+        String safeVehicleType =
+                vehicleType == null ||
+                        vehicleType.isBlank()
+                        ? "N/A"
+                        : vehicleType;
+
+        String finalFullName =
+                fullName;
+
+        String finalDetails =
+                details;
+
+        String finalVehicleNumber =
+                vehicleNumber == null
+                        ? ""
+                        : vehicleNumber;
+
+        String finalIdProofUrl =
+                idProofUrl;
+
+        String finalDrivingLicenseUrl =
+                drivingLicenseUrl;
+
+        String finalRcUrl =
+                rcUrl;
+
+        VBox card =
+                createDeliveryCard(
+                        finalFullName,
+                        finalDetails,
+                        safeVehicleType,
+                        "▧ ID Proof",
+                        "▧ Driving License",
+                        false
+                );
+
+        Button view =
+                (Button) ((HBox) card
+                        .getChildren()
+                        .get(1))
+                        .getChildren()
+                        .get(
+                                ((HBox) card
+                                        .getChildren()
+                                        .get(1))
+                                        .getChildren()
+                                        .size() - 1
+                        );
+
+        view.setOnAction(e -> {
+
+            for (javafx.scene.Node node :
+                    deliveryCards.getChildren()) {
+
+                if (node instanceof VBox) {
+
+                    ((VBox) node).setStyle(
+                            "-fx-background-color:white;" +
+                            "-fx-background-radius:12;"
+                    );
+                }
+            }
+
+            card.setStyle(
+                    "-fx-background-color:white;" +
+                    "-fx-background-radius:12;" +
+                    "-fx-border-color:#FF6500;" +
+                    "-fx-border-width:2;" +
+                    "-fx-border-radius:12;"
+            );
+
+            showDeliveryReview(
+                    reviewPanel,
+                    finalFullName,
+                    finalDetails,
+                    safeVehicleType,
+                    finalVehicleNumber,
+                    finalIdProofUrl,
+                    finalDrivingLicenseUrl,
+                    finalRcUrl,
+                    uid
+            );
+        });
+
+        return card;
     }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> getAdminVerification(
+            QueryDocumentSnapshot document
+    ) {
+
+        try {
+
+            Object value =
+                    document.get(
+                            "adminVerification"
+                    );
+
+            if (value instanceof Map) {
+
+                return (Map<String, Object>) value;
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private String getString(
+            QueryDocumentSnapshot document,
+            String field
+    ) {
+
+        try {
+
+            String value =
+                    document.getString(
+                            field
+                    );
+
+            return value == null
+                    ? ""
+                    : value;
+
+        } catch (Exception e) {
+
+            return "";
+        }
+    }
+
+    private String getMapString(
+            Map<String, Object> map,
+            String key
+    ) {
+
+        if (map == null) {
+            return "";
+        }
+
+        Object value =
+                map.get(key);
+
+        return value == null
+                ? ""
+                : String.valueOf(value);
+    }
+
 
     public void showDeliveryReview(
             VBox reviewPanel,
@@ -836,7 +1159,8 @@ public class DeliveryVerificationPage {
             String vehicleNumber,
             String idProofUrl,
             String drivingLicenseUrl,
-            String rcUrl) {
+            String rcUrl,
+            String deliveryPartnerUid) {
 
         reviewPanel.getChildren().clear();
         reviewPanel.setAlignment(Pos.TOP_LEFT);
@@ -1026,30 +1350,93 @@ public class DeliveryVerificationPage {
                 return;
             }
 
-            Alert alert =
-                    new Alert(
-                            Alert.AlertType.INFORMATION);
+            DeliveryPartnerDAO dao =
+                    new DeliveryPartnerDAO();
 
-            alert.setHeaderText(null);
-            alert.setContentText(
-                    partnerName +
-                            " verification rejected.");
+            boolean rejected =
+                    dao.rejectPartner(
+                            deliveryPartnerUid,
+                            reviewNote
+                                    .getText()
+                                    .trim()
+                    );
 
-            alert.showAndWait();
+            if (rejected) {
+
+                Alert alert =
+                        new Alert(
+                                Alert.AlertType.INFORMATION);
+
+                alert.setHeaderText(null);
+                alert.setContentText(
+                        partnerName +
+                                " verification rejected.");
+
+                alert.showAndWait();
+
+                DeliveryVerificationPage page =
+                        new DeliveryVerificationPage();
+
+                Homepage.HomepageStage.setScene(
+                        page.getUserScene()
+                );
+
+            } else {
+
+                Alert alert =
+                        new Alert(
+                                Alert.AlertType.ERROR);
+
+                alert.setHeaderText(null);
+                alert.setContentText(
+                        "Delivery partner rejection failed.");
+
+                alert.showAndWait();
+            }
         });
 
         approve.setOnAction(e -> {
 
-            Alert alert =
-                    new Alert(
-                            Alert.AlertType.INFORMATION);
+            DeliveryPartnerDAO dao =
+                    new DeliveryPartnerDAO();
 
-            alert.setHeaderText(null);
-            alert.setContentText(
-                    partnerName +
-                            " approved successfully.");
+            boolean approved =
+                    dao.approvePartner(
+                            deliveryPartnerUid
+                    );
 
-            alert.showAndWait();
+            if (approved) {
+
+                Alert alert =
+                        new Alert(
+                                Alert.AlertType.INFORMATION);
+
+                alert.setHeaderText(null);
+                alert.setContentText(
+                        partnerName +
+                                " approved successfully.");
+
+                alert.showAndWait();
+
+                DeliveryVerificationPage page =
+                        new DeliveryVerificationPage();
+
+                Homepage.HomepageStage.setScene(
+                        page.getUserScene()
+                );
+
+            } else {
+
+                Alert alert =
+                        new Alert(
+                                Alert.AlertType.ERROR);
+
+                alert.setHeaderText(null);
+                alert.setContentText(
+                        "Delivery partner approval failed.");
+
+                alert.showAndWait();
+            }
         });
 
         reviewPanel.getChildren().addAll(

@@ -3,6 +3,7 @@ package com.kryox.view.Customer;
 
 import com.kryox.view.Admin.AdminLoginPage;
 import com.kryox.view.Shopkeeper.ShopkeeperLogin;
+import com.kryox.view.Delivery.Deliverylogin;
 
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
@@ -44,7 +45,7 @@ public class Homepage extends Application {
     // =========================================================
 
     private static final String VIDEO_PATH =
-            "C:\\BuyNex\\Super-X\\buynex\\src\\main\\resources\\assets\\vedio\\Videio1.mp4";
+            "C:\\Java_26\\testing\\Super-X\\buynex\\src\\main\\resources\\assets\\vedio\\Videio1.mp4";
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -913,9 +914,11 @@ public class Homepage extends Application {
                 "-fx-background-color: #e6690f;" +
                 "-fx-background-radius: 15;"
         );
-        b4.setOnAction(event->{
-                // Deliverylogin dl=new Deliverylogin();
-                // Homepage.HomepageStage.setScene(dl.getDelivaryScene());
+        b4.setOnAction(event -> {
+
+            Homepage.HomepageStage.setScene(
+                    Deliverylogin.getDelivaryScene()
+            );
         });
 
         Region deliverySpacer =

@@ -1,36 +1,52 @@
 package com.kryox.model.Shopkeeper;
 
 public class ShopkeeperModel {
-    
-    String shopNameValue;
-    String ownerNameValue;
-    String mobileValue;
-    String panValue;
-    String gstValue;
-    String categoryValue;
-    String addressValue;
-    String stateValue;
-    String cityValue;
-    String pinValue;
-    String licenseValue;
-    String uniqueIdValue;
-    String shopkeeperUid;
-    String descriptionValue;
-    String shopLogoURL;
-    String shopPhotoURL;
-    String licenseDocumentURL;
-    String gstCertificateURL;
-    String role = "Shopkeeper";
-    boolean approved = false;
+
+    private String shopNameValue;
+    private String ownerNameValue;
+    private String mobileValue;
+    private String panValue;
+    private String gstValue;
+    private String categoryValue;
+    private String addressValue;
+    private String stateValue;
+    private String cityValue;
+    private String pinValue;
+    private String licenseValue;
+    private String uniqueIdValue;
+    private String shopkeeperUid;
+    private String descriptionValue;
+    private String shopLogoURL;
+    private String shopPhotoURL;
+    private String licenseDocumentURL;
+    private String gstCertificateURL;
+    private String role = "Shopkeeper";
+    private boolean approved = false;
 
     public ShopkeeperModel() {
     }
 
-    public ShopkeeperModel( String shopNameValue, String ownerNameValue, String mobileValue, String panValue, String gstValue,
-            String categoryValue, String addressValue, String stateValue, String cityValue,
-            String pinValue, String licenseValue, String uniqueIdValue,String shopkeeperUid,String descriptionValue,
-            String shopLogoURL, String shopPhotoURL, String licenseDocumentURL, String gstCertificateURL
-        ) {
+    public ShopkeeperModel(
+            String shopNameValue,
+            String ownerNameValue,
+            String mobileValue,
+            String panValue,
+            String gstValue,
+            String categoryValue,
+            String addressValue,
+            String stateValue,
+            String cityValue,
+            String pinValue,
+            String licenseValue,
+            String uniqueIdValue,
+            String shopkeeperUid,
+            String descriptionValue,
+            String shopLogoURL,
+            String shopPhotoURL,
+            String licenseDocumentURL,
+            String gstCertificateURL
+    ) {
+
         this.shopNameValue = shopNameValue;
         this.ownerNameValue = ownerNameValue;
         this.mobileValue = mobileValue;
@@ -51,6 +67,13 @@ public class ShopkeeperModel {
         this.gstCertificateURL = gstCertificateURL;
     }
 
+    public String getShopNameValue() {
+        return shopNameValue;
+    }
+
+    public void setShopNameValue(String shopNameValue) {
+        this.shopNameValue = shopNameValue;
+    }
 
     public String getOwnerNameValue() {
         return ownerNameValue;
@@ -58,14 +81,6 @@ public class ShopkeeperModel {
 
     public void setOwnerNameValue(String ownerNameValue) {
         this.ownerNameValue = ownerNameValue;
-    }
-
-    public String getShopNameValue() {
-        return shopNameValue;
-    }
-
-    public void setShopNameValue(String shopNameValue) {
-        this.shopNameValue = shopNameValue;
     }
 
     public String getMobileValue() {
@@ -164,14 +179,6 @@ public class ShopkeeperModel {
         this.descriptionValue = descriptionValue;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public boolean isApproved() {
-        return approved;
-    }
-     
     public String getShopLogoURL() {
         return shopLogoURL;
     }
@@ -204,4 +211,19 @@ public class ShopkeeperModel {
         this.gstCertificateURL = gstCertificateURL;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
 }

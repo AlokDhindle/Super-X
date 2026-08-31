@@ -1,9 +1,15 @@
 package com.kryox.view.Admin;
 
+import java.util.List;
+
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.kryox.dao.Delivery.DeliveryPartnerDAO;
+import com.kryox.dao.Shopkeeper.ShopkeeperDAO;
 import com.kryox.view.Customer.Homepage;
 
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -982,7 +988,7 @@ public class AdminDashboardPage {
                 card2Title.setFill(
                                 Color.web("#777777"));
 
-                Text card2Value = new Text("1,284");
+                Text card2Value = new Text("...");
                 card2Value.setFont(
                                 Font.font(
                                                 "Arial",
@@ -1113,7 +1119,7 @@ public class AdminDashboardPage {
                 card4Title.setFill(
                                 Color.web("#777777"));
 
-                Text card4Value = new Text("43");
+                Text card4Value = new Text("...");
                 card4Value.setFont(
                                 Font.font(
                                                 "Arial",
@@ -1415,47 +1421,44 @@ public class AdminDashboardPage {
                 HBox bottom = new HBox();
                 bottom.setSpacing(18);
 
+                // =================================================
+                // SHOP VERIFICATIONS
+                // =================================================
+
                 VBox shopVerification = new VBox();
                 shopVerification.setSpacing(10);
-                shopVerification.setPadding(
-                                new Insets(18));
+                shopVerification.setPadding(new Insets(18));
                 shopVerification.setPrefWidth(440);
                 shopVerification.setPrefHeight(260);
                 shopVerification.setStyle(
                                 "-fx-background-color:white;" +
                                                 "-fx-background-radius:15;");
 
-                Text shopTitle = new Text(
-                                "Shop Verifications");
+                Text shopTitle = new Text("Shop Verifications");
                 shopTitle.setFont(
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
                                                 17));
 
-                Text shopViewAll = new Text(
-                                "View All");
+                Text shopViewAll = new Text("View All");
                 shopViewAll.setFont(
                                 Font.font(
                                                 "Arial",
                                                 FontWeight.BOLD,
                                                 13));
-                shopViewAll.setFill(
-                                Color.web("#B84300"));
+                shopViewAll.setFill(Color.web("#B84300"));
+                shopViewAll.setStyle("-fx-cursor: hand;");
 
                 Region shopHeaderGrow = new Region();
-
-                HBox.setHgrow(
-                                shopHeaderGrow,
-                                Priority.ALWAYS);
+                HBox.setHgrow(shopHeaderGrow, Priority.ALWAYS);
 
                 HBox shopHeader = new HBox(
                                 shopTitle,
                                 shopHeaderGrow,
                                 shopViewAll);
 
-                shopHeader.setAlignment(
-                                Pos.CENTER_LEFT);
+                shopHeader.setAlignment(Pos.CENTER_LEFT);
 
                 VBox shopTable = new VBox();
                 shopTable.setSpacing(2);
@@ -1505,124 +1508,509 @@ public class AdminDashboardPage {
                                 th3,
                                 th4);
 
-                HBox row1 = new HBox();
-                row1.setPadding(
-                                new Insets(8, 0, 8, 0));
+                Text loadingShops = new Text(
+                                "Loading shop verification data...");
 
-                Text r1c1 = new Text("Urban Mart");
-                Text r1c2 = new Text("Mark Spencer");
-                Text r1c3 = new Text("Grocery");
-                Text r1c4 = new Text("Pending");
+                loadingShops.setFont(
+                                Font.font("Arial", 12));
 
-                r1c1.setWrappingWidth(90);
-                r1c2.setWrappingWidth(100);
-                r1c3.setWrappingWidth(80);
+                loadingShops.setFill(
+                                Color.web("#777777"));
 
-                r1c1.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                13));
-                r1c2.setFont(
-                                Font.font("Arial", 13));
-                r1c3.setFont(
-                                Font.font("Arial", 13));
-                r1c4.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                12));
-                r1c4.setFill(
-                                Color.web("#E08A00"));
+                VBox shopRows = new VBox();
+                shopRows.setSpacing(2);
+                shopRows.getChildren().add(loadingShops);
 
-                row1.getChildren().addAll(
-                                r1c1,
-                                r1c2,
-                                r1c3,
-                                r1c4);
+                ScrollPane shopTableScroll =
+                                new ScrollPane(shopRows);
 
-                HBox row2 = new HBox();
-                row2.setPadding(
-                                new Insets(8, 0, 8, 0));
+                shopTableScroll.setFitToWidth(true);
+                shopTableScroll.setPrefHeight(165);
+                shopTableScroll.setMaxHeight(165);
 
-                Text r2c1 = new Text("Tech Haven");
-                Text r2c2 = new Text("Sarah Chen");
-                Text r2c3 = new Text("Electronics");
-                Text r2c4 = new Text("Verified");
+                shopTableScroll.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
 
-                r2c1.setWrappingWidth(90);
-                r2c2.setWrappingWidth(100);
-                r2c3.setWrappingWidth(80);
+                shopTableScroll.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-                r2c1.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                13));
-                r2c2.setFont(
-                                Font.font("Arial", 13));
-                r2c3.setFont(
-                                Font.font("Arial", 13));
-                r2c4.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                12));
-                r2c4.setFill(
-                                Color.web("#1FA64B"));
-
-                row2.getChildren().addAll(
-                                r2c1,
-                                r2c2,
-                                r2c3,
-                                r2c4);
-
-                HBox row3 = new HBox();
-                row3.setPadding(
-                                new Insets(8, 0, 8, 0));
-
-                Text r3c1 = new Text("Flora Design");
-                Text r3c2 = new Text("Emma Wilson");
-                Text r3c3 = new Text("Lifestyle");
-                Text r3c4 = new Text("Flagged");
-
-                r3c1.setWrappingWidth(90);
-                r3c2.setWrappingWidth(100);
-                r3c3.setWrappingWidth(80);
-
-                r3c1.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                13));
-                r3c2.setFont(
-                                Font.font("Arial", 13));
-                r3c3.setFont(
-                                Font.font("Arial", 13));
-                r3c4.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                12));
-                r3c4.setFill(
-                                Color.web("#C0392B"));
-
-                row3.getChildren().addAll(
-                                r3c1,
-                                r3c2,
-                                r3c3,
-                                r3c4);
+                shopTableScroll.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-background:transparent;" +
+                                                "-fx-border-color:transparent;");
 
                 shopTable.getChildren().addAll(
                                 tableHeader,
                                 new Separator(),
-                                row1,
-                                row2,
-                                row3);
+                                shopTableScroll);
 
                 shopVerification.getChildren().addAll(
                                 shopHeader,
                                 shopTable);
+
+                boolean[] shopExpanded = { false };
+
+                shopViewAll.setOnMouseClicked(e -> {
+
+                        shopExpanded[0] =
+                                        !shopExpanded[0];
+
+                        if (shopExpanded[0]) {
+
+                                double expandedHeight =
+                                                Math.max(
+                                                                165,
+                                                                shopRows
+                                                                                .getChildren()
+                                                                                .size()
+                                                                                * 54.0);
+
+                                shopTableScroll.setPrefHeight(
+                                                expandedHeight);
+
+                                shopTableScroll.setMaxHeight(
+                                                expandedHeight);
+
+                                shopTableScroll.setVbarPolicy(
+                                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                                shopVerification.setPrefHeight(
+                                                expandedHeight + 95);
+
+                                shopViewAll.setText(
+                                                "Collapse");
+
+                        } else {
+
+                                shopTableScroll.setPrefHeight(
+                                                165);
+
+                                shopTableScroll.setMaxHeight(
+                                                165);
+
+                                shopTableScroll.setVbarPolicy(
+                                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                                shopVerification.setPrefHeight(
+                                                260);
+
+                                shopViewAll.setText(
+                                                "View All");
+                        }
+                });
+
+                // =================================================
+                // DELIVERY PARTNER VERIFICATIONS
+                // =================================================
+
+                VBox deliveryVerification = new VBox();
+                deliveryVerification.setSpacing(10);
+                deliveryVerification.setPadding(
+                                new Insets(18));
+                deliveryVerification.setPrefWidth(440);
+                deliveryVerification.setPrefHeight(260);
+                deliveryVerification.setStyle(
+                                "-fx-background-color:white;" +
+                                                "-fx-background-radius:15;");
+
+                Text deliveryVerificationTitle =
+                                new Text(
+                                                "Delivery Partner Verifications");
+
+                deliveryVerificationTitle.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                17));
+
+                Text deliveryViewAll =
+                                new Text("View All");
+
+                deliveryViewAll.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                13));
+
+                deliveryViewAll.setFill(
+                                Color.web("#B84300"));
+
+                deliveryViewAll.setStyle(
+                                "-fx-cursor: hand;");
+
+                Region deliveryHeaderGrow =
+                                new Region();
+
+                HBox.setHgrow(
+                                deliveryHeaderGrow,
+                                Priority.ALWAYS);
+
+                HBox deliveryVerificationHeader =
+                                new HBox(
+                                                deliveryVerificationTitle,
+                                                deliveryHeaderGrow,
+                                                deliveryViewAll);
+
+                deliveryVerificationHeader.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                VBox deliveryTable =
+                                new VBox();
+
+                deliveryTable.setSpacing(2);
+
+                HBox deliveryTableHeader =
+                                new HBox();
+
+                deliveryTableHeader.setPadding(
+                                new Insets(
+                                                8,
+                                                0,
+                                                8,
+                                                0));
+
+                Text dth1 =
+                                new Text("PARTNER");
+
+                Text dth2 =
+                                new Text("VEHICLE");
+
+                Text dth3 =
+                                new Text("NUMBER");
+
+                Text dth4 =
+                                new Text("STATUS");
+
+                dth1.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                dth2.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                dth3.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                dth4.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                dth1.setFill(
+                                Color.web("#999999"));
+
+                dth2.setFill(
+                                Color.web("#999999"));
+
+                dth3.setFill(
+                                Color.web("#999999"));
+
+                dth4.setFill(
+                                Color.web("#999999"));
+
+                dth1.setWrappingWidth(110);
+                dth2.setWrappingWidth(90);
+                dth3.setWrappingWidth(120);
+
+                deliveryTableHeader.getChildren()
+                                .addAll(
+                                                dth1,
+                                                dth2,
+                                                dth3,
+                                                dth4);
+
+                Text loadingDelivery =
+                                new Text(
+                                                "Loading delivery partner verification data...");
+
+                loadingDelivery.setFont(
+                                Font.font(
+                                                "Arial",
+                                                12));
+
+                loadingDelivery.setFill(
+                                Color.web("#777777"));
+
+                VBox deliveryRows =
+                                new VBox();
+
+                deliveryRows.setSpacing(2);
+
+                deliveryRows.getChildren()
+                                .add(
+                                                loadingDelivery);
+
+                ScrollPane deliveryTableScroll =
+                                new ScrollPane(
+                                                deliveryRows);
+
+                deliveryTableScroll.setFitToWidth(
+                                true);
+
+                deliveryTableScroll.setPrefHeight(
+                                165);
+
+                deliveryTableScroll.setMaxHeight(
+                                165);
+
+                deliveryTableScroll.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                deliveryTableScroll.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                deliveryTableScroll.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-background:transparent;" +
+                                                "-fx-border-color:transparent;");
+
+                deliveryTable.getChildren()
+                                .addAll(
+                                                deliveryTableHeader,
+                                                new Separator(),
+                                                deliveryTableScroll);
+
+                deliveryVerification.getChildren()
+                                .addAll(
+                                                deliveryVerificationHeader,
+                                                deliveryTable);
+
+                boolean[] deliveryExpanded =
+                                { false };
+
+                deliveryViewAll.setOnMouseClicked(
+                                e -> {
+
+                                        deliveryExpanded[0] =
+                                                        !deliveryExpanded[0];
+
+                                        if (deliveryExpanded[0]) {
+
+                                                double expandedHeight =
+                                                                Math.max(
+                                                                                165,
+                                                                                deliveryRows
+                                                                                                .getChildren()
+                                                                                                .size()
+                                                                                                * 54.0);
+
+                                                deliveryTableScroll.setPrefHeight(
+                                                                expandedHeight);
+
+                                                deliveryTableScroll.setMaxHeight(
+                                                                expandedHeight);
+
+                                                deliveryTableScroll.setVbarPolicy(
+                                                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                                                deliveryVerification.setPrefHeight(
+                                                                expandedHeight + 95);
+
+                                                deliveryViewAll.setText(
+                                                                "Collapse");
+
+                                        } else {
+
+                                                deliveryTableScroll.setPrefHeight(
+                                                                165);
+
+                                                deliveryTableScroll.setMaxHeight(
+                                                                165);
+
+                                                deliveryTableScroll.setVbarPolicy(
+                                                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                                                deliveryVerification.setPrefHeight(
+                                                                260);
+
+                                                deliveryViewAll.setText(
+                                                                "View All");
+                                        }
+                                });
+
+                // =================================================
+                // LOAD SHOP + DELIVERY DATA FROM FIRESTORE
+                // =================================================
+
+                ShopkeeperDAO shopkeeperDAO =
+                                new ShopkeeperDAO();
+
+                DeliveryPartnerDAO deliveryPartnerDAO =
+                                new DeliveryPartnerDAO();
+
+                Thread verificationDashboardThread =
+                                new Thread(() -> {
+
+                                        List<QueryDocumentSnapshot> allShopkeepers =
+                                                        shopkeeperDAO
+                                                                        .getAllShopkeepers();
+
+                                        List<QueryDocumentSnapshot> allDeliveryPartners =
+                                                        deliveryPartnerDAO
+                                                                        .getAllPartners();
+
+                                        int shopPendingCount = 0;
+
+                                        for (QueryDocumentSnapshot document :
+                                                        allShopkeepers) {
+
+                                                Boolean approved =
+                                                                document
+                                                                                .getBoolean(
+                                                                                                "approved");
+
+                                                if (!Boolean.TRUE.equals(
+                                                                approved)) {
+
+                                                        shopPendingCount++;
+                                                }
+                                        }
+
+                                        int deliveryPendingCount = 0;
+
+                                        for (QueryDocumentSnapshot document :
+                                                        allDeliveryPartners) {
+
+                                                Boolean approved =
+                                                                document
+                                                                                .getBoolean(
+                                                                                                "approved");
+
+                                                String status =
+                                                                document
+                                                                                .getString(
+                                                                                                "status");
+
+                                                boolean isApproved =
+                                                                Boolean.TRUE.equals(
+                                                                                approved)
+                                                                                || "APPROVED"
+                                                                                                .equalsIgnoreCase(
+                                                                                                                status);
+
+                                                boolean isRejected =
+                                                                "REJECTED"
+                                                                                .equalsIgnoreCase(
+                                                                                                status);
+
+                                                if (!isApproved &&
+                                                                !isRejected) {
+
+                                                        deliveryPendingCount++;
+                                                }
+                                        }
+
+                                        int totalPending =
+                                                        shopPendingCount
+                                                                        + deliveryPendingCount;
+
+                                        Platform.runLater(() -> {
+
+                                                card2Value.setText(
+                                                                String.valueOf(
+                                                                                allShopkeepers
+                                                                                                .size()));
+
+                                                card4Value.setText(
+                                                                String.valueOf(
+                                                                                totalPending));
+
+                                                shopRows.getChildren()
+                                                                .clear();
+
+                                                if (allShopkeepers
+                                                                .isEmpty()) {
+
+                                                        Text noShops =
+                                                                        new Text(
+                                                                                        "No shop verification requests found.");
+
+                                                        noShops.setFont(
+                                                                        Font.font(
+                                                                                        "Arial",
+                                                                                        12));
+
+                                                        noShops.setFill(
+                                                                        Color.web(
+                                                                                        "#777777"));
+
+                                                        shopRows
+                                                                        .getChildren()
+                                                                        .add(
+                                                                                        noShops);
+
+                                                } else {
+
+                                                        for (QueryDocumentSnapshot document :
+                                                                        allShopkeepers) {
+
+                                                                HBox row =
+                                                                                createShopVerificationRow(
+                                                                                                document);
+
+                                                                shopRows
+                                                                                .getChildren()
+                                                                                .add(
+                                                                                                row);
+                                                        }
+                                                }
+
+                                                deliveryRows
+                                                                .getChildren()
+                                                                .clear();
+
+                                                if (allDeliveryPartners
+                                                                .isEmpty()) {
+
+                                                        Text noDelivery =
+                                                                        new Text(
+                                                                                        "No delivery partner verification requests found.");
+
+                                                        noDelivery.setFont(
+                                                                        Font.font(
+                                                                                        "Arial",
+                                                                                        12));
+
+                                                        noDelivery.setFill(
+                                                                        Color.web(
+                                                                                        "#777777"));
+
+                                                        deliveryRows
+                                                                        .getChildren()
+                                                                        .add(
+                                                                                        noDelivery);
+
+                                                } else {
+
+                                                        for (QueryDocumentSnapshot document :
+                                                                        allDeliveryPartners) {
+
+                                                                HBox row =
+                                                                                createDeliveryVerificationRow(
+                                                                                                document);
+
+                                                                deliveryRows
+                                                                                .getChildren()
+                                                                                .add(
+                                                                                                row);
+                                                        }
+                                                }
+                                        });
+                                });
+
+                verificationDashboardThread.setDaemon(
+                                true);
+
+                verificationDashboardThread.start();
 
                 // =========================
                 // DAILY ACTIVE USERS
@@ -1741,9 +2129,24 @@ public class AdminDashboardPage {
                                 dailyUsers,
                                 Priority.ALWAYS);
 
+                HBox.setHgrow(
+                                deliveryVerification,
+                                Priority.ALWAYS);
+
                 bottom.getChildren().addAll(
                                 shopVerification,
                                 dailyUsers);
+
+                HBox deliveryVerificationRow =
+                                new HBox();
+
+                deliveryVerificationRow.getChildren()
+                                .add(
+                                                deliveryVerification);
+
+                HBox.setHgrow(
+                                deliveryVerification,
+                                Priority.ALWAYS);
 
                 // =========================
                 // ADD CENTER COMPONENTS
@@ -1753,7 +2156,8 @@ public class AdminDashboardPage {
                                 top,
                                 cards,
                                 middle,
-                                bottom);
+                                bottom,
+                                deliveryVerificationRow);
 
                 centerWrapper.getChildren().add(center);
 
@@ -1782,6 +2186,238 @@ public class AdminDashboardPage {
                 Scene scene = new Scene(root, 1500, 850);
                 dashboardScene = scene;
                 return dashboardScene;
+        }
+
+
+        private HBox createShopVerificationRow(
+                        QueryDocumentSnapshot document) {
+
+                String shopName =
+                                getShopValue(
+                                                document,
+                                                "shopNameValue",
+                                                "Unnamed Shop");
+
+                String ownerName =
+                                getShopValue(
+                                                document,
+                                                "ownerNameValue",
+                                                "-");
+
+                String category =
+                                getShopValue(
+                                                document,
+                                                "categoryValue",
+                                                "-");
+
+                Boolean approved =
+                                document.getBoolean("approved");
+
+                String status =
+                                Boolean.TRUE.equals(approved)
+                                                ? "Verified"
+                                                : "Pending";
+
+                HBox row = new HBox();
+                row.setPadding(new Insets(8, 0, 8, 0));
+
+                Text shopNameText = new Text(shopName);
+                Text ownerNameText = new Text(ownerName);
+                Text categoryText = new Text(category);
+                Text statusText = new Text(status);
+
+                shopNameText.setWrappingWidth(90);
+                ownerNameText.setWrappingWidth(100);
+                categoryText.setWrappingWidth(80);
+
+                shopNameText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                13));
+
+                ownerNameText.setFont(Font.font("Arial", 13));
+                categoryText.setFont(Font.font("Arial", 13));
+
+                statusText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                if (Boolean.TRUE.equals(approved)) {
+                        statusText.setFill(Color.web("#1FA64B"));
+                } else {
+                        statusText.setFill(Color.web("#E08A00"));
+                }
+
+                row.getChildren().addAll(
+                                shopNameText,
+                                ownerNameText,
+                                categoryText,
+                                statusText);
+
+                return row;
+        }
+
+        private HBox createDeliveryVerificationRow(
+                        QueryDocumentSnapshot document) {
+
+                String fullName =
+                                getDeliveryValue(
+                                                document,
+                                                "fullName",
+                                                "Partner");
+
+                String vehicleType =
+                                getDeliveryValue(
+                                                document,
+                                                "vehicleType",
+                                                "-");
+
+                String vehicleNumber =
+                                getDeliveryValue(
+                                                document,
+                                                "vehicleNumber",
+                                                "-");
+
+                Boolean approved =
+                                document.getBoolean(
+                                                "approved");
+
+                String rawStatus =
+                                document.getString(
+                                                "status");
+
+                String status;
+
+                if (Boolean.TRUE.equals(approved) ||
+                                "APPROVED"
+                                                .equalsIgnoreCase(
+                                                                rawStatus)) {
+
+                        status = "Verified";
+
+                } else if ("REJECTED"
+                                .equalsIgnoreCase(
+                                                rawStatus)) {
+
+                        status = "Rejected";
+
+                } else {
+
+                        status = "Pending";
+                }
+
+                HBox row = new HBox();
+                row.setPadding(
+                                new Insets(
+                                                8,
+                                                0,
+                                                8,
+                                                0));
+
+                Text nameText =
+                                new Text(fullName);
+
+                Text vehicleText =
+                                new Text(vehicleType);
+
+                Text numberText =
+                                new Text(vehicleNumber);
+
+                Text statusText =
+                                new Text(status);
+
+                nameText.setWrappingWidth(110);
+                vehicleText.setWrappingWidth(90);
+                numberText.setWrappingWidth(120);
+
+                nameText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                13));
+
+                vehicleText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                13));
+
+                numberText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                13));
+
+                statusText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                if ("Verified"
+                                .equals(status)) {
+
+                        statusText.setFill(
+                                        Color.web(
+                                                        "#1FA64B"));
+
+                } else if ("Rejected"
+                                .equals(status)) {
+
+                        statusText.setFill(
+                                        Color.web(
+                                                        "#C0392B"));
+
+                } else {
+
+                        statusText.setFill(
+                                        Color.web(
+                                                        "#E08A00"));
+                }
+
+                row.getChildren()
+                                .addAll(
+                                                nameText,
+                                                vehicleText,
+                                                numberText,
+                                                statusText);
+
+                return row;
+        }
+
+        private String getDeliveryValue(
+                        QueryDocumentSnapshot document,
+                        String fieldName,
+                        String defaultValue) {
+
+                String value =
+                                document.getString(
+                                                fieldName);
+
+                if (value == null ||
+                                value.trim().isEmpty()) {
+
+                        return defaultValue;
+                }
+
+                return value;
+        }
+
+        private String getShopValue(
+                        QueryDocumentSnapshot document,
+                        String fieldName,
+                        String defaultValue) {
+
+                String value = document.getString(fieldName);
+
+                if (value == null ||
+                                value.trim().isEmpty()) {
+
+                        return defaultValue;
+                }
+
+                return value;
         }
 
 }

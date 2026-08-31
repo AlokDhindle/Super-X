@@ -1,6 +1,10 @@
 package com.kryox.config;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
@@ -10,22 +14,71 @@ import com.google.firebase.cloud.FirestoreClient;
 
 public class Firebaseconfig {
 
-    static {
-        getFirebaseConfig();
-    }
+    private static FirebaseApp firebaseApp;
 
-    private static void getFirebaseConfig() {
+    public static void getFirebaseConfig() {
 
         try {
 
-            if (!FirebaseApp.getApps().isEmpty()) {
+            if (firebaseApp != null) {
                 return;
             }
 
-            FileInputStream serviceAccount =
-                    new FileInputStream(
-                            "C:\\Java_26\\testing\\Super-X\\buynex\\src\\main\\resources\\assets\\serviceAccount.json.json"
-                    );
+            if (!FirebaseApp.getApps().isEmpty()) {
+                firebaseApp = FirebaseApp.getInstance();
+                return;
+            }
+
+            InputStream serviceAccount =
+                    Firebaseconfig.class
+                            .getResourceAsStream(
+                                    "/assets/serviceAccount.json"
+                            );
+
+            if (serviceAccount == null) {
+
+                serviceAccount =
+                        Thread.currentThread()
+                                .getContextClassLoader()
+                                .getResourceAsStream(
+                                        "assets/serviceAccount.json"
+                                );
+            }
+
+            if (serviceAccount == null) {
+
+                Path path =
+                        Paths.get(
+                                System.getProperty("user.dir"),
+                                "src",
+                                "main",
+                                "resources",
+                                "assets",
+                                "serviceAccount.json"
+                        );
+
+                System.out.println(
+                        "Trying Firebase path: " +
+                        path.toAbsolutePath()
+                );
+
+                if (Files.exists(path)) {
+
+                    serviceAccount =
+                            new FileInputStream(
+                                    path.toFile()
+                            );
+                }
+            }
+
+            if (serviceAccount == null) {
+
+                System.out.println(
+                        "serviceAccount.json not found."
+                );
+
+                return;
+            }
 
             FirebaseOptions options =
                     FirebaseOptions.builder()
@@ -36,14 +89,13 @@ public class Firebaseconfig {
                             )
                             .build();
 
-            FirebaseApp.initializeApp(
-                    options
-            );
-
-            serviceAccount.close();
+            firebaseApp =
+                    FirebaseApp.initializeApp(
+                            options
+                    );
 
             System.out.println(
-                    "Firebase Connected Successfully!"
+                    "Firebase initialized successfully"
             );
 
         } catch (Exception e) {
@@ -58,18 +110,19 @@ public class Firebaseconfig {
 
     public static Firestore gFirestore() {
 
-        if (FirebaseApp.getApps().isEmpty()) {
-
+        if (firebaseApp == null) {
             getFirebaseConfig();
         }
 
-        if (FirebaseApp.getApps().isEmpty()) {
+        if (firebaseApp == null) {
 
             throw new IllegalStateException(
                     "Firebase is not initialized."
             );
         }
 
-        return FirestoreClient.getFirestore();
+        return FirestoreClient.getFirestore(
+                firebaseApp
+        );
     }
 }

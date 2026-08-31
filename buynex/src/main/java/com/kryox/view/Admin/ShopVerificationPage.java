@@ -2,11 +2,16 @@ package com.kryox.view.Admin;
 
 import java.awt.Desktop;
 import java.net.URI;
+import java.util.List;
 
+
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.kryox.dao.Shopkeeper.ShopkeeperDAO;
 import com.kryox.view.Customer.Homepage;
 
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -102,7 +107,7 @@ public class ShopVerificationPage {
 
                 dashboard.setOnMouseExited(e -> {
                         dashboard.setStyle(
-                                        "-fx-background-color:transprant;" +
+                                        "-fx-background-color:transparent;" +
                                                         "-fx-background-radius:10;");
 
                         dashboardText.setFill(Color.web("#333333"));
@@ -822,389 +827,17 @@ public class ShopVerificationPage {
 
                 shopCards.setPrefWidth(520);
 
-                // =====================================================
-                // CARD 1
-                // =====================================================
+                Text loadingText =
+                                new Text("Loading pending shops...");
 
-                VBox card1 = new VBox(12);
+                loadingText.setFont(
+                                Font.font("Arial", 13));
 
-                card1.setPadding(
-                                new Insets(14));
-
-                card1.setStyle(
-                                "-fx-background-color:white;" +
-                                                "-fx-background-radius:12;");
-
-                HBox card1Top = new HBox(10);
-
-                card1Top.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Rectangle card1Image = new Rectangle(
-                                44,
-                                44);
-
-                card1Image.setArcWidth(10);
-                card1Image.setArcHeight(10);
-
-                card1Image.setFill(
-                                Color.web("#EFF0D9"));
-
-                VBox card1Info = new VBox(3);
-
-                Text card1Name = new Text(
-                                "Green Root Grocers");
-
-                card1Name.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                17));
-
-                Text card1Owner = new Text(
-                                "Owner: Rajesh Kumar • Registered 2h ago");
-
-                card1Owner.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                card1Owner.setFill(
+                loadingText.setFill(
                                 Color.GRAY);
 
-                card1Info.getChildren().addAll(
-                                card1Name,
-                                card1Owner);
-
-                Region card1Space = new Region();
-
-                HBox.setHgrow(
-                                card1Space,
-                                Priority.ALWAYS);
-
-                Text card1Category = new Text(
-                                "GROCERY");
-
-                card1Category.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                9));
-
-                card1Category.setFill(
-                                Color.GRAY);
-
-                card1Top.getChildren().addAll(
-                                card1Image,
-                                card1Info,
-                                card1Space,
-                                card1Category);
-
-                HBox card1Bottom = new HBox(12);
-
-                card1Bottom.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Text license1 = new Text(
-                                "▧ Business License");
-
-                license1.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                Text gst1 = new Text(
-                                "▧ GST Certificate");
-
-                gst1.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                Region card1BottomSpace = new Region();
-
-                HBox.setHgrow(
-                                card1BottomSpace,
-                                Priority.ALWAYS);
-
-                Button view1 = new Button(
-                                "View Documents");
-
-                view1.setPrefHeight(36);
-
-                view1.setStyle(
-                                "-fx-background-color:#FF6500;" +
-                                                "-fx-text-fill:white;" +
-                                                "-fx-background-radius:7;" +
-                                                "-fx-font-size:12px;" +
-                                                "-fx-font-size:12px;");
-
-                card1Bottom.getChildren().addAll(
-                                license1,
-                                gst1,
-                                card1BottomSpace,
-                                view1);
-
-                card1.getChildren().addAll(
-                                card1Top,
-                                card1Bottom);
-
-                // =====================================================
-                // CARD 2
-                // =====================================================
-
-                VBox card2 = new VBox(12);
-
-                card2.setPadding(
-                                new Insets(14));
-
-                card2.setStyle(
-                                "-fx-background-color:white;" +
-                                                "-fx-background-radius:12;");
-
-                HBox card2Top = new HBox(10);
-
-                card2Top.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Rectangle card2Image = new Rectangle(
-                                44,
-                                44);
-
-                card2Image.setArcWidth(10);
-                card2Image.setArcHeight(10);
-
-                card2Image.setFill(
-                                Color.web("#E5E7E9"));
-
-                VBox card2Info = new VBox(3);
-
-                Text card2Name = new Text(
-                                "Apex Electronics");
-
-                card2Name.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                17));
-
-                Text card2Owner = new Text(
-                                "Owner: Sarah Jenkins • Registered 5h ago");
-
-                card2Owner.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                card2Owner.setFill(
-                                Color.GRAY);
-
-                card2Info.getChildren().addAll(
-                                card2Name,
-                                card2Owner);
-
-                Region card2Space = new Region();
-
-                HBox.setHgrow(
-                                card2Space,
-                                Priority.ALWAYS);
-
-                Text card2Category = new Text(
-                                "ELECTRONICS");
-
-                card2Category.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                9));
-
-                card2Category.setFill(
-                                Color.GRAY);
-
-                card2Top.getChildren().addAll(
-                                card2Image,
-                                card2Info,
-                                card2Space,
-                                card2Category);
-
-                HBox card2Bottom = new HBox(12);
-
-                card2Bottom.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Text license2 = new Text(
-                                "▧ Business License");
-
-                license2.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                Text gst2 = new Text(
-                                "▧ GST Certificate");
-
-                gst2.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                Region card2BottomSpace = new Region();
-
-                HBox.setHgrow(
-                                card2BottomSpace,
-                                Priority.ALWAYS);
-
-                Button view2 = new Button(
-                                "View Documents");
-
-                view2.setPrefHeight(36);
-
-                view2.setStyle(
-                                "-fx-background-color:#FF6500;" +
-                                                "-fx-text-fill:white;" +
-                                                "-fx-background-radius:7;" +
-                                                "-fx-font-size:12px;");
-
-                card2Bottom.getChildren().addAll(
-                                license2,
-                                gst2,
-                                card2BottomSpace,
-                                view2);
-
-                card2.getChildren().addAll(
-                                card2Top,
-                                card2Bottom);
-
-                // =====================================================
-                // CARD 3
-                // =====================================================
-
-                VBox card3 = new VBox(12);
-
-                card3.setPadding(
-                                new Insets(14));
-
-                card3.setStyle(
-                                "-fx-background-color:white;" +
-                                                "-fx-background-radius:12;");
-
-                HBox card3Top = new HBox(10);
-
-                card3Top.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Rectangle card3Image = new Rectangle(
-                                44,
-                                44);
-
-                card3Image.setArcWidth(10);
-                card3Image.setArcHeight(10);
-
-                card3Image.setFill(
-                                Color.web("#F0EEEE"));
-
-                VBox card3Info = new VBox(3);
-
-                Text card3Name = new Text(
-                                "Velvet Bakes");
-
-                card3Name.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                17));
-
-                Text card3Owner = new Text(
-                                "Owner: Anita Desai • Registered Yesterday");
-
-                card3Owner.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                card3Owner.setFill(
-                                Color.GRAY);
-
-                card3Info.getChildren().addAll(
-                                card3Name,
-                                card3Owner);
-
-                Region card3Space = new Region();
-
-                HBox.setHgrow(
-                                card3Space,
-                                Priority.ALWAYS);
-
-                Text card3Category = new Text(
-                                "BAKERY");
-
-                card3Category.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                9));
-
-                card3Category.setFill(
-                                Color.GRAY);
-
-                card3Top.getChildren().addAll(
-                                card3Image,
-                                card3Info,
-                                card3Space,
-                                card3Category);
-
-                HBox card3Bottom = new HBox(12);
-
-                card3Bottom.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Text license3 = new Text(
-                                "▧ Business License");
-
-                license3.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                Text gst3 = new Text(
-                                "⚠ GST Missing");
-
-                gst3.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                Region card3BottomSpace = new Region();
-
-                HBox.setHgrow(
-                                card3BottomSpace,
-                                Priority.ALWAYS);
-
-                Button view3 = new Button(
-                                "View Documents");
-
-                view3.setPrefHeight(36);
-
-                view3.setStyle(
-                                "-fx-background-color:#FF6500;" +
-                                                "-fx-text-fill:white;" +
-                                                "-fx-background-radius:7;" +
-                                                "-fx-font-size:12px;");
-
-                card3Bottom.getChildren().addAll(
-                                license3,
-                                gst3,
-                                card3BottomSpace,
-                                view3);
-
-                card3.getChildren().addAll(
-                                card3Top,
-                                card3Bottom);
-
-                shopCards.getChildren().addAll(
-                                card1,
-                                card2,
-                                card3);
+                shopCards.getChildren().add(
+                                loadingText);
 
                 // =====================================================
                 // RIGHT REVIEW PANEL
@@ -1255,82 +888,73 @@ public class ShopVerificationPage {
                                 check,
                                 reviewText);
 
-                HBox.setHgrow(reviewPanel, Priority.ALWAYS);
+                HBox.setHgrow(
+                                reviewPanel,
+                                Priority.ALWAYS);
 
-                view1.setOnAction(e -> {
-                        card1.setStyle(
-                                        "-fx-background-color:white;" +
-                                                        "-fx-background-radius:12;" +
-                                                        "-fx-border-color:#FF6500;" +
-                                                        "-fx-border-width:2;" +
-                                                        "-fx-border-radius:12;");
+                // =====================================================
+                // FIRESTORE - ONLY approved == false SHOPKEEPERS
+                // =====================================================
 
-                        card2.setStyle(
-                                        "-fx-background-color:white;" +
-                                                        "-fx-background-radius:12;");
+                ShopkeeperDAO shopkeeperDAO =
+                                new ShopkeeperDAO();
 
-                        card3.setStyle(
-                                        "-fx-background-color:white;" +
-                                                        "-fx-background-radius:12;");
+                Thread pendingShopThread =
+                                new Thread(() -> {
 
-                        showDocumentReview(
-                                        reviewPanel,
-                                        "Green Root Grocers",
-                                        "Owner: Rajesh Kumar",
-                                        "GROCERY",
-                                        "BUSINESS_LICENSE_CLOUDINARY_URL",
-                                        "GST_CERTIFICATE_CLOUDINARY_URL");
-                });
+                                        List<QueryDocumentSnapshot> pendingShops =
+                                                        shopkeeperDAO
+                                                                        .getPendingShopkeepers();
 
-                view2.setOnAction(e -> {
-                        card2.setStyle(
-                                        "-fx-background-color:white;" +
-                                                        "-fx-background-radius:12;" +
-                                                        "-fx-border-color:#FF6500;" +
-                                                        "-fx-border-width:2;" +
-                                                        "-fx-border-radius:12;");
+                                        Platform.runLater(() -> {
 
-                        card1.setStyle(
-                                        "-fx-background-color:white;" +
-                                                        "-fx-background-radius:12;");
+                                                shopCards
+                                                                .getChildren()
+                                                                .clear();
 
-                        card3.setStyle(
-                                        "-fx-background-color:white;" +
-                                                        "-fx-background-radius:12;");
+                                                pendingValue.setText(
+                                                                String.valueOf(
+                                                                                pendingShops.size()));
 
-                        showDocumentReview(
-                                        reviewPanel,
-                                        "Apex Electronics",
-                                        "Owner: Sarah Jenkins",
-                                        "ELECTRONICS",
-                                        "BUSINESS_LICENSE_CLOUDINARY_URL",
-                                        "GST_CERTIFICATE_CLOUDINARY_URL");
-                });
+                                                if (pendingShops.isEmpty()) {
 
-                view3.setOnAction(e -> {
-                        card3.setStyle(
-                                        "-fx-background-color:white;" +
-                                                        "-fx-background-radius:12;" +
-                                                        "-fx-border-color:#FF6500;" +
-                                                        "-fx-border-width:2;" +
-                                                        "-fx-border-radius:12;");
+                                                        Text noPending =
+                                                                        new Text(
+                                                                                        "No pending shop verifications.");
 
-                        card1.setStyle(
-                                        "-fx-background-color:white;" +
-                                                        "-fx-background-radius:12;");
+                                                        noPending.setFont(
+                                                                        Font.font(
+                                                                                        "Arial",
+                                                                                        FontWeight.BOLD,
+                                                                                        14));
 
-                        card2.setStyle(
-                                        "-fx-background-color:white;" +
-                                                        "-fx-background-radius:12;");
+                                                        noPending.setFill(
+                                                                        Color.GRAY);
 
-                        showDocumentReview(
-                                        reviewPanel,
-                                        "Velvet Bakes",
-                                        "Owner: Anita Desai",
-                                        "BAKERY",
-                                        "BUSINESS_LICENSE_CLOUDINARY_URL",
-                                        null);
-                });
+                                                        shopCards
+                                                                        .getChildren()
+                                                                        .add(noPending);
+
+                                                        return;
+                                                }
+
+                                                for (QueryDocumentSnapshot document :
+                                                                pendingShops) {
+
+                                                        VBox shopCard =
+                                                                        createPendingShopCard(
+                                                                                        document,
+                                                                                        reviewPanel);
+
+                                                        shopCards
+                                                                        .getChildren()
+                                                                        .add(shopCard);
+                                                }
+                                        });
+                                });
+
+                pendingShopThread.setDaemon(true);
+                pendingShopThread.start();
 
                 // =====================================================
                 // MAIN CONTENT ADD
@@ -1368,13 +992,301 @@ public class ShopVerificationPage {
                 return scene;
         }
 
+        private String getStringField(
+                        QueryDocumentSnapshot document,
+                        String... keys) {
+
+                for (String key : keys) {
+
+                        try {
+
+                                String value =
+                                                document.getString(
+                                                                key);
+
+                                if (value != null &&
+                                                !value.isBlank()) {
+
+                                        return value;
+                                }
+
+                        } catch (Exception e) {
+
+                                // Try next possible field name.
+                        }
+                }
+
+                return null;
+        }
+
+
+        private VBox createPendingShopCard(
+                        QueryDocumentSnapshot document,
+                        VBox reviewPanel) {
+
+                String shopkeeperUid =
+                                document.getId();
+
+                String shopName =
+                                getStringField(
+                                                document,
+                                                "shopNameValue",
+                                                "shopName");
+
+                String ownerName =
+                                getStringField(
+                                                document,
+                                                "ownerNameValue",
+                                                "ownerName",
+                                                "name");
+
+                String category =
+                                getStringField(
+                                                document,
+                                                "categoryValue",
+                                                "category");
+
+                String businessLicenseUrl =
+                                getStringField(
+                                                document,
+                                                "licenseDocumentURL",
+                                                "businessLicenseUrl");
+
+                String gstCertificateUrl =
+                                getStringField(
+                                                document,
+                                                "gstCertificateURL",
+                                                "gstCertificateUrl");
+
+                if (shopName == null ||
+                                shopName.isBlank()) {
+
+                        shopName = "Shop";
+                }
+
+                if (ownerName == null ||
+                                ownerName.isBlank()) {
+
+                        ownerName = "Shopkeeper";
+                }
+
+                if (category == null ||
+                                category.isBlank()) {
+
+                        category = "SHOP";
+                }
+
+                String finalUid =
+                                shopkeeperUid;
+
+                String finalShopName =
+                                shopName;
+
+                String finalOwnerName =
+                                ownerName;
+
+                String finalCategory =
+                                category;
+
+                String finalBusinessLicenseUrl =
+                                businessLicenseUrl;
+
+                String finalGstCertificateUrl =
+                                gstCertificateUrl;
+
+                VBox card = new VBox(12);
+
+                card.setPadding(
+                                new Insets(14));
+
+                card.setStyle(
+                                "-fx-background-color:white;" +
+                                                "-fx-background-radius:12;");
+
+                HBox top = new HBox(10);
+
+                top.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                Rectangle shopImage =
+                                new Rectangle(
+                                                44,
+                                                44);
+
+                shopImage.setArcWidth(10);
+                shopImage.setArcHeight(10);
+
+                shopImage.setFill(
+                                Color.web("#EFF0D9"));
+
+                VBox info = new VBox(3);
+
+                Text shopNameText =
+                                new Text(
+                                                finalShopName);
+
+                shopNameText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                17));
+
+                Text ownerText =
+                                new Text(
+                                                "Owner: "
+                                                                + finalOwnerName);
+
+                ownerText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                11));
+
+                ownerText.setFill(
+                                Color.GRAY);
+
+                info.getChildren().addAll(
+                                shopNameText,
+                                ownerText);
+
+                Region topSpace =
+                                new Region();
+
+                HBox.setHgrow(
+                                topSpace,
+                                Priority.ALWAYS);
+
+                Text categoryText =
+                                new Text(
+                                                finalCategory
+                                                                .toUpperCase());
+
+                categoryText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                9));
+
+                categoryText.setFill(
+                                Color.GRAY);
+
+                top.getChildren().addAll(
+                                shopImage,
+                                info,
+                                topSpace,
+                                categoryText);
+
+                HBox bottom =
+                                new HBox(12);
+
+                bottom.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                boolean licenseAvailable =
+                                finalBusinessLicenseUrl != null &&
+                                                !finalBusinessLicenseUrl
+                                                                .isBlank();
+
+                boolean gstAvailable =
+                                finalGstCertificateUrl != null &&
+                                                !finalGstCertificateUrl
+                                                                .isBlank();
+
+                Text licenseText =
+                                new Text(
+                                                licenseAvailable
+                                                                ? "▧ Business License"
+                                                                : "⚠ Business License Missing");
+
+                licenseText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                11));
+
+                if (!licenseAvailable) {
+
+                        licenseText.setFill(
+                                        Color.web("#B22222"));
+                }
+
+                Text gstText =
+                                new Text(
+                                                gstAvailable
+                                                                ? "▧ GST Certificate"
+                                                                : "⚠ GST Missing");
+
+                gstText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                11));
+
+                if (!gstAvailable) {
+
+                        gstText.setFill(
+                                        Color.web("#B22222"));
+                }
+
+                Region bottomSpace =
+                                new Region();
+
+                HBox.setHgrow(
+                                bottomSpace,
+                                Priority.ALWAYS);
+
+                Button view =
+                                new Button(
+                                                "View Documents");
+
+                view.setPrefHeight(36);
+
+                view.setStyle(
+                                "-fx-background-color:#FF6500;" +
+                                                "-fx-text-fill:white;" +
+                                                "-fx-background-radius:7;" +
+                                                "-fx-font-size:12px;");
+
+                view.setOnAction(e -> {
+
+                        card.setStyle(
+                                        "-fx-background-color:white;" +
+                                                        "-fx-background-radius:12;" +
+                                                        "-fx-border-color:#FF6500;" +
+                                                        "-fx-border-width:2;" +
+                                                        "-fx-border-radius:12;");
+
+                        showDocumentReview(
+                                        reviewPanel,
+                                        finalShopName,
+                                        "Owner: "
+                                                        + finalOwnerName,
+                                        finalCategory
+                                                        .toUpperCase(),
+                                        finalBusinessLicenseUrl,
+                                        finalGstCertificateUrl,
+                                        finalUid);
+                });
+
+                bottom.getChildren().addAll(
+                                licenseText,
+                                gstText,
+                                bottomSpace,
+                                view);
+
+                card.getChildren().addAll(
+                                top,
+                                bottom);
+
+                return card;
+        }
+
+
         public void showDocumentReview(
                         VBox reviewPanel,
                         String shopName,
                         String ownerName,
                         String category,
                         String businessLicenseUrl,
-                        String gstCertificateUrl) {
+                        String gstCertificateUrl,
+                        String shopkeeperUid) {
 
                 reviewPanel.getChildren().clear();
                 reviewPanel.setAlignment(Pos.TOP_LEFT);
@@ -1430,16 +1342,37 @@ public class ShopVerificationPage {
                 Region licenseSpace = new Region();
                 HBox.setHgrow(licenseSpace, Priority.ALWAYS);
 
-                Label licenseStatus = new Label("Submitted");
-                licenseStatus.setStyle(
-                                "-fx-background-color:#DFF2DA;" +
-                                                "-fx-text-fill:#26733C;" +
-                                                "-fx-padding:4 10 4 10;" +
-                                                "-fx-background-radius:7;" +
+                boolean licenseAvailable =
+                                businessLicenseUrl != null &&
+                                                !businessLicenseUrl.isBlank();
+
+                Label licenseStatus = new Label(
+                                licenseAvailable
+                                                ? "Submitted"
+                                                : "Missing");
+
+                if (licenseAvailable) {
+
+                        licenseStatus.setStyle(
+                                        "-fx-background-color:#DFF2DA;" +
+                                                        "-fx-text-fill:#26733C;" +
+                                                        "-fx-padding:4 10 4 10;" +
+                                                        "-fx-background-radius:7;" +
                                                         "-fx-font-size:12px;");
+
+                } else {
+
+                        licenseStatus.setStyle(
+                                        "-fx-background-color:#FFE1E1;" +
+                                                        "-fx-text-fill:#B22222;" +
+                                                        "-fx-padding:4 10 4 10;" +
+                                                        "-fx-background-radius:7;" +
+                                                        "-fx-font-size:12px;");
+                }
 
                 Button viewLicense = new Button("View");
                 viewLicense.setPrefSize(100, 38);
+                viewLicense.setDisable(!licenseAvailable);
                 viewLicense.setStyle(
                                 "-fx-background-color:white;" +
                                                 "-fx-text-fill:#FF6500;" +
@@ -1576,11 +1509,47 @@ public class ShopVerificationPage {
                 });
 
                 approve.setOnAction(e -> {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setHeaderText(null);
-                        alert.setContentText(
-                                        shopName + " approved successfully.");
-                        alert.showAndWait();
+
+                        ShopkeeperDAO shopkeeperDAO =
+                                        new ShopkeeperDAO();
+
+                        boolean approved =
+                                        shopkeeperDAO.approveShopkeeper(
+                                                        shopkeeperUid);
+
+                        if (approved) {
+
+                                Alert alert =
+                                                new Alert(
+                                                                Alert.AlertType.INFORMATION);
+
+                                alert.setHeaderText(null);
+
+                                alert.setContentText(
+                                                shopName
+                                                                + " approved successfully.");
+
+                                alert.showAndWait();
+
+                                ShopVerificationPage page =
+                                                new ShopVerificationPage();
+
+                                Homepage.HomepageStage.setScene(
+                                                page.getUserScene());
+
+                        } else {
+
+                                Alert alert =
+                                                new Alert(
+                                                                Alert.AlertType.ERROR);
+
+                                alert.setHeaderText(null);
+
+                                alert.setContentText(
+                                                "Shop approval failed.");
+
+                                alert.showAndWait();
+                        }
                 });
 
                 reviewPanel.getChildren().addAll(
@@ -1617,4 +1586,4 @@ public class ShopVerificationPage {
                 }
         }
 
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       

@@ -1,59 +1,211 @@
 package com.kryox.dao.Shopkeeper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.kryox.config.Firebaseconfig;
 import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
 import com.kryox.model.Shopkeeper.ShopkeeperModel;
 
 public class ShopkeeperDAO {
 
-    private Firestore db = Firebaseconfig.gFirestore();
+    private final Firestore db =
+            Firebaseconfig.gFirestore();
 
-    public void addShop(ShopkeeperModel shopkeeperModel) {
+    public void addShop(
+            ShopkeeperModel shopkeeperModel
+    ) {
+
         System.out.println("Adding Shopkeeper");
 
         try {
+
+            String shopkeeperUid =
+                    ShopkeeperLogController.getShopkeeperUid();
+
+            shopkeeperModel.setApproved(false);
+            shopkeeperModel.setShopkeeperUid(shopkeeperUid);
+
             db.collection("Shopkeepers")
-                    .document(ShopkeeperLogController.getShopkeeperUid())
-                    .create(shopkeeperModel);
-            System.out.println("Shopkeeper added");
+                    .document(shopkeeperUid)
+                    .set(shopkeeperModel)
+                    .get();
+
+            System.out.println(
+                    "Shopkeeper added with approved = false"
+            );
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public ShopkeeperModel getShopDetails(String shopkeeperUid) {
-        System.out.println("Getting Shopkeeper Details");
+    public ShopkeeperModel getShopDetails(
+            String shopkeeperUid
+    ) {
 
         try {
-            ApiFuture<DocumentSnapshot> doc = db.collection("Shopkeepers")
-                    .document(shopkeeperUid)
-                    .get();
-            DocumentSnapshot document = doc.get();
+
+            ApiFuture<DocumentSnapshot> doc =
+                    db.collection("Shopkeepers")
+                            .document(shopkeeperUid)
+                            .get();
+
+            DocumentSnapshot document =
+                    doc.get();
+
             if (document.exists()) {
-                System.out.println("DocumentSnapshot data: " + document.getData());
-                return document.toObject(ShopkeeperModel.class);
+
+                return document.toObject(
+                        ShopkeeperModel.class
+                );
             }
+
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+
         return null;
     }
 
-    public void updateShopkeeperDetails(String shopNameValue, String ownerNameValue, String mobileValue,
-            String panValue, String gstValue,
-            String categoryValue, String addressValue, String stateValue, String cityValue,
-            String pinValue, String licenseValue) {
-        System.out.println("Updating Shopkeeper Details");
+    public List<QueryDocumentSnapshot>
+            getAllShopkeepers() {
+
+        List<QueryDocumentSnapshot> all =
+                new ArrayList<>();
+
         try {
 
-            Map<String, Object> updates = new HashMap<>();
+            QuerySnapshot snapshot =
+                    db.collection("Shopkeepers")
+                            .get()
+                            .get();
+
+            all.addAll(
+                    snapshot.getDocuments()
+            );
+
+            System.out.println(
+                    "Total Shopkeepers = "
+                            + all.size()
+            );
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "All Shopkeepers fetch error: "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+        }
+
+        return all;
+    }
+
+    public List<QueryDocumentSnapshot>
+            getPendingShopkeepers() {
+
+        List<QueryDocumentSnapshot> pending =
+                new ArrayList<>();
+
+        for (QueryDocumentSnapshot document :
+                getAllShopkeepers()) {
+
+            Boolean approved =
+                    document.getBoolean("approved");
+
+            if (!Boolean.TRUE.equals(approved)) {
+                pending.add(document);
+            }
+        }
+
+        return pending;
+    }
+
+    public List<QueryDocumentSnapshot>
+            getVerifiedShopkeepers() {
+
+        List<QueryDocumentSnapshot> verified =
+                new ArrayList<>();
+
+        for (QueryDocumentSnapshot document :
+                getAllShopkeepers()) {
+
+            Boolean approved =
+                    document.getBoolean("approved");
+
+            if (Boolean.TRUE.equals(approved)) {
+                verified.add(document);
+            }
+        }
+
+        return verified;
+    }
+
+    public int getPendingShopkeeperCount() {
+
+        return getPendingShopkeepers().size();
+    }
+
+    public boolean approveShopkeeper(
+            String shopkeeperUid
+    ) {
+
+        try {
+
+            db.collection("Shopkeepers")
+                    .document(shopkeeperUid)
+                    .update(
+                            "approved",
+                            true
+                    )
+                    .get();
+
+            System.out.println(
+                    "Shopkeeper approved: "
+                            + shopkeeperUid
+            );
+
+            return true;
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Shopkeeper approval error: "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void updateShopkeeperDetails(
+            String shopNameValue,
+            String ownerNameValue,
+            String mobileValue,
+            String panValue,
+            String gstValue,
+            String categoryValue,
+            String addressValue,
+            String stateValue,
+            String cityValue,
+            String pinValue,
+            String licenseValue
+    ) {
+
+        try {
+
+            Map<String, Object> updates =
+                    new HashMap<>();
 
             updates.put("shopNameValue", shopNameValue);
             updates.put("ownerNameValue", ownerNameValue);
@@ -68,29 +220,40 @@ public class ShopkeeperDAO {
             updates.put("licenseValue", licenseValue);
 
             db.collection("Shopkeepers")
-                    .document(ShopkeeperLogController.getShopkeeperUid())
-                    .update(updates);
+                    .document(
+                            ShopkeeperLogController
+                                    .getShopkeeperUid()
+                    )
+                    .update(updates)
+                    .get();
 
-            System.out.println("Shopkeeper details updated");
+            System.out.println(
+                    "Shopkeeper details updated"
+            );
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 
     public void deleteAccount() {
-        System.out.println("Deleting Account");
 
         try {
+
             db.collection("Shopkeepers")
-                    .document(ShopkeeperLogController.getShopkeeperUid())
-                    .delete();
-            System.out.println("Account deleted");
+                    .document(
+                            ShopkeeperLogController
+                                    .getShopkeeperUid()
+                    )
+                    .delete()
+                    .get();
+
+            System.out.println(
+                    "Account deleted"
+            );
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 }
