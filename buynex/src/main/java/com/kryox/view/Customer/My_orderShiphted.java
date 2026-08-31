@@ -29,6 +29,10 @@ import javafx.stage.Stage;
 
 public class My_orderShiphted {
         private Scene ShippedScene;
+        public String userId;
+        public My_orderShiphted(String userId) {
+        this.userId = userId;
+    }
 
         Scene getShippedScene(Runnable callbacktoOngoing) {
                 // =====================================================
@@ -377,8 +381,13 @@ public class My_orderShiphted {
                                                 "-fx-alignment: CENTER_LEFT;" +
                                                 "-fx-cursor: hand;");
                 lefButton5.setOnAction(event->{
-                                Analytics an=new Analytics();
-                                Homepage.HomepageStage.setScene(an.getAnalyticscene(null));
+                                Analytics an=new Analytics(userId);
+                                Runnable rn=new Runnable() {
+                                        public void run(){
+                                                backtoShipped();
+                                        }
+                                };
+                                Homepage.HomepageStage.setScene(an.getAnalyticscene(rn));
                         });
 
                 HBox hbInDashboard5 = new HBox(17, div5, lefButton5);
@@ -797,7 +806,7 @@ public class My_orderShiphted {
                                                 "-fx-cursor: hand;");
 
                 deliveredButton.setOnAction(event->{
-                        My_orderDelivard Mod=new My_orderDelivard();
+                        My_orderDelivard Mod=new My_orderDelivard(userId);
                         Runnable callback=new Runnable() {
                                 public void run(){
                                         backtoShipped();
@@ -1035,7 +1044,7 @@ public class My_orderShiphted {
                 // SCENE
                 // =====================================================
 
-                Scene sc = new Scene(mainBox, 1500, 800);
+                Scene sc = new Scene(mainBox, 1530, 850);
                 ShippedScene = sc;
 
                 return ShippedScene;
