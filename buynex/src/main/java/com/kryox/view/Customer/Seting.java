@@ -1,15 +1,17 @@
-
 package com.kryox.view.Customer;
 
 import java.io.File;
-import java.io.InputStream;
 import java.time.LocalDate;
 
-import javafx.application.Application;
+import com.kryox.controller.Customer.Clodnarycontroller;
+import com.kryox.controller.Customer.Userstorecontroller;
+import com.kryox.model.Customer.User;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -28,10 +30,17 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class Seting  {
+public class Seting {
+        public String userId;
+        public Seting(String userId) {
+        this.userId = userId;
+    }
         private Scene setingSceene;
 
-        Scene getSetingscene(Runnable callbacktoDashboard){
+        private final Userstorecontroller userController =
+                        new Userstorecontroller();
+
+        Scene getSetingscene(Runnable callbacktoDashboard) {
                 // ================= PROFILE IMAGE =================
 
                 Image defaultImage = new Image(
@@ -62,14 +71,25 @@ public class Seting  {
                                                         "*.jpg",
                                                         "*.jpeg"));
 
-                        File file = fileChooser.showOpenDialog(Homepage.HomepageStage);
+                        File file = fileChooser.showOpenDialog(
+                                        Homepage.HomepageStage);
 
                         if (file != null) {
 
+                                // Immediately show selected image
                                 Image newImage = new Image(
                                                 file.toURI().toString());
 
                                 profileImage.setImage(newImage);
+
+                                System.out.println(
+                                                "Selected File: " + file.getAbsolutePath());
+
+                                // Upload image to Cloudinary
+                                String url = Clodnarycontroller.imageUpload(file);
+
+                                System.out.println(
+                                                "Cloudinary URL: " + url);
 
                                 // Cursor
                                 profileImage.setCursor(Cursor.HAND);
@@ -80,14 +100,14 @@ public class Seting  {
 
                 // ================= USER INFORMATION =================
 
-                Label name = new Label("Saiprasad sable");
+                Label name = new Label("Loading...");
 
                 name.setStyle(
                                 "-fx-font-size: 18px;" +
                                                 "-fx-font-weight: bold;" +
                                                 "-fx-text-fill: #a83f00;");
 
-                Label member = new Label("Premium Member");
+                Label member = new Label("Member");
 
                 member.setStyle(
                                 "-fx-font-size: 11px;" +
@@ -152,11 +172,7 @@ public class Seting  {
                                                 "-fx-padding: 0 0 0 14;" +
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
-                privacyBtn.setOnAction(event->{
-                        Privacy pc=new Privacy();
-                        Homepage.HomepageStage.setScene(pc.getPrivecyscene(callbacktoDashboard));
-                });
-
+                
                 // ================= NOTIFICATION BUTTON =================
 
                 Button notificationBtn = new Button("♧    Notifications");
@@ -296,6 +312,16 @@ public class Seting  {
                                                 "-fx-padding: 0 0 0 14;" +
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
+                helpBtn.setOnAction(event->{
+                        Helppage hp=new Helppage(userId);
+                        Runnable rn=new Runnable() {
+                                public void run(){
+
+                                }
+                        };
+                        Homepage.HomepageStage.setScene(hp.getHelpScene(rn));
+                });
+        
 
                 // ================= TERMS BUTTON =================
 
@@ -311,7 +337,7 @@ public class Seting  {
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
 
-                Button back=new Button("back");
+                Button back = new Button("back");
                 back.setPrefSize(200, 36);
                 back.setStyle(
                                 "-fx-background-color: transparent;" +
@@ -321,11 +347,12 @@ public class Seting  {
                                                 "-fx-padding: 0 0 0 14;" +
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
-                back.setOnAction(even->{
-                        callbacktoDashboard.run();
+                back.setOnAction(even -> {
+                        
+                        Dashbord ds=new Dashbord(userId);
+                        Homepage.HomepageStage.setScene(ds.getDashbordScene());
+                       
                 });
-
-
 
                 // ================= MENU BOX =================
 
@@ -347,7 +374,7 @@ public class Seting  {
                                 accessibilityBtn,
                                 securityBtn,
                                 helpBtn,
-                                termsBtn,back);
+                                termsBtn, back);
                 menuBox.setStyle("-fx-background-color: #ebccb7;");
 
                 // ================= UPGRADE TO PRO =================
@@ -440,6 +467,27 @@ public class Seting  {
                         });
                 }
 
+                helpBtn.setOnAction(event -> {
+                        Helppage helppage = new Helppage(userId);
+                        Runnable rn=new Runnable() {
+                                public void run(){
+                                        backToseting();
+                                }
+                        };
+
+                        Homepage.HomepageStage.setScene(helppage.getHelpScene(rn));
+                });
+                privacyBtn.setOnAction(event -> {
+                        Privacy pc = new Privacy(userId);
+                        Runnable rn = new Runnable() {
+                                public void run() {
+                                        backToseting();
+                                }
+                        };
+                        Homepage.HomepageStage.setScene(pc.getPrivecyscene(rn));
+                });
+
+
                 VBox leftVBox = new VBox(profileBox, menuBox, upgradeBox);
 
                 leftVBox.setStyle("-fx-background-color: #ffffff;");
@@ -476,215 +524,186 @@ public class Seting  {
                 // ================= PROFILE CARD =================
 
                 // ================= PROFILE CARD =================
-// ================= PROFILE CARD =================
+                // ================= PROFILE CARD =================
 
-HBox profileCard = new HBox();
+                HBox profileCard = new HBox();
 
-profileCard.setPrefWidth(600);
-profileCard.setMinWidth(600);
-profileCard.setMaxWidth(600);
+                profileCard.setPrefWidth(600);
+                profileCard.setMinWidth(600);
+                profileCard.setMaxWidth(600);
 
-profileCard.setPrefHeight(130);
-profileCard.setMinHeight(130);
-profileCard.setMaxHeight(130);
+                profileCard.setPrefHeight(130);
+                profileCard.setMinHeight(130);
+                profileCard.setMaxHeight(130);
 
-profileCard.setAlignment(Pos.CENTER_LEFT);
+                profileCard.setAlignment(Pos.CENTER_LEFT);
 
-profileCard.setPadding(
-        new Insets(15, 25, 15, 20)
-);
+                profileCard.setPadding(
+                                new Insets(15, 25, 15, 20));
 
-profileCard.setStyle(
-        "-fx-background-color: #ffffff;" +
-        "-fx-background-radius: 14;" +
-        "-fx-border-radius: 14;" +
-        "-fx-border-color: #eeeeee;" +
-        "-fx-border-width: 1;"
-);
+                profileCard.setStyle(
+                                "-fx-background-color: #ffffff;" +
+                                                "-fx-background-radius: 14;" +
+                                                "-fx-border-radius: 14;" +
+                                                "-fx-border-color: #eeeeee;" +
+                                                "-fx-border-width: 1;");
 
-profileCard.setTranslateX(50);
+                profileCard.setTranslateX(50);
 
+                // ================= CARD SHADOW =================
 
-// ================= CARD SHADOW =================
+                DropShadow cardShadow = new DropShadow();
 
-DropShadow cardShadow = new DropShadow();
+                cardShadow.setRadius(12);
+                cardShadow.setSpread(0.03);
 
-cardShadow.setRadius(12);
-cardShadow.setSpread(0.03);
+                cardShadow.setOffsetX(0);
+                cardShadow.setOffsetY(4);
 
-cardShadow.setOffsetX(0);
-cardShadow.setOffsetY(4);
+                cardShadow.setColor(
+                                Color.rgb(0, 0, 0, 0.10));
 
-cardShadow.setColor(
-        Color.rgb(0, 0, 0, 0.10)
-);
+                profileCard.setEffect(cardShadow);
 
-profileCard.setEffect(cardShadow);
+                // =====================================================
+                // PROFILE IMAGE
+                // =====================================================
 
+                Image profileImg = new Image(
+                                "file:C:/Users/YourName/Pictures/profile.jpg");
 
-// =====================================================
-//                  PROFILE IMAGE
-// =====================================================
+                ImageView profileImagevView = new ImageView(profileImg);
 
-Image profileImg = new Image(
-        "file:C:/Users/YourName/Pictures/profile.jpg"
-);
+                profileImagevView.setFitWidth(88);
+                profileImagevView.setFitHeight(88);
 
-ImageView profileImagevView= new ImageView(profileImg);
+                profileImagevView.setPreserveRatio(true);
 
-profileImagevView.setFitWidth(88);
-profileImagevView.setFitHeight(88);
+                // Circular Image
+                Circle imageClip = new Circle(44, 44, 44);
 
-profileImagevView.setPreserveRatio(true);
+                profileImagevView.setClip(imageClip);
 
+                // =====================================================
+                // EDIT BUTTON
+                // =====================================================
 
-// Circular Image
-Circle imageClip = new Circle(44, 44, 44);
+                Button editButton = new Button("✎");
 
-profileImagevView.setClip(imageClip);
+                editButton.setPrefWidth(28);
+                editButton.setPrefHeight(28);
 
+                editButton.setMinWidth(28);
+                editButton.setMinHeight(28);
 
-// =====================================================
-//                  EDIT BUTTON
-// =====================================================
+                editButton.setMaxWidth(28);
+                editButton.setMaxHeight(28);
 
-Button editButton = new Button("✎");
+                editButton.setAlignment(Pos.CENTER);
 
-editButton.setPrefWidth(28);
-editButton.setPrefHeight(28);
+                editButton.setStyle(
+                                "-fx-background-color: #ff7100;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-background-radius: 50%;" +
+                                                "-fx-font-size: 16px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-padding: 0;" +
+                                                "-fx-cursor: hand;");
 
-editButton.setMinWidth(28);
-editButton.setMinHeight(28);
+                // =====================================================
+                // IMAGE + EDIT BUTTON
+                // =====================================================
 
-editButton.setMaxWidth(28);
-editButton.setMaxHeight(28);
+                StackPane imageBox = new StackPane();
 
-editButton.setAlignment(Pos.CENTER);
+                imageBox.setPrefWidth(90);
+                imageBox.setPrefHeight(90);
 
-editButton.setStyle(
-        "-fx-background-color: #ff7100;" +
-        "-fx-text-fill: white;" +
-        "-fx-background-radius: 50%;" +
-        "-fx-font-size: 16px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-padding: 0;" +
-        "-fx-cursor: hand;"
-);
+                imageBox.setMinWidth(90);
+                imageBox.setMinHeight(90);
 
+                imageBox.setMaxWidth(90);
+                imageBox.setMaxHeight(90);
 
-// =====================================================
-//              IMAGE + EDIT BUTTON
-// =====================================================
+                imageBox.getChildren().addAll(
+                                profileImage,
+                                editButton);
 
-StackPane imageBox = new StackPane();
+                // Position edit button
+                StackPane.setAlignment(
+                                editButton,
+                                Pos.BOTTOM_RIGHT);
 
-imageBox.setPrefWidth(90);
-imageBox.setPrefHeight(90);
+                StackPane.setMargin(
+                                editButton,
+                                new Insets(0, -2, -2, 0));
 
-imageBox.setMinWidth(90);
-imageBox.setMinHeight(90);
+                // =====================================================
+                // NAME
+                // =====================================================
 
-imageBox.setMaxWidth(90);
-imageBox.setMaxHeight(90);
+                Label nameLabel = new Label("Loading...");
 
-imageBox.getChildren().addAll(
-        profileImage,
-        editButton
-);
+                nameLabel.setStyle(
+                                "-fx-text-fill: #111111;" +
+                                                "-fx-font-size: 18px;" +
+                                                "-fx-font-weight: bold;");
 
+                // =====================================================
+                // PREMIUM BADGE
+                // =====================================================
 
+                Label premiumLabel = new Label("♙ Premium");
 
-// Position edit button
-StackPane.setAlignment(
-        editButton,
-        Pos.BOTTOM_RIGHT
-);
+                premiumLabel.setStyle(
+                                "-fx-background-color: #fff0e6;" +
+                                                "-fx-text-fill: #c85c13;" +
+                                                "-fx-background-radius: 12;" +
+                                                "-fx-padding: 4px 8px;" +
+                                                "-fx-font-size: 10px;" +
+                                                "-fx-font-weight: bold;");
 
-StackPane.setMargin(
-        editButton,
-        new Insets(0, -2, -2, 0)
-);
+                // =====================================================
+                // NAME + PREMIUM
+                // =====================================================
 
+                HBox nameRow = new HBox(7);
 
-// =====================================================
-//                    NAME
-// =====================================================
+                nameRow.setAlignment(Pos.CENTER_LEFT);
 
-Label nameLabel = new Label("Alex Rivera");
+                nameRow.getChildren().addAll(
+                                nameLabel,
+                                premiumLabel);
 
-nameLabel.setStyle(
-        "-fx-text-fill: #111111;" +
-        "-fx-font-size: 18px;" +
-        "-fx-font-weight: bold;"
-);
+                // =====================================================
+                // EMAIL
+                // =====================================================
 
+                Label emailLabel = new Label("Loading...");
 
-// =====================================================
-//                 PREMIUM BADGE
-// =====================================================
+                emailLabel.setStyle(
+                                "-fx-text-fill: #666666;" +
+                                                "-fx-font-size: 12px;");
 
-Label premiumLabel = new Label("♙ Premium");
+                // =====================================================
+                // DETAILS BOX
+                // =====================================================
 
-premiumLabel.setStyle(
-        "-fx-background-color: #fff0e6;" +
-        "-fx-text-fill: #c85c13;" +
-        "-fx-background-radius: 12;" +
-        "-fx-padding: 4px 8px;" +
-        "-fx-font-size: 10px;" +
-        "-fx-font-weight: bold;"
-);
+                VBox detailsBox = new VBox(6);
 
+                detailsBox.setAlignment(Pos.CENTER_LEFT);
 
-// =====================================================
-//              NAME + PREMIUM
-// =====================================================
+                detailsBox.getChildren().addAll(
+                                nameRow,
+                                emailLabel);
 
-HBox nameRow = new HBox(7);
+                // =====================================================
+                // ADD TO PROFILE CARD
+                // =====================================================
 
-nameRow.setAlignment(Pos.CENTER_LEFT);
-
-nameRow.getChildren().addAll(
-        nameLabel,
-        premiumLabel
-);
-
-
-// =====================================================
-//                    EMAIL
-// =====================================================
-
-Label emailLabel = new Label(
-        "alex.rivera@example.com"
-);
-
-emailLabel.setStyle(
-        "-fx-text-fill: #666666;" +
-        "-fx-font-size: 12px;"
-);
-
-
-// =====================================================
-//                  DETAILS BOX
-// =====================================================
-
-VBox detailsBox = new VBox(6);
-
-detailsBox.setAlignment(Pos.CENTER_LEFT);
-
-detailsBox.getChildren().addAll(
-        nameRow,
-        emailLabel
-);
-
-
-// =====================================================
-//              ADD TO PROFILE CARD
-// =====================================================
-
-profileCard.getChildren().addAll(
-        imageBox,
-        detailsBox
-);
+                profileCard.getChildren().addAll(
+                                imageBox,
+                                detailsBox);
 
                 // ================= PERSONAL INFORMATION =================
 
@@ -706,7 +725,7 @@ profileCard.getChildren().addAll(
 
                 // ================= FULL NAME =================
 
-                TextField nameField = new TextField("Alex Rivera");
+                TextField nameField = new TextField();
                 nameField.setPrefSize(194, 37);
 
                 VBox nameBox = new VBox(6,
@@ -715,7 +734,7 @@ profileCard.getChildren().addAll(
 
                 // ================= EMAIL =================
 
-                TextField emailField = new TextField("alex.rivera@example.com");
+                TextField emailField = new TextField();
 
                 emailField.setPrefSize(194, 37);
 
@@ -727,7 +746,7 @@ profileCard.getChildren().addAll(
 
                 // ================= PHONE =================
 
-                TextField phoneField = new TextField("+1 (555) 123-4567");
+                TextField phoneField = new TextField();
 
                 phoneField.setPrefSize(194, 37);
 
@@ -748,10 +767,82 @@ profileCard.getChildren().addAll(
 
                 HBox phoneanddob = new HBox(50, phoneBox, dobBox);
 
-                // ================= ADD 4 DATA =================
+                // ================= SAVE BUTTON =================
+
+                Button saveButton = new Button("Save Changes");
+                saveButton.setPrefWidth(150);
+                saveButton.setPrefHeight(38);
+                saveButton.setStyle(
+                                "-fx-background-color: #ff7100;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-font-size: 12px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 8;" +
+                                                "-fx-cursor: hand;");
+
+                saveButton.setOnAction(event -> {
+
+                        String oldEmail = userId == null ? "" : userId.trim();
+                        String updatedName = nameField.getText().trim();
+                        String updatedEmail = emailField.getText().trim();
+                        String updatedMobile = phoneField.getText().trim();
+
+                        if (oldEmail.isEmpty()) {
+                                System.out.println("User email not found.");
+                                return;
+                        }
+
+                        if (updatedName.isEmpty() ||
+                                        updatedEmail.isEmpty() ||
+                                        updatedMobile.isEmpty()) {
+                                System.out.println("Please fill all fields.");
+                                return;
+                        }
+
+                        saveButton.setDisable(true);
+                        saveButton.setText("Saving...");
+
+                        String oldUserEmail = oldEmail;
+
+                        new Thread(() -> {
+
+                                boolean updated = userController.updateUser(
+                                                oldUserEmail,
+                                                updatedName,
+                                                updatedEmail,
+                                                updatedMobile);
+
+                                Platform.runLater(() -> {
+
+                                        saveButton.setDisable(false);
+                                        saveButton.setText("Save Changes");
+
+                                        if (updated) {
+
+                                                userId = updatedEmail;
+                                                nameLabel.setText(updatedName);
+                                                emailLabel.setText(updatedEmail);
+                                                name.setText(updatedName);
+
+                                                System.out.println(
+                                                                "Profile updated successfully.");
+
+                                        } else {
+
+                                                System.out.println(
+                                                                "Profile update failed.");
+                                        }
+                                });
+
+                        }).start();
+                });
+
+                // ================= ADD PERSONAL DATA =================
 
                 personalInfo.getChildren().addAll(
-                                nameAndEmail, phoneanddob);
+                                nameAndEmail,
+                                phoneanddob,
+                                saveButton);
 
                 // ========================================================
                 // ACCOUNT SECURITY
@@ -774,7 +865,6 @@ profileCard.getChildren().addAll(
                                 "-fx-background-color: white;" +
                                                 "-fx-background-radius: 14;" +
                                                 "-fx-border-radius: 14;");
-                
 
                 // ================= ICON =================
 
@@ -833,6 +923,20 @@ profileCard.getChildren().addAll(
                                 spacer,
                                 arrow);
                 accessibilityBtn.setTranslateX(200);
+
+                // =========================================================
+                // LOAD USER DATA FROM FIREBASE
+                // =========================================================
+
+                loadUserData(
+                                name,
+                                nameLabel,
+                                emailLabel,
+                                nameField,
+                                emailField,
+                                phoneField,
+                                member,
+                                saveButton);
 
                 VBox contentBox = new VBox(20, title, subtitle, profileCard, personalInfo, accountSecurity);
                 contentBox.setPrefWidth(1250);
@@ -915,14 +1019,6 @@ profileCard.getChildren().addAll(
                 verificationBtn.setPrefWidth(180);
                 verificationBtn.setPrefHeight(30);
 
-                verificationBtn.setStyle(
-                                "-fx-background-color: #ebccb7;" +
-                                                "-fx-text-fill: #c85c13;" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-cursor: hand;" +
-                                                "-fx-padding: 5px;");
-
                 // ================= ADD EVERYTHING =================
 
                 verifiedBox.getChildren().addAll(
@@ -932,22 +1028,99 @@ profileCard.getChildren().addAll(
                                 verificationBtn);
                 verifiedBox.setStyle("-fx-background-color: #ebccb7;");
 
-                //contentofpolicy
-
-                
+                // contentofpolicy
 
                 HBox mainBox = new HBox(leftVBox, contentBox, verifiedBox);
 
                 mainBox.setPrefSize(1500, 800);
 
                 Scene sc = new Scene(mainBox, 1500, 800);
-                setingSceene=sc;
-
-
+                setingSceene = sc;
 
                 return setingSceene;
         }
 
-        
+        // =========================================================
+        // LOAD USER DATA
+        // =========================================================
+
+        private void loadUserData(
+                        Label headerName,
+                        Label profileName,
+                        Label profileEmail,
+                        TextField nameField,
+                        TextField emailField,
+                        TextField phoneField,
+                        Label member,
+                        Button saveButton) {
+
+                if (userId == null || userId.trim().isEmpty()) {
+
+                        headerName.setText("User");
+                        profileName.setText("User");
+                        profileEmail.setText("Email not found");
+                        saveButton.setDisable(true);
+                        return;
+                }
+
+                new Thread(() -> {
+
+                        User user = userController.getUser(userId.trim());
+
+                        Platform.runLater(() -> {
+
+                                if (user == null) {
+
+                                        headerName.setText("User not found");
+                                        profileName.setText("User not found");
+                                        profileEmail.setText(userId);
+                                        saveButton.setDisable(true);
+                                        return;
+                                }
+
+                                String userName = user.getName();
+                                String userEmail = user.getEmail();
+                                String userMobile = user.getMobile();
+                                String userRole = user.getRole();
+
+                                if (userName == null || userName.trim().isEmpty()) {
+                                        userName = "User";
+                                }
+
+                                if (userEmail == null || userEmail.trim().isEmpty()) {
+                                        userEmail = userId;
+                                }
+
+                                if (userMobile == null) {
+                                        userMobile = "";
+                                }
+
+                                if (userRole == null || userRole.trim().isEmpty()) {
+                                        userRole = "Member";
+                                }
+
+                                headerName.setText(userName);
+                                profileName.setText(userName);
+                                profileEmail.setText(userEmail);
+                                member.setText(userRole);
+
+                                nameField.setText(userName);
+                                emailField.setText(userEmail);
+                                phoneField.setText(userMobile);
+
+                                saveButton.setDisable(false);
+                        });
+
+                }).start();
+        }
+
+
+        // =========================================================
+        // BACK TO SETTINGS
+        // =========================================================
+
+        public void backToseting() {
+                Homepage.HomepageStage.setScene(setingSceene);
+        }
 
 }

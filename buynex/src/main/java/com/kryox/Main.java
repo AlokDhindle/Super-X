@@ -1,11 +1,8 @@
 package com.kryox;
 
-import javafx.application.Application;
-
-import com.kryox.view.Customer.BookingSuccess;
-import com.kryox.view.Customer.Checkout;
 import com.kryox.view.Customer.Homepage;
-import com.kryox.view.Customer.ShoppingCartUI;
+
+import javafx.application.Application;
 
 public class Main {
 

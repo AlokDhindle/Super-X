@@ -77,11 +77,6 @@ public class PaymentController {
         System.out.println("Amount : ₹" + amount);
         System.out.println("================================");
 
-        if (paymentSuccessCallback != null) {
-        Platform.runLater(paymentSuccessCallback);
-        }
-
-
         try {
 
             // -------------------------------------------------
@@ -857,6 +852,13 @@ public class PaymentController {
                 paymentId,
                 orderId
         );
+
+
+        // Execute callback only after verified payment success.
+        if (paymentSuccessCallback != null) {
+            Platform.runLater(paymentSuccessCallback);
+        }
+
     }
 
 
