@@ -822,10 +822,10 @@ public class Analytics {
                 summaryCards.setAlignment(Pos.CENTER_LEFT);
                 summaryCards.setFillHeight(true);
                 summaryCards.getChildren().addAll(
-                                createSummaryCard("TOTAL SPENDING", "$2,450.80", "💰"),
+                                createSummaryCard("TOTAL SPENDING", "\u20B92,450.80", "💰"),
                                 createSummaryCard("ORDERS", "18", "📦"),
-                                createSummaryCard("AVG. ORDER VALUE", "$136.15", "📊"),
-                                createSummaryCard("REFUNDS", "$45.00", "↩️"));
+                                createSummaryCard("AVG. ORDER VALUE", "\u20B9136.15", "📊"),
+                                createSummaryCard("REFUNDS", "\u20B945.00", "↩️"));
 
                 // Spending Trends Chart - FIXED VERSION
                 CategoryAxis xAxis = new CategoryAxis();
@@ -833,7 +833,7 @@ public class Analytics {
                 xAxis.getCategories().addAll("Week 1", "Week 2", "Week 3", "Week 4");
 
                 NumberAxis yAxis = new NumberAxis();
-                yAxis.setLabel("Spending ($)");
+                yAxis.setLabel("Spending (\u20B9)");
                 yAxis.setAutoRanging(false);
                 yAxis.setLowerBound(0);
                 yAxis.setUpperBound(2500);

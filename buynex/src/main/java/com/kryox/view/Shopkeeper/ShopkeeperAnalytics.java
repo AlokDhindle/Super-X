@@ -37,6 +37,11 @@ public class ShopkeeperAnalytics {
                 // ================================================================
 
                 HBox headerMainBox = ViewConstants.header();
+
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
                 borderPane.setTop(headerMainBox);
 
                 // ============================================================
@@ -56,7 +61,7 @@ public class ShopkeeperAnalytics {
                                 new Insets(20, 24, 25, 24));
 
                 analyticsMain.setStyle(
-                                "-fx-background-color: #F8F7FC;");
+                                "-fx-background-color: #EEE5DF;");
 
                 // ============================================================
                 // TITLE AREA
@@ -188,7 +193,7 @@ public class ShopkeeperAnalytics {
                                 revenueIcon,
                                 revenueLabel);
 
-                Text revenueValue = new Text("$42.8k");
+                Text revenueValue = new Text("\u20B942.8k");
 
                 revenueValue.setStyle(
                                 "-fx-font-size: 25px;" +
@@ -294,7 +299,7 @@ public class ShopkeeperAnalytics {
                                 aovIcon,
                                 aovLabel);
 
-                Text aovValue = new Text("$34.50");
+                Text aovValue = new Text("\u20B934.50");
 
                 aovValue.setStyle(
                                 "-fx-font-size: 25px;" +
@@ -672,7 +677,7 @@ public class ShopkeeperAnalytics {
                                                 "-fx-fill: #72594D;");
 
                 Text forecastValue = new Text(
-                                "$12.4k");
+                                "\u20B912.4k");
 
                 forecastValue.setStyle(
                                 "-fx-font-size: 22px;" +
@@ -1291,7 +1296,7 @@ public class ShopkeeperAnalytics {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 centerScroll.setStyle(
-                                "-fx-background-color: #F8F7FC;" +
+                                "-fx-background-color: #EEE5DF;" +
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(
@@ -1338,7 +1343,7 @@ public class ShopkeeperAnalytics {
                         );
 
                 analyticsScene.setFill(
-                                Color.web("#F8F7FC"));
+                                Color.web("#EEE5DF"));
 
                 return analyticsScene;
         }
@@ -1353,7 +1358,7 @@ public class ShopkeeperAnalytics {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 
