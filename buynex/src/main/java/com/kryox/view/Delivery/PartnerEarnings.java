@@ -1,6 +1,6 @@
 package com.kryox.view.Delivery;
 
-import com.kryox.config.FirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -57,7 +57,6 @@ public class PartnerEarnings {
         public String partnerTier;
         public String selectedPeriod = "August 2026 (This Month)";
 
-        // Top Cards Metrics (in INR ₹)
         public double weeklyEarnings = 1450.00;
         public String weeklyGrowth = "+15%";
         public double monthlyTotal = 5820.50;
@@ -66,10 +65,8 @@ public class PartnerEarnings {
         public int avgDeliveriesPerDay = 16;
         public double avgPerOrder = 4.80;
 
-        // Chart View Toggle State
         public boolean isWeeklyChart = false;
 
-        // Transactions List
         public List<TransactionRecord> transactions = new ArrayList<>();
 
         public EarningsData() {
@@ -168,24 +165,24 @@ public class PartnerEarnings {
         }
     }
 
-    public static void show(Scene scene) {
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS
+    // =========================================================================
+    public static Scene partnerEarningsScene() {
         EarningsData data = new EarningsData();
-        show(scene, data);
-        attachRealtimeEarningsListener(scene, data);
+        Scene scene = partnerEarningsScene(data);
+        attachRealtimeEarningsListener(data);
+        return scene;
     }
 
-    public static void show(Scene scene, EarningsData data) {
+    public static Scene partnerEarningsScene(EarningsData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        // 1. Top Header Search Bar
-        root.setTop(createTopHeader(scene));
+        root.setTop(createTopHeader());
+        root.setLeft(createSidebar(data));
 
-        // 2. Left Sidebar Navigation
-        root.setLeft(createSidebar(scene, data));
-
-        // 3. Scrollable Main Content
-        VBox mainContent = createMainContent(scene, data);
+        VBox mainContent = createMainContent(data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
@@ -199,15 +196,12 @@ public class PartnerEarnings {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    // =========================================================================
-    // REALTIME FIRESTORE EARNINGS SYNC
-    // =========================================================================
-    private static void attachRealtimeEarningsListener(Scene scene, EarningsData data) {
+    private static void attachRealtimeEarningsListener(EarningsData data) {
         try {
             if (earningsListener != null) {
                 earningsListener.remove();
@@ -256,7 +250,9 @@ public class PartnerEarnings {
                         data.dailyAverage = totalEarned / Math.max(1, realTxList.size());
                         data.avgDeliveriesPerDay = realTxList.size();
                         data.avgPerOrder = totalEarned / Math.max(1, realTxList.size());
-                        PartnerEarnings.show(scene, data);
+                        if (Homepage.HomepageStage != null) {
+                            Homepage.HomepageStage.setScene(partnerEarningsScene(data));
+                        }
                     }
                 });
             });
@@ -265,10 +261,7 @@ public class PartnerEarnings {
         }
     }
 
-    // =========================================================================
-    // TOP SEARCH HEADER BAR
-    // =========================================================================
-    private static BorderPane createTopHeader(Scene scene) {
+    private static BorderPane createTopHeader() {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -304,11 +297,19 @@ public class PartnerEarnings {
 
         Label notifIcon = new Label("🔔");
         notifIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        notifIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "EARNINGS"));
+        notifIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNotifications.partnerNotificationsScene("EARNINGS"));
+            }
+        });
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "EARNINGS"));
+        chatIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerChatSupport.partnerChatSupportScene("EARNINGS"));
+            }
+        });
 
         StackPane userAvatarPane = createAvatarNode(15);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -323,18 +324,28 @@ public class PartnerEarnings {
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerSettings.show(scene));
+        itemProfile.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
+        });
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
+        itemAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
             if (earningsListener != null) earningsListener.remove();
             PartnerConstants.clear();
-            Deliverylogin.show(scene);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
@@ -353,10 +364,7 @@ public class PartnerEarnings {
         return topBar;
     }
 
-    // =========================================================================
-    // 1. LEFT SIDEBAR
-    // =========================================================================
-    private static VBox createSidebar(Scene scene, EarningsData data) {
+    private static VBox createSidebar(EarningsData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -372,39 +380,46 @@ public class PartnerEarnings {
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(scene);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(scene);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(scene, data);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene);
-        Runnable openSettingsTask = () -> PartnerSettings.show(scene);
-        Runnable logoutTask = () -> {
-            if (earningsListener != null) earningsListener.remove();
-            PartnerConstants.clear();
-            Deliverylogin.show(scene);
-        };
-
         Button btnDashboard = createNavButton("▤   Dashboard", false);
-        btnDashboard.setOnAction(e -> openDashboardTask.run());
+        btnDashboard.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDashboard.partnerDashboardScene());
+            }
+        });
 
         Button btnDeliveries = createNavButton("📦   My Deliveries", false);
-        btnDeliveries.setOnAction(e -> openDeliveriesTask.run());
+        btnDeliveries.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+            }
+        });
 
         Button btnNavigation = createNavButton("🧭   Navigation", false);
-        btnNavigation.setOnAction(e -> openNavigationTask.run());
+        btnNavigation.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene());
+            }
+        });
 
         Button btnEarnings = createNavButton("💵   Earnings", true);
-        btnEarnings.setOnAction(e -> openEarningsTask.run());
+        btnEarnings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerEarningsScene(data));
+            }
+        });
 
         Button btnAvailability = createNavButton("⏱   Availability", false);
-        btnAvailability.setOnAction(e -> openAvailabilityTask.run());
+        btnAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         VBox navList = new VBox(6, btnDashboard, btnDeliveries, btnNavigation, btnEarnings, btnAvailability);
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // Dynamic Profile Card
         VBox profileCard = new VBox(4);
         profileCard.setPadding(new Insets(10, 12, 10, 12));
         profileCard.setStyle(
@@ -428,10 +443,18 @@ public class PartnerEarnings {
 
         userBox.getChildren().addAll(avatar, userDetails);
         profileCard.getChildren().add(userBox);
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene));
+        profileCard.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerProfile.partnerProfileScene());
+            }
+        });
 
         Button btnSettings = createNavButton("⚙   Settings", false);
-        btnSettings.setOnAction(e -> openSettingsTask.run());
+        btnSettings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
+        });
 
         Button btnLogout = new Button("↪   Logout");
         btnLogout.setMaxWidth(Double.MAX_VALUE);
@@ -439,17 +462,20 @@ public class PartnerEarnings {
         btnLogout.setPrefHeight(34);
         btnLogout.setStyle(
                 "-fx-font-size: 12px; -fx-text-fill: #e11d48; -fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0 14 0 14;");
-        btnLogout.setOnAction(e -> logoutTask.run());
+        btnLogout.setOnAction(e -> {
+            if (earningsListener != null) earningsListener.remove();
+            PartnerConstants.clear();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
+        });
 
         VBox bottomNav = new VBox(6, profileCard, btnSettings, btnLogout);
         sidebar.getChildren().addAll(logoBox, navList, spacer, bottomNav);
         return sidebar;
     }
 
-    // =========================================================================
-    // 2. MAIN REPORT BODY
-    // =========================================================================
-    private static VBox createMainContent(Scene scene, EarningsData data) {
+    private static VBox createMainContent(EarningsData data) {
         VBox main = new VBox(22);
         main.setPadding(new Insets(26, 35, 60, 35));
         main.setFillWidth(true);
@@ -492,7 +518,9 @@ public class PartnerEarnings {
             item.setStyle("-fx-font-size: 11px; -fx-padding: 6 12 6 12;");
             item.setOnAction(e -> {
                 data.loadMonthData(month);
-                PartnerEarnings.show(scene, data);
+                if (Homepage.HomepageStage != null) {
+                    Homepage.HomepageStage.setScene(partnerEarningsScene(data));
+                }
             });
             monthMenu.getItems().add(item);
         }
@@ -524,7 +552,6 @@ public class PartnerEarnings {
         actions.getChildren().addAll(btnPeriodDropdown, btnExport);
         headerRow.setRight(actions);
 
-        // 1. Top 3 Metrics Row
         HBox topMetrics = new HBox(16);
         VBox cardWeekly = createMetricCard("Weekly Earnings", "₹" + String.format("%,.2f", data.weeklyEarnings),
                 data.weeklyGrowth, "💳", true);
@@ -537,19 +564,13 @@ public class PartnerEarnings {
         HBox.setHgrow(cardMonthly, Priority.ALWAYS);
         HBox.setHgrow(cardDaily, Priority.ALWAYS);
 
-        // 2. Middle Spline Graph Area Card
-        VBox middleChartBox = createOverviewChartCard(scene, data);
-
-        // 3. Bottom Transaction History Card
+        VBox middleChartBox = createOverviewChartCard(data);
         VBox bottomHistoryBox = createTransactionHistoryCard(data);
 
         main.getChildren().addAll(headerRow, topMetrics, middleChartBox, bottomHistoryBox);
         return main;
     }
 
-    // =========================================================================
-    // 3. TOP KPI CARDS
-    // =========================================================================
     private static VBox createMetricCard(String label, String value, String growth, String icon,
                                          boolean isOrangeBadge) {
         VBox card = createCard();
@@ -623,10 +644,7 @@ public class PartnerEarnings {
         return card;
     }
 
-    // =========================================================================
-    // 4. OVERVIEW AREA CHART
-    // =========================================================================
-    private static VBox createOverviewChartCard(Scene scene, EarningsData data) {
+    private static VBox createOverviewChartCard(EarningsData data) {
         VBox card = createCard();
         card.setPadding(new Insets(20));
 
@@ -658,12 +676,16 @@ public class PartnerEarnings {
 
         btnDaily.setOnAction(e -> {
             data.isWeeklyChart = false;
-            PartnerEarnings.show(scene, data);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerEarningsScene(data));
+            }
         });
 
         btnWeekly.setOnAction(e -> {
             data.isWeeklyChart = true;
-            PartnerEarnings.show(scene, data);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerEarningsScene(data));
+            }
         });
 
         toggle.getChildren().addAll(btnDaily, btnWeekly);
@@ -741,9 +763,6 @@ public class PartnerEarnings {
         return l;
     }
 
-    // =========================================================================
-    // 5. TRANSACTION HISTORY TABLE
-    // =========================================================================
     private static VBox createTransactionHistoryCard(EarningsData data) {
         VBox card = createCard();
         card.setPadding(new Insets(20));
@@ -759,7 +778,6 @@ public class PartnerEarnings {
         header.setLeft(title);
         header.setRight(countBadge);
 
-        // Table Header
         HBox tableHeader = new HBox();
         tableHeader.setPadding(new Insets(14, 10, 8, 10));
         tableHeader.setStyle("-fx-border-color: #f3f4f6; -fx-border-width: 0 0 1 0;");
@@ -772,7 +790,6 @@ public class PartnerEarnings {
                 createColHeader("STATUS", 110),
                 createColHeader("ACTIONS", 80));
 
-        // Scrollable Rows Container
         VBox rowsContainer = new VBox();
         for (TransactionRecord tx : data.transactions) {
             rowsContainer.getChildren().add(createTransactionRow(tx));
@@ -841,9 +858,6 @@ public class PartnerEarnings {
         return l;
     }
 
-    // =========================================================================
-    // DYNAMIC AVATAR BUILDER
-    // =========================================================================
     private static StackPane createAvatarNode(double radius) {
         StackPane avatarPane = new StackPane();
         avatarPane.setPrefSize(radius * 2, radius * 2);

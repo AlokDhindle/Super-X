@@ -1,6 +1,6 @@
 package com.kryox.view.Delivery;
 
-import com.kryox.config.FirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -104,37 +104,31 @@ public class PartnerNavigation {
         }
     }
 
-    public static void show(Scene scene) {
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS
+    // =========================================================================
+    public static Scene partnerNavigationScene() {
         TripData data = new TripData();
-        show(scene, data);
-        attachRealtimeNavListener(scene, data);
+        Scene scene = partnerNavigationScene(data);
+        attachRealtimeNavListener(data);
+        return scene;
     }
 
-    public static void show(Scene scene, TripData tripData) {
+    public static Scene partnerNavigationScene(TripData tripData) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        // 1. Top Bar
-        root.setTop(createTopHeader(scene, tripData));
-
-        // 2. Left Sidebar Navigation
-        root.setLeft(createSidebar(scene, tripData));
-
-        // 3. Center Live Map View
+        root.setTop(createTopHeader(tripData));
+        root.setLeft(createSidebar(tripData));
         root.setCenter(createMapArea(tripData));
-
-        // 4. Right Dynamic Trip Details Panel
         root.setRight(createTripDetailsPanel(tripData));
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    // =========================================================================
-    // REALTIME FIRESTORE ORDER SYNC (SMART FALLBACK)
-    // =========================================================================
-    private static void attachRealtimeNavListener(Scene scene, TripData data) {
+    private static void attachRealtimeNavListener(TripData data) {
         try {
             if (navOrderListener != null) {
                 navOrderListener.remove();
@@ -159,7 +153,6 @@ public class PartnerNavigation {
                             boolean isForMe = partnerId == null || partnerId.isEmpty()
                                     || (PartnerConstants.UID != null && partnerId.equals(PartnerConstants.UID));
 
-                            // If this order is currently active/accepted
                             if (("ACCEPTED".equalsIgnoreCase(status) || "ASSIGNED".equalsIgnoreCase(status) || "PLACED".equalsIgnoreCase(status)) && isForMe) {
                                 String orderId = doc.getId();
                                 data.orderNumber = "Order #" + (orderId.length() > 6 ? orderId.substring(0, 6).toUpperCase() : orderId);
@@ -187,7 +180,9 @@ public class PartnerNavigation {
                         data.loadDummyRoute();
                     }
 
-                    PartnerNavigation.show(scene, data);
+                    if (Homepage.HomepageStage != null) {
+                        Homepage.HomepageStage.setScene(partnerNavigationScene(data));
+                    }
                 });
             });
         } catch (Exception ex) {
@@ -195,8 +190,7 @@ public class PartnerNavigation {
         }
     }
 
-    // --- TOP HEADER ---
-    private static BorderPane createTopHeader(Scene scene, TripData data) {
+    private static BorderPane createTopHeader(TripData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -228,11 +222,19 @@ public class PartnerNavigation {
 
         Label bellIcon = new Label("🔔");
         bellIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        bellIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "NAVIGATION"));
+        bellIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNotifications.partnerNotificationsScene("NAVIGATION"));
+            }
+        });
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "NAVIGATION"));
+        chatIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerChatSupport.partnerChatSupportScene("NAVIGATION"));
+            }
+        });
 
         StackPane userAvatarPane = createAvatarNode(15);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -247,18 +249,28 @@ public class PartnerNavigation {
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerSettings.show(scene));
+        itemProfile.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
+        });
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
+        itemAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
             if (navOrderListener != null) navOrderListener.remove();
             PartnerConstants.clear();
-            Deliverylogin.show(scene);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
@@ -277,8 +289,7 @@ public class PartnerNavigation {
         return topBar;
     }
 
-    // --- LEFT SIDEBAR ---
-    private static VBox createSidebar(Scene scene, TripData data) {
+    private static VBox createSidebar(TripData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -294,39 +305,46 @@ public class PartnerNavigation {
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(scene);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(scene, data);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(scene);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene);
-        Runnable openSettingsTask = () -> PartnerSettings.show(scene);
-        Runnable logoutTask = () -> {
-            if (navOrderListener != null) navOrderListener.remove();
-            PartnerConstants.clear();
-            Deliverylogin.show(scene);
-        };
-
         Button btnDashboard = createNavButton("▤   Dashboard", false);
-        btnDashboard.setOnAction(e -> openDashboardTask.run());
+        btnDashboard.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDashboard.partnerDashboardScene());
+            }
+        });
 
         Button btnDeliveries = createNavButton("📦   My Deliveries", false);
-        btnDeliveries.setOnAction(e -> openDeliveriesTask.run());
+        btnDeliveries.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+            }
+        });
 
         Button btnNavigation = createNavButton("🧭   Navigation", true);
-        btnNavigation.setOnAction(e -> openNavigationTask.run());
+        btnNavigation.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerNavigationScene(data));
+            }
+        });
 
         Button btnEarnings = createNavButton("💵   Earnings", false);
-        btnEarnings.setOnAction(e -> openEarningsTask.run());
+        btnEarnings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerEarnings.partnerEarningsScene());
+            }
+        });
 
         Button btnAvailability = createNavButton("⏱   Availability", false);
-        btnAvailability.setOnAction(e -> openAvailabilityTask.run());
+        btnAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         VBox navList = new VBox(6, btnDashboard, btnDeliveries, btnNavigation, btnEarnings, btnAvailability);
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // Profile Card with Dynamic Cloudinary Avatar
         VBox profileCard = new VBox(4);
         profileCard.setPadding(new Insets(10, 12, 10, 12));
         profileCard.setStyle(
@@ -351,10 +369,18 @@ public class PartnerNavigation {
 
         userBox.getChildren().addAll(avatar, userDetails);
         profileCard.getChildren().add(userBox);
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene));
+        profileCard.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerProfile.partnerProfileScene());
+            }
+        });
 
         Button btnSettings = createNavButton("⚙   Settings", false);
-        btnSettings.setOnAction(e -> openSettingsTask.run());
+        btnSettings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
+        });
 
         Button btnLogout = new Button("↪   Logout");
         btnLogout.setMaxWidth(Double.MAX_VALUE);
@@ -362,7 +388,13 @@ public class PartnerNavigation {
         btnLogout.setPrefHeight(34);
         btnLogout.setStyle(
                 "-fx-font-size: 12px; -fx-text-fill: #e11d48; -fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0 14 0 14;");
-        btnLogout.setOnAction(e -> logoutTask.run());
+        btnLogout.setOnAction(e -> {
+            if (navOrderListener != null) navOrderListener.remove();
+            PartnerConstants.clear();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
+        });
 
         Button btnGoOnline = new Button(data.isOnline ? "Go Offline" : "Go Online");
         btnGoOnline.setMaxWidth(Double.MAX_VALUE);
@@ -376,7 +408,9 @@ public class PartnerNavigation {
                         "-fx-cursor: hand;");
         btnGoOnline.setOnAction(e -> {
             data.isOnline = !data.isOnline;
-            PartnerNavigation.show(scene, data);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerNavigationScene(data));
+            }
         });
 
         VBox bottomNav = new VBox(6, profileCard, btnSettings, btnLogout, btnGoOnline);
@@ -384,7 +418,6 @@ public class PartnerNavigation {
         return sidebar;
     }
 
-    // --- CENTER MAP AREA ---
     private static StackPane createMapArea(TripData tripData) {
         StackPane mapStack = new StackPane();
         mapStack.setStyle("-fx-background-color: #dce3e8;");
@@ -535,7 +568,6 @@ public class PartnerNavigation {
         }
     }
 
-    // --- RIGHT TRIP DETAILS PANEL ---
     private static VBox createTripDetailsPanel(TripData trip) {
         VBox panel = new VBox(20);
         panel.setPrefWidth(330);
@@ -667,7 +699,6 @@ public class PartnerNavigation {
         return panel;
     }
 
-    // --- DYNAMIC AVATAR BUILDER ---
     private static StackPane createAvatarNode(double radius) {
         StackPane avatarPane = new StackPane();
         avatarPane.setPrefSize(radius * 2, radius * 2);

@@ -1,6 +1,6 @@
 package com.kryox.view.Delivery;
 
-import com.kryox.config.FirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -45,7 +45,7 @@ public class PartnerDeliveries {
     private static ListenerRegistration orderListenerRegistration;
 
     // =========================================================================
-    // DYNAMIC DATA MODELS (WITH SMART FALLBACK)
+    // DYNAMIC DATA MODELS
     // =========================================================================
     public static class DeliveryQueueData {
         public String partnerName;
@@ -136,24 +136,24 @@ public class PartnerDeliveries {
         }
     }
 
-    public static void show(Scene scene) {
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS
+    // =========================================================================
+    public static Scene partnerDeliveriesScene() {
         DeliveryQueueData data = new DeliveryQueueData();
-        show(scene, data);
-        attachRealtimeOrderListener(scene, data);
+        Scene scene = partnerDeliveriesScene(data);
+        attachRealtimeOrderListener(data);
+        return scene;
     }
 
-    public static void show(Scene scene, DeliveryQueueData data) {
+    public static Scene partnerDeliveriesScene(DeliveryQueueData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        // 1. Top Bar
-        root.setTop(createTopHeader(scene));
+        root.setTop(createTopHeader());
+        root.setLeft(createSidebar(data));
 
-        // 2. Left Sidebar Navigation
-        root.setLeft(createSidebar(scene, data));
-
-        // 3. Scrollable Main Content
-        VBox mainContent = createMainContent(scene, data);
+        VBox mainContent = createMainContent(data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
@@ -167,15 +167,12 @@ public class PartnerDeliveries {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    // =========================================================================
-    // REALTIME FIRESTORE ORDER SYNC (SMART FALLBACK)
-    // =========================================================================
-    private static void attachRealtimeOrderListener(Scene scene, DeliveryQueueData data) {
+    private static void attachRealtimeOrderListener(DeliveryQueueData data) {
         try {
             if (orderListenerRegistration != null) {
                 orderListenerRegistration.remove();
@@ -261,7 +258,9 @@ public class PartnerDeliveries {
                         data.loadDummyOrders();
                     }
 
-                    PartnerDeliveries.show(scene, data);
+                    if (Homepage.HomepageStage != null) {
+                        Homepage.HomepageStage.setScene(partnerDeliveriesScene(data));
+                    }
                 });
             });
         } catch (Exception ex) {
@@ -269,10 +268,7 @@ public class PartnerDeliveries {
         }
     }
 
-    // =========================================================================
-    // TOP SEARCH HEADER BAR
-    // =========================================================================
-    private static BorderPane createTopHeader(Scene scene) {
+    private static BorderPane createTopHeader() {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -308,15 +304,27 @@ public class PartnerDeliveries {
 
         Label notifIcon = new Label("🔔");
         notifIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        notifIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "DELIVERIES"));
+        notifIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNotifications.partnerNotificationsScene("DELIVERIES"));
+            }
+        });
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "DELIVERIES"));
+        chatIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerChatSupport.partnerChatSupportScene("DELIVERIES"));
+            }
+        });
 
         Label helpIcon = new Label("❓");
         helpIcon.setStyle("-fx-font-size: 14px; -fx-cursor: hand;");
-        helpIcon.setOnMouseClicked(e -> DeliverySupport.show(scene, "DELIVERIES"));
+        helpIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(DeliverySupport.supportScene("DELIVERIES"));
+            }
+        });
 
         StackPane userAvatarPane = createAvatarNode(15);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -331,18 +339,28 @@ public class PartnerDeliveries {
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerSettings.show(scene));
+        itemProfile.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
+        });
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
+        itemAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
             if (orderListenerRegistration != null) orderListenerRegistration.remove();
             PartnerConstants.clear();
-            Deliverylogin.show(scene);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
@@ -361,10 +379,7 @@ public class PartnerDeliveries {
         return topBar;
     }
 
-    // =========================================================================
-    // 1. LEFT SIDEBAR
-    // =========================================================================
-    private static VBox createSidebar(Scene scene, DeliveryQueueData data) {
+    private static VBox createSidebar(DeliveryQueueData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -380,32 +395,40 @@ public class PartnerDeliveries {
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(scene);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene, data);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(scene);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(scene);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene);
-        Runnable openSettingsTask = () -> PartnerSettings.show(scene);
-        Runnable logoutTask = () -> {
-            if (orderListenerRegistration != null) orderListenerRegistration.remove();
-            PartnerConstants.clear();
-            Deliverylogin.show(scene);
-        };
-
         Button btnDashboard = createNavButton("▤   Dashboard", false);
-        btnDashboard.setOnAction(e -> openDashboardTask.run());
+        btnDashboard.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDashboard.partnerDashboardScene());
+            }
+        });
 
         Button btnDeliveries = createNavButton("📦   My Deliveries", true);
-        btnDeliveries.setOnAction(e -> openDeliveriesTask.run());
+        btnDeliveries.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene(data));
+            }
+        });
 
         Button btnNavigation = createNavButton("🧭   Navigation", false);
-        btnNavigation.setOnAction(e -> openNavigationTask.run());
+        btnNavigation.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene());
+            }
+        });
 
         Button btnEarnings = createNavButton("💵   Earnings", false);
-        btnEarnings.setOnAction(e -> openEarningsTask.run());
+        btnEarnings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerEarnings.partnerEarningsScene());
+            }
+        });
 
         Button btnAvailability = createNavButton("⏱   Availability", false);
-        btnAvailability.setOnAction(e -> openAvailabilityTask.run());
+        btnAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         VBox navList = new VBox(6, btnDashboard, btnDeliveries, btnNavigation, btnEarnings, btnAvailability);
 
@@ -435,10 +458,18 @@ public class PartnerDeliveries {
 
         userBox.getChildren().addAll(avatar, userDetails);
         profileCard.getChildren().add(userBox);
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene));
+        profileCard.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerProfile.partnerProfileScene());
+            }
+        });
 
         Button btnSettings = createNavButton("⚙   Settings", false);
-        btnSettings.setOnAction(e -> openSettingsTask.run());
+        btnSettings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
+        });
 
         Button btnLogout = new Button("↪   Logout");
         btnLogout.setMaxWidth(Double.MAX_VALUE);
@@ -446,17 +477,20 @@ public class PartnerDeliveries {
         btnLogout.setPrefHeight(34);
         btnLogout.setStyle(
                 "-fx-font-size: 12px; -fx-text-fill: #e11d48; -fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0 14 0 14;");
-        btnLogout.setOnAction(e -> logoutTask.run());
+        btnLogout.setOnAction(e -> {
+            if (orderListenerRegistration != null) orderListenerRegistration.remove();
+            PartnerConstants.clear();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
+        });
 
         VBox bottomNav = new VBox(6, profileCard, btnSettings, btnLogout);
         sidebar.getChildren().addAll(logoBox, navList, spacer, bottomNav);
         return sidebar;
     }
 
-    // =========================================================================
-    // 2. MAIN LAYOUT
-    // =========================================================================
-    private static VBox createMainContent(Scene scene, DeliveryQueueData data) {
+    private static VBox createMainContent(DeliveryQueueData data) {
         VBox main = new VBox(20);
         main.setPadding(new Insets(24, 30, 40, 30));
         main.setFillWidth(true);
@@ -481,8 +515,16 @@ public class PartnerDeliveries {
         btnHighValue.setStyle(
                 "-fx-background-color:linear-gradient(to right, #B84208, #F36A00); -fx-text-fill: #ffffff; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 14; -fx-padding: 5 14 5 14; -fx-cursor: hand;");
 
-        btnNearMe.setOnAction(e -> NearbyDeliveries.show(scene));
-        btnHighValue.setOnAction(e -> HighValueDeliveries.show(scene));
+        btnNearMe.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(NearbyDeliveries.nearbyDeliveriesScene());
+            }
+        });
+        btnHighValue.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(HighValueDeliveries.highValueDeliveriesScene());
+            }
+        });
 
         filterPills.getChildren().addAll(btnNearMe, btnHighValue);
         headerRow.setRight(filterPills);
@@ -496,7 +538,7 @@ public class PartnerDeliveries {
         queueCol.setMaxWidth(360);
 
         for (OrderSummary order : data.queueOrders) {
-            queueCol.getChildren().add(createQueueOrderCard(scene, data, order));
+            queueCol.getChildren().add(createQueueOrderCard(data, order));
         }
 
         VBox detailsCol = new VBox(16);
@@ -504,8 +546,8 @@ public class PartnerDeliveries {
 
         if (data.activeOrder != null) {
             detailsCol.getChildren().addAll(
-                    createMapSnapshotCard(scene, data.activeOrder),
-                    createOrderDetailsCard(scene, data, data.activeOrder));
+                    createMapSnapshotCard(data.activeOrder),
+                    createOrderDetailsCard(data, data.activeOrder));
         }
 
         bodySplit.getChildren().addAll(queueCol, detailsCol);
@@ -513,10 +555,7 @@ public class PartnerDeliveries {
         return main;
     }
 
-    // =========================================================================
-    // 3. QUEUE ORDER CARD ITEM
-    // =========================================================================
-    private static VBox createQueueOrderCard(Scene scene, DeliveryQueueData data, OrderSummary order) {
+    private static VBox createQueueOrderCard(DeliveryQueueData data, OrderSummary order) {
         VBox card = new VBox(8);
         card.setPadding(new Insets(14));
         card.setStyle(
@@ -585,16 +624,15 @@ public class PartnerDeliveries {
                     order.customerName + " (Residence)", "Selected Delivery Destination",
                     "12 Minutes", 150.00, 3, order.statusBadge);
 
-            PartnerDeliveries.show(scene, data);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerDeliveriesScene(data));
+            }
         });
 
         return card;
     }
 
-    // =========================================================================
-    // 4. MAP SNAPSHOT HUD CARD
-    // =========================================================================
-    private static StackPane createMapSnapshotCard(Scene scene, OrderDetail active) {
+    private static StackPane createMapSnapshotCard(OrderDetail active) {
         StackPane mapCard = new StackPane();
         mapCard.setPrefHeight(150);
         mapCard.setMinHeight(150);
@@ -656,7 +694,11 @@ public class PartnerDeliveries {
                         "-fx-background-radius: 6;" +
                         "-fx-padding: 0 12 0 12;" +
                         "-fx-cursor: hand;");
-        btnOpenMaps.setOnAction(e -> PartnerNavigation.show(scene));
+        btnOpenMaps.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene());
+            }
+        });
         hud.setRight(btnOpenMaps);
         BorderPane.setAlignment(btnOpenMaps, Pos.CENTER_RIGHT);
 
@@ -667,10 +709,7 @@ public class PartnerDeliveries {
         return mapCard;
     }
 
-    // =========================================================================
-    // 5. ORDER DETAILS CARD
-    // =========================================================================
-    private static VBox createOrderDetailsCard(Scene scene, DeliveryQueueData data, OrderDetail active) {
+    private static VBox createOrderDetailsCard(DeliveryQueueData data, OrderDetail active) {
         VBox card = createCard();
         card.setPadding(new Insets(18));
 
@@ -694,7 +733,11 @@ public class PartnerDeliveries {
             btnStartNav.setPrefHeight(32);
             btnStartNav.setStyle(
                     "-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 0 18 0 18; -fx-cursor: hand;");
-            btnStartNav.setOnAction(e -> PartnerNavigation.show(scene));
+            btnStartNav.setOnAction(e -> {
+                if (Homepage.HomepageStage != null) {
+                    Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene());
+                }
+            });
             btnActions.getChildren().add(btnStartNav);
         } else if (isRejected) {
             Label rejectedLbl = new Label("Order Declined");
@@ -733,7 +776,9 @@ public class PartnerDeliveries {
                         break;
                     }
                 }
-                PartnerDeliveries.show(scene, data);
+                if (Homepage.HomepageStage != null) {
+                    Homepage.HomepageStage.setScene(partnerDeliveriesScene(data));
+                }
             });
 
             btnReject.setOnAction(e -> {
@@ -753,7 +798,9 @@ public class PartnerDeliveries {
                         break;
                     }
                 }
-                PartnerDeliveries.show(scene, data);
+                if (Homepage.HomepageStage != null) {
+                    Homepage.HomepageStage.setScene(partnerDeliveriesScene(data));
+                }
             });
 
             btnActions.getChildren().addAll(btnReject, btnAccept);
@@ -812,9 +859,6 @@ public class PartnerDeliveries {
         return card;
     }
 
-    // =========================================================================
-    // DYNAMIC AVATAR BUILDER
-    // =========================================================================
     private static StackPane createAvatarNode(double radius) {
         StackPane avatarPane = new StackPane();
         avatarPane.setPrefSize(radius * 2, radius * 2);

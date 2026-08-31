@@ -1,6 +1,6 @@
 package com.kryox.controller.Delivery;
 
-import com.kryox.config.CloudinaryConfig;
+import com.kryox.config.Coustomerconfig;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
@@ -16,7 +16,7 @@ public class ImageUploadController {
         }
 
         try {
-            Cloudinary cloudinary = CloudinaryConfig.getCloudinary();
+            Cloudinary cloudinary = Coustomerconfig.getCloudinary();
             if (cloudinary == null) {
                 System.err.println("[ImageUpload] Error: Cloudinary instance is null. Verify CloudinaryConfig.java.");
                 return null;

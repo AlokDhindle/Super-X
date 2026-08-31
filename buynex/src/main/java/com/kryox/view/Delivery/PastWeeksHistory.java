@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -18,8 +19,6 @@ import java.util.List;
 
 public class PastWeeksHistory {
 
-    private static final String ORANGE_PRIMARY = "#f46a06";
-    private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
     private static final String BG_COLOR = "#fbfbfe";
     private static final String BORDER_COLOR = "#f0edf2";
 
@@ -64,19 +63,20 @@ public class PastWeeksHistory {
         }
     }
 
-    public static void show(Scene scene) {
-        show(scene, new PastWeeksData());
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS
+    // =========================================================================
+    public static Scene pastWeeksHistoryScene() {
+        return pastWeeksHistoryScene(new PastWeeksData());
     }
 
-    public static void show(Scene scene, PastWeeksData data) {
+    public static Scene pastWeeksHistoryScene(PastWeeksData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        // 1. Top Bar
-        root.setTop(createTopHeader(scene));
+        root.setTop(createTopHeader());
 
-        // 2. Center Content inside ScrollPane
-        VBox mainContent = createMainContent(scene, data);
+        VBox mainContent = createMainContent(data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -84,15 +84,12 @@ public class PastWeeksHistory {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    // =========================================================================
-    // TOP HEADER
-    // =========================================================================
-    private static BorderPane createTopHeader(Scene scene) {
+    private static BorderPane createTopHeader() {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -116,7 +113,11 @@ public class PastWeeksHistory {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
-        btnBack.setOnAction(e -> PartnerAvailability.show(scene));
+        btnBack.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         Text title = new Text("Past Weeks Shift History");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -128,10 +129,7 @@ public class PastWeeksHistory {
         return topBar;
     }
 
-    // =========================================================================
-    // MAIN CONTENT
-    // =========================================================================
-    private static VBox createMainContent(Scene scene, PastWeeksData data) {
+    private static VBox createMainContent(PastWeeksData data) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(24, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);
@@ -139,7 +137,6 @@ public class PastWeeksHistory {
         VBox wrapper = new VBox(20);
         wrapper.setMaxWidth(880);
 
-        // Overall Performance Summary Card
         HBox topMetrics = new HBox(16);
         topMetrics.getChildren().addAll(
                 createSummaryCard("Total Historical Hours", data.totalHistoricalHours + " hrs", "Logged across active shifts", "⏱"),
@@ -148,7 +145,6 @@ public class PastWeeksHistory {
         );
         topMetrics.getChildren().forEach(n -> HBox.setHgrow(n, Priority.ALWAYS));
 
-        // Weekly Log Cards
         VBox recordsList = new VBox(14);
         for (WeekRecord record : data.weekRecords) {
             recordsList.getChildren().add(createWeekRecordCard(record));
@@ -223,7 +219,6 @@ public class PastWeeksHistory {
         rightBox.getChildren().addAll(earnVal, payoutBadge);
         topRow.setRight(rightBox);
 
-        // Progress Bar
         VBox progGroup = new VBox(4);
         BorderPane progMeta = new BorderPane();
         Label progTitle = new Label("Shift Completion Target");

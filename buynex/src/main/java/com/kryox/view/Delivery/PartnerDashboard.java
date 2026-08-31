@@ -1,6 +1,6 @@
 package com.kryox.view.Delivery;
 
-import com.kryox.config.FirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -52,30 +52,24 @@ public class PartnerDashboard {
         public boolean isOnline = true;
         public String rankingNotice = "You're ranked in the top 5% of partners this week.";
 
-        // Key Metric 1: Deliveries
         public int todayDeliveries = 24;
         public String deliveriesGrowth = "+12%";
         public int deliveriesGoal = 30;
 
-        // Key Metric 2: Current Earnings (INR ₹)
         public double currentEarnings = 342.15;
         public double currentTips = 84.50;
-        public double earningsGoalProgress = 0.65; // 65%
+        public double earningsGoalProgress = 0.65;
 
-        // Key Metric 3: Ratings
         public double averageRating = 4.92;
         public int totalReviews = 92;
 
-        // High Demand Surge Card
         public String surgeLocation = "FC Road & Deccan, Pune";
         public String surgeMultiplier = "2.5x higher";
 
-        // Weekly Target Goal Card
-        public double weeklyGoalPercent = 0.80; // 80%
+        public double weeklyGoalPercent = 0.80;
         public int deliveriesLeftForBonus = 12;
         public double bonusReward = 100.00;
 
-        // Dynamic List of Recent Orders
         public List<RecentOrderRecord> recentOrders = new ArrayList<>();
 
         public DashboardData() {
@@ -114,24 +108,24 @@ public class PartnerDashboard {
         }
     }
 
-    public static void show(Scene scene) {
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS
+    // =========================================================================
+    public static Scene partnerDashboardScene() {
         DashboardData data = new DashboardData();
-        show(scene, data);
-        attachRealtimeDashboardListener(scene, data);
+        Scene scene = partnerDashboardScene(data);
+        attachRealtimeDashboardListener(data);
+        return scene;
     }
 
-    public static void show(Scene scene, DashboardData data) {
+    public static Scene partnerDashboardScene(DashboardData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        // 1. Top Bar
-        root.setTop(createTopHeader(scene, data));
+        root.setTop(createTopHeader(data));
+        root.setLeft(createSidebar(data));
 
-        // 2. Sidebar
-        root.setLeft(createSidebar(scene, data));
-
-        // 3. Center Dashboard View inside ScrollPane
-        VBox dashboardContent = createDashboardView(scene, data);
+        VBox dashboardContent = createDashboardView(data);
         ScrollPane scrollPane = new ScrollPane(dashboardContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
@@ -145,15 +139,12 @@ public class PartnerDashboard {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    // =========================================================================
-    // REALTIME FIRESTORE LISTENER
-    // =========================================================================
-    private static void attachRealtimeDashboardListener(Scene scene, DashboardData data) {
+    private static void attachRealtimeDashboardListener(DashboardData data) {
         try {
             if (dashboardOrderListener != null) {
                 dashboardOrderListener.remove();
@@ -214,7 +205,9 @@ public class PartnerDashboard {
                         data.recentOrders = liveOrders;
                         data.todayDeliveries = deliveredCount > 0 ? deliveredCount : liveOrders.size();
                         data.currentEarnings = earned > 0 ? earned : data.currentEarnings;
-                        PartnerDashboard.show(scene, data);
+                        if (Homepage.HomepageStage != null) {
+                            Homepage.HomepageStage.setScene(partnerDashboardScene(data));
+                        }
                     }
                 });
             });
@@ -223,10 +216,7 @@ public class PartnerDashboard {
         }
     }
 
-    // =========================================================================
-    // TOP HEADER
-    // =========================================================================
-    private static BorderPane createTopHeader(Scene scene, DashboardData data) {
+    private static BorderPane createTopHeader(DashboardData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -243,7 +233,6 @@ public class PartnerDashboard {
         HBox rightControls = new HBox(16);
         rightControls.setAlignment(Pos.CENTER_RIGHT);
 
-        // Online / Offline Status Badge
         HBox statusPill = new HBox(8);
         statusPill.setAlignment(Pos.CENTER);
         statusPill.setPadding(new Insets(4, 10, 4, 10));
@@ -259,11 +248,19 @@ public class PartnerDashboard {
 
         Label bellIcon = new Label("🔔");
         bellIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        bellIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "DASHBOARD"));
+        bellIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNotifications.partnerNotificationsScene("DASHBOARD"));
+            }
+        });
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "DASHBOARD"));
+        chatIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerChatSupport.partnerChatSupportScene("DASHBOARD"));
+            }
+        });
 
         StackPane userAvatarPane = createAvatarNode(15);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -278,18 +275,28 @@ public class PartnerDashboard {
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerSettings.show(scene));
+        itemProfile.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
+        });
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
+        itemAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
             if (dashboardOrderListener != null) dashboardOrderListener.remove();
             PartnerConstants.clear();
-            Deliverylogin.show(scene);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
@@ -308,10 +315,7 @@ public class PartnerDashboard {
         return topBar;
     }
 
-    // =========================================================================
-    // 1. SIDEBAR NAVIGATION
-    // =========================================================================
-    private static VBox createSidebar(Scene scene, DashboardData data) {
+    private static VBox createSidebar(DashboardData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -329,18 +333,6 @@ public class PartnerDashboard {
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(scene, data);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(scene);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(scene);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene);
-        Runnable openSettingsTask = () -> PartnerSettings.show(scene);
-        Runnable logoutTask = () -> {
-            if (dashboardOrderListener != null) dashboardOrderListener.remove();
-            PartnerConstants.clear();
-            Deliverylogin.show(scene);
-        };
-
         Button btnDashboard = createNavButton("▤   Dashboard");
         Button btnDeliveries = createNavButton("📦   My Deliveries");
         Button btnNavigation = createNavButton("🧭   Navigation");
@@ -350,32 +342,44 @@ public class PartnerDashboard {
 
         btnDashboard.setOnAction(e -> {
             setActiveButton(btnDashboard);
-            openDashboardTask.run();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerDashboardScene(data));
+            }
         });
 
         btnDeliveries.setOnAction(e -> {
             setActiveButton(btnDeliveries);
-            openDeliveriesTask.run();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+            }
         });
 
         btnNavigation.setOnAction(e -> {
             setActiveButton(btnNavigation);
-            openNavigationTask.run();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene());
+            }
         });
 
         btnEarnings.setOnAction(e -> {
             setActiveButton(btnEarnings);
-            openEarningsTask.run();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerEarnings.partnerEarningsScene());
+            }
         });
 
         btnAvailability.setOnAction(e -> {
             setActiveButton(btnAvailability);
-            openAvailabilityTask.run();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
         });
 
         btnSettings.setOnAction(e -> {
             setActiveButton(btnSettings);
-            openSettingsTask.run();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
         });
 
         setActiveButton(btnDashboard);
@@ -385,7 +389,6 @@ public class PartnerDashboard {
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // Dynamic Profile Card
         VBox profileCard = new VBox(4);
         profileCard.setPadding(new Insets(10, 12, 10, 12));
         profileCard.setStyle(
@@ -417,7 +420,11 @@ public class PartnerDashboard {
         userBox.getChildren().addAll(avatar, userDetails);
 
         profileCard.getChildren().addAll(statusBox, userBox);
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene));
+        profileCard.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerProfile.partnerProfileScene());
+            }
+        });
 
         Button btnLogout = new Button("↪   Logout");
         btnLogout.setMaxWidth(Double.MAX_VALUE);
@@ -425,17 +432,20 @@ public class PartnerDashboard {
         btnLogout.setPrefHeight(34);
         btnLogout.setStyle(
                 "-fx-font-size: 12px; -fx-text-fill: #e11d48; -fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0 14 0 14;");
-        btnLogout.setOnAction(e -> logoutTask.run());
+        btnLogout.setOnAction(e -> {
+            if (dashboardOrderListener != null) dashboardOrderListener.remove();
+            PartnerConstants.clear();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
+        });
 
         VBox bottomNav = new VBox(4, profileCard, btnSettings, btnLogout);
         sidebar.getChildren().addAll(logoBox, navList, spacer, bottomNav);
         return sidebar;
     }
 
-    // =========================================================================
-    // 2. MAIN DASHBOARD CONTENT AREA
-    // =========================================================================
-    private static VBox createDashboardView(Scene scene, DashboardData data) {
+    private static VBox createDashboardView(DashboardData data) {
         VBox main = new VBox(22);
         main.setPadding(new Insets(24, 35, 60, 35));
         main.setFillWidth(true);
@@ -459,14 +469,20 @@ public class PartnerDashboard {
                 + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; -fx-background-radius: 8; -fx-padding: 0 16 0 16; -fx-cursor: hand;");
         btnGoOnline.setOnAction(e -> {
             data.isOnline = !data.isOnline;
-            PartnerDashboard.show(scene, data);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerDashboardScene(data));
+            }
         });
 
         Button btnTasks = new Button("▤ View Tasks");
         btnTasks.setPrefHeight(36);
         btnTasks.setStyle(
                 "-fx-background-color: white; -fx-border-color: #d1d5db; -fx-text-fill: #374151; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-border-radius: 8; -fx-padding: 0 16 0 16; -fx-cursor: hand;");
-        btnTasks.setOnAction(e -> PartnerDeliveries.show(scene));
+        btnTasks.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+            }
+        });
 
         actionBtns.getChildren().addAll(btnGoOnline, btnTasks);
         header.setRight(actionBtns);
@@ -484,7 +500,7 @@ public class PartnerDashboard {
 
         HBox lowerRow = new HBox(20);
         lowerRow.setFillHeight(true);
-        VBox recentOrdersCol = createRecentOrdersSection(scene, data);
+        VBox recentOrdersCol = createRecentOrdersSection(data);
         VBox sideWidgetsCol = createSideWidgetsSection(data);
         lowerRow.getChildren().addAll(recentOrdersCol, sideWidgetsCol);
         HBox.setHgrow(recentOrdersCol, Priority.ALWAYS);
@@ -494,10 +510,7 @@ public class PartnerDashboard {
         return main;
     }
 
-    // =========================================================================
-    // 3. DYNAMIC RECENT ORDERS SECTION
-    // =========================================================================
-    private static VBox createRecentOrdersSection(Scene scene, DashboardData data) {
+    private static VBox createRecentOrdersSection(DashboardData data) {
         VBox container = new VBox(12);
 
         BorderPane titleRow = new BorderPane();
@@ -508,19 +521,23 @@ public class PartnerDashboard {
         Label viewAll = new Label("View All");
         viewAll.setStyle(
                 "-fx-font-size: 11px; -fx-text-fill: " + ORANGE_PRIMARY + "; -fx-font-weight: bold; -fx-cursor: hand;");
-        viewAll.setOnMouseClicked(e -> PartnerDeliveries.show(scene));
+        viewAll.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+            }
+        });
         titleRow.setRight(viewAll);
 
         container.getChildren().add(titleRow);
 
         for (RecentOrderRecord order : data.recentOrders) {
-            container.getChildren().add(createOrderCard(scene, order));
+            container.getChildren().add(createOrderCard(order));
         }
 
         return container;
     }
 
-    private static VBox createOrderCard(Scene scene, RecentOrderRecord order) {
+    private static VBox createOrderCard(RecentOrderRecord order) {
         VBox card = new VBox();
         card.setPadding(new Insets(12, 16, 12, 16));
         card.setStyle(
@@ -567,7 +584,11 @@ public class PartnerDashboard {
         detailsBtn.setPrefHeight(28);
         detailsBtn.setStyle(
                 "-fx-background-color: #1f2937; -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;");
-        detailsBtn.setOnAction(e -> PartnerDeliveries.show(scene));
+        detailsBtn.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+            }
+        });
 
         right.getChildren().addAll(priceInfo, detailsBtn);
         row.setRight(right);
@@ -576,15 +597,11 @@ public class PartnerDashboard {
         return card;
     }
 
-    // =========================================================================
-    // 4. SIDE WIDGETS SECTION
-    // =========================================================================
     private static VBox createSideWidgetsSection(DashboardData data) {
         VBox container = new VBox(14);
         container.setPrefWidth(260);
         container.setMinWidth(260);
 
-        // Demand Surge Card
         VBox demandCard = new VBox(8);
         demandCard.setPadding(new Insets(14));
         demandCard.setStyle("-fx-background-color: #2b303c; -fx-background-radius: 12;");
@@ -605,7 +622,6 @@ public class PartnerDashboard {
         locSub.setStyle("-fx-font-size: 10px; -fx-text-fill: #9ca3af;");
         demandCard.getChildren().addAll(liveBadgeBox, spacer, locTitle, locSub);
 
-        // Target Goal Card
         VBox goalCard = new VBox(6);
         goalCard.setPadding(new Insets(14));
         goalCard.setStyle("-fx-background-color: " + ORANGE_GRADIENT + "; -fx-background-radius: 12;");
@@ -635,9 +651,6 @@ public class PartnerDashboard {
         return container;
     }
 
-    // =========================================================================
-    // 5. STATS CARD HELPERS
-    // =========================================================================
     private static VBox createStatCard(String label, String value, String badgeText, String footer, String icon) {
         VBox card = new VBox(10);
         card.setPadding(new Insets(16));
@@ -726,9 +739,6 @@ public class PartnerDashboard {
         return card;
     }
 
-    // =========================================================================
-    // DYNAMIC AVATAR BUILDER
-    // =========================================================================
     private static StackPane createAvatarNode(double radius) {
         StackPane avatarPane = new StackPane();
         avatarPane.setPrefSize(radius * 2, radius * 2);
@@ -768,9 +778,6 @@ public class PartnerDashboard {
         return avatarPane;
     }
 
-    // =========================================================================
-    // SIDEBAR INTERACTIVITY HELPERS
-    // =========================================================================
     private static Button createNavButton(String text) {
         Button btn = new Button(text);
         btn.setMaxWidth(Double.MAX_VALUE);

@@ -2,7 +2,6 @@ package com.kryox.view.Delivery;
 
 import com.kryox.controller.Delivery.DeliveryLoginController;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,39 +16,24 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-public class Deliverylogin extends Application {
-
-    @Override
-    public void start(Stage primaryStage) {
-        // Creates the initial scene and sets this view as the root
-        BorderPane root = buildView(null);
-        Scene scene = new Scene(root);
-        
-        // Re-bind actions with the created scene
-        primaryStage.setScene(scene);
-        Deliverylogin.show(scene);
-        
-        primaryStage.setTitle("BuyNeX - Delivery Partner Login");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
-    }
+public class Deliverylogin {
 
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
     private static final String ORANGE_GRADIENT_HOVER = "linear-gradient(to right, #9e3604, #d95b00)";
 
     private static final DeliveryLoginController loginController = new DeliveryLoginController();
 
-    public static void show(Scene scene) {
-        BorderPane root = buildView(scene);
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+    public static Scene deliveryLoginScene() {
+        BorderPane root = buildView();
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web("#eee5df"));
+        return scene;
     }
 
-    private static BorderPane buildView(Scene scene) {
+    public static BorderPane buildView() {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: #eee5df;");
 
@@ -74,11 +58,14 @@ public class Deliverylogin extends Application {
         logoBox.setPadding(new Insets(0, 0, 0, 25));
         topBar.setLeft(logoBox);
 
-        Runnable openSupportTask = () -> DeliverySupport.show(scene, "LOGIN");
-
+        // Direct lambda actions for support
         Text needHelpTxt = new Text("Need Help?");
         needHelpTxt.setStyle("-fx-font-size: 14px; -fx-fill: #333333; -fx-cursor: hand;");
-        needHelpTxt.setOnMouseClicked(e -> openSupportTask.run());
+        needHelpTxt.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(DeliverySupport.supportScene("LOGIN"));
+            }
+        });
 
         Text supportLink = new Text("ⓘ Support");
         supportLink.setStyle(
@@ -86,7 +73,11 @@ public class Deliverylogin extends Application {
                 "-fx-fill: " + ORANGE_GRADIENT + ";" +
                 "-fx-font-weight: bold;" +
                 "-fx-cursor: hand;");
-        supportLink.setOnMouseClicked(e -> openSupportTask.run());
+        supportLink.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(DeliverySupport.supportScene("LOGIN"));
+            }
+        });
 
         HBox supportBox = new HBox(8, needHelpTxt, supportLink);
         supportBox.setAlignment(Pos.CENTER_RIGHT);
@@ -99,12 +90,11 @@ public class Deliverylogin extends Application {
         HBox hbox = new HBox();
         hbox.setFillHeight(true);
 
-        // Left Visual Banner
         ImageView imageView = new ImageView();
         try {
             Image image = new Image(Deliverylogin.class.getClassLoader()
                     .getResourceAsStream("requirements/delivery.jpeg"));
-            if (image.isError()) {
+            if (image == null || image.isError()) {
                 image = new Image("file:src/main/resources/requirements/delivery.jpeg");
             }
             imageView.setImage(image);
@@ -127,7 +117,6 @@ public class Deliverylogin extends Application {
         leftVBox.getChildren().add(imageView);
         HBox.setHgrow(leftVBox, Priority.ALWAYS);
 
-        // Right Form Container
         VBox rightSide = new VBox();
         rightSide.setAlignment(Pos.CENTER);
         rightSide.setStyle("-fx-background-color: #f8f8ff;");
@@ -208,12 +197,10 @@ public class Deliverylogin extends Application {
                 "-fx-background-radius: 7;" +
                 "-fx-cursor: hand;"));
 
-        // Executes Authentication via DeliveryLoginController (passing Scene)
         loginButton.setOnAction(e -> {
-            String emailInput = emailField.getText();
-            String passInput = passwordField.getText();
-
-            loginController.handleLogin(emailInput, passInput, scene);
+            String emailInput = emailField.getText() != null ? emailField.getText().trim() : "";
+            String passInput = passwordField.getText() != null ? passwordField.getText() : "";
+            loginController.handleLogin(emailInput, passInput);
         });
 
         Label orDivider = new Label("───────────────  OR  ───────────────");
@@ -233,8 +220,11 @@ public class Deliverylogin extends Application {
                 "-fx-font-weight: bold;" +
                 "-fx-cursor: hand;");
 
-        Runnable openRegistrationTask = () -> DeliveryRegistration2.show(scene);
-        signupBtn.setOnAction(e -> openRegistrationTask.run());
+        signupBtn.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(DeliveryRegistration2.registrationScene());
+            }
+        });
 
         HBox registerBox = new HBox(4, registerTxt, signupBtn);
         registerBox.setAlignment(Pos.CENTER);

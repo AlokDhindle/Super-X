@@ -60,19 +60,22 @@ public class ChangePayout {
         }
     }
 
-    public static void show(Scene scene) {
-        show(scene, new PartnerSettings.SettingsData());
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS (SHOPKEEPER PATTERN)
+    // =========================================================================
+    public static Scene changePayoutScene() {
+        return changePayoutScene(new PartnerSettings.SettingsData());
     }
 
-    public static void show(Scene scene, PartnerSettings.SettingsData settingsData) {
+    public static Scene changePayoutScene(PartnerSettings.SettingsData settingsData) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(scene, settingsData));
+        root.setTop(createTopHeader(settingsData));
 
         // 2. Center Content inside ScrollPane
-        VBox mainContent = createMainContent(scene, settingsData);
+        VBox mainContent = createMainContent(settingsData);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -80,15 +83,15 @@ public class ChangePayout {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Scene scene, PartnerSettings.SettingsData settingsData) {
+    private static BorderPane createTopHeader(PartnerSettings.SettingsData settingsData) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -112,7 +115,11 @@ public class ChangePayout {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
-        btnBack.setOnAction(e -> PartnerSettings.show(scene, settingsData));
+        btnBack.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene(settingsData));
+            }
+        });
 
         Text title = new Text("Change Payout Account");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -135,7 +142,7 @@ public class ChangePayout {
     // =========================================================================
     // MAIN CONTENT
     // =========================================================================
-    private static VBox createMainContent(Scene scene, PartnerSettings.SettingsData settingsData) {
+    private static VBox createMainContent(PartnerSettings.SettingsData settingsData) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(26, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);
@@ -217,7 +224,7 @@ public class ChangePayout {
         noteText.setStyle("-fx-font-size: 11px; -fx-text-fill: #9a3412;");
         noteBox.getChildren().addAll(infoIcon, noteText);
 
-        // Submit Button (Synchronizes with Settings & Firestore)
+        // Submit Button
         Button btnSaveAccount = new Button("Verify & Update Payout Method  →");
         btnSaveAccount.setPrefHeight(44);
         btnSaveAccount.setMaxWidth(Double.MAX_VALUE);
@@ -244,8 +251,9 @@ public class ChangePayout {
             btnSaveAccount.setText("✓ Bank Account Updated in Firestore!");
             btnSaveAccount.setStyle("-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-background-radius: 8;");
 
-            // Smooth transition back to Settings after update
-            PartnerSettings.show(scene, settingsData);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene(settingsData));
+            }
         });
 
         formCard.getChildren().addAll(

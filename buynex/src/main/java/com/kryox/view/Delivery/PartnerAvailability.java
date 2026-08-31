@@ -1,6 +1,6 @@
 package com.kryox.view.Delivery;
 
-import com.kryox.config.FirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.google.cloud.firestore.Firestore;
 
@@ -107,22 +107,25 @@ public class PartnerAvailability {
         }
     }
 
-    public static void show(Scene scene) {
-        show(scene, new AvailabilityData());
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS (SHOPKEEPER PATTERN)
+    // =========================================================================
+    public static Scene availabilityScene() {
+        return availabilityScene(new AvailabilityData());
     }
 
-    public static void show(Scene scene, AvailabilityData data) {
+    public static Scene availabilityScene(AvailabilityData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(scene, data));
+        root.setTop(createTopHeader(data));
 
         // 2. Left Sidebar Navigation
-        root.setLeft(createSidebar(scene, data));
+        root.setLeft(createSidebar(data));
 
         // 3. Main Content Area
-        VBox mainContent = createMainContent(scene, data);
+        VBox mainContent = createMainContent(data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
@@ -131,27 +134,29 @@ public class PartnerAvailability {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setStyle(
                 "-fx-background-color: transparent;" +
-                        "-fx-background: " + BG_COLOR + ";" +
-                        "-fx-border-color: transparent;");
+                "-fx-background: " + BG_COLOR + ";" +
+                "-fx-border-color: transparent;"
+        );
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Scene scene, AvailabilityData data) {
+    private static BorderPane createTopHeader(AvailabilityData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
                 "-fx-background-color: white;" +
-                        "-fx-border-color: #f0edf2;" +
-                        "-fx-border-width: 0 0 1 0;" +
-                        "-fx-padding: 0 35 0 30;");
+                "-fx-border-color: #f0edf2;" +
+                "-fx-border-width: 0 0 1 0;" +
+                "-fx-padding: 0 35 0 30;"
+        );
 
         Text title = new Text("Available");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #a94717;");
@@ -176,11 +181,19 @@ public class PartnerAvailability {
 
         Label bellIcon = new Label("🔔");
         bellIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        bellIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "AVAILABILITY"));
+        bellIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNotifications.partnerNotificationsScene("AVAILABILITY"));
+            }
+        });
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #555; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "AVAILABILITY"));
+        chatIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerChatSupport.partnerChatSupportScene("AVAILABILITY"));
+            }
+        });
 
         StackPane userAvatarPane = createAvatarNode(15);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -188,24 +201,35 @@ public class PartnerAvailability {
         ContextMenu userMenu = new ContextMenu();
         userMenu.setStyle(
                 "-fx-background-color: white;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-border-color: #e5e7eb;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);");
+                "-fx-background-radius: 8;" +
+                "-fx-border-radius: 8;" +
+                "-fx-border-color: #e5e7eb;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);"
+        );
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerSettings.show(scene));
+        itemProfile.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
+        });
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
+        itemAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
             PartnerConstants.clear();
-            Deliverylogin.show(scene);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
@@ -227,7 +251,7 @@ public class PartnerAvailability {
     // =========================================================================
     // 1. LEFT SIDEBAR
     // =========================================================================
-    private static VBox createSidebar(Scene scene, AvailabilityData data) {
+    private static VBox createSidebar(AvailabilityData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -235,54 +259,64 @@ public class PartnerAvailability {
         sidebar.setPadding(new Insets(20, 16, 25, 16));
         sidebar.setStyle(
                 "-fx-background-color: " + SIDEBAR_BG + ";" +
-                        "-fx-border-color: " + BORDER_COLOR + ";" +
-                        "-fx-border-width: 0 1 0 0;");
+                "-fx-border-color: " + BORDER_COLOR + ";" +
+                "-fx-border-width: 0 1 0 0;"
+        );
 
         Text logo = new Text("BuyNeX");
         logo.setStyle("-fx-font-size: 26px; -fx-fill: " + ORANGE_GRADIENT + "; -fx-font-weight: bold;");
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(scene);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(scene);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(scene);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene, data);
-        Runnable openSettingsTask = () -> PartnerSettings.show(scene);
-        Runnable logoutTask = () -> {
-            PartnerConstants.clear();
-            Deliverylogin.show(scene);
-        };
-
         Button btnDashboard = createNavButton("▤   Dashboard", false);
-        btnDashboard.setOnAction(e -> openDashboardTask.run());
+        btnDashboard.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDashboard.partnerDashboardScene());
+            }
+        });
 
         Button btnDeliveries = createNavButton("📦   My Deliveries", false);
-        btnDeliveries.setOnAction(e -> openDeliveriesTask.run());
+        btnDeliveries.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+            }
+        });
 
         Button btnNavigation = createNavButton("🧭   Navigation", false);
-        btnNavigation.setOnAction(e -> openNavigationTask.run());
+        btnNavigation.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene());
+            }
+        });
 
         Button btnEarnings = createNavButton("💵   Earnings", false);
-        btnEarnings.setOnAction(e -> openEarningsTask.run());
+        btnEarnings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerEarnings.partnerEarningsScene());
+            }
+        });
 
         Button btnAvailability = createNavButton("⏱   Availability", true);
-        btnAvailability.setOnAction(e -> openAvailabilityTask.run());
+        btnAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene(data));
+            }
+        });
 
         VBox navList = new VBox(6, btnDashboard, btnDeliveries, btnNavigation, btnEarnings, btnAvailability);
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // Dynamic Bottom Profile Card
         VBox profileCard = new VBox(4);
         profileCard.setPadding(new Insets(10, 12, 10, 12));
         profileCard.setStyle(
                 "-fx-background-color: #f8f8fb;" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-border-color: #e5e7eb;" +
-                        "-fx-border-radius: 10;" +
-                        "-fx-cursor: hand;");
+                "-fx-background-radius: 10;" +
+                "-fx-border-color: #e5e7eb;" +
+                "-fx-border-radius: 10;" +
+                "-fx-cursor: hand;"
+        );
 
         HBox userBox = new HBox(8);
         userBox.setAlignment(Pos.CENTER_LEFT);
@@ -298,18 +332,32 @@ public class PartnerAvailability {
         userBox.getChildren().addAll(avatar, userDetails);
         profileCard.getChildren().add(userBox);
 
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene));
+        profileCard.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerProfile.partnerProfileScene());
+            }
+        });
 
         Button btnSettings = createNavButton("⚙   Settings", false);
-        btnSettings.setOnAction(e -> openSettingsTask.run());
+        btnSettings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+            }
+        });
 
         Button btnLogout = new Button("↪   Logout");
         btnLogout.setMaxWidth(Double.MAX_VALUE);
         btnLogout.setAlignment(Pos.CENTER_LEFT);
         btnLogout.setPrefHeight(34);
         btnLogout.setStyle(
-                "-fx-font-size: 12px; -fx-text-fill: #e11d48; -fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0 14 0 14;");
-        btnLogout.setOnAction(e -> logoutTask.run());
+                "-fx-font-size: 12px; -fx-text-fill: #e11d48; -fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0 14 0 14;"
+        );
+        btnLogout.setOnAction(e -> {
+            PartnerConstants.clear();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
+        });
 
         VBox bottomNav = new VBox(4, profileCard, btnSettings, btnLogout);
         sidebar.getChildren().addAll(logoBox, navList, spacer, bottomNav);
@@ -319,7 +367,7 @@ public class PartnerAvailability {
     // =========================================================================
     // 2. MAIN CONTENT
     // =========================================================================
-    private static VBox createMainContent(Scene scene, AvailabilityData data) {
+    private static VBox createMainContent(AvailabilityData data) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(24, 35, 60, 35));
         content.setFillWidth(true);
@@ -329,8 +377,7 @@ public class PartnerAvailability {
         VBox titleBox = new VBox(4);
         Text title = new Text("Manage Availability");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #111827;");
-        Text subTitle = new Text(
-                "Tap shifts below to adjust your active hours. Earnings & summaries update automatically.");
+        Text subTitle = new Text("Tap shifts below to adjust your active hours. Earnings & summaries update automatically.");
         subTitle.setStyle("-fx-font-size: 12px; -fx-fill: #6b7280;");
         titleBox.getChildren().addAll(title, subTitle);
         headerRow.setLeft(titleBox);
@@ -340,13 +387,13 @@ public class PartnerAvailability {
         btnSave.setPadding(new Insets(0, 18, 0, 18));
         btnSave.setStyle(
                 "-fx-background-color: #93380b;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;");
+                "-fx-text-fill: white;" +
+                "-fx-font-weight: bold;" +
+                "-fx-font-size: 12px;" +
+                "-fx-background-radius: 8;" +
+                "-fx-cursor: hand;"
+        );
 
-        // Firestore Sync Handler
         btnSave.setOnAction(e -> {
             btnSave.setText("Saving...");
             btnSave.setDisable(true);
@@ -370,15 +417,13 @@ public class PartnerAvailability {
 
                     Platform.runLater(() -> {
                         btnSave.setText("✓ Schedule Synced!");
-                        btnSave.setStyle(
-                                "-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; -fx-background-radius: 8;");
+                        btnSave.setStyle("-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; -fx-background-radius: 8;");
                         btnSave.setDisable(false);
                     });
                 } catch (Exception ex) {
                     Platform.runLater(() -> {
                         btnSave.setText("Save Failed");
-                        btnSave.setStyle(
-                                "-fx-background-color: #dc2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; -fx-background-radius: 8;");
+                        btnSave.setStyle("-fx-background-color: #dc2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; -fx-background-radius: 8;");
                         btnSave.setDisable(false);
                     });
                     ex.printStackTrace();
@@ -392,14 +437,13 @@ public class PartnerAvailability {
         HBox bodyColumns = new HBox(22);
         bodyColumns.setFillHeight(true);
 
-        // Left Column: Preferences + Interactive 7-Day Shift Grid
         VBox leftColumn = new VBox(20);
         leftColumn.getChildren().addAll(
                 createPreferencesCard(data),
-                createInteractiveWeeklyGrid(scene, data));
+                createInteractiveWeeklyGrid(data)
+        );
         HBox.setHgrow(leftColumn, Priority.ALWAYS);
 
-        // Right Column: Dynamic Projected Earnings + Dynamic Week Summary + View Past Weeks Button
         VBox rightColumn = new VBox(18);
         rightColumn.setPrefWidth(290);
         rightColumn.setMinWidth(290);
@@ -407,7 +451,8 @@ public class PartnerAvailability {
         rightColumn.getChildren().addAll(
                 createProjectedEarningsCard(data),
                 createWeekSummaryCard(data),
-                createPastWeeksButton(scene));
+                createPastWeeksButton()
+        );
         HBox.setHgrow(rightColumn, Priority.NEVER);
 
         bodyColumns.getChildren().addAll(leftColumn, rightColumn);
@@ -469,18 +514,20 @@ public class PartnerAvailability {
                 "Kothrud & Karve Road",
                 "Hinjawadi IT Corridor",
                 "Viman Nagar & Kharadi",
-                "Hadapsar / Magarpatta Hub");
+                "Hadapsar / Magarpatta Hub"
+        );
         zoneDropdown.setValue(data.selectedZone);
         zoneDropdown.setPrefHeight(32);
         zoneDropdown.setStyle(
                 "-fx-background-color: white;" +
-                        "-fx-border-color: #e5e7eb;" +
-                        "-fx-border-radius: 6;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-font-size: 11px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #374151;" +
-                        "-fx-cursor: hand;");
+                "-fx-border-color: #e5e7eb;" +
+                "-fx-border-radius: 6;" +
+                "-fx-background-radius: 6;" +
+                "-fx-font-size: 11px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #374151;" +
+                "-fx-cursor: hand;"
+        );
         zoneDropdown.setOnAction(e -> data.selectedZone = zoneDropdown.getValue());
 
         Region r2Spacer = new Region();
@@ -495,7 +542,7 @@ public class PartnerAvailability {
     // =========================================================================
     // 3. INTERACTIVE 7-DAY SHIFT SCHEDULER
     // =========================================================================
-    private static VBox createInteractiveWeeklyGrid(Scene scene, AvailabilityData data) {
+    private static VBox createInteractiveWeeklyGrid(AvailabilityData data) {
         VBox card = createCard();
         card.setPadding(new Insets(0));
 
@@ -524,7 +571,6 @@ public class PartnerAvailability {
 
         headerWrapper.getChildren().addAll(topOrangeLine, header);
 
-        // Schedule Grid
         GridPane grid = new GridPane();
         grid.setHgap(8);
         grid.setVgap(10);
@@ -532,15 +578,13 @@ public class PartnerAvailability {
 
         String[] days = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
         String[] shifts = { "Morning", "Afternoon", "Evening" };
-        String[] shiftLabels = { "Morning\n(08:00 - 12:00)", "Afternoon\n(12:00 - 16:00)",
-                "Peak Evening ⚡\n(17:00 - 21:00)" };
+        String[] shiftLabels = { "Morning\n(08:00 - 12:00)", "Afternoon\n(12:00 - 16:00)", "Peak Evening ⚡\n(17:00 - 21:00)" };
 
         for (int col = 0; col < days.length; col++) {
             Label dayLbl = new Label(days[col]);
             dayLbl.setMaxWidth(Double.MAX_VALUE);
             dayLbl.setAlignment(Pos.CENTER);
-            dayLbl.setStyle(
-                    "-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151; -fx-padding: 0 0 4 0;");
+            dayLbl.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151; -fx-padding: 0 0 4 0;");
             grid.add(dayLbl, col + 1, 0);
         }
 
@@ -562,7 +606,9 @@ public class PartnerAvailability {
                     boolean newState = !Boolean.TRUE.equals(data.activeShifts.get(shiftKey));
                     data.activeShifts.put(shiftKey, newState);
                     data.recalculateMetrics();
-                    PartnerAvailability.show(scene, data);
+                    if (Homepage.HomepageStage != null) {
+                        Homepage.HomepageStage.setScene(availabilityScene(data));
+                    }
                 });
 
                 grid.add(slotBtn, col + 1, row + 1);
@@ -588,33 +634,36 @@ public class PartnerAvailability {
             if (isPeak) {
                 btn.setStyle(
                         "-fx-background-color: #ffedd5;" +
-                                "-fx-border-color: " + ORANGE_PRIMARY + ";" +
-                                "-fx-border-radius: 6;" +
-                                "-fx-background-radius: 6;" +
-                                "-fx-text-fill: #9a3412;" +
-                                "-fx-font-size: 10px;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-cursor: hand;");
+                        "-fx-border-color: " + ORANGE_PRIMARY + ";" +
+                        "-fx-border-radius: 6;" +
+                        "-fx-background-radius: 6;" +
+                        "-fx-text-fill: #9a3412;" +
+                        "-fx-font-size: 10px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-cursor: hand;"
+                );
             } else {
                 btn.setStyle(
                         "-fx-background-color: #dcfce7;" +
-                                "-fx-border-color: #86efac;" +
-                                "-fx-border-radius: 6;" +
-                                "-fx-background-radius: 6;" +
-                                "-fx-text-fill: #15803d;" +
-                                "-fx-font-size: 10px;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-cursor: hand;");
+                        "-fx-border-color: #86efac;" +
+                        "-fx-border-radius: 6;" +
+                        "-fx-background-radius: 6;" +
+                        "-fx-text-fill: #15803d;" +
+                        "-fx-font-size: 10px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-cursor: hand;"
+                );
             }
         } else {
             btn.setStyle(
                     "-fx-background-color: #fafafc;" +
-                            "-fx-border-color: #e5e7eb;" +
-                            "-fx-border-radius: 6;" +
-                            "-fx-background-radius: 6;" +
-                            "-fx-text-fill: #9ca3af;" +
-                            "-fx-font-size: 10px;" +
-                            "-fx-cursor: hand;");
+                    "-fx-border-color: #e5e7eb;" +
+                    "-fx-border-radius: 6;" +
+                    "-fx-background-radius: 6;" +
+                    "-fx-text-fill: #9ca3af;" +
+                    "-fx-font-size: 10px;" +
+                    "-fx-cursor: hand;"
+            );
         }
 
         return btn;
@@ -738,20 +787,25 @@ public class PartnerAvailability {
     // =========================================================================
     // 6. DYNAMIC "VIEW PAST WEEKS" ACTION BUTTON
     // =========================================================================
-    private static Button createPastWeeksButton(Scene scene) {
+    private static Button createPastWeeksButton() {
         Button btn = new Button("↺   View Past Weeks");
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setPrefHeight(40);
         btn.setStyle(
                 "-fx-background-color: white;" +
-                        "-fx-border-color: #d1d5db;" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-text-fill: #374151;" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-cursor: hand;");
-        btn.setOnAction(e -> PastWeeksHistory.show(scene));
+                "-fx-border-color: #d1d5db;" +
+                "-fx-border-radius: 8;" +
+                "-fx-background-radius: 8;" +
+                "-fx-text-fill: #374151;" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-cursor: hand;"
+        );
+        btn.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PastWeeksHistory.pastWeeksHistoryScene());
+            }
+        });
         return btn;
     }
 
@@ -801,10 +855,11 @@ public class PartnerAvailability {
         VBox card = new VBox(12);
         card.setStyle(
                 "-fx-background-color: white;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-border-color: " + BORDER_COLOR + ";" +
-                        "-fx-border-width: 1;");
+                "-fx-background-radius: 12;" +
+                "-fx-border-radius: 12;" +
+                "-fx-border-color: " + BORDER_COLOR + ";" +
+                "-fx-border-width: 1;"
+        );
         return card;
     }
 
@@ -817,19 +872,21 @@ public class PartnerAvailability {
         if (active) {
             btn.setStyle(
                     "-fx-background-color: " + ORANGE_PRIMARY + ";" +
-                            "-fx-text-fill: white;" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-font-size: 12px;" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-padding: 0 14 0 14;" +
-                            "-fx-cursor: hand;");
+                    "-fx-text-fill: white;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-font-size: 12px;" +
+                    "-fx-background-radius: 8;" +
+                    "-fx-padding: 0 14 0 14;" +
+                    "-fx-cursor: hand;"
+            );
         } else {
             btn.setStyle(
                     "-fx-background-color: transparent;" +
-                            "-fx-text-fill: #6b7280;" +
-                            "-fx-font-size: 12px;" +
-                            "-fx-padding: 0 14 0 14;" +
-                            "-fx-cursor: hand;");
+                    "-fx-text-fill: #6b7280;" +
+                    "-fx-font-size: 12px;" +
+                    "-fx-padding: 0 14 0 14;" +
+                    "-fx-cursor: hand;"
+            );
             btn.setOnMouseEntered(e -> btn.setStyle(
                     "-fx-background-color: #fcece3; -fx-text-fill: #a94717; -fx-font-size: 12px; -fx-background-radius: 8; -fx-padding: 0 14 0 14; -fx-cursor: hand;"));
             btn.setOnMouseExited(e -> btn.setStyle(

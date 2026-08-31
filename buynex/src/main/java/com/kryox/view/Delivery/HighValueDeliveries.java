@@ -131,19 +131,22 @@ public class HighValueDeliveries {
         }
     }
 
-    public static void show(Scene scene) {
-        show(scene, new HighValueData());
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS (SHOPKEEPER PATTERN)
+    // =========================================================================
+    public static Scene highValueDeliveriesScene() {
+        return highValueDeliveriesScene(new HighValueData());
     }
 
-    public static void show(Scene scene, HighValueData data) {
+    public static Scene highValueDeliveriesScene(HighValueData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar
-        root.setTop(createTopHeader(scene, data));
+        root.setTop(createTopHeader(data));
 
         // 2. Center Content inside ScrollPane
-        VBox mainContent = createMainContent(scene, data);
+        VBox mainContent = createMainContent(data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -151,15 +154,15 @@ public class HighValueDeliveries {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
     // =========================================================================
     // TOP HEADER
     // =========================================================================
-    private static BorderPane createTopHeader(Scene scene, HighValueData data) {
+    private static BorderPane createTopHeader(HighValueData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -183,7 +186,11 @@ public class HighValueDeliveries {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
-        btnBack.setOnAction(e -> PartnerDeliveries.show(scene));
+        btnBack.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+            }
+        });
 
         Text title = new Text("High Value Delivery Queue");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -207,7 +214,7 @@ public class HighValueDeliveries {
     // =========================================================================
     // MAIN CONTENT VIEW
     // =========================================================================
-    private static VBox createMainContent(Scene scene, HighValueData data) {
+    private static VBox createMainContent(HighValueData data) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(24, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);
@@ -215,7 +222,6 @@ public class HighValueDeliveries {
         VBox wrapper = new VBox(20);
         wrapper.setMaxWidth(880);
 
-        // Minimum Payout Threshold Card
         BorderPane filterCard = new BorderPane();
         filterCard.setPadding(new Insets(16, 20, 16, 20));
         filterCard.setStyle(
@@ -254,10 +260,9 @@ public class HighValueDeliveries {
         sliderBox.getChildren().addAll(minLbl, payoutSlider, maxLbl);
         filterCard.setRight(sliderBox);
 
-        // Dynamic High Value Cards Container
         VBox ordersContainer = new VBox(14);
         for (HighValueOrderItem order : data.orders) {
-            ordersContainer.getChildren().add(createHighValueCard(scene, data, order));
+            ordersContainer.getChildren().add(createHighValueCard(data, order));
         }
 
         wrapper.getChildren().addAll(filterCard, ordersContainer);
@@ -268,7 +273,7 @@ public class HighValueDeliveries {
     // =========================================================================
     // HIGH VALUE ORDER CARD
     // =========================================================================
-    private static VBox createHighValueCard(Scene scene, HighValueData data, HighValueOrderItem item) {
+    private static VBox createHighValueCard(HighValueData data, HighValueOrderItem item) {
         VBox card = new VBox(12);
         card.setPadding(new Insets(18));
         card.setStyle(
@@ -280,7 +285,6 @@ public class HighValueDeliveries {
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.03), 8, 0, 0, 2);"
         );
 
-        // Header Row: High Value Badge, Order ID, Payout & Tip Capsule
         BorderPane header = new BorderPane();
 
         HBox tagGroup = new HBox(8);
@@ -308,7 +312,6 @@ public class HighValueDeliveries {
         payoutBox.getChildren().addAll(payoutLbl, tipSub);
         header.setRight(payoutBox);
 
-        // Location Path
         HBox pathRow = new HBox(20);
         pathRow.setAlignment(Pos.CENTER_LEFT);
         pathRow.setPadding(new Insets(4, 0, 4, 0));
@@ -338,7 +341,6 @@ public class HighValueDeliveries {
 
         pathRow.getChildren().addAll(storeBox, arrow, custBox);
 
-        // Handling Requirement & Items Row
         HBox specRow = new HBox(8);
         specRow.setAlignment(Pos.CENTER_LEFT);
         specRow.setPadding(new Insets(6, 10, 6, 10));
@@ -351,7 +353,6 @@ public class HighValueDeliveries {
         specText.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #374151;");
         specRow.getChildren().addAll(alertIcon, specText);
 
-        // Footer Actions
         BorderPane footer = new BorderPane();
         footer.setPadding(new Insets(6, 0, 0, 0));
         footer.setStyle("-fx-border-color: #f3f4f6; -fx-border-width: 1 0 0 0;");
@@ -375,7 +376,9 @@ public class HighValueDeliveries {
                 trip.dropoffName = item.customerName;
                 trip.dropoffAddress = item.customerAddress;
                 trip.orderEarnings = item.partnerPayout;
-                PartnerNavigation.show(scene, trip);
+                if (Homepage.HomepageStage != null) {
+                    Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene(trip));
+                }
             });
             footer.setRight(btnNavigate);
         } else {
@@ -387,7 +390,9 @@ public class HighValueDeliveries {
             btnDecline.setStyle("-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #4b5563; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 0 12 0 12; -fx-cursor: hand;");
             btnDecline.setOnAction(e -> {
                 data.orders.remove(item);
-                show(scene, data);
+                if (Homepage.HomepageStage != null) {
+                    Homepage.HomepageStage.setScene(highValueDeliveriesScene(data));
+                }
             });
 
             Button btnAccept = new Button("Accept (₹" + (int) item.partnerPayout + ")");
@@ -395,7 +400,9 @@ public class HighValueDeliveries {
             btnAccept.setStyle("-fx-background-color: " + ORANGE_GRADIENT + "; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 0 16 0 16; -fx-cursor: hand;");
             btnAccept.setOnAction(e -> {
                 item.isAccepted = true;
-                show(scene, data);
+                if (Homepage.HomepageStage != null) {
+                    Homepage.HomepageStage.setScene(highValueDeliveriesScene(data));
+                }
             });
 
             actBtns.getChildren().addAll(btnDecline, btnAccept);

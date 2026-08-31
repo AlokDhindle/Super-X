@@ -1,42 +1,49 @@
 package com.kryox.controller.Delivery;
 
+// import com.buynex.Main;
 import com.kryox.dao.Delivery.DeliveryPartnerDAO;
 import com.kryox.model.Delivery.DeliveryPartner;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.kryox.view.Delivery.RegistrationSuccess;
+import com.kryox.view.Delivery.Homepage;
+
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.Scene;
 
 public class DeliveryRegistrationController {
 
     private final DeliveryPartnerDAO partnerDAO = new DeliveryPartnerDAO();
 
-    public void handleRegistration(DeliveryPartner partner, String password, String confirmPassword, boolean termsAccepted, Scene scene) {
+    public void handleRegistration(DeliveryPartner partner, String password, String confirmPassword,
+            boolean termsAccepted) {
         if (!termsAccepted) {
-            showAlert(Alert.AlertType.WARNING, "Terms & Conditions", "Please accept the terms & conditions to proceed.");
+            showAlert(Alert.AlertType.WARNING, "Terms & Conditions",
+                    "Please accept the terms & conditions to proceed.");
             return;
         }
 
         if (partner.getFullName() == null || partner.getFullName().trim().isEmpty() ||
-            partner.getMobile() == null || partner.getMobile().trim().isEmpty() ||
-            partner.getEmail() == null || partner.getEmail().trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Missing Details", "Please fill in all mandatory fields (Full Name, Mobile, Email).");
+                partner.getMobile() == null || partner.getMobile().trim().isEmpty() ||
+                partner.getEmail() == null || partner.getEmail().trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Missing Details",
+                    "Please fill in all mandatory fields (Full Name, Mobile, Email).");
             return;
         }
 
         // Vehicle Details Validation
         if (partner.getVehicleNumber() == null || partner.getVehicleNumber().trim().isEmpty() ||
-            partner.getDrivingLicense() == null || partner.getDrivingLicense().trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Vehicle Details Missing", "Please provide your Vehicle Registration Number and Driving License Number.");
+                partner.getDrivingLicense() == null || partner.getDrivingLicense().trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Vehicle Details Missing",
+                    "Please provide your Vehicle Registration Number and Driving License Number.");
             return;
         }
 
         // Document Upload Verification
         if (partner.getIdCardPath() == null || partner.getIdCardPath().trim().isEmpty() ||
-            partner.getLicenseDocPath() == null || partner.getLicenseDocPath().trim().isEmpty() ||
-            partner.getRcBookPath() == null || partner.getRcBookPath().trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Documents Incomplete", "Please upload your Government ID, Driving License, and Vehicle RC Book for admin verification.");
+                partner.getLicenseDocPath() == null || partner.getLicenseDocPath().trim().isEmpty() ||
+                partner.getRcBookPath() == null || partner.getRcBookPath().trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Documents Incomplete",
+                    "Please upload your Government ID, Driving License, and Vehicle RC Book for admin verification.");
             return;
         }
 
@@ -62,12 +69,15 @@ public class DeliveryRegistrationController {
                     PartnerConstants.VEHICLE_TYPE = partner.getVehicleType();
                     PartnerConstants.VEHICLE_NUMBER = partner.getVehicleNumber();
                     PartnerConstants.PARTNER_TIER = "Standard Partner";
-                    
+
                     if (partner.getProfilePhotoPath() != null && !partner.getProfilePhotoPath().isEmpty()) {
                         PartnerConstants.PROFILE_PHOTO_URL = partner.getProfilePhotoPath();
                     }
 
-                    RegistrationSuccess.show(scene);
+                    // Open Registration Success via static scene factory
+                    if (Homepage.HomepageStage != null) {
+                        Homepage.HomepageStage.setScene(RegistrationSuccess.registrationSuccessScene());
+                    }
                 }))
                 .exceptionally(ex -> {
                     Platform.runLater(() -> {

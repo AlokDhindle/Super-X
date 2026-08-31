@@ -33,20 +33,23 @@ public class DeliverySupport {
         public String activePartner = "Alex Walker";
     }
 
-    public static void show(Scene scene) {
-        show(scene, "LOGIN", new SupportData());
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS (SHOPKEEPER PATTERN)
+    // =========================================================================
+    public static Scene supportScene() {
+        return supportScene("LOGIN", new SupportData());
     }
 
-    public static void show(Scene scene, String returnSource) {
-        show(scene, returnSource, new SupportData());
+    public static Scene supportScene(String returnSource) {
+        return supportScene(returnSource, new SupportData());
     }
 
-    public static void show(Scene scene, String returnSource, SupportData data) {
+    public static Scene supportScene(String returnSource, SupportData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Bar with Dynamic Back Button
-        root.setTop(createTopHeader(scene, returnSource));
+        root.setTop(createTopHeader(returnSource));
 
         // 2. Center Scrollable Content
         VBox mainContent = createMainContent(data);
@@ -61,12 +64,12 @@ public class DeliverySupport {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    private static BorderPane createTopHeader(Scene scene, String returnSource) {
+    private static BorderPane createTopHeader(String returnSource) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -102,21 +105,19 @@ public class DeliverySupport {
                 "-fx-padding: 6 14 6 14;"
         );
 
-        Runnable backTask = new Runnable() {
-            @Override
-            public void run() {
+        btnBack.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
                 if ("REGISTRATION".equalsIgnoreCase(returnSource)) {
-                    DeliveryRegistration2.show(scene);
+                    Homepage.HomepageStage.setScene(DeliveryRegistration2.registrationScene());
                 } else if ("SUCCESS".equalsIgnoreCase(returnSource)) {
-                    RegistrationSuccess.show(scene);
+                    Homepage.HomepageStage.setScene(RegistrationSuccess.registrationSuccessScene());
                 } else if ("SETTINGS".equalsIgnoreCase(returnSource)) {
-                    PartnerSettings.show(scene);
+                    Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
                 } else {
-                    Deliverylogin.show(scene);
+                    Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
                 }
             }
-        };
-        btnBack.setOnAction(e -> backTask.run());
+        });
 
         Text logo = new Text("BuyNeX Support");
         logo.setStyle(
@@ -165,8 +166,8 @@ public class DeliverySupport {
         HBox bodySplit = new HBox(22);
         bodySplit.setFillHeight(true);
 
-        VBox faqColumn = createFaqSection();
-        HBox.setHgrow(faqColumn, Priority.ALWAYS);
+        VBox faqSection = createFaqSection();
+        HBox.setHgrow(faqSection, Priority.ALWAYS);
 
         VBox ticketColumn = createTicketFormCard();
         ticketColumn.setPrefWidth(380);
@@ -174,7 +175,7 @@ public class DeliverySupport {
         ticketColumn.setMaxWidth(380);
         HBox.setHgrow(ticketColumn, Priority.NEVER);
 
-        bodySplit.getChildren().addAll(faqColumn, ticketColumn);
+        bodySplit.getChildren().addAll(faqSection, ticketColumn);
 
         content.getChildren().addAll(titleBox, contactCards, bodySplit);
         return content;

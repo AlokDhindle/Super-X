@@ -21,7 +21,6 @@ import java.util.List;
 public class PartnerNotifications {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
-    private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
     private static final String BG_COLOR = "#fbfbfe";
     private static final String BORDER_COLOR = "#f0edf2";
 
@@ -30,21 +29,20 @@ public class PartnerNotifications {
     // =========================================================================
     public static class NotificationData {
         public String partnerName = "Alex Walker";
-        public String activeFilter = "ALL"; // "ALL", "UNREAD", "PAYOUTS", "ORDERS"
+        public String activeFilter = "ALL";
         public List<NotificationItem> notifications = new ArrayList<>();
 
         public NotificationData() {
-            // Default dynamic sample feed
             notifications.add(new NotificationItem("N-101", "ORDER", "New Delivery Request #BN-4920", "Pickup at Whole Foods Market (1.2 km). Estimated payout: ₹145.50.", "2 mins ago", false));
             notifications.add(new NotificationItem("N-102", "PAYOUT", "Weekly Payout Credited", "₹4,892.20 transferred successfully to HDFC Bank (•••• 8219).", "2 hours ago", false));
             notifications.add(new NotificationItem("N-103", "ALERT", "High Surge Active in Downtown", "Earn 1.5x bonus on orders delivered between 6:00 PM and 9:00 PM.", "5 hours ago", true));
-            notifications.add(new NotificationItem("N-104", "SYSTEM", "Document Verified", "Your Driving License (MH-142011) has been approved by compliance.", "1 day ago", true));
+            notifications.add(new NotificationItem("N-104", "SYSTEM", "Document Verified", "Your Driving License has been approved by compliance.", "1 day ago", true));
         }
     }
 
     public static class NotificationItem {
         public String id;
-        public String type; // "ORDER", "PAYOUT", "ALERT", "SYSTEM"
+        public String type;
         public String title;
         public String description;
         public String timestamp;
@@ -60,23 +58,24 @@ public class PartnerNotifications {
         }
     }
 
-    public static void show(Scene scene) {
-        show(scene, "DASHBOARD", new NotificationData());
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS
+    // =========================================================================
+    public static Scene partnerNotificationsScene() {
+        return partnerNotificationsScene("DASHBOARD", new NotificationData());
     }
 
-    public static void show(Scene scene, String returnScreen) {
-        show(scene, returnScreen, new NotificationData());
+    public static Scene partnerNotificationsScene(String returnScreen) {
+        return partnerNotificationsScene(returnScreen, new NotificationData());
     }
 
-    public static void show(Scene scene, String returnScreen, NotificationData data) {
+    public static Scene partnerNotificationsScene(String returnScreen, NotificationData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        // 1. Top Bar
-        root.setTop(createTopHeader(scene, returnScreen, data));
+        root.setTop(createTopHeader(returnScreen, data));
 
-        // 2. Center Notifications Content
-        VBox mainContent = createMainContent(scene, returnScreen, data);
+        VBox mainContent = createMainContent(returnScreen, data);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -84,15 +83,12 @@ public class PartnerNotifications {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    // =========================================================================
-    // TOP HEADER
-    // =========================================================================
-    private static BorderPane createTopHeader(Scene scene, String returnScreen, NotificationData data) {
+    private static BorderPane createTopHeader(String returnScreen, NotificationData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -104,7 +100,6 @@ public class PartnerNotifications {
                 "-fx-padding: 0 35 0 25;"
         );
 
-        // Dynamic Back Button
         String backLabel = "←  Back to " + formatScreenName(returnScreen);
         Button btnBack = new Button(backLabel);
         btnBack.setStyle(
@@ -119,7 +114,7 @@ public class PartnerNotifications {
                 "-fx-padding: 6 14 6 14;"
         );
 
-        btnBack.setOnAction(e -> navigateBack(scene, returnScreen));
+        btnBack.setOnAction(e -> navigateBack(returnScreen));
 
         Text logo = new Text("Notifications Center");
         logo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -128,7 +123,6 @@ public class PartnerNotifications {
         leftGroup.setAlignment(Pos.CENTER_LEFT);
         topBar.setLeft(leftGroup);
 
-        // Header Actions: Mark All Read
         Button btnMarkAllRead = new Button("Mark all as read");
         btnMarkAllRead.setStyle(
                 "-fx-background-color: transparent;" +
@@ -141,7 +135,9 @@ public class PartnerNotifications {
             for (NotificationItem item : data.notifications) {
                 item.isRead = true;
             }
-            show(scene, returnScreen, data);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerNotificationsScene(returnScreen, data));
+            }
         });
 
         topBar.setRight(btnMarkAllRead);
@@ -150,10 +146,7 @@ public class PartnerNotifications {
         return topBar;
     }
 
-    // =========================================================================
-    // MAIN NOTIFICATIONS FEED
-    // =========================================================================
-    private static VBox createMainContent(Scene scene, String returnScreen, NotificationData data) {
+    private static VBox createMainContent(String returnScreen, NotificationData data) {
         VBox content = new VBox(20);
         content.setPadding(new Insets(24, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);
@@ -161,27 +154,24 @@ public class PartnerNotifications {
         VBox container = new VBox(16);
         container.setMaxWidth(780);
 
-        // Filter Pills Row
         HBox filterBar = new HBox(10);
         filterBar.setAlignment(Pos.CENTER_LEFT);
 
         filterBar.getChildren().addAll(
-                createFilterPill(scene, returnScreen, data, "ALL", "All Notifications"),
-                createFilterPill(scene, returnScreen, data, "UNREAD", "Unread"),
-                createFilterPill(scene, returnScreen, data, "ORDERS", "Orders"),
-                createFilterPill(scene, returnScreen, data, "PAYOUTS", "Payouts")
+                createFilterPill(returnScreen, data, "ALL", "All Notifications"),
+                createFilterPill(returnScreen, data, "UNREAD", "Unread"),
+                createFilterPill(returnScreen, data, "ORDERS", "Orders"),
+                createFilterPill(returnScreen, data, "PAYOUTS", "Payouts")
         );
 
-        // Dynamic Notifications Card Container
         VBox listContainer = new VBox(10);
 
         for (NotificationItem item : data.notifications) {
-            // Apply filter logic
             if ("UNREAD".equals(data.activeFilter) && item.isRead) continue;
             if ("ORDERS".equals(data.activeFilter) && !"ORDER".equals(item.type)) continue;
             if ("PAYOUTS".equals(data.activeFilter) && !"PAYOUT".equals(item.type)) continue;
 
-            listContainer.getChildren().add(createNotificationCard(scene, item));
+            listContainer.getChildren().add(createNotificationCard(item));
         }
 
         if (listContainer.getChildren().isEmpty()) {
@@ -201,7 +191,7 @@ public class PartnerNotifications {
         return content;
     }
 
-    private static Button createFilterPill(Scene scene, String returnScreen, NotificationData data, String filterKey, String title) {
+    private static Button createFilterPill(String returnScreen, NotificationData data, String filterKey, String title) {
         boolean active = filterKey.equalsIgnoreCase(data.activeFilter);
         Button pill = new Button(title);
         pill.setPrefHeight(32);
@@ -213,13 +203,15 @@ public class PartnerNotifications {
 
         pill.setOnAction(e -> {
             data.activeFilter = filterKey;
-            show(scene, returnScreen, data);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerNotificationsScene(returnScreen, data));
+            }
         });
 
         return pill;
     }
 
-    private static HBox createNotificationCard(Scene scene, NotificationItem item) {
+    private static HBox createNotificationCard(NotificationItem item) {
         HBox card = new HBox(14);
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(14, 18, 14, 18));
@@ -232,7 +224,6 @@ public class PartnerNotifications {
                 "-fx-cursor: hand;"
         );
 
-        // Dynamic Icon Box based on notification type
         StackPane iconBox = new StackPane();
         Circle iconBg = new Circle(18);
         Label iconLbl = new Label();
@@ -254,7 +245,6 @@ public class PartnerNotifications {
 
         iconBox.getChildren().addAll(iconBg, iconLbl);
 
-        // Content
         VBox textGroup = new VBox(3);
         Label titleLbl = new Label(item.title);
         titleLbl.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #111827;");
@@ -269,7 +259,6 @@ public class PartnerNotifications {
         textGroup.getChildren().addAll(titleLbl, descLbl, timeLbl);
         HBox.setHgrow(textGroup, Priority.ALWAYS);
 
-        // Unread Indicator Dot
         if (!item.isRead) {
             Circle unreadDot = new Circle(4, Color.web(ORANGE_PRIMARY));
             card.getChildren().addAll(iconBox, textGroup, unreadDot);
@@ -277,13 +266,14 @@ public class PartnerNotifications {
             card.getChildren().addAll(iconBox, textGroup);
         }
 
-        // Click to read/navigate
         card.setOnMouseClicked(e -> {
             item.isRead = true;
-            if ("ORDER".equals(item.type)) {
-                PartnerDeliveries.show(scene);
-            } else if ("PAYOUT".equals(item.type)) {
-                PartnerEarnings.show(scene);
+            if (Homepage.HomepageStage != null) {
+                if ("ORDER".equals(item.type)) {
+                    Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+                } else if ("PAYOUT".equals(item.type)) {
+                    Homepage.HomepageStage.setScene(PartnerEarnings.partnerEarningsScene());
+                }
             }
         });
 
@@ -299,12 +289,13 @@ public class PartnerNotifications {
         return "Dashboard";
     }
 
-    private static void navigateBack(Scene scene, String returnScreen) {
-        if ("DELIVERIES".equalsIgnoreCase(returnScreen)) PartnerDeliveries.show(scene);
-        else if ("NAVIGATION".equalsIgnoreCase(returnScreen)) PartnerNavigation.show(scene);
-        else if ("EARNINGS".equalsIgnoreCase(returnScreen)) PartnerEarnings.show(scene);
-        else if ("AVAILABILITY".equalsIgnoreCase(returnScreen)) PartnerAvailability.show(scene);
-        else if ("SETTINGS".equalsIgnoreCase(returnScreen)) PartnerSettings.show(scene);
-        else PartnerDashboard.show(scene);
+    private static void navigateBack(String returnScreen) {
+        if (Homepage.HomepageStage == null) return;
+        if ("DELIVERIES".equalsIgnoreCase(returnScreen)) Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+        else if ("NAVIGATION".equalsIgnoreCase(returnScreen)) Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene());
+        else if ("EARNINGS".equalsIgnoreCase(returnScreen)) Homepage.HomepageStage.setScene(PartnerEarnings.partnerEarningsScene());
+        else if ("AVAILABILITY".equalsIgnoreCase(returnScreen)) Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+        else if ("SETTINGS".equalsIgnoreCase(returnScreen)) Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene());
+        else Homepage.HomepageStage.setScene(PartnerDashboard.partnerDashboardScene());
     }
 }

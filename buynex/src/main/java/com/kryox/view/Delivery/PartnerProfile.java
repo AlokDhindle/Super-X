@@ -33,24 +33,24 @@ import java.util.Map;
 
 public class PartnerProfile {
 
-    private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
     private static final String BG_COLOR = "#fbfbfe";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    public static void show(Scene scene) {
-        show(scene, new PartnerSettings.SettingsData());
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS
+    // =========================================================================
+    public static Scene partnerProfileScene() {
+        return partnerProfileScene(new PartnerSettings.SettingsData());
     }
 
-    public static void show(Scene scene, PartnerSettings.SettingsData settingsData) {
+    public static Scene partnerProfileScene(PartnerSettings.SettingsData settingsData) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        // 1. Top Header with Back to Settings Button
-        root.setTop(createTopHeader(scene, settingsData));
+        root.setTop(createTopHeader(settingsData));
 
-        // 2. Center Content inside ScrollPane
-        VBox mainContent = createMainContent(scene, settingsData);
+        VBox mainContent = createMainContent(settingsData);
         ScrollPane scrollPane = new ScrollPane(mainContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setPannable(true);
@@ -58,12 +58,12 @@ public class PartnerProfile {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    private static BorderPane createTopHeader(Scene scene, PartnerSettings.SettingsData settingsData) {
+    private static BorderPane createTopHeader(PartnerSettings.SettingsData settingsData) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
@@ -87,7 +87,11 @@ public class PartnerProfile {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
-        btnBack.setOnAction(e -> PartnerSettings.show(scene, settingsData));
+        btnBack.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerSettings.partnerSettingsScene(settingsData));
+            }
+        });
 
         Text title = new Text("Partner Account Profile");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #111827;");
@@ -99,7 +103,7 @@ public class PartnerProfile {
         return topBar;
     }
 
-    private static VBox createMainContent(Scene scene, PartnerSettings.SettingsData settingsData) {
+    private static VBox createMainContent(PartnerSettings.SettingsData settingsData) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(26, 40, 60, 40));
         content.setAlignment(Pos.TOP_CENTER);
@@ -107,7 +111,6 @@ public class PartnerProfile {
         VBox wrapper = new VBox(20);
         wrapper.setMaxWidth(820);
 
-        // 1. Hero Identity Banner Card
         BorderPane heroCard = new BorderPane();
         heroCard.setPadding(new Insets(22, 26, 22, 26));
         heroCard.setStyle(
@@ -122,7 +125,6 @@ public class PartnerProfile {
         HBox identityLeft = new HBox(16);
         identityLeft.setAlignment(Pos.CENTER_LEFT);
 
-        // --- Circular Avatar & Image Loader ---
         StackPane bigAvatar = createProfileAvatarNode(38);
 
         Button btnUploadPhoto = new Button("📷 Change Photo");
@@ -145,7 +147,7 @@ public class PartnerProfile {
                     new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
             );
 
-            Window window = (scene != null) ? scene.getWindow() : null;
+            Window window = Homepage.HomepageStage;
             File selectedFile = fileChooser.showOpenDialog(window);
             if (selectedFile != null) {
                 btnUploadPhoto.setText("Uploading...");
@@ -157,7 +159,6 @@ public class PartnerProfile {
                         String uploadedUrl = controller.imageUpload(selectedFile);
 
                         if (uploadedUrl != null && !uploadedUrl.isEmpty()) {
-                            // Update Cloud Firestore
                             if (PartnerConstants.UID != null && !PartnerConstants.UID.isEmpty()) {
                                 Firestore db = FirebaseConfig.getFireStore();
                                 Map<String, Object> photoUpdate = new HashMap<>();
@@ -170,14 +171,14 @@ public class PartnerProfile {
                                         .get();
                             }
 
-                            // Update in-memory session constants
                             PartnerConstants.PROFILE_PHOTO_URL = uploadedUrl;
 
                             Platform.runLater(() -> {
                                 btnUploadPhoto.setText("📷 Change Photo");
                                 btnUploadPhoto.setDisable(false);
-                                // Reload scene to immediately display the updated Cloudinary photo
-                                PartnerProfile.show(scene, settingsData);
+                                if (Homepage.HomepageStage != null) {
+                                    Homepage.HomepageStage.setScene(partnerProfileScene(settingsData));
+                                }
                             });
                         } else {
                             Platform.runLater(() -> {
@@ -224,7 +225,6 @@ public class PartnerProfile {
         heroCard.setRight(joinDateLbl);
         BorderPane.setAlignment(joinDateLbl, Pos.CENTER_RIGHT);
 
-        // 2. Lifetime Delivery Performance KPIs
         HBox kpiRow = new HBox(14);
         kpiRow.getChildren().addAll(
                 createKpiCard("Total Trips Completed", String.format("%,d", settingsData.totalSuccessfulDeliveries), "📦"),
@@ -234,7 +234,6 @@ public class PartnerProfile {
         );
         kpiRow.getChildren().forEach(n -> HBox.setHgrow(n, Priority.ALWAYS));
 
-        // 3. Detailed Profile & Contact Form Card
         VBox formCard = new VBox(16);
         formCard.setPadding(new Insets(24));
         formCard.setStyle(

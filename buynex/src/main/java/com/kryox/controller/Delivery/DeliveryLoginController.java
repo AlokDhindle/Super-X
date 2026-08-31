@@ -1,19 +1,19 @@
 package com.kryox.controller.Delivery;
 
+// import com.buynex.Main;
 import com.kryox.dao.Delivery.DeliveryPartnerDAO;
 import com.kryox.model.Delivery.PartnerConstants;
+import com.kryox.view.Delivery.Homepage;
 import com.kryox.view.Delivery.PartnerDashboard;
+
 import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import com.kryox.view.Delivery.PartnerDashboard; 
 
 public class DeliveryLoginController {
 
     private final DeliveryPartnerDAO partnerDAO = new DeliveryPartnerDAO();
 
-    public void handleLogin(String identifier, String password, Scene scene) {
+    public void handleLogin(String identifier, String password) {
         if (identifier == null || identifier.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Login Error", "Please enter your Phone Number/Email and Password.");
             return;
@@ -49,8 +49,8 @@ public class DeliveryLoginController {
                                 PartnerConstants.MASKED_ACCOUNT = "•••• •••• " + PartnerConstants.ACCOUNT_NUMBER;
                             }
 
-                            // Open Main Dashboard with user photo & data loaded
-                            PartnerDashboard.show(scene);
+                            // Open Main Dashboard via static scene factory
+                            Homepage.HomepageStage.setScene(PartnerDashboard.partnerDashboardScene());
                         } else {
                             showAlert(Alert.AlertType.ERROR, "Authentication Failed", "Incorrect email or password.");
                         }

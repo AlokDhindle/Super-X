@@ -22,45 +22,42 @@ import java.io.InputStream;
 
 public class RegistrationSuccess {
 
-    private static final String DEFAULT_IMAGE_PATH = "src/main/resources/assets/requirements/delivery2.jpeg";
+    private static final String DEFAULT_IMAGE_PATH = "assets/requirements/delivery2.jpeg";
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
     private static final String BG_COLOR = "#fbfbfe";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    public static void show(Scene scene) {
-        show(scene, DEFAULT_IMAGE_PATH);
+    // =========================================================================
+    // STATIC SCENE FACTORY METHODS
+    // =========================================================================
+    public static Scene registrationSuccessScene() {
+        return registrationSuccessScene(DEFAULT_IMAGE_PATH);
     }
 
-    public static void show(Scene scene, String customImagePath) {
+    public static Scene registrationSuccessScene(String customImagePath) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        // 1. Top Bar
-        root.setTop(createTopHeader(scene));
+        root.setTop(createTopHeader());
 
-        // 2. Main Content Container
         HBox mainContainer = new HBox(60);
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.setPadding(new Insets(50, 70, 70, 70));
 
         VBox leftColumn = createLeftColumn(customImagePath);
-        VBox rightColumn = createRightColumn(scene);
+        VBox rightColumn = createRightColumn();
 
         mainContainer.getChildren().addAll(leftColumn, rightColumn);
         root.setCenter(mainContainer);
 
-        // Smooth Scene Transition
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    // =========================================================================
-    // TOP HEADER
-    // =========================================================================
-    private static BorderPane createTopHeader(Scene scene) {
+    private static BorderPane createTopHeader() {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -78,24 +75,13 @@ public class RegistrationSuccess {
         HBox rightNav = new HBox(16);
         rightNav.setAlignment(Pos.CENTER_RIGHT);
 
-        // Runnable Actions
-        Runnable openSupportTask = new Runnable() {
-            @Override
-            public void run() {
-                DeliverySupport.show(scene, "SUCCESS");
-            }
-        };
-
-        Runnable openLoginTask = new Runnable() {
-            @Override
-            public void run() {
-                Deliverylogin.show(scene);
-            }
-        };
-
         Text support = new Text("ⓘ Support");
         support.setStyle("-fx-font-size: 14px; -fx-fill: #4b5563; -fx-font-weight: bold; -fx-cursor: hand;");
-        support.setOnMouseClicked(e -> openSupportTask.run());
+        support.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(DeliverySupport.supportScene("SUCCESS"));
+            }
+        });
 
         Button partnerLogin = new Button("Partner Login");
         partnerLogin.setPrefHeight(36);
@@ -110,7 +96,11 @@ public class RegistrationSuccess {
                 "-fx-padding: 0 18 0 18;" +
                 "-fx-cursor: hand;"
         );
-        partnerLogin.setOnAction(e -> openLoginTask.run());
+        partnerLogin.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
+        });
 
         rightNav.getChildren().addAll(support, partnerLogin);
         topBar.setRight(rightNav);
@@ -118,9 +108,6 @@ public class RegistrationSuccess {
         return topBar;
     }
 
-    // =========================================================================
-    // LEFT COLUMN (IMAGE CONTAINER + BADGES)
-    // =========================================================================
     private static VBox createLeftColumn(String path) {
         VBox col = new VBox(20);
         col.setPrefWidth(420);
@@ -212,10 +199,7 @@ public class RegistrationSuccess {
         return card;
     }
 
-    // =========================================================================
-    // RIGHT COLUMN (ACTIONS & REDIRECTS)
-    // =========================================================================
-    private static VBox createRightColumn(Scene scene) {
+    private static VBox createRightColumn() {
         VBox col = new VBox(20);
         col.setPrefWidth(520);
         col.setMaxWidth(520);
@@ -248,13 +232,6 @@ public class RegistrationSuccess {
         btnRow.setAlignment(Pos.CENTER_LEFT);
         btnRow.setPadding(new Insets(10, 0, 10, 0));
 
-        Runnable navigateToLoginTask = new Runnable() {
-            @Override
-            public void run() {
-                Deliverylogin.show(scene);
-            }
-        };
-
         Button btnGoToLogin = new Button("Go to Login  →");
         btnGoToLogin.setPrefHeight(46);
         btnGoToLogin.setStyle(
@@ -266,7 +243,11 @@ public class RegistrationSuccess {
                 "-fx-padding: 0 24 0 24;" +
                 "-fx-cursor: hand;"
         );
-        btnGoToLogin.setOnAction(e -> navigateToLoginTask.run());
+        btnGoToLogin.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
+        });
 
         btnRow.getChildren().add(btnGoToLogin);
 

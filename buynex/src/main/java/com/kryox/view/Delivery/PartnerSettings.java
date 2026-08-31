@@ -1,15 +1,24 @@
 package com.kryox.view.Delivery;
 
+import com.kryox.dao.Delivery.DeliveryPartnerDAO;
 import com.kryox.model.Delivery.PartnerConstants;
+
+import java.awt.Desktop;
+import java.net.URI;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -24,6 +33,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 
 public class PartnerSettings {
 
@@ -34,7 +44,7 @@ public class PartnerSettings {
     private static final String SIDEBAR_BG = "#ffffff";
 
     // =========================================================================
-    // DYNAMIC DATA MODEL FOR PARTNER SETTINGS (CONNECTED TO PARTNERCONSTANTS)
+    // DYNAMIC DATA MODEL FOR PARTNER SETTINGS
     // =========================================================================
     public static class SettingsData {
         public String partnerName;
@@ -49,18 +59,24 @@ public class PartnerSettings {
         // Vehicle & Assets
         public String vehicleType;
         public String vehicleIdNumber;
-        public String insuranceStatus = "Active";
+        public String insuranceStatus;
 
-        // Compliance & Documents
-        public String licenseStatus = "Verified";
-        public String bgCheckStatus = "Passed";
-        public String healthPermitStatus = "Verified";
+        // Compliance & Verification Documents
+        public String licenseStatus;
+        public String governmentIdStatus;
+        public String rcBookStatus;
+        public boolean isOverallApproved;
+
+        // Document URLs
+        public String licenseDocUrl;
+        public String governmentIdDocUrl;
+        public String rcBookDocUrl;
 
         // Rating & Performance
-        public double ratingScore = 4.9;
-        public String ratingQuote = "\"Fast and always polite! Great service.\"";
-        public int totalSuccessfulDeliveries = 284;
-        public double completionRate = 99.2;
+        public double ratingScore;
+        public String ratingQuote;
+        public int totalSuccessfulDeliveries;
+        public double completionRate;
 
         // App & Alert Preferences
         public boolean orderSoundAlerts = true;
@@ -73,7 +89,6 @@ public class PartnerSettings {
         public String accountHolderName;
 
         public SettingsData() {
-            // Dynamically load user constants
             this.partnerName           = PartnerConstants.FULL_NAME;
             this.fullName              = PartnerConstants.FULL_NAME;
             this.email                 = PartnerConstants.EMAIL;
@@ -82,29 +97,51 @@ public class PartnerSettings {
             this.vehicleIdNumber       = PartnerConstants.VEHICLE_NUMBER;
             this.partnerTier           = PartnerConstants.PARTNER_TIER;
 
-            // Bank details
             this.bankName              = PartnerConstants.BANK_NAME;
             this.maskedAccountNumber   = PartnerConstants.MASKED_ACCOUNT;
             this.accountHolderName     = PartnerConstants.FULL_NAME;
+
+            this.insuranceStatus       = PartnerConstants.INSURANCE_STATUS;
+            this.licenseStatus         = PartnerConstants.LICENSE_STATUS;
+            this.governmentIdStatus    = PartnerConstants.GOVERNMENT_ID_STATUS;
+            this.rcBookStatus          = PartnerConstants.RC_BOOK_STATUS;
+
+            this.licenseDocUrl         = PartnerConstants.LICENSE_DOC_URL;
+            this.governmentIdDocUrl    = PartnerConstants.ID_CARD_URL;
+            this.rcBookDocUrl          = PartnerConstants.RC_BOOK_URL;
+
+            this.ratingScore           = PartnerConstants.RATING_SCORE;
+            this.ratingQuote           = PartnerConstants.RATING_QUOTE;
+            this.totalSuccessfulDeliveries = PartnerConstants.TOTAL_DELIVERIES;
+            this.completionRate        = PartnerConstants.COMPLETION_RATE;
+
+            this.isOverallApproved     = PartnerConstants.IS_ADMIN_APPROVED || 
+                    (isStatusApproved(licenseStatus) 
+                     && isStatusApproved(governmentIdStatus) 
+                     && isStatusApproved(rcBookStatus));
+        }
+
+        private static boolean isStatusApproved(String stat) {
+            return stat != null && (stat.equalsIgnoreCase("Approved") || stat.equalsIgnoreCase("Verified") || stat.equalsIgnoreCase("Active"));
         }
     }
 
-    public static void show(Scene scene) {
-        show(scene, new SettingsData());
+    public static Scene partnerSettingsScene() {
+        return partnerSettingsScene(new SettingsData());
     }
 
-    public static void show(Scene scene, SettingsData data) {
+    public static Scene partnerSettingsScene(SettingsData data) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
         // 1. Top Search Header
-        root.setTop(createTopHeader(scene, data));
+        root.setTop(createTopHeader(data));
 
         // 2. Left Navigation Sidebar
-        root.setLeft(createSidebar(scene, data));
+        root.setLeft(createSidebar(data));
 
         // 3. Main Settings Content
-        VBox profileContent = createProfileContent(scene, data);
+        VBox profileContent = createProfileContent(data);
         ScrollPane scrollPane = new ScrollPane(profileContent);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
@@ -119,15 +156,12 @@ public class PartnerSettings {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    // =========================================================================
-    // TOP SEARCH HEADER BAR
-    // =========================================================================
-    private static BorderPane createTopHeader(Scene scene, SettingsData data) {
+    private static BorderPane createTopHeader(SettingsData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
@@ -169,11 +203,19 @@ public class PartnerSettings {
 
         Label notifIcon = new Label("🔔");
         notifIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #4b5563; -fx-cursor: hand;");
-        notifIcon.setOnMouseClicked(e -> PartnerNotifications.show(scene, "SETTINGS"));
+        notifIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNotifications.partnerNotificationsScene("SETTINGS"));
+            }
+        });
 
         Label chatIcon = new Label("💬");
         chatIcon.setStyle("-fx-font-size: 14px; -fx-text-fill: #4b5563; -fx-cursor: hand;");
-        chatIcon.setOnMouseClicked(e -> PartnerChatSupport.show(scene, "SETTINGS"));
+        chatIcon.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerChatSupport.partnerChatSupportScene("SETTINGS"));
+            }
+        });
 
         StackPane userAvatarPane = createAvatarNode(16);
         userAvatarPane.setStyle("-fx-cursor: hand;");
@@ -189,24 +231,35 @@ public class PartnerSettings {
 
         MenuItem itemProfile = new MenuItem("👤   View Profile & Settings");
         itemProfile.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemProfile.setOnAction(e -> PartnerProfile.show(scene, data));
+        itemProfile.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerProfile.partnerProfileScene(data));
+            }
+        });
 
         MenuItem itemAvailability = new MenuItem("⏱   Manage Availability");
         itemAvailability.setStyle("-fx-font-size: 11px; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
-        itemAvailability.setOnAction(e -> PartnerAvailability.show(scene));
+        itemAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         MenuItem itemLogout = new MenuItem("↪   Logout");
         itemLogout.setStyle("-fx-font-size: 11px; -fx-text-fill: #e11d48; -fx-padding: 6 14 6 14; -fx-cursor: hand;");
         itemLogout.setOnAction(e -> {
+            DeliveryPartnerDAO.stopListening();
             PartnerConstants.clear();
-            Deliverylogin.show(scene);
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
         });
 
         userMenu.getItems().addAll(itemProfile, itemAvailability, itemLogout);
 
         userAvatarPane.setOnMouseClicked(e -> {
             if (!userMenu.isShowing()) {
-                userMenu.show(userAvatarPane, javafx.geometry.Side.BOTTOM, -120, 8);
+                userMenu.show(userAvatarPane, Side.BOTTOM, -120, 8);
             } else {
                 userMenu.hide();
             }
@@ -218,10 +271,7 @@ public class PartnerSettings {
         return topBar;
     }
 
-    // =========================================================================
-    // 1. LEFT SIDEBAR
-    // =========================================================================
-    private static VBox createSidebar(Scene scene, SettingsData data) {
+    private static VBox createSidebar(SettingsData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
@@ -238,40 +288,53 @@ public class PartnerSettings {
         VBox logoBox = new VBox(logo);
         logoBox.setPadding(new Insets(0, 0, 15, 8));
 
-        Runnable openDashboardTask = () -> PartnerDashboard.show(scene);
-        Runnable openDeliveriesTask = () -> PartnerDeliveries.show(scene);
-        Runnable openNavigationTask = () -> PartnerNavigation.show(scene);
-        Runnable openEarningsTask = () -> PartnerEarnings.show(scene);
-        Runnable openAvailabilityTask = () -> PartnerAvailability.show(scene);
-        
-        Runnable logoutTask = () -> {
-            PartnerConstants.clear();
-            Deliverylogin.show(scene);
-        };
-
         Button btnDashboard = createSidebarNavButton("▤   Dashboard", false);
-        btnDashboard.setOnAction(e -> openDashboardTask.run());
+        btnDashboard.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDashboard.partnerDashboardScene());
+            }
+        });
 
         Button btnDeliveries = createSidebarNavButton("📦   My Deliveries", false);
-        btnDeliveries.setOnAction(e -> openDeliveriesTask.run());
+        btnDeliveries.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
+            }
+        });
 
         Button btnNavigation = createSidebarNavButton("🧭   Navigation", false);
-        btnNavigation.setOnAction(e -> openNavigationTask.run());
+        btnNavigation.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene());
+            }
+        });
 
         Button btnEarnings = createSidebarNavButton("💵   Earnings", false);
-        btnEarnings.setOnAction(e -> openEarningsTask.run());
+        btnEarnings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerEarnings.partnerEarningsScene());
+            }
+        });
 
         Button btnAvailability = createSidebarNavButton("⏱   Availability", false);
-        btnAvailability.setOnAction(e -> openAvailabilityTask.run());
+        btnAvailability.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerAvailability.availabilityScene());
+            }
+        });
 
         Button btnSettings = createSidebarNavButton("⚙   Settings", true);
+        btnSettings.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(partnerSettingsScene(data));
+            }
+        });
 
         VBox navList = new VBox(6, btnDashboard, btnDeliveries, btnNavigation, btnEarnings, btnAvailability, btnSettings);
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // Dynamic Profile Card
         VBox profileCard = new VBox(4);
         profileCard.setPadding(new Insets(10, 12, 10, 12));
         profileCard.setStyle(
@@ -284,9 +347,9 @@ public class PartnerSettings {
 
         HBox userBox = new HBox(8);
         userBox.setAlignment(Pos.CENTER_LEFT);
-        
+
         StackPane avatar = createAvatarNode(14);
-        
+
         VBox userDetails = new VBox(1);
         Label userName = new Label(data.partnerName);
         userName.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #111827;");
@@ -296,28 +359,34 @@ public class PartnerSettings {
         userBox.getChildren().addAll(avatar, userDetails);
         profileCard.getChildren().add(userBox);
 
-        profileCard.setOnMouseClicked(e -> PartnerProfile.show(scene, data));
+        profileCard.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerProfile.partnerProfileScene(data));
+            }
+        });
 
         Button btnLogout = new Button("↪   Logout");
         btnLogout.setMaxWidth(Double.MAX_VALUE);
         btnLogout.setAlignment(Pos.CENTER_LEFT);
         btnLogout.setPrefHeight(34);
         btnLogout.setStyle("-fx-font-size: 12px; -fx-text-fill: #e11d48; -fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0 14 0 14;");
-        btnLogout.setOnAction(e -> logoutTask.run());
+        btnLogout.setOnAction(e -> {
+            DeliveryPartnerDAO.stopListening();
+            PartnerConstants.clear();
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
+        });
 
         VBox bottomNav = new VBox(6, profileCard, btnLogout);
         sidebar.getChildren().addAll(logoBox, navList, spacer, bottomNav);
         return sidebar;
     }
 
-    // =========================================================================
-    // 2. MAIN PROFILE BODY
-    // =========================================================================
-    private static VBox createProfileContent(Scene scene, SettingsData data) {
+    private static VBox createProfileContent(SettingsData data) {
         VBox main = new VBox(22);
         main.setPadding(new Insets(26, 35, 60, 35));
         main.setFillWidth(true);
-        main.setMinHeight(Region.USE_PREF_SIZE);
 
         VBox titleBox = new VBox(3);
         Text title = new Text("Partner Settings & Preferences");
@@ -332,7 +401,7 @@ public class PartnerSettings {
         VBox leftCol = new VBox(18);
         leftCol.getChildren().addAll(
                 createShiftAvailabilityCard(data),
-                createPersonalAndVehicleCard(scene, data),
+                createPersonalAndVehicleCard(data),
                 createComplianceCard(data),
                 createAppPreferencesCard(data)
         );
@@ -344,8 +413,8 @@ public class PartnerSettings {
         rightCol.setMaxWidth(310);
         rightCol.getChildren().addAll(
                 createRatingCard(data),
-                createPayoutMethodCard(scene, data),
-                createHelpSupportCard(scene)
+                createPayoutMethodCard(data),
+                createHelpSupportCard()
         );
         HBox.setHgrow(rightCol, Priority.NEVER);
 
@@ -356,7 +425,6 @@ public class PartnerSettings {
 
     private static VBox createShiftAvailabilityCard(SettingsData data) {
         VBox card = createCard();
-
         BorderPane row = new BorderPane();
 
         VBox textPart = new VBox(3);
@@ -409,7 +477,7 @@ public class PartnerSettings {
         return card;
     }
 
-    private static VBox createPersonalAndVehicleCard(Scene scene, SettingsData data) {
+    private static VBox createPersonalAndVehicleCard(SettingsData data) {
         VBox card = createCard();
 
         HBox split = new HBox(24);
@@ -421,7 +489,11 @@ public class PartnerSettings {
         pTitle.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #111827;");
         Label editLbl = new Label("Edit Profile");
         editLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: " + ORANGE_PRIMARY + "; -fx-font-weight: bold; -fx-cursor: hand;");
-        editLbl.setOnMouseClicked(e -> PartnerProfile.show(scene, data));
+        editLbl.setOnMouseClicked(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerProfile.partnerProfileScene(data));
+            }
+        });
         personalHeader.setLeft(pTitle);
         personalHeader.setRight(editLbl);
 
@@ -467,23 +539,29 @@ public class PartnerSettings {
         BorderPane header = new BorderPane();
         Label title = new Label("Compliance & Verified Documents");
         title.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #111827;");
-        Label allDone = new Label("✓ 100% Compliant");
-        allDone.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #15803d; -fx-background-color: #dcfce7; -fx-background-radius: 6; -fx-padding: 2 6 2 6;");
+
+        Label statusBadge = new Label(data.isOverallApproved ? "✓ Approved" : "⏳ Pending Approval");
+        if (data.isOverallApproved) {
+            statusBadge.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #15803d; -fx-background-color: #dcfce7; -fx-background-radius: 6; -fx-padding: 2 6 2 6;");
+        } else {
+            statusBadge.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #b45309; -fx-background-color: #fef3c7; -fx-background-radius: 6; -fx-padding: 2 6 2 6;");
+        }
+
         header.setLeft(title);
-        header.setRight(allDone);
+        header.setRight(statusBadge);
 
         HBox docChips = new HBox(12);
         docChips.getChildren().addAll(
-                createDocChip("Driving License", data.licenseStatus),
-                createDocChip("Police Verification", data.bgCheckStatus),
-                createDocChip("Health & Food Permit", data.healthPermitStatus)
+                createDocChip("Driving License", data.licenseStatus, data.licenseDocUrl),
+                createDocChip("Government ID Proof", data.governmentIdStatus, data.governmentIdDocUrl),
+                createDocChip("Vehicle RC Book", data.rcBookStatus, data.rcBookDocUrl)
         );
 
         card.getChildren().addAll(header, docChips);
         return card;
     }
 
-    private static HBox createDocChip(String docName, String status) {
+    private static HBox createDocChip(String docName, String status, String docUrl) {
         HBox chip = new HBox(8);
         chip.setAlignment(Pos.CENTER_LEFT);
         chip.setPadding(new Insets(10, 12, 10, 12));
@@ -496,17 +574,122 @@ public class PartnerSettings {
         HBox.setHgrow(chip, Priority.ALWAYS);
 
         Label icon = new Label("📄");
-        icon.setStyle("-fx-font-size: 14px;");
+        icon.setStyle("-fx-font-size: 16px;");
 
-        VBox info = new VBox(1);
+        VBox info = new VBox(2);
         Label name = new Label(docName);
         name.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #1f2937;");
-        Label stat = new Label("✓ " + status);
-        stat.setStyle("-fx-font-size: 9px; -fx-text-fill: #10b981; -fx-font-weight: bold;");
-        info.getChildren().addAll(name, stat);
 
+        boolean approved = status != null && (status.equalsIgnoreCase("Approved") || status.equalsIgnoreCase("Verified") || status.equalsIgnoreCase("Active"));
+
+        Label stat = new Label(approved ? "✓ Approved" : "⏳ " + (status != null && !status.isEmpty() ? status : "Pending Approval"));
+        stat.setStyle("-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: " + (approved ? "#10b981;" : "#d97706;"));
+
+        Button btnView = new Button("👁 View Document");
+        btnView.setStyle(
+                "-fx-background-color: transparent;" +
+                "-fx-text-fill: " + ORANGE_PRIMARY + ";" +
+                "-fx-font-size: 10px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-padding: 2 0 0 0;" +
+                "-fx-cursor: hand;"
+        );
+        btnView.setOnMouseEntered(e -> btnView.setStyle("-fx-background-color: transparent; -fx-text-fill: #B84208; -fx-font-size: 10px; -fx-font-weight: bold; -fx-underline: true; -fx-padding: 2 0 0 0; -fx-cursor: hand;"));
+        btnView.setOnMouseExited(e -> btnView.setStyle("-fx-background-color: transparent; -fx-text-fill: " + ORANGE_PRIMARY + "; -fx-font-size: 10px; -fx-font-weight: bold; -fx-underline: false; -fx-padding: 2 0 0 0; -fx-cursor: hand;"));
+
+        btnView.setOnAction(e -> openDocumentViewer(docName, docUrl));
+
+        info.getChildren().addAll(name, stat, btnView);
         chip.getChildren().addAll(icon, info);
         return chip;
+    }
+
+    private static void openDocumentViewer(String docTitle, String url) {
+        if (url == null || url.trim().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Document Not Available");
+            alert.setHeaderText(null);
+            alert.setContentText("No document upload found for: " + docTitle);
+            if (Homepage.HomepageStage != null) {
+                alert.initOwner(Homepage.HomepageStage);
+            }
+            alert.showAndWait();
+            return;
+        }
+
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle(docTitle + " - Preview");
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        if (Homepage.HomepageStage != null) {
+            dialog.initOwner(Homepage.HomepageStage);
+        }
+
+        VBox content = new VBox(12);
+        content.setPadding(new Insets(16));
+        content.setAlignment(Pos.CENTER);
+        content.setStyle("-fx-background-color: #ffffff;");
+
+        Label titleLbl = new Label(docTitle);
+        titleLbl.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #111827;");
+
+        StackPane imageContainer = new StackPane();
+        imageContainer.setPrefSize(480, 360);
+        imageContainer.setMaxSize(480, 360);
+        imageContainer.setStyle("-fx-background-color: #f3f4f6; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8;");
+
+        ProgressIndicator loader = new ProgressIndicator();
+        imageContainer.getChildren().add(loader);
+
+        try {
+            Image docImage = new Image(url, true);
+            ImageView imageView = new ImageView(docImage);
+            imageView.setFitWidth(460);
+            imageView.setFitHeight(340);
+            imageView.setPreserveRatio(true);
+
+            docImage.progressProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal.doubleValue() >= 1.0) {
+                    imageContainer.getChildren().remove(loader);
+                    if (!docImage.isError()) {
+                        imageContainer.getChildren().add(imageView);
+                    } else {
+                        Label err = new Label("Could not load image preview. Click below to open in browser.");
+                        err.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 11px;");
+                        imageContainer.getChildren().add(err);
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            imageContainer.getChildren().remove(loader);
+            Label err = new Label("Could not load document preview.");
+            err.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 11px;");
+            imageContainer.getChildren().add(err);
+        }
+
+        Button btnBrowser = new Button("🌐 Open in Browser");
+        btnBrowser.setStyle(
+                "-fx-background-color: #f8f8fb;" +
+                "-fx-border-color: #e5e7eb;" +
+                "-fx-border-radius: 6;" +
+                "-fx-background-radius: 6;" +
+                "-fx-text-fill: #374151;" +
+                "-fx-font-size: 11px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-cursor: hand;"
+        );
+        btnBrowser.setOnAction(e -> {
+            try {
+                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                    Desktop.getDesktop().browse(new URI(url));
+                }
+            } catch (Exception ignored) {}
+        });
+
+        content.getChildren().addAll(titleLbl, imageContainer, btnBrowser);
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+        dialog.showAndWait();
     }
 
     private static VBox createAppPreferencesCard(SettingsData data) {
@@ -579,7 +762,7 @@ public class PartnerSettings {
         return card;
     }
 
-    private static VBox createPayoutMethodCard(Scene scene, SettingsData data) {
+    private static VBox createPayoutMethodCard(SettingsData data) {
         VBox card = createCard();
 
         BorderPane titleRow = new BorderPane();
@@ -622,13 +805,17 @@ public class PartnerSettings {
                 "-fx-cursor: hand;"
         );
 
-        btnChange.setOnAction(e -> ChangePayout.show(scene));
+        btnChange.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(ChangePayout.changePayoutScene(data));
+            }
+        });
 
         card.getChildren().addAll(titleRow, debitCard, btnChange);
         return card;
     }
 
-    private static VBox createHelpSupportCard(Scene scene) {
+    private static VBox createHelpSupportCard() {
         VBox card = createCard();
 
         Label title = new Label("Help & Support");
@@ -654,7 +841,11 @@ public class PartnerSettings {
                 "-fx-font-size: 11px;" +
                 "-fx-cursor: hand;"
         );
-        btnContact.setOnAction(e -> PartnerChatSupport.show(scene, "SETTINGS"));
+        btnContact.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerChatSupport.partnerChatSupportScene("SETTINGS"));
+            }
+        });
 
         card.getChildren().addAll(title, accordion, btnContact);
         return card;
@@ -672,9 +863,6 @@ public class PartnerSettings {
         return row;
     }
 
-    // =========================================================================
-    // DYNAMIC AVATAR BUILDER
-    // =========================================================================
     private static StackPane createAvatarNode(double radius) {
         StackPane avatarPane = new StackPane();
         avatarPane.setPrefSize(radius * 2, radius * 2);
@@ -742,11 +930,13 @@ public class PartnerSettings {
         Label l = new Label(label);
         l.setStyle("-fx-font-size: 9px; -fx-text-fill: #9ca3af;");
 
+        boolean approved = status != null && (status.equalsIgnoreCase("Approved") || status.equalsIgnoreCase("Verified") || status.equalsIgnoreCase("Active"));
+
         HBox statusBox = new HBox(4);
         statusBox.setAlignment(Pos.CENTER_LEFT);
-        Circle dot = new Circle(3, Color.web("#22c55e"));
-        Label v = new Label(status != null && !status.isEmpty() ? status : "Active");
-        v.setStyle("-fx-font-size: 11px; -fx-text-fill: #22c55e; -fx-font-weight: bold;");
+        Circle dot = new Circle(3, approved ? Color.web("#22c55e") : Color.web("#d97706"));
+        Label v = new Label(approved ? "Approved" : (status != null && !status.isEmpty() ? status : "Pending Approval"));
+        v.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: " + (approved ? "#22c55e;" : "#d97706;"));
         statusBox.getChildren().addAll(dot, v);
 
         box.getChildren().addAll(l, statusBox);

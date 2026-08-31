@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -57,11 +58,14 @@ public class DeliveryRegistration2 {
     private static CheckBox termsCheckbox;
     private static final DeliveryRegistrationController controller = new DeliveryRegistrationController();
 
-    public static void show(Scene scene) {
+    // =========================================================================
+    // STATIC SCENE FACTORY METHOD (SHOPKEEPER PATTERN)
+    // =========================================================================
+    public static Scene registrationScene() {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + BG_COLOR + ";");
 
-        root.setTop(createTopBar(scene));
+        root.setTop(createTopBar());
 
         VBox content = new VBox(22);
         content.setAlignment(Pos.TOP_CENTER);
@@ -73,10 +77,10 @@ public class DeliveryRegistration2 {
                 createHeading(),
                 createPersonalDetails(),
                 createVehicleInformation(),
-                createDocuments(scene),
+                createDocuments(),
                 createPayoutSecurity(),
                 createSecuritySection(),
-                createSubmissionSection(scene));
+                createSubmissionSection());
 
         ScrollPane scrollPane = new ScrollPane(content);
         scrollPane.setFitToWidth(true);
@@ -91,12 +95,12 @@ public class DeliveryRegistration2 {
 
         root.setCenter(scrollPane);
 
-        if (scene != null) {
-            scene.setRoot(root);
-        }
+        Scene scene = new Scene(root, 1280, 720);
+        scene.setFill(Color.web(BG_COLOR));
+        return scene;
     }
 
-    private static BorderPane createTopBar(Scene scene) {
+    private static BorderPane createTopBar() {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(55);
         topBar.setMinHeight(55);
@@ -104,7 +108,8 @@ public class DeliveryRegistration2 {
         topBar.setStyle("-fx-background-color: #eee5df; -fx-border-color: #e0d5ce; -fx-border-width: 0 0 1 0;");
 
         Text logo = new Text("Buynex");
-        logo.setStyle("-fx-font-size: 30px; -fx-fill: linear-gradient(to right, #B84208, #F36A00); -fx-font-weight: bold;");
+        logo.setStyle(
+                "-fx-font-size: 30px; -fx-fill: linear-gradient(to right, #B84208, #F36A00); -fx-font-weight: bold;");
 
         HBox logoBox = new HBox(logo);
         logoBox.setAlignment(Pos.CENTER_LEFT);
@@ -115,12 +120,17 @@ public class DeliveryRegistration2 {
         needHelp.setStyle("-fx-font-size: 14px; -fx-fill: #333333;");
 
         Button partnerLogin = new Button("Partner Login");
-        partnerLogin.setStyle("-fx-font-size: 14px;" +
-                "-fx-text-fill: #c95b14;" +
-                "-fx-background-color: transparent;" +
-                "-fx-font-weight: bold;" +
-                "-fx-cursor: hand;");
-        partnerLogin.setOnAction(e -> Deliverylogin.show(scene));
+        partnerLogin.setStyle(
+                "-fx-font-size: 14px;" +
+                        "-fx-text-fill: #c95b14;" +
+                        "-fx-background-color: transparent;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-cursor: hand;");
+        partnerLogin.setOnAction(e -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(Deliverylogin.deliveryLoginScene());
+            }
+        });
 
         HBox rightBox = new HBox(8, needHelp, partnerLogin);
         rightBox.setAlignment(Pos.CENTER_RIGHT);
@@ -210,27 +220,24 @@ public class DeliveryRegistration2 {
     // ==========================================
     // 3. DOCUMENT UPLOADS (CLOUDINARY & ADMIN ROUTING)
     // ==========================================
-    private static VBox createDocuments(Scene scene) {
+    private static VBox createDocuments() {
         VBox card = createCard();
         Text title = createSectionTitle("3. Document Uploads");
 
         HBox documents = new HBox(14);
         documents.setAlignment(Pos.CENTER);
 
-        // Profile Photo: Uploads to Cloudinary & sets PartnerConstants immediately
-        Button profile = createDocumentUploadButton(scene, "Profile Photo\n(Live Avatar)", "profilePhoto", true);
-
-        // Verification Documents: Uploaded to Cloudinary and routed to Admin for review
-        Button idCard = createDocumentUploadButton(scene, "Government ID Proof\n(Needs Admin Review)", "idCard", false);
-        Button license = createDocumentUploadButton(scene, "Driving License\n(Front & Back)", "licenseDoc", false);
-        Button rc = createDocumentUploadButton(scene, "Vehicle RC Book\n(Registration Copy)", "rcBook", false);
+        Button profile = createDocumentUploadButton("Profile Photo\n(Live Avatar)", "profilePhoto", true);
+        Button idCard = createDocumentUploadButton("Government ID Proof\n(Needs Admin Review)", "idCard", false);
+        Button license = createDocumentUploadButton("Driving License\n(Front & Back)", "licenseDoc", false);
+        Button rc = createDocumentUploadButton("Vehicle RC Book\n(Registration Copy)", "rcBook", false);
 
         documents.getChildren().addAll(profile, idCard, license, rc);
         card.getChildren().addAll(title, documents);
         return card;
     }
 
-    private static Button createDocumentUploadButton(Scene scene, String label, String key, boolean isProfileAvatar) {
+    private static Button createDocumentUploadButton(String label, String key, boolean isProfileAvatar) {
         Button button = new Button("Upload\n" + label);
         button.setPrefWidth(200);
         button.setPrefHeight(80);
@@ -252,10 +259,9 @@ public class DeliveryRegistration2 {
             FileChooser chooser = new FileChooser();
             chooser.setTitle("Select " + label.replace("\n", " "));
             chooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.pdf")
-            );
+                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.pdf"));
 
-            Window window = (scene != null) ? scene.getWindow() : null;
+            Window window = Homepage.HomepageStage;
             File file = chooser.showOpenDialog(window);
             if (file != null) {
                 button.setText("Uploading to Cloud...");
@@ -370,7 +376,7 @@ public class DeliveryRegistration2 {
     // ==========================================
     // SUBMISSION SECTION & REGISTRATION DISPATCH
     // ==========================================
-    private static VBox createSubmissionSection(Scene scene) {
+    private static VBox createSubmissionSection() {
         VBox section = new VBox(16);
         section.setMaxWidth(920);
         section.setAlignment(Pos.CENTER_LEFT);
@@ -407,13 +413,16 @@ public class DeliveryRegistration2 {
             partner.setVehicleNumber(vehicleNumberField.getText().trim());
             partner.setDrivingLicense(licenseField.getText().trim());
 
-            // Cloudinary Photo & Document URLs
-            partner.setProfilePhotoPath(uploadedCloudinaryUrls.get("profilePhoto"));
-            partner.setIdCardPath(uploadedCloudinaryUrls.get("idCard"));
-            partner.setLicenseDocPath(uploadedCloudinaryUrls.get("licenseDoc"));
-            partner.setRcBookPath(uploadedCloudinaryUrls.get("rcBook"));
+            String photoUrl = uploadedCloudinaryUrls.getOrDefault("profilePhoto", "");
+            String idUrl = uploadedCloudinaryUrls.getOrDefault("idCard", "");
+            String dlUrl = uploadedCloudinaryUrls.getOrDefault("licenseDoc", "");
+            String rcUrl = uploadedCloudinaryUrls.getOrDefault("rcBook", "");
 
-            // Verification status defaults to PENDING_APPROVAL for Admin review
+            partner.setProfilePhotoPath(photoUrl);
+            partner.setIdCardPath(idUrl);
+            partner.setLicenseDocPath(dlUrl);
+            partner.setRcBookPath(rcUrl);
+
             partner.setAccountHolder(accountHolderField.getText().trim());
             partner.setBankName(bankNameField.getText().trim());
             partner.setAccountNumber(accountNumberField.getText().trim());
@@ -425,7 +434,6 @@ public class DeliveryRegistration2 {
             String password = passwordField.getText();
             String confirmPassword = confirmPasswordField.getText();
 
-            // Set PartnerConstants immediately for live session rendering
             PartnerConstants.FULL_NAME = partner.getFullName().isEmpty() ? "Partner" : partner.getFullName();
             PartnerConstants.EMAIL = partner.getEmail();
             PartnerConstants.PHONE = partner.getMobile();
@@ -435,16 +443,20 @@ public class DeliveryRegistration2 {
             PartnerConstants.BANK_NAME = partner.getBankName().isEmpty() ? "HDFC Bank" : partner.getBankName();
             PartnerConstants.ACCOUNT_NUMBER = partner.getAccountNumber().isEmpty() ? "000000000000" : partner.getAccountNumber();
             PartnerConstants.IFSC_CODE = partner.getIfscCode().isEmpty() ? "HDFC0000123" : partner.getIfscCode();
-            PartnerConstants.PROFILE_PHOTO_URL = uploadedCloudinaryUrls.getOrDefault("profilePhoto", "");
+            
+            PartnerConstants.PROFILE_PHOTO_URL = photoUrl;
+            PartnerConstants.ID_CARD_URL = idUrl;
+            PartnerConstants.LICENSE_DOC_URL = dlUrl;
+            PartnerConstants.RC_BOOK_URL = rcUrl;
 
             if (PartnerConstants.ACCOUNT_NUMBER.length() >= 4) {
-                PartnerConstants.MASKED_ACCOUNT = "•••• •••• " + PartnerConstants.ACCOUNT_NUMBER.substring(PartnerConstants.ACCOUNT_NUMBER.length() - 4);
+                PartnerConstants.MASKED_ACCOUNT = "•••• •••• "
+                        + PartnerConstants.ACCOUNT_NUMBER.substring(PartnerConstants.ACCOUNT_NUMBER.length() - 4);
             } else {
                 PartnerConstants.MASKED_ACCOUNT = "•••• •••• " + PartnerConstants.ACCOUNT_NUMBER;
             }
 
-            // Execute Controller flow (saves partner document with admin verification flags in Firestore)
-            controller.handleRegistration(partner, password, confirmPassword, termsCheckbox.isSelected(), scene);
+            controller.handleRegistration(partner, password, confirmPassword, termsCheckbox.isSelected());
         });
 
         section.getChildren().addAll(termsCheckbox, registerButton);
