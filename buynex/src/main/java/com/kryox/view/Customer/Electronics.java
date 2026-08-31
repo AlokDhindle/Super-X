@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kryox.controller.Customer.CARTcontroller;
+import com.kryox.controller.Shopkeeper.ProductController;
+import com.kryox.model.Shopkeeper.ProductModel;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -1222,7 +1224,7 @@ public class Electronics {
 
         Label productCount =
                 new Label(
-                        "12 products"
+                        "0 products"
                 );
 
         productCount.setStyle(
@@ -1381,8 +1383,9 @@ public class Electronics {
         );
 
         // =========================================================
-        // PRODUCT GRID
+        // PRODUCT GRID - FIREBASE ELECTRONICS PRODUCTS
         // =========================================================
+
         FlowPane productGrid =
                 new FlowPane();
 
@@ -1394,10 +1397,7 @@ public class Electronics {
         );
 
         /*
-         * IMPORTANT:
-         * FlowPane is used instead of HBox.
-         * Cards will automatically move to the next row
-         * instead of getting cut off.
+         * FlowPane automatically moves cards to the next row.
          */
         productGrid.setPrefWrapLength(
                 850
@@ -1406,53 +1406,123 @@ public class Electronics {
         List<String> cartItems =
                 new ArrayList<>();
 
-        // CARD 1
-        VBox product1 =
-                createProductCard(
-                        "MacBook Pro M3",
-                        "Apple",
-                        "$1,999",
-                        "Premium Laptop",
-                        "macbook.png",
-                        "💻",
-                        "★★★★★  4.9",
-                        cartItems,
-                        cartButton
+        // ---------------------------------------------------------
+        // FETCH PRODUCTS FROM FIREBASE
+        // ---------------------------------------------------------
+
+        try {
+
+                /*
+                 * ProductController initializes ProductDAO.
+                 * ProductDAO reads Products from all Shopkeepers.
+                 */
+                ProductController productController =
+                        new ProductController();
+
+                ArrayList<ProductModel> firebaseProducts =
+                        productController.fetchProducts();
+
+                int electronicsCount = 0;
+
+                if (firebaseProducts != null) {
+
+                        for (ProductModel product :
+                                firebaseProducts) {
+
+                                if (product == null) {
+                                        continue;
+                                }
+
+                                String category =
+                                        product.getCategory();
+
+                                /*
+                                 * ONLY ELECTRONICS PRODUCTS
+                                 */
+                                if (category == null ||
+                                        !category.trim()
+                                                .equalsIgnoreCase(
+                                                        "Electronics"
+                                                )) {
+
+                                        continue;
+                                }
+
+                                VBox productCard =
+                                        createProductCard(
+                                                product,
+                                                cartItems,
+                                                cartButton
+                                        );
+
+                                productGrid.getChildren().add(
+                                        productCard
+                                );
+
+                                electronicsCount++;
+                        }
+                }
+
+                productCount.setText(
+                        electronicsCount + " products"
                 );
 
-        // CARD 2
-        VBox product2 =
-                createProductCard(
-                        "Galaxy S24 Ultra",
-                        "Samsung  •  5% OFF",
-                        "$1,199",
-                        "Flagship Smartphone",
-                        "s24.png",
-                        "📱",
-                        "★★★★★  4.8",
-                        cartItems,
-                        cartButton
+                System.out.println(
+                        "Electronics products displayed: "
+                                + electronicsCount
                 );
 
-        // CARD 3
-        VBox product3 =
-                createProductCard(
-                        "WH-1000XM5",
-                        "Sony",
-                        "$349",
-                        "Noise Cancelling Audio",
-                        "sony-headphones.png",
-                        "🎧",
-                        "★★★★★  4.7",
-                        cartItems,
-                        cartButton
+                // -------------------------------------------------
+                // NO PRODUCT MESSAGE
+                // -------------------------------------------------
+
+                if (electronicsCount == 0) {
+
+                        Label noProducts =
+                                new Label(
+                                        "No Electronics products found."
+                                );
+
+                        noProducts.setStyle(
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-text-fill: #77747A;" +
+                                "-fx-padding: 30;"
+                        );
+
+                        productGrid.getChildren().add(
+                                noProducts
+                        );
+                }
+
+        } catch (Exception e) {
+
+                System.out.println(
+                        "ERROR: Electronics products could not be loaded."
                 );
 
-        productGrid.getChildren().addAll(
-                product1,
-                product2,
-                product3
-        );
+                e.printStackTrace();
+
+                productCount.setText(
+                        "0 products"
+                );
+
+                Label errorLabel =
+                        new Label(
+                                "Unable to load Electronics products."
+                        );
+
+                errorLabel.setStyle(
+                        "-fx-font-size: 14px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #B00020;" +
+                        "-fx-padding: 30;"
+                );
+
+                productGrid.getChildren().add(
+                        errorLabel
+                );
+        }
 
         productsContent.getChildren().addAll(
                 productHeading,
@@ -1578,24 +1648,71 @@ public class Electronics {
     }
 
     // =============================================================
-    // PREMIUM PRODUCT CARD
+    // DYNAMIC ELECTRONICS PRODUCT CARD
     // =============================================================
-    // =============================================================
-    // PREMIUM PRODUCT CARD
-    // =============================================================
+
     private VBox createProductCard(
-            String productName,
-            String brand,
-            String price,
-            String category,
-            String imageName,
-            String fallbackIcon,
-            String rating,
+            ProductModel product,
             List<String> cartItems,
             Button cartButton
     ) {
 
-        VBox card = new VBox(9);
+        // ---------------------------------------------------------
+        // PRODUCT DATA FROM FIREBASE
+        // ---------------------------------------------------------
+
+        String productName =
+                safeText(
+                        product.getProductName(),
+                        "Unnamed Product"
+                );
+
+        String brand =
+                safeText(
+                        product.getBrand(),
+                        "Brand"
+                );
+
+        String category =
+                safeText(
+                        product.getCategory(),
+                        "Electronics"
+                );
+
+        String imageUrl =
+                safeText(
+                        product.getImageUrl(),
+                        ""
+                );
+
+        double sellingPrice =
+                product.getSellingPrice() != null
+                        ? product.getSellingPrice()
+                        : 0.0;
+
+        double discount =
+                product.getDiscount() != null
+                        ? product.getDiscount()
+                        : 0.0;
+
+        int stockQuantity =
+                Math.max(
+                        0,
+                        product.getStockQuantity()
+                );
+
+        String status =
+                safeText(
+                        product.getStatus(),
+                        ""
+                );
+
+        // ---------------------------------------------------------
+        // CARD
+        // ---------------------------------------------------------
+
+        VBox card =
+                new VBox(9);
 
         card.setPrefWidth(270);
         card.setMinWidth(270);
@@ -1605,7 +1722,9 @@ public class Electronics {
         card.setMinHeight(365);
         card.setMaxHeight(365);
 
-        card.setPadding(new Insets(12));
+        card.setPadding(
+                new Insets(12)
+        );
 
         card.setStyle(
                 "-fx-background-color: white;" +
@@ -1616,18 +1735,25 @@ public class Electronics {
                 "-fx-cursor: hand;"
         );
 
-        DropShadow shadow = new DropShadow();
+        DropShadow shadow =
+                new DropShadow();
+
         shadow.setRadius(13);
         shadow.setOffsetY(5);
-        shadow.setColor(Color.rgb(0, 0, 0, 0.08));
+        shadow.setColor(
+                Color.rgb(0, 0, 0, 0.08)
+        );
 
         card.setEffect(shadow);
 
-        // =========================================================
+        // ---------------------------------------------------------
         // HOVER
-        // =========================================================
+        // ---------------------------------------------------------
+
         card.setOnMouseEntered(e -> {
+
             card.setTranslateY(-4);
+
             card.setStyle(
                     "-fx-background-color: white;" +
                     "-fx-background-radius: 18;" +
@@ -1639,7 +1765,9 @@ public class Electronics {
         });
 
         card.setOnMouseExited(e -> {
+
             card.setTranslateY(0);
+
             card.setStyle(
                     "-fx-background-color: white;" +
                     "-fx-background-radius: 18;" +
@@ -1650,23 +1778,43 @@ public class Electronics {
             );
         });
 
-        // =========================================================
+        // ---------------------------------------------------------
         // IMAGE BOX
-        // =========================================================
-        StackPane imageBox = new StackPane();
+        // ---------------------------------------------------------
 
-        imageBox.setPrefSize(246, 165);
-        imageBox.setMinSize(246, 165);
-        imageBox.setMaxSize(246, 165);
-        imageBox.setAlignment(Pos.CENTER);
+        StackPane imageBox =
+                new StackPane();
+
+        imageBox.setPrefSize(
+                246,
+                165
+        );
+
+        imageBox.setMinSize(
+                246,
+                165
+        );
+
+        imageBox.setMaxSize(
+                246,
+                165
+        );
+
+        imageBox.setAlignment(
+                Pos.CENTER
+        );
 
         imageBox.setStyle(
                 "-fx-background-color: #F8F7F8;" +
                 "-fx-background-radius: 14;"
         );
 
+        // ---------------------------------------------------------
         // CATEGORY BADGE
-        Label categoryBadge = new Label(category);
+        // ---------------------------------------------------------
+
+        Label categoryBadge =
+                new Label(category);
 
         categoryBadge.setStyle(
                 "-fx-background-color: " + ORANGE_LIGHT + ";" +
@@ -1677,41 +1825,79 @@ public class Electronics {
                 "-fx-padding: 5 8 5 8;"
         );
 
-        StackPane.setAlignment(categoryBadge, Pos.TOP_LEFT);
-        StackPane.setMargin(categoryBadge, new Insets(9, 0, 0, 9));
-
-        // PRODUCT IMAGE
-        URL imageUrl = getClass().getResource(
-                "/assets/images/Electronics/" + imageName
+        StackPane.setAlignment(
+                categoryBadge,
+                Pos.TOP_LEFT
         );
 
-        if (imageUrl != null) {
+        StackPane.setMargin(
+                categoryBadge,
+                new Insets(9, 0, 0, 9)
+        );
 
-            ImageView imageView = new ImageView(
-                    new Image(imageUrl.toExternalForm())
-            );
+        // ---------------------------------------------------------
+        // FIREBASE IMAGE
+        // ---------------------------------------------------------
 
-            imageView.setFitWidth(205);
-            imageView.setFitHeight(140);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
+        if (!imageUrl.isEmpty()) {
 
-            imageBox.getChildren().add(imageView);
+            try {
+
+                Image image =
+                        new Image(
+                                imageUrl,
+                                205,
+                                140,
+                                true,
+                                true,
+                                true
+                        );
+
+                if (!image.isError()) {
+
+                    ImageView imageView =
+                            new ImageView(image);
+
+                    imageView.setFitWidth(205);
+                    imageView.setFitHeight(140);
+                    imageView.setPreserveRatio(true);
+                    imageView.setSmooth(true);
+
+                    imageBox.getChildren().add(
+                            imageView
+                    );
+
+                } else {
+
+                    addFallbackIcon(
+                            imageBox
+                    );
+                }
+
+            } catch (Exception e) {
+
+                addFallbackIcon(
+                        imageBox
+                );
+            }
 
         } else {
 
-            Label fallback = new Label(fallbackIcon);
-            fallback.setStyle("-fx-font-size: 70px;");
-
-            imageBox.getChildren().add(fallback);
+            addFallbackIcon(
+                    imageBox
+            );
         }
 
-        imageBox.getChildren().add(categoryBadge);
+        imageBox.getChildren().add(
+                categoryBadge
+        );
 
-        // =========================================================
+        // ---------------------------------------------------------
         // PRODUCT NAME
-        // =========================================================
-        Label name = new Label(productName);
+        // ---------------------------------------------------------
+
+        Label name =
+                new Label(productName);
 
         name.setWrapText(true);
         name.setMaxWidth(245);
@@ -1723,25 +1909,42 @@ public class Electronics {
                 "-fx-text-fill: " + TEXT + ";"
         );
 
-        // =========================================================
-        // BRAND + RATING
-        // =========================================================
-        HBox meta = new HBox(6);
-        meta.setAlignment(Pos.CENTER_LEFT);
+        // ---------------------------------------------------------
+        // BRAND + STATUS
+        // ---------------------------------------------------------
 
-        Label brandLabel = new Label(brand);
+        HBox meta =
+                new HBox(6);
+
+        meta.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        Label brandLabel =
+                new Label(brand);
 
         brandLabel.setStyle(
                 "-fx-font-size: 9px;" +
                 "-fx-text-fill: " + MUTED + ";"
         );
 
-        Region metaSpacer = new Region();
-        HBox.setHgrow(metaSpacer, Priority.ALWAYS);
+        Region metaSpacer =
+                new Region();
 
-        Label ratingLabel = new Label(rating);
+        HBox.setHgrow(
+                metaSpacer,
+                Priority.ALWAYS
+        );
 
-        ratingLabel.setStyle(
+        String statusText =
+                status.isEmpty()
+                        ? "Available"
+                        : status;
+
+        Label statusLabel =
+                new Label(statusText);
+
+        statusLabel.setStyle(
                 "-fx-font-size: 8px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: " + ORANGE + ";"
@@ -1750,15 +1953,23 @@ public class Electronics {
         meta.getChildren().addAll(
                 brandLabel,
                 metaSpacer,
-                ratingLabel
+                statusLabel
         );
 
-        // =========================================================
-        // BOTTOM SECTION
-        // =========================================================
-        VBox priceBox = new VBox(1);
+        // ---------------------------------------------------------
+        // PRICE
+        // ---------------------------------------------------------
 
-        Label priceLabel = new Label(price);
+        VBox priceBox =
+                new VBox(1);
+
+        Label priceLabel =
+                new Label(
+                        String.format(
+                                "₹%.2f",
+                                sellingPrice
+                        )
+                );
 
         priceLabel.setStyle(
                 "-fx-font-size: 17px;" +
@@ -1766,10 +1977,19 @@ public class Electronics {
                 "-fx-text-fill: " + TEXT + ";"
         );
 
-        Label delivery = new Label("● Fast delivery");
+        Label delivery =
+                new Label(
+                        discount > 0
+                                ? String.format(
+                                        "● %.0f%% OFF",
+                                        discount
+                                )
+                                : "● Fast delivery"
+                );
 
         delivery.setStyle(
                 "-fx-font-size: 7px;" +
+                "-fx-font-weight: bold;" +
                 "-fx-text-fill: #8B888D;"
         );
 
@@ -1778,15 +1998,20 @@ public class Electronics {
                 delivery
         );
 
-        // =========================================================
+        // ---------------------------------------------------------
         // QUANTITY
-        // =========================================================
-        int stockQuantity = 10;
+        // ---------------------------------------------------------
 
-        Label quantityLabel = new Label("1");
+        Label quantityLabel =
+                new Label("1");
 
-        quantityLabel.setPrefWidth(30);
-        quantityLabel.setAlignment(Pos.CENTER);
+        quantityLabel.setPrefWidth(
+                30
+        );
+
+        quantityLabel.setAlignment(
+                Pos.CENTER
+        );
 
         quantityLabel.setStyle(
                 "-fx-font-size: 14px;" +
@@ -1807,48 +2032,82 @@ public class Electronics {
                 "-fx-padding: 0;" +
                 "-fx-cursor: hand;";
 
-        Button minusButton = new Button("-");
-        minusButton.setStyle(quantityButtonStyle);
+        Button minusButton =
+                new Button("-");
 
-        Button plusButton = new Button("+");
-        plusButton.setStyle(quantityButtonStyle);
-
-        HBox quantityBox = new HBox(
-                6,
-                minusButton,
-                quantityLabel,
-                plusButton
+        minusButton.setStyle(
+                quantityButtonStyle
         );
 
-        quantityBox.setAlignment(Pos.CENTER);
+        Button plusButton =
+                new Button("+");
+
+        plusButton.setStyle(
+                quantityButtonStyle
+        );
+
+        HBox quantityBox =
+                new HBox(
+                        6,
+                        minusButton,
+                        quantityLabel,
+                        plusButton
+                );
+
+        quantityBox.setAlignment(
+                Pos.CENTER
+        );
 
         minusButton.setOnAction(e -> {
 
-            int quantity = Integer.parseInt(quantityLabel.getText());
+            int quantity =
+                    Integer.parseInt(
+                            quantityLabel.getText()
+                    );
 
             if (quantity > 1) {
+
                 quantity--;
-                quantityLabel.setText(String.valueOf(quantity));
+
+                quantityLabel.setText(
+                        String.valueOf(quantity)
+                );
             }
         });
 
         plusButton.setOnAction(e -> {
 
-            int quantity = Integer.parseInt(quantityLabel.getText());
+            int quantity =
+                    Integer.parseInt(
+                            quantityLabel.getText()
+                    );
 
             if (quantity < stockQuantity) {
+
                 quantity++;
-                quantityLabel.setText(String.valueOf(quantity));
+
+                quantityLabel.setText(
+                        String.valueOf(quantity)
+                );
             }
         });
 
-        // =========================================================
+        // ---------------------------------------------------------
         // ADD TO CART
-        // =========================================================
-        Button addButton = new Button("+ Add");
+        // ---------------------------------------------------------
 
-        addButton.setPrefSize(75, 32);
-        addButton.setMinSize(75, 32);
+        Button addButton =
+                new Button("+ Add");
+
+        addButton.setPrefSize(
+                75,
+                32
+        );
+
+        addButton.setMinSize(
+                75,
+                32
+        );
 
         addButton.setStyle(
                 "-fx-background-color: " + ORANGE + ";" +
@@ -1859,74 +2118,93 @@ public class Electronics {
                 "-fx-cursor: hand;"
         );
 
-        addButton.setOnAction(e -> {
+        // Disable Add when stock is zero
+        if (stockQuantity <= 0) {
 
-            try {
+            addButton.setDisable(true);
+            addButton.setText(
+                    "Out of Stock"
+            );
 
-                int quantity =
-                        Integer.parseInt(quantityLabel.getText());
+        } else {
 
-                // "$1,999" -> 1999.0
-                double priceValue =
-                        Double.parseDouble(
-                                price.replace("$", "")
-                                      .replace(",", "")
-                                      .trim()
-                        );
+            addButton.setOnAction(e -> {
 
-                CARTcontroller cl =
-                        new CARTcontroller();
+                try {
 
-                // Electronics page ke liye correct shop/category
-                cl.addTocart(
-                        userId,
-                        productName,
-                        priceValue,
-                        "Electronics",
-                        quantity
-                );
+                    int quantity =
+                            Integer.parseInt(
+                                    quantityLabel.getText()
+                            );
 
-                // Cart counter update
-                cartItems.add(
-                        productName + " x " + quantity
-                );
+                    if (quantity > stockQuantity) {
+                        quantity = stockQuantity;
+                    }
 
-                cartButton.setText(
-                        "🛒 " + cartItems.size()
-                );
+                    CARTcontroller cl =
+                            new CARTcontroller();
 
-                addButton.setText("✓ Added");
+                    cl.addTocart(
+                            userId,
+                            productName,
+                            sellingPrice,
+                            "Electronics",
+                            quantity
+                    );
 
-                addButton.setStyle(
-                        "-fx-background-color: #2E9B57;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-size: 9px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 16;" +
-                        "-fx-cursor: hand;"
-                );
+                    cartItems.add(
+                            productName +
+                            " x " +
+                            quantity
+                    );
 
-            } catch (NumberFormatException ex) {
+                    cartButton.setText(
+                            "🛒 " +
+                            cartItems.size()
+                    );
 
-                System.out.println(
-                        "Invalid product price: " + price
-                );
+                    addButton.setText(
+                            "✓ Added"
+                    );
 
-            } catch (Exception ex) {
+                    addButton.setStyle(
+                            "-fx-background-color: #2E9B57;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-font-size: 9px;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-background-radius: 16;" +
+                            "-fx-cursor: hand;"
+                    );
 
-                ex.printStackTrace();
-            }
-        });
+                } catch (Exception ex) {
 
-        // =========================================================
+                    System.out.println(
+                            "ERROR adding product to cart."
+                    );
+
+                    ex.printStackTrace();
+                }
+            });
+        }
+
+        // ---------------------------------------------------------
         // BOTTOM ROW
-        // =========================================================
-        HBox bottom = new HBox(7);
+        // ---------------------------------------------------------
 
-        bottom.setAlignment(Pos.CENTER_LEFT);
+        HBox bottom =
+                new HBox(7);
 
-        Region bottomSpacer = new Region();
-        HBox.setHgrow(bottomSpacer, Priority.ALWAYS);
+        bottom.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        Region bottomSpacer =
+                new Region();
+
+        HBox.setHgrow(
+                bottomSpacer,
+                Priority.ALWAYS
+        );
 
         bottom.getChildren().addAll(
                 priceBox,
@@ -1935,9 +2213,10 @@ public class Electronics {
                 addButton
         );
 
-        // =========================================================
+        // ---------------------------------------------------------
         // FINAL CARD
-        // =========================================================
+        // ---------------------------------------------------------
+
         card.getChildren().addAll(
                 imageBox,
                 name,
@@ -1948,6 +2227,43 @@ public class Electronics {
         return card;
     }
 
+    // =============================================================
+    // SAFE TEXT
+    // =============================================================
+
+    private String safeText(
+            String value,
+            String defaultValue
+    ) {
+
+        if (value == null ||
+                value.trim().isEmpty()) {
+
+            return defaultValue;
+        }
+
+        return value.trim();
+    }
+
+    // =============================================================
+    // FALLBACK PRODUCT ICON
+    // =============================================================
+
+    private void addFallbackIcon(
+            StackPane imageBox
+    ) {
+
+        Label fallback =
+                new Label("💻");
+
+        fallback.setStyle(
+                "-fx-font-size: 70px;"
+        );
+
+        imageBox.getChildren().add(
+                fallback
+        );
+    }
 
     // =============================================================
     // SIDEBAR ROW
