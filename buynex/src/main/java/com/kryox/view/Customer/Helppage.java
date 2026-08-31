@@ -28,7 +28,7 @@ public class Helppage  {
     private Scene HelpScene;
 
     private TextField searchField;
-    Scene getHelpScene(){
+    Scene getHelpScene(Runnable callbacktosetion){
          // =====================================================
         // MAIN BORDERPANE
         // =====================================================
@@ -36,7 +36,7 @@ public class Helppage  {
         BorderPane root = new BorderPane();
 
         root.setStyle(
-        "-fx-background-color: #EEE5DF;"
+        "-fx-background-color: #eee5df;"
         );
 
 
@@ -542,13 +542,7 @@ public class Helppage  {
                 "-fx-font-size: 10px;"
         );
         backBtn.setOnAction(event->{
-            Seting se=new Seting(userId);
-            Runnable rn=new Runnable() {
-                public void run(){
-                        backtoDashboard();
-                }
-            };
-            Homepage.HomepageStage.setScene(se.getSetingscene(rn));
+           callbacktosetion.run();
         });
 
 
@@ -772,14 +766,7 @@ public class Helppage  {
         // BACK BUTTON FUNCTIONALITY
         // =====================================================
 
-        backBtn.setOnAction(e -> {
-
-            Stage currentStage =
-                    (Stage) backBtn.getScene().getWindow();
-
-            currentStage.close();
-        });
-
+      
 
         // =====================================================
         // ROOT CENTER
@@ -788,6 +775,7 @@ public class Helppage  {
         root.setCenter(
                 contentBox
         );
+        root.setStyle("-fx-background-color: #eee5df;");
 
 
         // =====================================================
@@ -1097,8 +1085,12 @@ public class Helppage  {
 
         alert.showAndWait();
     }
-    public void backtoDashboard(){
-        Homepage.HomepageStage.setScene(HelpScene);
-    }
+    public void backtoDashboard() {
+    Seting seting = new Seting(userId);
+    Homepage.HomepageStage.setScene(
+        HelpScene
+        
+    );
+}
 
 }

@@ -96,9 +96,9 @@ public class Analytics {
                 // =====================================================
 
                 HBox premiumBox = new HBox(9);
-                premiumBox.setPrefSize(205, 58);
-                premiumBox.setMinSize(205, 58);
-                premiumBox.setMaxSize(205, 58);
+                premiumBox.setPrefSize(223, 66);
+                premiumBox.setMinSize(223, 66);
+                premiumBox.setMaxSize(223, 66);
                 premiumBox.setAlignment(Pos.CENTER_LEFT);
                 premiumBox.setPadding(new Insets(8, 13, 8, 13));
                 premiumBox.setStyle(
@@ -156,9 +156,9 @@ public class Analytics {
                 });
 
                 HBox hbInDashboard = new HBox(17, div, lefButton1);
-                hbInDashboard.setPrefWidth(205);
-                hbInDashboard.setMinWidth(205);
-                hbInDashboard.setMaxWidth(205);
+                hbInDashboard.setPrefWidth(223);
+                hbInDashboard.setMinWidth(223);
+                hbInDashboard.setMaxWidth(223);
                 hbInDashboard.setPrefHeight(42);
                 hbInDashboard.setMinHeight(42);
                 hbInDashboard.setMaxHeight(42);
@@ -228,9 +228,9 @@ public class Analytics {
                 });
 
                 HBox hbInDashboard2 = new HBox(17, div2, lefButton2);
-                hbInDashboard2.setPrefWidth(205);
-                hbInDashboard2.setMinWidth(205);
-                hbInDashboard2.setMaxWidth(205);
+                hbInDashboard2.setPrefWidth(223);
+                hbInDashboard2.setMinWidth(223);
+                hbInDashboard2.setMaxWidth(223);
                 hbInDashboard2.setPrefHeight(42);
                 hbInDashboard2.setMinHeight(42);
                 hbInDashboard2.setMaxHeight(42);
@@ -291,9 +291,9 @@ public class Analytics {
                                                 "-fx-cursor: hand;");
 
                 HBox hbInDashboard3 = new HBox(17, div3, lefButton3);
-                hbInDashboard3.setPrefWidth(205);
-                hbInDashboard3.setMinWidth(205);
-                hbInDashboard3.setMaxWidth(205);
+                hbInDashboard3.setPrefWidth(223);
+                hbInDashboard3.setMinWidth(223);
+                hbInDashboard3.setMaxWidth(223);
                 hbInDashboard3.setPrefHeight(42);
                 hbInDashboard3.setMinHeight(42);
                 hbInDashboard3.setMaxHeight(42);
@@ -358,9 +358,9 @@ public class Analytics {
                 });
 
                 HBox hbInDashboard4 = new HBox(17, div4, lefButton4);
-                hbInDashboard4.setPrefWidth(205);
-                hbInDashboard4.setMinWidth(205);
-                hbInDashboard4.setMaxWidth(205);
+                hbInDashboard4.setPrefWidth(223);
+                hbInDashboard4.setMinWidth(223);
+                hbInDashboard4.setMaxWidth(223);
                 hbInDashboard4.setPrefHeight(42);
                 hbInDashboard4.setMinHeight(42);
                 hbInDashboard4.setMaxHeight(42);
@@ -421,15 +421,25 @@ public class Analytics {
                                                 "-fx-cursor: hand;");
 
                 HBox hbInDashboard5 = new HBox(17, div5, lefButton5);
-                hbInDashboard5.setPrefWidth(205);
-                hbInDashboard5.setMinWidth(205);
-                hbInDashboard5.setMaxWidth(205);
+                hbInDashboard5.setPrefWidth(223);
+                hbInDashboard5.setMinWidth(223);
+                hbInDashboard5.setMaxWidth(223);
                 hbInDashboard5.setPrefHeight(42);
                 hbInDashboard5.setMinHeight(42);
                 hbInDashboard5.setMaxHeight(42);
                 hbInDashboard5.setPadding(new Insets(2, 8, 2, 13));
                 hbInDashboard5.setAlignment(Pos.CENTER_LEFT);
-                hbInDashboard5.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                hbInDashboard5.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
+                lefButton5.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-font-size: 12px;" +
+                                                "-fx-font-family: 'Montserrat';" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-border-width: 0;" +
+                                                "-fx-padding: 0;" +
+                                                "-fx-alignment: CENTER_LEFT;" +
+                                                "-fx-cursor: hand;");
 
                 hbInDashboard5.setOnMouseEntered(e -> {
                         hbInDashboard5.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
@@ -464,10 +474,10 @@ public class Analytics {
                 // =====================================================
 
                 VBox upgradeCard = new VBox(7);
-                upgradeCard.setPrefWidth(205);
-                upgradeCard.setMinWidth(205);
-                upgradeCard.setMaxWidth(205);
-                upgradeCard.setPrefHeight(112);
+                upgradeCard.setPrefWidth(223);
+                upgradeCard.setMinWidth(223);
+                upgradeCard.setMaxWidth(223);
+                upgradeCard.setPrefHeight(123);
                 upgradeCard.setPadding(new Insets(15));
                 upgradeCard.setAlignment(Pos.CENTER_LEFT);
 
@@ -496,7 +506,7 @@ public class Analytics {
                                                 "-fx-text-fill: #BEBFC3;");
 
                 Button upgradeGold = new Button("Upgrade to Gold");
-                upgradeGold.setPrefWidth(175);
+                upgradeGold.setPrefWidth(193);
                 upgradeGold.setPrefHeight(30);
                 upgradeGold.setStyle(
                                 "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
@@ -542,9 +552,9 @@ public class Analytics {
                 });
 
                 HBox hbInDashboard6 = new HBox(10, div6, lefButton6);
-                hbInDashboard6.setPrefWidth(205);
-                hbInDashboard6.setMinWidth(205);
-                hbInDashboard6.setMaxWidth(205);
+                hbInDashboard6.setPrefWidth(223);
+                hbInDashboard6.setMinWidth(223);
+                hbInDashboard6.setMaxWidth(223);
                 hbInDashboard6.setPrefHeight(34);
                 hbInDashboard6.setAlignment(Pos.CENTER_LEFT);
                 hbInDashboard6.setPadding(new Insets(0, 8, 0, 18));
@@ -573,9 +583,9 @@ public class Analytics {
                                                 "-fx-cursor: hand;");
 
                 HBox hbInDashboard7 = new HBox(10, div7, lefButton7);
-                hbInDashboard7.setPrefWidth(205);
-                hbInDashboard7.setMinWidth(205);
-                hbInDashboard7.setMaxWidth(205);
+                hbInDashboard7.setPrefWidth(223);
+                hbInDashboard7.setMinWidth(223);
+                hbInDashboard7.setMaxWidth(223);
                 hbInDashboard7.setPrefHeight(34);
                 hbInDashboard7.setAlignment(Pos.CENTER_LEFT);
                 hbInDashboard7.setPadding(new Insets(0, 8, 0, 18));
@@ -585,12 +595,12 @@ public class Analytics {
                 // =====================================================
 
                 VBox leftBox = new VBox(14);
-                leftBox.setPrefWidth(245);
-                leftBox.setMinWidth(245);
-                leftBox.setMaxWidth(245);
+                leftBox.setPrefWidth(267);
+                leftBox.setMinWidth(267);
+                leftBox.setMaxWidth(267);
                 leftBox.setPrefHeight(800);
                 leftBox.setAlignment(Pos.TOP_CENTER);
-                leftBox.setPadding(new Insets(27, 20, 20, 20));
+                leftBox.setPadding(new Insets(27, 22, 20, 22));
                 leftBox.setStyle("-fx-background-color: #ebccb7");
                 leftBox.setEffect(shadow);
 
@@ -672,8 +682,8 @@ public class Analytics {
 
                 TextField searchBox = new TextField();
                 searchBox.setPromptText("Search products, shops or deals with AI...");
-                searchBox.setPrefWidth(310);
-                searchBox.setPrefHeight(39);
+                searchBox.setPrefWidth(340);
+                searchBox.setPrefHeight(40);
                 searchBox.setStyle(
                                 "-fx-background-color: #F8F7FA;" +
                                                 "-fx-background-radius: 20;" +
@@ -770,14 +780,14 @@ public class Analytics {
                                 locationBox,
                                 actionBox);
 
-                navBox.setPrefHeight(68);
-                navBox.setMinHeight(68);
-                navBox.setMaxHeight(68);
+                navBox.setPrefHeight(72);
+                navBox.setMinHeight(72);
+                navBox.setMaxHeight(72);
 
                 navBox.setMaxWidth(Double.MAX_VALUE);
                 HBox.setHgrow(navBox, Priority.ALWAYS);
 
-                navBox.setPadding(new Insets(15, 25, 15, 25));
+                navBox.setPadding(new Insets(14, 25, 14, 25));
                 navBox.setAlignment(Pos.CENTER_LEFT);
                 navBox.setFillHeight(true);
 
@@ -804,12 +814,13 @@ public class Analytics {
                                                 "-fx-text-fill: #666666;");
 
                 VBox headerBox = new VBox(4, analyticsTitle, analyticsSubtitle);
-                headerBox.setPadding(new Insets(0, 0, 20, 0));
+                headerBox.setPadding(new Insets(0, 0, 4, 0));
 
                 // Summary Cards (static data)
 
                 HBox summaryCards = new HBox(18);
                 summaryCards.setAlignment(Pos.CENTER_LEFT);
+                summaryCards.setFillHeight(true);
                 summaryCards.getChildren().addAll(
                                 createSummaryCard("TOTAL SPENDING", "$2,450.80", "💰"),
                                 createSummaryCard("ORDERS", "18", "📦"),
@@ -830,8 +841,8 @@ public class Analytics {
 
                 LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
                 lineChart.setTitle("Spending Trends");
-                lineChart.setPrefHeight(350);
-                lineChart.setPrefWidth(800);
+                lineChart.setPrefHeight(380);
+                lineChart.setPrefWidth(1000);
                 lineChart.setAnimated(false);
 
                 // Apply CSS styling to the chart
@@ -860,15 +871,15 @@ public class Analytics {
                                                 "-fx-border-color: #E9E2EA;" +
                                                 "-fx-border-radius: 14;" +
                                                 "-fx-border-width: 1;");
-                chartContainer.setPadding(new Insets(20));
+                chartContainer.setPadding(new Insets(22));
                 chartContainer.setEffect(cardShadow);
 
                 VBox chartBox = new VBox(chartContainer);
                 chartBox.setPadding(new Insets(20, 0, 0, 0));
 
                 // Combine all analytics content
-                VBox analyticsContent = new VBox(12, headerBox, summaryCards, chartBox);
-                analyticsContent.setPadding(new Insets(20, 0, 20, 0));
+                VBox analyticsContent = new VBox(18, headerBox, summaryCards, chartBox);
+                analyticsContent.setPadding(new Insets(30, 25, 30, 25));
 
                 // =====================================================
                 // RIGHT BOX (Center)

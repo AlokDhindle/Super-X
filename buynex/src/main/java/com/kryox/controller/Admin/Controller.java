@@ -10,7 +10,6 @@ import com.cloudinary.utils.ObjectUtils;
 import com.kryox.config.AdminConfig;
 
 
-
 public class Controller {
 
     public String imageUpload(File file) {

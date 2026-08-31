@@ -1,5 +1,6 @@
 package com.kryox.view.Customer;
 
+import com.kryox.controller.Customer.PaymentController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -32,6 +33,8 @@ import com.kryox.controller.Customer.CARTcontroller;
 import com.kryox.model.Customer.Productcart;
 
 public class ShoppingCartUI {
+
+        private VBox products;
 
         private Scene addcartScene;
         private String userId;
@@ -160,14 +163,22 @@ public class ShoppingCartUI {
                 new Button("Dashboard");
 
         dashboard.setOnAction(event->{
-                Dashbord ds=new Dashbord(null);
+                Dashbord ds=new Dashbord(userId);
                 Homepage.HomepageStage.setScene(ds.getDashbordScene());
         });
 
         Button nearby =
                 new Button("Nearby Shops");
                 neaby_shope ns=new neaby_shope(userId);
-                Homepage.HomepageStage.setScene(ns.getNearby_shopes(null));
+                Runnable rn=new Runnable() {
+                        public void run(){
+                                backTodashboard();
+                                
+                                
+
+                        }
+                };
+                Homepage.HomepageStage.setScene(ns.getNearby_shopes(rn));
 
         Button deals =
                 new Button("Deals");
@@ -739,7 +750,19 @@ public class ShoppingCartUI {
     // QUANTITY BUTTON
     // =========================================================
 
-    private HBox createQuantityBox(String quantity) {
+    private HBox createQuantityBox(
+            String quantity,
+            double unitPrice,
+            Label priceLabel,
+            Label eachLabel,
+            Label subtotalLabel,
+            Label subtotalAmountLabel,
+            Label totalAmountLabel,
+            int[] itemCount,
+            double[] subtotal,
+            VBox card,
+            VBox products
+    ) {
 
         Button minus = new Button("−");
         Button plus = new Button("+");
@@ -778,16 +801,129 @@ public class ShoppingCartUI {
 
             int value = Integer.parseInt(qty.getText());
 
-            if (value > 1) {
-                qty.setText(String.valueOf(value - 1));
+            // =====================================================
+            // IF QUANTITY IS 1, REMOVE THE COMPLETE PRODUCT
+            // =====================================================
+
+            if (value == 1) {
+
+                card.setVisible(false);
+                card.setManaged(false);
+
+                subtotal[0] -= unitPrice;
+
+                if (subtotal[0] < 0) {
+                    subtotal[0] = 0;
+                }
+
+                itemCount[0]--;
+
+                if (itemCount[0] < 0) {
+                    itemCount[0] = 0;
+                }
+
+                subtotalLabel.setText(
+                        String.format(
+                                "Subtotal (%d items)",
+                                itemCount[0]
+                        )
+                );
+
+                updateSummaryAmounts(
+                        subtotal,
+                        subtotalAmountLabel,
+                        totalAmountLabel
+                );
+
+                // Show empty-cart message if last product was removed.
+                if (itemCount[0] == 0) {
+
+                    Label emptyLabel =
+                            new Label("Your cart is empty.");
+
+                    emptyLabel.setStyle(
+                            "-fx-font-size: 14px;" +
+                            "-fx-text-fill: #777777;" +
+                            "-fx-font-weight: bold;"
+                    );
+
+                    products.getChildren().clear();
+                    products.getChildren().add(emptyLabel);
+                }
+
+                return;
             }
+
+            // =====================================================
+            // IF QUANTITY IS GREATER THAN 1, DECREASE IT
+            // =====================================================
+
+            value--;
+
+            qty.setText(String.valueOf(value));
+
+            priceLabel.setText(
+                    String.format(
+                            "₹%.2f",
+                            unitPrice * value
+                    )
+            );
+
+            eachLabel.setText(
+                    String.format(
+                            "₹%.2f / ea",
+                            unitPrice
+                    )
+            );
+
+            subtotal[0] -= unitPrice;
+
+            if (subtotal[0] < 0) {
+                subtotal[0] = 0;
+            }
+
+            itemCount[0]--;
+
+            if (itemCount[0] < 0) {
+                itemCount[0] = 0;
+            }
+
+            subtotalLabel.setText(
+                    String.format(
+                            "Subtotal (%d items)",
+                            itemCount[0]
+                    )
+            );
+
+            updateSummaryAmounts(
+                    subtotal,
+                    subtotalAmountLabel,
+                    totalAmountLabel
+            );
         });
 
         plus.setOnAction(e -> {
 
             int value = Integer.parseInt(qty.getText());
 
-            qty.setText(String.valueOf(value + 1));
+            value++;
+
+            qty.setText(String.valueOf(value));
+            priceLabel.setText(String.format("₹%.2f", unitPrice * value));
+            eachLabel.setText(String.format("₹%.2f / ea", unitPrice));
+
+            subtotal[0] += unitPrice;
+            itemCount[0]++;
+
+            subtotalLabel.setText(
+                    String.format("Subtotal (%d items)", itemCount[0])
+            );
+
+            updateSummaryAmounts(
+                    subtotal,
+                    subtotalAmountLabel,
+                    totalAmountLabel
+            );
         });
 
         return quantityBox;
@@ -800,10 +936,16 @@ public class ShoppingCartUI {
     private VBox createCartProduct(
             String productName,
             String shopName,
-            String price,
+            double unitPrice,
             String oldPrice,
             String quantity,
-            String imagePath
+            String imagePath,
+            Label subtotalLabel,
+            Label subtotalAmountLabel,
+            Label totalAmountLabel,
+            int[] itemCount,
+            double[] subtotal,
+            VBox products
     ) {
 
         VBox card = new VBox(8);
@@ -882,9 +1024,54 @@ public class ShoppingCartUI {
                 "-fx-cursor: hand;"
         );
 
-        deleteButton.setOnAction(e ->
-                card.setVisible(false)
-        );
+        deleteButton.setOnAction(e -> {
+
+            int currentQuantity =
+                    Integer.parseInt(quantity);
+
+            card.setVisible(false);
+            card.setManaged(false);
+
+            subtotal[0] -= unitPrice * currentQuantity;
+
+            if (subtotal[0] < 0) {
+                subtotal[0] = 0;
+            }
+
+            itemCount[0] -= currentQuantity;
+
+            if (itemCount[0] < 0) {
+                itemCount[0] = 0;
+            }
+
+            subtotalLabel.setText(
+                    String.format(
+                            "Subtotal (%d items)",
+                            itemCount[0]
+                    )
+            );
+
+            updateSummaryAmounts(
+                    subtotal,
+                    subtotalAmountLabel,
+                    totalAmountLabel
+            );
+
+            if (itemCount[0] == 0) {
+
+                Label emptyLabel =
+                        new Label("Your cart is empty.");
+
+                emptyLabel.setStyle(
+                        "-fx-font-size: 14px;" +
+                        "-fx-text-fill: #777777;" +
+                        "-fx-font-weight: bold;"
+                );
+
+                products.getChildren().clear();
+                products.getChildren().add(emptyLabel);
+            }
+        });
 
         productTop.getChildren().addAll(
                 productImage,
@@ -901,8 +1088,37 @@ public class ShoppingCartUI {
 
         bottomRow.setAlignment(Pos.CENTER_LEFT);
 
+        Label priceLabel =
+                new Label(String.format("₹%.2f", unitPrice));
+
+        priceLabel.setStyle(
+                "-fx-font-size: 17px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #151515;"
+        );
+
+        Label each =
+                new Label(String.format("₹%.2f / ea", unitPrice));
+
+        each.setStyle(
+                "-fx-font-size: 9px;" +
+                "-fx-text-fill: #555555;"
+        );
+
         HBox quantity1 =
-                createQuantityBox(quantity);
+                createQuantityBox(
+                        quantity,
+                        unitPrice,
+                        priceLabel,
+                        each,
+                        subtotalLabel,
+                        subtotalAmountLabel,
+                        totalAmountLabel,
+                        itemCount,
+                        subtotal,
+                        card,
+                        products
+                );
 
         Region bottomSpacer =
                 new Region();
@@ -915,23 +1131,6 @@ public class ShoppingCartUI {
         VBox priceBox = new VBox(1);
 
         priceBox.setAlignment(Pos.CENTER_RIGHT);
-
-        Label priceLabel =
-                new Label(price);
-
-        priceLabel.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #151515;"
-        );
-
-        Label each =
-                new Label("$6.00 / ea");
-
-        each.setStyle(
-                "-fx-font-size: 9px;" +
-                "-fx-text-fill: #555555;"
-        );
 
         priceBox.getChildren().addAll(
                 priceLabel,
@@ -1018,11 +1217,50 @@ public class ShoppingCartUI {
         return card;
     }
 
+    private void updateSummaryAmounts(
+            double[] subtotal,
+            Label subtotalAmountLabel,
+            Label totalAmountLabel
+    ) {
+
+        double subtotalAmount = subtotal[0];
+
+        double platformFee = 10.0;
+        double tax = subtotalAmount * 0.05;
+        double deliveryFee = subtotalAmount >= 500 ? 0 : 30.0;
+
+        double total =
+                subtotalAmount
+                + platformFee
+                + tax
+                + deliveryFee;
+
+        subtotalAmountLabel.setText(
+                String.format("₹%.2f", subtotalAmount)
+        );
+
+        totalAmountLabel.setText(
+                String.format("₹%.2f", total)
+        );
+    }
+
     // =========================================================
     // ORDER SUMMARY
     // =========================================================
 
-    private VBox createOrderSummary() {
+    private VBox createOrderSummary(
+            double subtotalAmount,
+            int itemCount,
+            Label subtotalLabel,
+            Label subtotalAmountLabel,
+            Label totalAmountLabel
+    ) {
+
+        double platformFee = 10.0;
+        double tax = subtotalAmount * 0.05;
+        double deliveryFee = subtotalAmount >= 500 ? 0 : 30.0;
+        double totalAmount =
+                subtotalAmount + platformFee + tax + deliveryFee;
 
         VBox summary =
                 new VBox(13);
@@ -1069,28 +1307,34 @@ public class ShoppingCartUI {
         // SUBTOTAL
         // -----------------------------------------------------
 
+        subtotalLabel.setText(
+                String.format("Subtotal (%d items)", itemCount)
+        );
+
         HBox subtotal =
-                summaryRow(
-                        "Subtotal (3 items)",
-                        "$17.50"
+                summaryRowWithLabel(
+                        subtotalLabel,
+                        subtotalAmountLabel
                 );
 
         HBox platform =
                 summaryRow(
                         "Platform Fee",
-                        "$1.00"
+                        String.format("₹%.2f", platformFee)
                 );
 
-        HBox tax =
+        HBox tax1 =
                 summaryRow(
                         "Estimated Tax",
-                        "$1.40"
+                        String.format("₹%.2f", tax)
                 );
 
         HBox delivery =
                 summaryRow(
                         "Delivery Fee",
-                        "$3.50"
+                        deliveryFee == 0
+                                ? "FREE"
+                                : String.format("₹%.2f", deliveryFee)
                 );
 
         // -----------------------------------------------------
@@ -1109,7 +1353,14 @@ public class ShoppingCartUI {
                 new HBox();
 
         Label more =
-                new Label("$7.50 more");
+                new Label(
+                        subtotalAmount >= 500
+                                ? "Free Delivery Unlocked"
+                                : String.format(
+                                        "₹%.2f more",
+                                        500 - subtotalAmount
+                                )
+                );
 
         more.setStyle(
                 "-fx-font-size: 9px;" +
@@ -1171,10 +1422,10 @@ public class ShoppingCartUI {
                 Priority.ALWAYS
         );
 
-        Label totalAmount =
-                new Label("$23.40");
+        Label totalValue =
+                new Label(String.format("₹%.2f", totalAmount));
 
-        totalAmount.setStyle(
+        totalValue.setStyle(
                 "-fx-font-size: 22px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #171717;"
@@ -1183,7 +1434,7 @@ public class ShoppingCartUI {
         totalRow.getChildren().addAll(
                 total,
                 totalSpacer,
-                totalAmount
+                totalValue
         );
 
         // -----------------------------------------------------
@@ -1207,6 +1458,17 @@ public class ShoppingCartUI {
                 "-fx-background-radius: 6;" +
                 "-fx-cursor: hand;"
         );
+
+        checkout.setOnAction(event -> {
+
+                PaymentController paymentController =
+                        new PaymentController();
+
+                paymentController.startPayment(
+                        totalAmount,
+                        () -> handlePaymentSuccess()
+                );
+        });
 
         // -----------------------------------------------------
         // AI TIP
@@ -1237,9 +1499,9 @@ public class ShoppingCartUI {
 
         Label aiText =
                 new Label(
-                        "Add $7.50 more to your cart to unlock Free\n" +
+                        "Add more to your cart to unlock Free\n" +
                         "Delivery! Try adding the suggested Farm\n" +
-                        "Fresh Milk."
+                        "Fresh Milk." 
                 );
 
         aiText.setWrapText(true);
@@ -1258,7 +1520,7 @@ public class ShoppingCartUI {
                 title,
                 subtotal,
                 platform,
-                tax,
+                tax1,
                 delivery,
                 progressText,
                 freeText,
@@ -1306,6 +1568,42 @@ public class ShoppingCartUI {
 
         Label rightLabel =
                 new Label(right);
+
+        rightLabel.setStyle(
+                "-fx-font-size: 10px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #222222;"
+        );
+
+        row.getChildren().addAll(
+                leftLabel,
+                spacer,
+                rightLabel
+        );
+
+        return row;
+    }
+
+    private HBox summaryRowWithLabel(
+            Label leftLabel,
+            Label rightLabel
+    ) {
+
+        HBox row = new HBox();
+
+        row.setAlignment(Pos.CENTER_LEFT);
+
+        leftLabel.setStyle(
+                "-fx-font-size: 10px;" +
+                "-fx-text-fill: #555555;"
+        );
+
+        Region spacer = new Region();
+
+        HBox.setHgrow(
+                spacer,
+                Priority.ALWAYS
+        );
 
         rightLabel.setStyle(
                 "-fx-font-size: 10px;" +
@@ -1474,10 +1772,23 @@ public class ShoppingCartUI {
         // CART + SUMMARY
         // -----------------------------------------------------
 
-        VBox products =
+        products =
                 new VBox(12);
 
         products.setPrefWidth(700);
+
+        // Dynamic cart totals
+        double[] subtotal = {0.0};
+        int[] itemCount = {0};
+
+        Label subtotalLabel =
+                new Label("Subtotal (0 items)");
+
+        Label subtotalAmountLabel =
+                new Label("₹0.00");
+
+        Label totalAmountLabel =
+                new Label("₹0.00");
 
         // -----------------------------------------------------
         // FETCH CART PRODUCTS FROM FIRESTORE
@@ -1527,17 +1838,26 @@ public class ShoppingCartUI {
                                 String shopName =
                                         product.getName1();
 
-                                String price =
-                                        "$" + product.getPrice();
+                                double unitPrice =
+                                        product.getPrice();
+
+                                subtotal[0] += unitPrice;
+                                itemCount[0]++;
 
                                 VBox productCard =
                                         createCartProduct(
                                                 productName,
                                                 shopName,
-                                                price,
+                                                unitPrice,
                                                 "",
                                                 "1",
-                                                "/assects/images/products/avocado.png"
+                                                "/assects/images/products/avocado.png",
+                                                subtotalLabel,
+                                                subtotalAmountLabel,
+                                                totalAmountLabel,
+                                                itemCount,
+                                                subtotal,
+                                                products
                                         );
 
                                 products.getChildren().add(productCard);
@@ -1546,7 +1866,13 @@ public class ShoppingCartUI {
         }
 
         VBox summary =
-                createOrderSummary();
+                createOrderSummary(
+                        subtotal[0],
+                        itemCount[0],
+                        subtotalLabel,
+                        subtotalAmountLabel,
+                        totalAmountLabel
+                );
 
         HBox cartContent =
                 new HBox(18);
@@ -1616,4 +1942,45 @@ public class ShoppingCartUI {
     
 
 
+
+
+    // =========================================================
+    // CLEAR CART
+    // =========================================================
+
+    private void clearCart() {
+
+        if (products != null) {
+            products.getChildren().clear();
+        }
+
+        System.out.println("Cart cleared successfully.");
+    }
+
+    // =========================================================
+    // PAYMENT SUCCESS
+    // =========================================================
+
+    private void handlePaymentSuccess() {
+
+        System.out.println("================================");
+        System.out.println("ORDER PROCESSING");
+        System.out.println("================================");
+
+        // 1. Order Firestore mein save karna
+        // 2. Cart clear karna
+        // 3. My Orders open karna
+
+        clearCart();
+
+        My_orderAllorder myOrders =
+                new My_orderAllorder(userId);
+
+        Homepage.HomepageStage.setScene(
+                myOrders.getAllorderScene()
+        );
+    }
+    public void backTodashboard(){
+        Homepage.HomepageStage.setScene(addcartScene);
+    }
 }

@@ -1,4 +1,26 @@
+
 package com.kryox.view.Customer;
+
+import java.io.ByteArrayInputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javafx.application.Platform;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,9 +41,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
@@ -33,11 +52,6 @@ public class neaby_shope {
         public neaby_shope(String userId) {
                 this.userId = userId;
         }
-
-        // IMPORTANT: Replace this placeholder with your NEW restricted Google Maps API
-        // key.
-        // Do not use the key that was exposed in the screenshot.
-        private static final String GOOGLE_MAPS_API_KEY = "AIzaSyD4JhVH741cVb2aSRmCrUyAMX_6biP1DLA";
 
         private Scene nearByscene;
 
@@ -766,7 +780,8 @@ public class neaby_shope {
                 // Shop list shown immediately beside the existing sidebar.
                 VBox shopList = new VBox(12);
                 shopList.setPrefWidth(335);
-                shopList.setMinWidth(315);
+                shopList.setMinWidth(335);
+                shopList.setMaxWidth(335);
                 shopList.setPadding(new Insets(18, 12, 18, 12));
                 shopList.setStyle("-fx-background-color: #F7F5F8;");
 
@@ -827,6 +842,81 @@ public class neaby_shope {
                                 fastDeliveryButton);
                 filterRow.setAlignment(Pos.CENTER_LEFT);
 
+                // =====================================================
+                // OPENSTREETMAP MAP - NATIVE JAVAFX
+                //
+                // Created here (before the shop cards) so the cards'
+                // "View Shop" buttons can be wired directly to this
+                // same map instance and draw routes on it.
+                // =====================================================
+
+                // =====================================================
+                // FIXED MAP SIZE
+                // =====================================================
+
+                final double MAP_WIDTH = 900;
+                final double MAP_HEIGHT = 700;
+
+                OsmMapView mapView = new OsmMapView();
+
+                mapView.setPrefWidth(MAP_WIDTH);
+                mapView.setMinWidth(MAP_WIDTH);
+                mapView.setMaxWidth(MAP_WIDTH);
+
+                mapView.setPrefHeight(MAP_HEIGHT);
+                mapView.setMinHeight(MAP_HEIGHT);
+                mapView.setMaxHeight(MAP_HEIGHT);
+
+                StackPane mapContainer = new StackPane();
+                mapContainer.getChildren().add(mapView);
+
+                mapContainer.setPrefWidth(MAP_WIDTH);
+                mapContainer.setMinWidth(MAP_WIDTH);
+                mapContainer.setMaxWidth(MAP_WIDTH);
+
+                mapContainer.setPrefHeight(MAP_HEIGHT);
+                mapContainer.setMinHeight(MAP_HEIGHT);
+                mapContainer.setMaxHeight(MAP_HEIGHT);
+
+                mapContainer.setAlignment(Pos.CENTER);
+
+                mapContainer.setStyle(
+                                "-fx-background-color: white;" +
+                                                "-fx-background-radius: 16;" +
+                                                "-fx-border-color: #E6E1E8;" +
+                                                "-fx-border-radius: 16;");
+
+                mapContainer.setEffect(cardShadow);
+
+                // -----------------------------------------------------
+                // FIX: clip mapContainer to its own bounds.
+                //
+                // Region/StackPane/Pane do NOT clip children to their
+                // layout bounds by default. OsmMapView draws OSM tiles
+                // at raw pixel coordinates (tilePane.setLayoutX/Y) which
+                // routinely fall outside the visible 900x700 box while
+                // panning/zooming. Without a clip, those tiles paint
+                // straight through and cover whatever is drawn after
+                // this node in the scene graph (here: the sidebar),
+                // which is exactly the "map takes over the whole
+                // window" bug seen in the screenshot.
+                //
+                // Binding a Rectangle clip to mapContainer's own
+                // width/height guarantees nothing the map draws can
+                // ever escape its container, regardless of window size.
+                // -----------------------------------------------------
+                Rectangle mapContainerClip = new Rectangle();
+                mapContainerClip.widthProperty().bind(mapContainer.widthProperty());
+                mapContainerClip.heightProperty().bind(mapContainer.heightProperty());
+                mapContainerClip.setArcWidth(32);
+                mapContainerClip.setArcHeight(32);
+                mapContainer.setClip(mapContainerClip);
+
+                // IMPORTANT:
+                // HBox.setHgrow(mapContainer, Priority.ALWAYS)
+                // is intentionally NOT used because the map must
+                // remain inside the fixed 900 x 700 frame.
+
                 VBox cardsBox = new VBox(12);
 
                 cardsBox.getChildren().addAll(
@@ -838,8 +928,9 @@ public class neaby_shope {
                                                 "$0 fee",
                                                 "4.8",
                                                 true,
-                                                18.4577,
-                                                73.8245),
+                                                40.7505,
+                                                73.8245,
+                                                mapView),
                                 createShopCard(
                                                 "Tech Haven",
                                                 "Electronics",
@@ -849,7 +940,8 @@ public class neaby_shope {
                                                 "4.9",
                                                 true,
                                                 40.7505,
-                                                -73.9934),
+                                                73.8245,
+                                                mapView),
                                 createShopCard(
                                                 "Nature's Pharmacy",
                                                 "Health",
@@ -859,7 +951,8 @@ public class neaby_shope {
                                                 "4.7",
                                                 false,
                                                 40.7306,
-                                                -73.9866));
+                                                73.8245,
+                                                mapView));
 
                 ScrollPane shopScroll = new ScrollPane(cardsBox);
                 shopScroll.setFitToWidth(true);
@@ -873,47 +966,13 @@ public class neaby_shope {
 
                 shopList.getChildren().addAll(titleRow, filterRow, shopScroll);
 
-                // =====================================================
-                // GOOGLE MAP - NO SEPARATE HTML FILE REQUIRED
-                // =====================================================
+                HBox nearbyContent = new HBox(
+                                20,
+                                shopList,
+                                mapContainer);
 
-                WebView mapWebView = new WebView();
-                mapWebView.setContextMenuEnabled(false);
-                mapWebView.setPrefSize(900, 700);
-                mapWebView.setMinSize(500, 450);
-
-                WebEngine mapEngine = mapWebView.getEngine();
-                mapEngine.setJavaScriptEnabled(true);
-
-                String mapHtml = createGoogleMapHtml();
-
-                // Load the generated Google Maps HTML into the JavaFX WebView.
-                mapEngine.loadContent(mapHtml);
-
-                // Print WebView/JavaScript errors to the console.
-                mapEngine.setOnError(event -> {
-                        System.err.println("Google Maps WebEngine error: " + event.getMessage());
-                });
-
-                mapEngine.getLoadWorker().exceptionProperty().addListener((obs, oldEx, newEx) -> {
-                        if (newEx != null) {
-                                System.err.println("Google Maps load error: " + newEx.getMessage());
-                        }
-                });
-
-                StackPane mapContainer = new StackPane(mapWebView);
-                mapContainer.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 16;" +
-                                                "-fx-border-color: #E6E1E8;" +
-                                                "-fx-border-radius: 16;");
-                mapContainer.setEffect(cardShadow);
-                HBox.setHgrow(mapContainer, Priority.ALWAYS);
-
-                // List is on the right of the old sidebar; map is to the right of list.
-                HBox nearbyContent = new HBox(0, shopList, mapContainer);
                 nearbyContent.setAlignment(Pos.TOP_LEFT);
-                VBox.setVgrow(nearbyContent, Priority.ALWAYS);
+                nearbyContent.setFillHeight(false);
 
                 // =====================================================
                 // RIGHT CONTENT
@@ -922,7 +981,6 @@ public class neaby_shope {
                 VBox Rightvbox = new VBox(12, navBox, nearbyContent);
                 Rightvbox.setPadding(new Insets(0, 26, 20, 0));
                 Rightvbox.setStyle("-fx-background-color: #eee5df");
-                VBox.setVgrow(nearbyContent, Priority.ALWAYS);
 
                 // =====================================================
                 // SUBTLE ORANGE BACKGROUND GLOW
@@ -974,7 +1032,8 @@ public class neaby_shope {
                         String rating,
                         boolean open,
                         double latitude,
-                        double longitude) {
+                        double longitude,
+                        OsmMapView mapView) {
 
                 VBox card = new VBox(7);
                 card.setPrefWidth(300);
@@ -1090,128 +1149,975 @@ public class neaby_shope {
                                 statusLabel,
                                 actionRow);
 
-                // Clicking Directions opens the location in Google Maps.
+                // Clicking Directions still opens the route in the browser
+                // via Google Maps -> unchanged from before.
                 directions.setOnAction(event -> {
                         String url = "https://www.google.com/maps/dir/?api=1&destination=" + latitude + "," + longitude;
 
                         getHostServicesSafely(url);
                 });
 
+                // -----------------------------------------------------
+                // Clicking "View Shop" draws the exact start -> destination
+                // route directly on our own embedded OsmMapView (no browser,
+                // no Google Maps redirect). The map fetches a real road
+                // route from OSRM and falls back to a straight line if
+                // the routing request fails for any reason.
+                // -----------------------------------------------------
+                viewShop.setOnAction(event -> {
+                        mapView.showRouteFromCurrentLocation(latitude, longitude);
+                });
+
                 return card;
         }
 
         // =====================================================
-        // GOOGLE MAP HTML CREATED INSIDE JAVA
+        // OPENSTREETMAP NATIVE JAVAFX MAP
+        //
+        // This does NOT use WebView, Google Maps JavaScript,
+        // Leaflet or any external JavaScript library.
+        //
+        // OSM tiles are downloaded directly and displayed in
+        // JavaFX ImageViews. This avoids the JavaFX WebView
+        // rendering problems with modern Leaflet maps.
         // =====================================================
 
-        private String createGoogleMapHtml() {
+        private static class OsmMapView extends StackPane {
 
-                String safeKey = GOOGLE_MAPS_API_KEY
-                                .replace("\\", "\\\\")
-                                .replace("'", "\\'");
+                private static final int TILE_SIZE = 256;
+                private static final int MAX_ZOOM = 19;
+                private static final int MIN_ZOOM = 2;
 
-                return """
-                                <!DOCTYPE html>
-                                <html>
-                                <head>
-                                <meta charset="UTF-8">
-                                <meta name="viewport"
-                                      content="initial-scale=1.0, width=device-width">
-                                <style>
-                                    html, body {
-                                        width: 100%%;
-                                        height: 100%%;
-                                        margin: 0;
-                                        padding: 0;
-                                        overflow: hidden;
-                                    }
+                private static final double INITIAL_LATITUDE = 18.4577;
+                private static final double INITIAL_LONGITUDE = 73.8245;
+                private static final int INITIAL_ZOOM = 12;
 
-                                    #map {
-                                        width: 100%%;
-                                        height: 100%%;
-                                    }
-                                </style>
-                                </head>
+                private final Pane tilePane = new Pane();
+                private final Pane routePane = new Pane();
+                private final Pane markerPane = new Pane();
 
-                                <body>
-                                    <div id="map"></div>
+                private final HttpClient httpClient =
+                                HttpClient.newBuilder()
+                                                .followRedirects(
+                                                                HttpClient.Redirect.NORMAL)
+                                                .build();
 
-                                    <script>
-                                        let map;
+                private final Map<String, Image> imageCache =
+                                new ConcurrentHashMap<>();
 
-                                        const shops = [
+                private double centerLatitude = INITIAL_LATITUDE;
+                private double centerLongitude = INITIAL_LONGITUDE;
+                private int zoom = INITIAL_ZOOM;
 
-                                            {
-                                                name: "Tech Haven",
-                                                lat: 40.7505,
-                                                lng: -73.9934
-                                            },
-                                            {
-                                                name: "Nature's Pharmacy",
-                                                lat: 40.7306,
-                                                lng: -73.9866
-                                            }
-                                        ];
+                // Active turn-by-turn route (drawn on routePane), if any.
+                private List<double[]> routePoints = null;
+                private double routeStartLat;
+                private double routeStartLon;
+                private double routeEndLat;
+                private double routeEndLon;
 
-                                        function initMap() {
+                private double mousePressedX;
+                private double mousePressedY;
+                private double pressedCenterX;
+                private double pressedCenterY;
 
-                                            const center = {
-                                                lat: 18.4577,
-                                                lng: 73.8245
-                                            };
+                private long renderNumber = 0;
 
-                                            map = new google.maps.Map(
-                                                document.getElementById("map"),
-                                                {
-                                                    center: center,
-                                                    zoom: 12,
-                                                    mapTypeControl: false,
-                                                    streetViewControl: false,
-                                                    fullscreenControl: true,
-                                                    zoomControl: true
-                                                }
-                                            );
+                OsmMapView() {
 
-                                            shops.forEach(function(shop) {
+                        setStyle("-fx-background-color: #E9E7E3;");
 
-                                                const marker =
-                                                    new google.maps.Marker({
-                                                        position: {
-                                                            lat: shop.lat,
-                                                            lng: shop.lng
-                                                        },
-                                                        map: map,
-                                                        title: shop.name
-                                                    });
+                        tilePane.setMouseTransparent(true);
+                        routePane.setMouseTransparent(true);
+                        markerPane.setMouseTransparent(false);
 
-                                                const info =
-                                                    new google.maps.InfoWindow({
-                                                        content:
-                                                            "<div style='font-family:Arial;padding:4px'>" +
-                                                            "<b>" + shop.name + "</b>" +
-                                                            "</div>"
-                                                    });
+                        getChildren().addAll(
+                                        tilePane,
+                                        routePane,
+                                        markerPane);
 
-                                                marker.addListener(
-                                                    "click",
-                                                    function() {
-                                                        info.open({
-                                                            anchor: marker,
-                                                            map: map
-                                                        });
-                                                    }
-                                                );
-                                            });
+                        // -----------------------------------------------------
+                        // FIX: clip this StackPane (and therefore tilePane /
+                        // markerPane) to its own real layout bounds so tiles
+                        // and markers can never be painted outside the map
+                        // box, no matter what world-pixel coordinates the
+                        // tile-loading math produces during pan/zoom.
+                        // -----------------------------------------------------
+                        Rectangle selfClip = new Rectangle();
+                        selfClip.widthProperty().bind(widthProperty());
+                        selfClip.heightProperty().bind(heightProperty());
+                        setClip(selfClip);
+
+                        createZoomControls();
+                        createAttribution();
+
+                        widthProperty().addListener(
+                                        (obs, oldValue, newValue) ->
+                                                        scheduleRender());
+
+                        heightProperty().addListener(
+                                        (obs, oldValue, newValue) ->
+                                                        scheduleRender());
+
+                        setOnMousePressed(this::handleMousePressed);
+                        setOnMouseDragged(this::handleMouseDragged);
+                        setOnMouseReleased(event -> {
+                                scheduleRender();
+                        });
+
+                        Platform.runLater(this::renderMap);
+                }
+
+                private void createZoomControls() {
+
+                        VBox zoomBox = new VBox(2);
+                        zoomBox.setAlignment(Pos.CENTER);
+                        zoomBox.setPadding(new Insets(5));
+
+                        Button plus = new Button("+");
+                        Button minus = new Button("−");
+
+                        plus.setPrefSize(38, 38);
+                        minus.setPrefSize(38, 38);
+
+                        String zoomButtonStyle =
+                                        "-fx-background-color: white;" +
+                                                        "-fx-text-fill: #333333;" +
+                                                        "-fx-font-size: 20px;" +
+                                                        "-fx-font-weight: bold;" +
+                                                        "-fx-background-radius: 7;" +
+                                                        "-fx-border-color: #DDDDDD;" +
+                                                        "-fx-border-radius: 7;" +
+                                                        "-fx-cursor: hand;";
+
+                        plus.setStyle(zoomButtonStyle);
+                        minus.setStyle(zoomButtonStyle);
+
+                        plus.setOnAction(event -> zoomIn());
+                        minus.setOnAction(event -> zoomOut());
+
+                        zoomBox.getChildren().addAll(
+                                        plus,
+                                        minus);
+
+                        StackPane.setAlignment(
+                                        zoomBox,
+                                        Pos.TOP_RIGHT);
+
+                        getChildren().add(zoomBox);
+                }
+
+                private void createAttribution() {
+
+                        Label attribution =
+                                        new Label(
+                                                        "© OpenStreetMap contributors");
+
+                        attribution.setStyle(
+                                        "-fx-background-color: rgba(255,255,255,0.90);" +
+                                                        "-fx-text-fill: #555555;" +
+                                                        "-fx-font-size: 9px;" +
+                                                        "-fx-padding: 3 6 3 6;" +
+                                                        "-fx-background-radius: 4;");
+
+                        StackPane.setAlignment(
+                                        attribution,
+                                        Pos.BOTTOM_RIGHT);
+
+                        StackPane.setMargin(
+                                        attribution,
+                                        new Insets(0, 8, 8, 0));
+
+                        getChildren().add(attribution);
+                }
+
+                private void handleMousePressed(MouseEvent event) {
+
+                        mousePressedX = event.getX();
+                        mousePressedY = event.getY();
+
+                        pressedCenterX =
+                                        longitudeToWorldX(
+                                                        centerLongitude,
+                                                        zoom);
+
+                        pressedCenterY =
+                                        latitudeToWorldY(
+                                                        centerLatitude,
+                                                        zoom);
+                }
+
+                private void handleMouseDragged(MouseEvent event) {
+
+                        double deltaX =
+                                        mousePressedX - event.getX();
+
+                        double deltaY =
+                                        mousePressedY - event.getY();
+
+                        double worldX =
+                                        pressedCenterX + deltaX;
+
+                        double worldY =
+                                        pressedCenterY + deltaY;
+
+                        centerLongitude =
+                                        worldXToLongitude(
+                                                        worldX,
+                                                        zoom);
+
+                        centerLatitude =
+                                        worldYToLatitude(
+                                                        worldY,
+                                                        zoom);
+
+                        centerLatitude =
+                                        Math.max(
+                                                        -85.05112878,
+                                                        Math.min(
+                                                                        85.05112878,
+                                                                        centerLatitude));
+
+                        renderMap();
+                }
+
+                private void zoomIn() {
+
+                        if (zoom >= MAX_ZOOM) {
+                                return;
+                        }
+
+                        zoom++;
+                        renderMap();
+                }
+
+                private void zoomOut() {
+
+                        if (zoom <= MIN_ZOOM) {
+                                return;
+                        }
+
+                        zoom--;
+                        renderMap();
+                }
+
+                private void scheduleRender() {
+
+                        Platform.runLater(this::renderMap);
+                }
+
+                private void renderMap() {
+
+                        if (getWidth() < 10 ||
+                                        getHeight() < 10) {
+                                return;
+                        }
+
+                        final long currentRender =
+                                        ++renderNumber;
+
+                        double centerWorldX =
+                                        longitudeToWorldX(
+                                                        centerLongitude,
+                                                        zoom);
+
+                        double centerWorldY =
+                                        latitudeToWorldY(
+                                                        centerLatitude,
+                                                        zoom);
+
+                        double leftWorld =
+                                        centerWorldX - getWidth() / 2.0;
+
+                        double topWorld =
+                                        centerWorldY - getHeight() / 2.0;
+
+                        tilePane.getChildren().clear();
+                        routePane.getChildren().clear();
+                        markerPane.getChildren().clear();
+
+                        int firstTileX =
+                                        (int) Math.floor(
+                                                        leftWorld / TILE_SIZE) - 1;
+
+                        int lastTileX =
+                                        (int) Math.floor(
+                                                        (leftWorld + getWidth()) /
+                                                                        TILE_SIZE) + 1;
+
+                        int firstTileY =
+                                        (int) Math.floor(
+                                                        topWorld / TILE_SIZE) - 1;
+
+                        int lastTileY =
+                                        (int) Math.floor(
+                                                        (topWorld + getHeight()) /
+                                                                        TILE_SIZE) + 1;
+
+                        int maxTile =
+                                        (1 << zoom) - 1;
+
+                        for (int tileX = firstTileX;
+                                        tileX <= lastTileX;
+                                        tileX++) {
+
+                                int wrappedX =
+                                                ((tileX % (maxTile + 1))
+                                                                + (maxTile + 1))
+                                                                % (maxTile + 1);
+
+                                for (int tileY = firstTileY;
+                                                tileY <= lastTileY;
+                                                tileY++) {
+
+                                        if (tileY < 0 ||
+                                                        tileY > maxTile) {
+                                                continue;
                                         }
-                                    </script>
 
-                                    <script async defer
-                                        src="https://maps.googleapis.com/maps/api/js?key=%s&callback=initMap">
-                                    </script>
-                                </body>
-                                </html>
-                                """
-                                .formatted(safeKey);
+                                        double imageX =
+                                                        tileX * TILE_SIZE
+                                                                        - leftWorld;
+
+                                        double imageY =
+                                                        tileY * TILE_SIZE
+                                                                        - topWorld;
+
+                                        loadTile(
+                                                        zoom,
+                                                        wrappedX,
+                                                        tileY,
+                                                        imageX,
+                                                        imageY,
+                                                        currentRender);
+                                }
+                        }
+
+                        addShopMarkers(
+                                        leftWorld,
+                                        topWorld);
+
+                        drawRoute(
+                                        leftWorld,
+                                        topWorld);
+                }
+
+                private void loadTile(
+                                int tileZoom,
+                                int tileX,
+                                int tileY,
+                                double imageX,
+                                double imageY,
+                                long currentRender) {
+
+                        String key =
+                                        tileZoom + "/" +
+                                                        tileX + "/" +
+                                                        tileY;
+
+                        Image cached =
+                                        imageCache.get(key);
+
+                        if (cached != null &&
+                                        !cached.isError()) {
+
+                                addTileImage(
+                                                cached,
+                                                imageX,
+                                                imageY);
+
+                                return;
+                        }
+
+                        String tileUrl =
+                                        "https://tile.openstreetmap.org/" +
+                                                        tileZoom + "/" +
+                                                        tileX + "/" +
+                                                        tileY + ".png";
+
+                        HttpRequest request =
+                                        HttpRequest.newBuilder()
+                                                        .uri(URI.create(tileUrl))
+                                                        .header(
+                                                                        "User-Agent",
+                                                                        "BuyNeX-JavaFX/1.0")
+                                                        .GET()
+                                                        .build();
+
+                        httpClient.sendAsync(
+                                        request,
+                                        HttpResponse.BodyHandlers.ofByteArray()
+                        ).thenApply(response -> {
+
+                                if (response.statusCode() != 200) {
+                                        throw new RuntimeException(
+                                                        "OSM tile HTTP " +
+                                                                        response.statusCode());
+                                }
+
+                                return new Image(
+                                                new ByteArrayInputStream(
+                                                                response.body()));
+                        }).thenAccept(image -> {
+
+                                imageCache.put(key, image);
+
+                                Platform.runLater(() -> {
+
+                                        if (currentRender != renderNumber) {
+                                                return;
+                                        }
+
+                                        addTileImage(
+                                                        image,
+                                                        imageX,
+                                                        imageY);
+                                });
+
+                        }).exceptionally(error -> {
+
+                                System.err.println(
+                                                "Could not load OSM tile " +
+                                                                key + ": " +
+                                                                error.getMessage());
+
+                                return null;
+                        });
+                }
+
+                private void addTileImage(
+                                Image image,
+                                double x,
+                                double y) {
+
+                        ImageView imageView =
+                                        new ImageView(image);
+
+                        imageView.setFitWidth(TILE_SIZE);
+                        imageView.setFitHeight(TILE_SIZE);
+                        imageView.setPreserveRatio(false);
+                        imageView.setSmooth(true);
+
+                        imageView.setLayoutX(x);
+                        imageView.setLayoutY(y);
+
+                        tilePane.getChildren().add(
+                                        imageView);
+                }
+
+                private void addShopMarkers(
+                                double leftWorld,
+                                double topWorld) {
+
+                        addMarker(
+                                        "Core2web",
+                                        "Grocery",
+                                        18.4577,
+                                        73.8245,
+                                        leftWorld,
+                                        topWorld);
+
+                        addMarker(
+                                        "Tech Haven",
+                                        "Electronics",
+                                        18.5204,
+                                        73.8567,
+                                        leftWorld,
+                                        topWorld);
+
+                        addMarker(
+                                        "Nature's Pharmacy",
+                                        "Health",
+                                        18.5074,
+                                        73.8077,
+                                        leftWorld,
+                                        topWorld);
+                }
+
+                private void addMarker(
+                                String name,
+                                String category,
+                                double latitude,
+                                double longitude,
+                                double leftWorld,
+                                double topWorld) {
+
+                        double worldX =
+                                        longitudeToWorldX(
+                                                        longitude,
+                                                        zoom);
+
+                        double worldY =
+                                        latitudeToWorldY(
+                                                        latitude,
+                                                        zoom);
+
+                        double x =
+                                        worldX - leftWorld;
+
+                        double y =
+                                        worldY - topWorld;
+
+                        Circle marker =
+                                        new Circle(
+                                                        8,
+                                                        Color.web("#FF6900"));
+
+                        marker.setStroke(Color.WHITE);
+                        marker.setStrokeWidth(3);
+
+                        Tooltip tooltip =
+                                        new Tooltip(
+                                                        name +
+                                                                        "\n" +
+                                                                        category);
+
+                        Tooltip.install(
+                                        marker,
+                                        tooltip);
+
+                        marker.setOnMouseClicked(event -> {
+
+                                marker.setFill(
+                                                Color.web("#E87500"));
+
+                                event.consume();
+                        });
+
+                        marker.setLayoutX(x);
+                        marker.setLayoutY(y);
+
+                        markerPane.getChildren().add(
+                                        marker);
+                }
+
+                // =====================================================
+                // ROUTING (drawn directly on this embedded map, no
+                // browser / Google Maps redirect involved)
+                // =====================================================
+
+                /**
+                 * Convenience entry point used by the "View Shop" button:
+                 * routes from this map's initial/current-location point
+                 * to the given shop destination.
+                 */
+                void showRouteFromCurrentLocation(
+                                double destinationLatitude,
+                                double destinationLongitude) {
+
+                        showRoute(
+                                        INITIAL_LATITUDE,
+                                        INITIAL_LONGITUDE,
+                                        destinationLatitude,
+                                        destinationLongitude);
+                }
+
+                /**
+                 * Fetches a real road route between the two points from
+                 * the public OSRM routing service and draws it on this
+                 * map. If the request fails for any reason (no internet,
+                 * service unavailable, etc.) it falls back to a straight
+                 * line between the two points so the feature still works.
+                 */
+                void showRoute(
+                                double startLatitude,
+                                double startLongitude,
+                                double endLatitude,
+                                double endLongitude) {
+
+                        String osrmUrl =
+                                        "https://router.project-osrm.org/route/v1/driving/" +
+                                                        startLongitude + "," + startLatitude + ";" +
+                                                        endLongitude + "," + endLatitude +
+                                                        "?overview=full&geometries=geojson";
+
+                        HttpRequest request =
+                                        HttpRequest.newBuilder()
+                                                        .uri(URI.create(osrmUrl))
+                                                        .header(
+                                                                        "User-Agent",
+                                                                        "BuyNeX-JavaFX/1.0")
+                                                        .GET()
+                                                        .build();
+
+                        httpClient.sendAsync(
+                                        request,
+                                        HttpResponse.BodyHandlers.ofString()
+                        ).thenApply(response -> {
+
+                                if (response.statusCode() != 200) {
+                                        throw new RuntimeException(
+                                                        "OSRM routing HTTP " +
+                                                                        response.statusCode());
+                                }
+
+                                return parseRouteCoordinates(
+                                                response.body());
+
+                        }).thenAccept(points -> {
+
+                                Platform.runLater(() -> {
+
+                                        applyRoute(
+                                                        points.size() >= 2
+                                                                        ? points
+                                                                        : straightLine(
+                                                                                        startLatitude,
+                                                                                        startLongitude,
+                                                                                        endLatitude,
+                                                                                        endLongitude),
+                                                        startLatitude,
+                                                        startLongitude,
+                                                        endLatitude,
+                                                        endLongitude);
+                                });
+
+                        }).exceptionally(error -> {
+
+                                System.err.println(
+                                                "Could not fetch route, falling back to a straight line: " +
+                                                                error.getMessage());
+
+                                Platform.runLater(() -> {
+
+                                        applyRoute(
+                                                        straightLine(
+                                                                        startLatitude,
+                                                                        startLongitude,
+                                                                        endLatitude,
+                                                                        endLongitude),
+                                                        startLatitude,
+                                                        startLongitude,
+                                                        endLatitude,
+                                                        endLongitude);
+                                });
+
+                                return null;
+                        });
+                }
+
+                private static List<double[]> straightLine(
+                                double startLatitude,
+                                double startLongitude,
+                                double endLatitude,
+                                double endLongitude) {
+
+                        List<double[]> points = new ArrayList<>();
+
+                        points.add(
+                                        new double[] {
+                                                        startLatitude,
+                                                        startLongitude });
+
+                        points.add(
+                                        new double[] {
+                                                        endLatitude,
+                                                        endLongitude });
+
+                        return points;
+                }
+
+                /**
+                 * Stores the route, re-centers/zooms the map so the whole
+                 * route is visible, and triggers a re-render (which draws
+                 * the route via drawRoute()).
+                 */
+                private void applyRoute(
+                                List<double[]> points,
+                                double startLatitude,
+                                double startLongitude,
+                                double endLatitude,
+                                double endLongitude) {
+
+                        this.routePoints = points;
+                        this.routeStartLat = startLatitude;
+                        this.routeStartLon = startLongitude;
+                        this.routeEndLat = endLatitude;
+                        this.routeEndLon = endLongitude;
+
+                        double minLat = Math.min(startLatitude, endLatitude);
+                        double maxLat = Math.max(startLatitude, endLatitude);
+                        double minLon = Math.min(startLongitude, endLongitude);
+                        double maxLon = Math.max(startLongitude, endLongitude);
+
+                        for (double[] point : points) {
+                                minLat = Math.min(minLat, point[0]);
+                                maxLat = Math.max(maxLat, point[0]);
+                                minLon = Math.min(minLon, point[1]);
+                                maxLon = Math.max(maxLon, point[1]);
+                        }
+
+                        fitToBounds(
+                                        minLat,
+                                        maxLat,
+                                        minLon,
+                                        maxLon);
+
+                        renderMap();
+                }
+
+                /**
+                 * Centers the map on the given bounding box and picks the
+                 * highest zoom level at which the whole box still fits
+                 * comfortably inside the current viewport.
+                 */
+                private void fitToBounds(
+                                double minLatitude,
+                                double maxLatitude,
+                                double minLongitude,
+                                double maxLongitude) {
+
+                        double viewWidth = Math.max(getWidth(), 200);
+                        double viewHeight = Math.max(getHeight(), 200);
+
+                        int bestZoom = MIN_ZOOM;
+
+                        for (int candidateZoom = MAX_ZOOM;
+                                        candidateZoom >= MIN_ZOOM;
+                                        candidateZoom--) {
+
+                                double x1 = longitudeToWorldX(minLongitude, candidateZoom);
+                                double x2 = longitudeToWorldX(maxLongitude, candidateZoom);
+                                double y1 = latitudeToWorldY(minLatitude, candidateZoom);
+                                double y2 = latitudeToWorldY(maxLatitude, candidateZoom);
+
+                                double spanX = Math.abs(x2 - x1);
+                                double spanY = Math.abs(y2 - y1);
+
+                                // Leave ~20% padding around the route.
+                                if (spanX <= viewWidth * 0.8 &&
+                                                spanY <= viewHeight * 0.8) {
+
+                                        bestZoom = candidateZoom;
+                                        break;
+                                }
+                        }
+
+                        centerLatitude = (minLatitude + maxLatitude) / 2.0;
+                        centerLongitude = (minLongitude + maxLongitude) / 2.0;
+                        zoom = bestZoom;
+                }
+
+                /**
+                 * Draws the currently active route (if any) as a polyline,
+                 * plus start/end markers, on routePane. Called every time
+                 * renderMap() runs so the route tracks pan/zoom/resize.
+                 */
+                private void drawRoute(
+                                double leftWorld,
+                                double topWorld) {
+
+                        if (routePoints == null ||
+                                        routePoints.size() < 2) {
+                                return;
+                        }
+
+                        Polyline line = new Polyline();
+
+                        for (double[] point : routePoints) {
+
+                                double worldX =
+                                                longitudeToWorldX(point[1], zoom)
+                                                                - leftWorld;
+
+                                double worldY =
+                                                latitudeToWorldY(point[0], zoom)
+                                                                - topWorld;
+
+                                line.getPoints().addAll(worldX, worldY);
+                        }
+
+                        line.setStroke(Color.web("#2E7DFF"));
+                        line.setStrokeWidth(5);
+                        line.setStrokeLineCap(StrokeLineCap.ROUND);
+                        line.setStrokeLineJoin(StrokeLineJoin.ROUND);
+
+                        routePane.getChildren().add(line);
+
+                        addRouteEndpointMarker(
+                                        routeStartLat,
+                                        routeStartLon,
+                                        leftWorld,
+                                        topWorld,
+                                        Color.web("#2E7DFF"),
+                                        "Start");
+
+                        addRouteEndpointMarker(
+                                        routeEndLat,
+                                        routeEndLon,
+                                        leftWorld,
+                                        topWorld,
+                                        Color.web("#1EAE55"),
+                                        "Destination");
+                }
+
+                private void addRouteEndpointMarker(
+                                double latitude,
+                                double longitude,
+                                double leftWorld,
+                                double topWorld,
+                                Color color,
+                                String label) {
+
+                        double worldX = longitudeToWorldX(longitude, zoom);
+                        double worldY = latitudeToWorldY(latitude, zoom);
+
+                        double x = worldX - leftWorld;
+                        double y = worldY - topWorld;
+
+                        Circle marker = new Circle(9, color);
+                        marker.setStroke(Color.WHITE);
+                        marker.setStrokeWidth(3);
+
+                        Tooltip.install(
+                                        marker,
+                                        new Tooltip(label));
+
+                        marker.setLayoutX(x);
+                        marker.setLayoutY(y);
+
+                        routePane.getChildren().add(marker);
+                }
+
+                /**
+                 * Minimal, dependency-free extraction of the
+                 * "geometry.coordinates" [[lon,lat], ...] array from an
+                 * OSRM GeoJSON route response, without pulling in a JSON
+                 * library. Returns an empty list if parsing fails, which
+                 * triggers the straight-line fallback.
+                 */
+                private static List<double[]> parseRouteCoordinates(
+                                String json) {
+
+                        List<double[]> points = new ArrayList<>();
+
+                        try {
+                                int geometryIndex = json.indexOf("\"geometry\"");
+
+                                int coordinatesIndex =
+                                                json.indexOf(
+                                                                "\"coordinates\"",
+                                                                Math.max(geometryIndex, 0));
+
+                                if (coordinatesIndex < 0) {
+                                        return points;
+                                }
+
+                                int start = json.indexOf("[[", coordinatesIndex);
+                                int end = json.indexOf("]]", start);
+
+                                if (start < 0 || end < 0) {
+                                        return points;
+                                }
+
+                                String coordsBlock =
+                                                json.substring(start + 2, end);
+
+                                String[] pairs =
+                                                coordsBlock.split("\\],\\[");
+
+                                for (String pair : pairs) {
+
+                                        String[] parts = pair.split(",");
+
+                                        if (parts.length < 2) {
+                                                continue;
+                                        }
+
+                                        double lon = Double.parseDouble(parts[0].trim());
+                                        double lat = Double.parseDouble(parts[1].trim());
+
+                                        points.add(new double[] { lat, lon });
+                                }
+
+                        } catch (Exception parseError) {
+
+                                System.err.println(
+                                                "Could not parse OSRM route response: " +
+                                                                parseError.getMessage());
+
+                                points.clear();
+                        }
+
+                        return points;
+                }
+
+                private static double longitudeToWorldX(
+                                double longitude,
+                                int zoomLevel) {
+
+                        double mapSize =
+                                        TILE_SIZE *
+                                                        Math.pow(
+                                                                        2,
+                                                                        zoomLevel);
+
+                        return (longitude + 180.0) /
+                                        360.0 *
+                                        mapSize;
+                }
+
+                private static double latitudeToWorldY(
+                                double latitude,
+                                int zoomLevel) {
+
+                        double mapSize =
+                                        TILE_SIZE *
+                                                        Math.pow(
+                                                                        2,
+                                                                        zoomLevel);
+
+                        double latitudeRadians =
+                                        Math.toRadians(latitude);
+
+                        double y =
+                                        (1.0 -
+                                                        Math.log(
+                                                                        Math.tan(latitudeRadians) +
+                                                                                        (1.0 /
+                                                                                                        Math.cos(latitudeRadians)))
+                                                                        / Math.PI)
+                                                        / 2.0;
+
+                        return y * mapSize;
+                }
+
+                private static double worldXToLongitude(
+                                double worldX,
+                                int zoomLevel) {
+
+                        double mapSize =
+                                        TILE_SIZE *
+                                                        Math.pow(
+                                                                        2,
+                                                                        zoomLevel);
+
+                        return worldX /
+                                        mapSize *
+                                        360.0 -
+                                        180.0;
+                }
+
+                private static double worldYToLatitude(
+                                double worldY,
+                                int zoomLevel) {
+
+                        double mapSize =
+                                        TILE_SIZE *
+                                                        Math.pow(
+                                                                        2,
+                                                                        zoomLevel);
+
+                        double y =
+                                        1.0 -
+                                                        (2.0 * worldY /
+                                                                        mapSize);
+
+                        return Math.toDegrees(
+                                        Math.atan(
+                                                        Math.sinh(
+                                                                        y * Math.PI)));
+                }
         }
 
         private void getHostServicesSafely(String url) {

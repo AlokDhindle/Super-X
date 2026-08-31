@@ -6,6 +6,7 @@ public class Productcart {
     private String name;
     private double price;
     private String name1;
+    private int quantity;
 
     // IMPORTANT:
     // Firestore fetch ke liye required
@@ -17,12 +18,13 @@ public class Productcart {
             String UserId,
             String name,
             double price,
-            String name1) {
+            String name1, int quantity) {
 
         this.UserId = UserId;
         this.name = name;
         this.price = price;
         this.name1 = name1;
+        this.quantity = quantity;
     }
 
     public String getUserId() {
@@ -55,5 +57,13 @@ public class Productcart {
 
     public void setName1(String name1) {
         this.name1 = name1;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
