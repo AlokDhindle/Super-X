@@ -366,8 +366,8 @@ public class ShopkeeperOrderNew {
         Scene ordersScene =
                 new Scene(
                         borderPane,
-                        1280,
-                        650
+                        1550,
+                        850
                 );
 
         ordersScene.setFill(

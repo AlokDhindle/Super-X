@@ -848,8 +848,8 @@ public class ShopkeeperRegistration {
 
         shopkeeperScene = new Scene(
                 borderPane,
-                1280,
-                650);
+                1550,
+                850);
 
         shopkeeperScene.setFill(
                 Color.web("#F8FBF8"));

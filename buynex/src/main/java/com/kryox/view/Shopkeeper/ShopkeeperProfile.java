@@ -791,8 +791,7 @@ public class ShopkeeperProfile {
 
                 Scene profileScene = new Scene(
                                 borderPane,
-                                ViewConstants.STAGE_WIDTH,
-                                ViewConstants.STAGE_HEIGHT);
+                                1550,850);
 
                 profileScene.setFill(
                                 Color.web("#F8F7FC"));

@@ -456,8 +456,8 @@ public class MainPage {
         mainPageScene =
                 new Scene(
                         borderPane,
-                        1280,
-                        650
+                        1550,
+                        850
                 );
 
         mainPageScene.setFill(

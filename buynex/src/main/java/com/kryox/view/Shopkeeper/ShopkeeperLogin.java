@@ -49,6 +49,7 @@ public class ShopkeeperLogin {
                 // =========================================================
 
                 HBox headerBox = ViewConstants.loginHeader();
+                
 
                 borderPane.setTop(
                                 headerBox);
@@ -1009,8 +1010,9 @@ public class ShopkeeperLogin {
 
                 loginScene = new Scene(
                                 borderPane,
-                                1280,
-                                650);
+                                1550,
+                                850);
+                
 
                 loginScene.setFill(
                                 Color.web("#F8FBF8"));

@@ -708,8 +708,8 @@ public class ShopkeeperSupport {
 
                 Scene scene = new Scene(
                                 borderPane,
-                                1280,
-                                650);
+                                1550,
+                                850);
 
                 scene.setFill(
                                 Color.web("#F8F7FC"));

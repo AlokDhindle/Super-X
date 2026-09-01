@@ -740,8 +740,7 @@ public class ShopkeeperChatbot {
 
                 Scene chatbotScene = new Scene(
                                 borderPane,
-                                ViewConstants.STAGE_WIDTH,
-                                ViewConstants.STAGE_HEIGHT
+                                1550,850
                         );
 
                 chatbotScene.setFill(

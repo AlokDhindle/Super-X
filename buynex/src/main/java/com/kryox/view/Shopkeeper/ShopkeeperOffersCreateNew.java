@@ -1305,8 +1305,8 @@ public class ShopkeeperOffersCreateNew {
         Scene scene =
                 new Scene(
                         borderPane,
-                        1280,
-                        650
+                        1550,
+                        850
                 );
 
         scene.setFill(

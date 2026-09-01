@@ -762,8 +762,8 @@ public class ShopkeeperLoginSendOtp {
 
                 sendOtpScene = new Scene(
                                 borderPane,
-                                1280,
-                                650);
+                                1550,
+                                850);
 
                 sendOtpScene.setFill(
                                 Color.web("#F8FBF8"));

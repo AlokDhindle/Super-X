@@ -1758,8 +1758,8 @@ public class ShopkeeperDetails {
         shopDetailsScene =
                 new Scene(
                         borderPane,
-                        1280,
-                        720);
+                        1550,
+                        850);
 
         shopDetailsScene.setFill(
                 Color.web("#F8FBF8"));

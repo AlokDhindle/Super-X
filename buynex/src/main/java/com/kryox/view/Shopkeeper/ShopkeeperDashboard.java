@@ -576,8 +576,7 @@ public class ShopkeeperDashboard {
         Scene dashboardScene =
                 new Scene(
                         borderPane,
-                        ViewConstants.STAGE_WIDTH,
-                        ViewConstants.STAGE_HEIGHT
+                       1550,850
                 );
 
         dashboardScene.setFill(

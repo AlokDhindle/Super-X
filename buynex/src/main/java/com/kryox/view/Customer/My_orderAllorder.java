@@ -942,7 +942,7 @@ public class My_orderAllorder  {
                 BorderPane mainBox = new BorderPane();
                 mainBox.setLeft(leftBox);
                 mainBox.setCenter(Rightvbox);
-                mainBox.setStyle("-fx-background-color: #eee5df");
+                mainBox.setStyle("-fx-background-color:#eee5df");
 
                 // =====================================================
                 // SCENE

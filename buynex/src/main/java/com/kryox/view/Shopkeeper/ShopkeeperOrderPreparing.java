@@ -323,8 +323,8 @@ public class ShopkeeperOrderPreparing {
 
                 Scene ordersScene = new Scene(
                                 borderPane,
-                                1280,
-                                650);
+                                1550,
+                                850);
 
                 ordersScene.setFill(
                                 Color.web("#F8F7FC"));
