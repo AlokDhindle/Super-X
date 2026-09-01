@@ -1086,11 +1086,9 @@ public class Helppage  {
         alert.showAndWait();
     }
     public void backtoDashboard() {
-    Seting seting = new Seting(userId);
-    Homepage.HomepageStage.setScene(
-        HelpScene
-        
-    );
-}
-
+        Seting seting = new Seting(userId);
+        Homepage.HomepageStage.setScene(
+            HelpScene
+        );
+    }
 }

@@ -569,4 +569,39 @@ public class UserDao {
             return false;
         }
     }
+
+    // =====================================================
+    // DASHBOARD - COUNT USERS BY ROLE
+    // =====================================================
+
+    public int getUserCountByRole(
+            String role
+    ) {
+
+        try {
+
+            QuerySnapshot snapshot =
+                    db.collection("User")
+                            .whereEqualTo(
+                                    "role",
+                                    role
+                            )
+                            .get()
+                            .get();
+
+            return snapshot.size();
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Role count error : "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+
+            return 0;
+        }
+    }
+
 }

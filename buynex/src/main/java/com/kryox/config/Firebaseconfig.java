@@ -16,6 +16,9 @@ public class Firebaseconfig {
 
     private static FirebaseApp firebaseApp;
 
+    public static final String WEB_API_KEY =
+            Apikey.API_KEY;
+
     public static void getFirebaseConfig() {
 
         try {
@@ -30,10 +33,9 @@ public class Firebaseconfig {
             }
 
             InputStream serviceAccount =
-                    Firebaseconfig.class
-                            .getResourceAsStream(
-                                    "/assets/serviceAccount.json"
-                            );
+                    Firebaseconfig.class.getResourceAsStream(
+                            "/assets/serviceAccount.json"
+                    );
 
             if (serviceAccount == null) {
 
@@ -50,6 +52,7 @@ public class Firebaseconfig {
                 Path path =
                         Paths.get(
                                 System.getProperty("user.dir"),
+                                "buynex",
                                 "src",
                                 "main",
                                 "resources",
@@ -57,9 +60,22 @@ public class Firebaseconfig {
                                 "serviceAccount.json"
                         );
 
+                if (!Files.exists(path)) {
+
+                    path =
+                            Paths.get(
+                                    System.getProperty("user.dir"),
+                                    "src",
+                                    "main",
+                                    "resources",
+                                    "assets",
+                                    "serviceAccount.json"
+                            );
+                }
+
                 System.out.println(
-                        "Trying Firebase path: " +
-                        path.toAbsolutePath()
+                        "Trying Firebase path: "
+                                + path.toAbsolutePath()
                 );
 
                 if (Files.exists(path)) {
@@ -124,5 +140,10 @@ public class Firebaseconfig {
         return FirestoreClient.getFirestore(
                 firebaseApp
         );
+    }
+
+    public static Firestore getFireStore() {
+
+        return gFirestore();
     }
 }

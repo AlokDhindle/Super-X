@@ -2,11 +2,16 @@ package com.kryox.dao.Delivery;
 
 import com.kryox.config.DelivrayFirebaseConfig;
 import com.kryox.model.Delivery.DeliveryPartner;
+import com.kryox.model.Delivery.PartnerConstants;
+
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.ListenerRegistration;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
+import javafx.application.Platform;
 
 import org.json.JSONObject;
 
@@ -21,11 +26,14 @@ import java.util.List;
 import java.util.Map;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class DeliveryPartnerDAO {
 
     private static final String COLLECTION_NAME =
             "delivery_partners";
+
+    private static ListenerRegistration partnerListener;
 
     public CompletableFuture<String> registerPartnerWithAuth(
             DeliveryPartner partner,
@@ -40,8 +48,7 @@ public class DeliveryPartnerDAO {
             try {
 
                 Firestore db =
-                        DelivrayFirebaseConfig
-                                .getFireStore();
+                        DelivrayFirebaseConfig.getFireStore();
 
                 String signUpUrl =
                         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="
@@ -128,7 +135,6 @@ public class DeliveryPartnerDAO {
                 partner.setCreatedAt(
                         System.currentTimeMillis()
                 );
-
                 partner.setApproved(false);
                 partner.setStatus(
                         "PENDING_APPROVAL"
@@ -137,39 +143,51 @@ public class DeliveryPartnerDAO {
                 Map<String, Object> partnerMap =
                         new HashMap<>();
 
-                partnerMap.put("id", uid);
+                partnerMap.put(
+                        "id",
+                        uid
+                );
+
                 partnerMap.put(
                         "fullName",
                         partner.getFullName()
                 );
+
                 partnerMap.put(
                         "email",
                         partner.getEmail()
                 );
+
                 partnerMap.put(
                         "mobile",
                         partner.getMobile()
                 );
+
                 partnerMap.put(
                         "dob",
                         partner.getDob()
                 );
+
                 partnerMap.put(
                         "gender",
                         partner.getGender()
                 );
+
                 partnerMap.put(
                         "address",
                         partner.getAddress()
                 );
+
                 partnerMap.put(
                         "vehicleType",
                         partner.getVehicleType()
                 );
+
                 partnerMap.put(
                         "vehicleNumber",
                         partner.getVehicleNumber()
                 );
+
                 partnerMap.put(
                         "drivingLicense",
                         partner.getDrivingLicense()
@@ -180,27 +198,141 @@ public class DeliveryPartnerDAO {
                                 ? partner.getProfilePhotoPath()
                                 : "";
 
+                String idCardUrl =
+                        partner.getIdCardPath() != null
+                                ? partner.getIdCardPath()
+                                : "";
+
+                String licenseDocUrl =
+                        partner.getLicenseDocPath() != null
+                                ? partner.getLicenseDocPath()
+                                : "";
+
+                String rcBookUrl =
+                        partner.getRcBookPath() != null
+                                ? partner.getRcBookPath()
+                                : "";
+
                 partnerMap.put(
                         "profilePhotoUrl",
                         photoUrl
                 );
+
                 partnerMap.put(
                         "profilePhotoPath",
                         photoUrl
                 );
 
                 partnerMap.put(
+                        "idCardUrl",
+                        idCardUrl
+                );
+
+                partnerMap.put(
+                        "idCardPath",
+                        idCardUrl
+                );
+
+                partnerMap.put(
+                        "licenseDocUrl",
+                        licenseDocUrl
+                );
+
+                partnerMap.put(
+                        "licenseDocPath",
+                        licenseDocUrl
+                );
+
+                partnerMap.put(
+                        "rcBookUrl",
+                        rcBookUrl
+                );
+
+                partnerMap.put(
+                        "rcBookPath",
+                        rcBookUrl
+                );
+
+                partnerMap.put(
+                        "licenseStatus",
+                        "Pending Approval"
+                );
+
+                partnerMap.put(
+                        "governmentIdStatus",
+                        "Pending Approval"
+                );
+
+                partnerMap.put(
+                        "rcBookStatus",
+                        "Pending Approval"
+                );
+
+                partnerMap.put(
+                        "insuranceStatus",
+                        "Pending Approval"
+                );
+
+                partnerMap.put(
+                        "approved",
+                        false
+                );
+
+                partnerMap.put(
+                        "isAdminApproved",
+                        false
+                );
+
+                partnerMap.put(
+                        "status",
+                        "PENDING_APPROVAL"
+                );
+
+                partnerMap.put(
+                        "ratingScore",
+                        5.0
+                );
+
+                partnerMap.put(
+                        "ratingQuote",
+                        "\"Fast and always polite! Great service.\""
+                );
+
+                partnerMap.put(
+                        "totalDeliveries",
+                        0
+                );
+
+                partnerMap.put(
+                        "completionRate",
+                        100.0
+                );
+
+                partnerMap.put(
+                        "partnerTier",
+                        "Standard Partner"
+                );
+
+                partnerMap.put(
+                        "city",
+                        "Pune"
+                );
+
+                partnerMap.put(
                         "accountHolder",
                         partner.getAccountHolder()
                 );
+
                 partnerMap.put(
                         "bankName",
                         partner.getBankName()
                 );
+
                 partnerMap.put(
                         "accountNumber",
                         partner.getAccountNumber()
                 );
+
                 partnerMap.put(
                         "ifscCode",
                         partner.getIfscCode()
@@ -210,6 +342,7 @@ public class DeliveryPartnerDAO {
                         "emergencyContactName",
                         partner.getEmergencyContactName()
                 );
+
                 partnerMap.put(
                         "emergencyContactPhone",
                         partner.getEmergencyContactPhone()
@@ -225,23 +358,17 @@ public class DeliveryPartnerDAO {
 
                 adminReview.put(
                         "idCardUrl",
-                        partner.getIdCardPath() != null
-                                ? partner.getIdCardPath()
-                                : ""
+                        idCardUrl
                 );
 
                 adminReview.put(
                         "licenseDocUrl",
-                        partner.getLicenseDocPath() != null
-                                ? partner.getLicenseDocPath()
-                                : ""
+                        licenseDocUrl
                 );
 
                 adminReview.put(
                         "rcBookUrl",
-                        partner.getRcBookPath() != null
-                                ? partner.getRcBookPath()
-                                : ""
+                        rcBookUrl
                 );
 
                 adminReview.put(
@@ -257,16 +384,6 @@ public class DeliveryPartnerDAO {
                 partnerMap.put(
                         "adminVerification",
                         adminReview
-                );
-
-                partnerMap.put(
-                        "approved",
-                        false
-                );
-
-                partnerMap.put(
-                        "status",
-                        "PENDING_APPROVAL"
                 );
 
                 db.collection(
@@ -292,11 +409,10 @@ public class DeliveryPartnerDAO {
         return future;
     }
 
-    public CompletableFuture<DeliveryPartner>
-            authenticatePartner(
-                    String email,
-                    String password
-            ) {
+    public CompletableFuture<DeliveryPartner> authenticatePartner(
+            String email,
+            String password
+    ) {
 
         CompletableFuture<DeliveryPartner> future =
                 new CompletableFuture<>();
@@ -307,8 +423,7 @@ public class DeliveryPartnerDAO {
 
                 String url =
                         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="
-                                + DelivrayFirebaseConfig
-                                        .WEB_API_KEY;
+                                + DelivrayFirebaseConfig.WEB_API_KEY;
 
                 JSONObject requestJson =
                         new JSONObject()
@@ -338,21 +453,16 @@ public class DeliveryPartnerDAO {
                                         "application/json"
                                 )
                                 .POST(
-                                        HttpRequest
-                                                .BodyPublishers
-                                                .ofString(
-                                                        requestJson
-                                                                .toString()
-                                                )
+                                        HttpRequest.BodyPublishers.ofString(
+                                                requestJson.toString()
+                                        )
                                 )
                                 .build();
 
                 HttpResponse<String> response =
                         client.send(
                                 request,
-                                HttpResponse
-                                        .BodyHandlers
-                                        .ofString()
+                                HttpResponse.BodyHandlers.ofString()
                         );
 
                 if (response.statusCode() == 200) {
@@ -368,8 +478,7 @@ public class DeliveryPartnerDAO {
                             );
 
                     Firestore db =
-                            DelivrayFirebaseConfig
-                                    .getFireStore();
+                            DelivrayFirebaseConfig.getFireStore();
 
                     DocumentSnapshot snapshot =
                             db.collection(
@@ -404,17 +513,15 @@ public class DeliveryPartnerDAO {
                             Boolean.TRUE.equals(
                                     approved
                             )
-                                    || "APPROVED"
-                                            .equalsIgnoreCase(
-                                                    status
-                                            );
+                                    || "APPROVED".equalsIgnoreCase(
+                                            status
+                                    );
 
                     if (!isApproved) {
 
-                        if ("REJECTED"
-                                .equalsIgnoreCase(
-                                        status
-                                )) {
+                        if ("REJECTED".equalsIgnoreCase(
+                                status
+                        )) {
 
                             future.completeExceptionally(
                                     new Exception(
@@ -446,43 +553,32 @@ public class DeliveryPartnerDAO {
                     }
 
                     partner.setId(uid);
-
                     partner.setApproved(true);
-
                     partner.setStatus(
                             status == null
                                     ? "APPROVED"
                                     : status
                     );
 
-                    if (snapshot.contains(
-                            "profilePhotoUrl"
-                    )
-                            && snapshot.getString(
-                                    "profilePhotoUrl"
-                            ) != null) {
+                    Map<String, Object> data =
+                            snapshot.getData();
 
-                        partner.setProfilePhotoPath(
-                                snapshot.getString(
-                                        "profilePhotoUrl"
-                                )
+                    if (data != null) {
+
+                        extractDocumentUrlsFromData(
+                                data,
+                                partner
                         );
 
-                    } else if (
-                            snapshot.contains(
-                                    "profilePhotoPath"
-                            )
-                                    && snapshot.getString(
-                                            "profilePhotoPath"
-                                    ) != null
-                    ) {
-
-                        partner.setProfilePhotoPath(
-                                snapshot.getString(
-                                        "profilePhotoPath"
+                        Platform.runLater(() ->
+                                PartnerConstants.setLoggedInPartner(
+                                        data
                                 )
                         );
                     }
+
+                    PartnerConstants.UID =
+                            uid;
 
                     future.complete(partner);
 
@@ -545,8 +641,7 @@ public class DeliveryPartnerDAO {
         return future;
     }
 
-    public List<QueryDocumentSnapshot>
-            getAllPartners() {
+    public List<QueryDocumentSnapshot> getAllPartners() {
 
         List<QueryDocumentSnapshot> allPartners =
                 new ArrayList<>();
@@ -554,8 +649,7 @@ public class DeliveryPartnerDAO {
         try {
 
             Firestore db =
-                    DelivrayFirebaseConfig
-                            .getFireStore();
+                    DelivrayFirebaseConfig.getFireStore();
 
             QuerySnapshot snapshot =
                     db.collection(
@@ -586,8 +680,7 @@ public class DeliveryPartnerDAO {
         return allPartners;
     }
 
-    public List<QueryDocumentSnapshot>
-            getPendingPartners() {
+    public List<QueryDocumentSnapshot> getPendingPartners() {
 
         List<QueryDocumentSnapshot> pending =
                 new ArrayList<>();
@@ -595,8 +688,7 @@ public class DeliveryPartnerDAO {
         try {
 
             Firestore db =
-                    DelivrayFirebaseConfig
-                            .getFireStore();
+                    DelivrayFirebaseConfig.getFireStore();
 
             QuerySnapshot snapshot =
                     db.collection(
@@ -622,21 +714,21 @@ public class DeliveryPartnerDAO {
                         Boolean.TRUE.equals(
                                 approved
                         )
-                                || "APPROVED"
-                                        .equalsIgnoreCase(
-                                                status
-                                        );
-
-                boolean isRejected =
-                        "REJECTED"
-                                .equalsIgnoreCase(
+                                || "APPROVED".equalsIgnoreCase(
                                         status
                                 );
+
+                boolean isRejected =
+                        "REJECTED".equalsIgnoreCase(
+                                status
+                        );
 
                 if (!isApproved &&
                         !isRejected) {
 
-                    pending.add(document);
+                    pending.add(
+                            document
+                    );
                 }
             }
 
@@ -665,14 +757,18 @@ public class DeliveryPartnerDAO {
         try {
 
             Firestore db =
-                    DelivrayFirebaseConfig
-                            .getFireStore();
+                    DelivrayFirebaseConfig.getFireStore();
 
             Map<String, Object> updates =
                     new HashMap<>();
 
             updates.put(
                     "approved",
+                    true
+            );
+
+            updates.put(
+                    "isAdminApproved",
                     true
             );
 
@@ -721,14 +817,18 @@ public class DeliveryPartnerDAO {
         try {
 
             Firestore db =
-                    DelivrayFirebaseConfig
-                            .getFireStore();
+                    DelivrayFirebaseConfig.getFireStore();
 
             Map<String, Object> updates =
                     new HashMap<>();
 
             updates.put(
                     "approved",
+                    false
+            );
+
+            updates.put(
+                    "isAdminApproved",
                     false
             );
 
@@ -744,7 +844,9 @@ public class DeliveryPartnerDAO {
 
             updates.put(
                     "adminVerification.reviewNote",
-                    reason
+                    reason != null
+                            ? reason
+                            : ""
             );
 
             updates.put(
@@ -771,6 +873,207 @@ public class DeliveryPartnerDAO {
             e.printStackTrace();
 
             return false;
+        }
+    }
+
+    public static void listenToPartnerUpdates(
+            String uid,
+            Consumer<DocumentSnapshot> onUpdate
+    ) {
+
+        if (uid == null ||
+                uid.isEmpty()) {
+
+            return;
+        }
+
+        if (partnerListener != null) {
+
+            partnerListener.remove();
+        }
+
+        Firestore db =
+                DelivrayFirebaseConfig.getFireStore();
+
+        DocumentReference docRef =
+                db.collection(
+                        COLLECTION_NAME
+                )
+                        .document(uid);
+
+        partnerListener =
+                docRef.addSnapshotListener(
+                        (snapshot, e) -> {
+
+                            if (e != null ||
+                                    snapshot == null ||
+                                    !snapshot.exists()) {
+
+                                return;
+                            }
+
+                            Map<String, Object> data =
+                                    snapshot.getData();
+
+                            if (data != null) {
+
+                                Platform.runLater(() -> {
+
+                                    PartnerConstants.setLoggedInPartner(
+                                            data
+                                    );
+
+                                    if (onUpdate != null) {
+
+                                        onUpdate.accept(
+                                                snapshot
+                                        );
+                                    }
+                                });
+                            }
+                        }
+                );
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void extractDocumentUrlsFromData(
+            Map<String, Object> data,
+            DeliveryPartner partner
+    ) {
+
+        String profilePhoto =
+                getVal(
+                        data,
+                        "profilePhotoUrl",
+                        "profilePhotoPath"
+                );
+
+        String idCard =
+                getVal(
+                        data,
+                        "idCardUrl",
+                        "idCardPath"
+                );
+
+        String licenseDoc =
+                getVal(
+                        data,
+                        "licenseDocUrl",
+                        "licenseDocPath"
+                );
+
+        String rcBook =
+                getVal(
+                        data,
+                        "rcBookUrl",
+                        "rcBookPath"
+                );
+
+        if ((idCard.isEmpty() ||
+                licenseDoc.isEmpty() ||
+                rcBook.isEmpty())
+                && data.get(
+                        "adminVerification"
+                ) instanceof Map) {
+
+            Map<String, Object> adminMap =
+                    (Map<String, Object>) data.get(
+                            "adminVerification"
+                    );
+
+            if (idCard.isEmpty()) {
+
+                idCard =
+                        getVal(
+                                adminMap,
+                                "idCardUrl",
+                                "idCardPath"
+                        );
+            }
+
+            if (licenseDoc.isEmpty()) {
+
+                licenseDoc =
+                        getVal(
+                                adminMap,
+                                "licenseDocUrl",
+                                "licenseDocPath"
+                        );
+            }
+
+            if (rcBook.isEmpty()) {
+
+                rcBook =
+                        getVal(
+                                adminMap,
+                                "rcBookUrl",
+                                "rcBookPath"
+                        );
+            }
+        }
+
+        if (!profilePhoto.isEmpty()) {
+
+            partner.setProfilePhotoPath(
+                    profilePhoto
+            );
+        }
+
+        if (!idCard.isEmpty()) {
+
+            partner.setIdCardPath(
+                    idCard
+            );
+        }
+
+        if (!licenseDoc.isEmpty()) {
+
+            partner.setLicenseDocPath(
+                    licenseDoc
+            );
+        }
+
+        if (!rcBook.isEmpty()) {
+
+            partner.setRcBookPath(
+                    rcBook
+            );
+        }
+    }
+
+    private static String getVal(
+            Map<String, Object> map,
+            String key1,
+            String key2
+    ) {
+
+        Object value1 =
+                map.get(key1);
+
+        if (value1 != null &&
+                !value1.toString().trim().isEmpty()) {
+
+            return value1.toString().trim();
+        }
+
+        Object value2 =
+                map.get(key2);
+
+        if (value2 != null &&
+                !value2.toString().trim().isEmpty()) {
+
+            return value2.toString().trim();
+        }
+
+        return "";
+    }
+
+    public static void stopListening() {
+
+        if (partnerListener != null) {
+
+            partnerListener.remove();
+            partnerListener = null;
         }
     }
 }

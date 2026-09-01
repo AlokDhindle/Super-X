@@ -3,6 +3,7 @@ package com.kryox.view.Admin;
 import java.util.List;
 
 import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.kryox.dao.Customer.UserDao;
 import com.kryox.dao.Delivery.DeliveryPartnerDAO;
 import com.kryox.dao.Shopkeeper.ShopkeeperDAO;
 import com.kryox.view.Customer.Homepage;
@@ -923,7 +924,7 @@ public class AdminDashboardPage {
                 card1Title.setFill(
                                 Color.web("#777777"));
 
-                Text card1Value = new Text("24,512");
+                Text card1Value = new Text("...");
                 card1Value.setFont(
                                 Font.font(
                                                 "Arial",
@@ -1841,6 +1842,9 @@ public class AdminDashboardPage {
                 // LOAD SHOP + DELIVERY DATA FROM FIRESTORE
                 // =================================================
 
+                UserDao userDao =
+                                new UserDao();
+
                 ShopkeeperDAO shopkeeperDAO =
                                 new ShopkeeperDAO();
 
@@ -1849,6 +1853,16 @@ public class AdminDashboardPage {
 
                 Thread verificationDashboardThread =
                                 new Thread(() -> {
+
+                                        int customerCount =
+                                                        userDao
+                                                                        .getUserCountByRole(
+                                                                                        "Customer");
+
+                                        int shopkeeperCount =
+                                                        userDao
+                                                                        .getUserCountByRole(
+                                                                                        "Shopkeeper");
 
                                         List<QueryDocumentSnapshot> allShopkeepers =
                                                         shopkeeperDAO
@@ -1915,10 +1929,13 @@ public class AdminDashboardPage {
 
                                         Platform.runLater(() -> {
 
+                                                card1Value.setText(
+                                                                String.valueOf(
+                                                                                customerCount));
+
                                                 card2Value.setText(
                                                                 String.valueOf(
-                                                                                allShopkeepers
-                                                                                                .size()));
+                                                                                shopkeeperCount));
 
                                                 card4Value.setText(
                                                                 String.valueOf(

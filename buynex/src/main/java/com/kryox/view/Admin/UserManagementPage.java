@@ -1177,18 +1177,28 @@ public class UserManagementPage {
 
                 VBox shopNameHeaderBox = new VBox(shopNameHeader);
                 shopNameHeaderBox.setPrefWidth(220);
+                shopNameHeaderBox.setMinWidth(220);
+                shopNameHeaderBox.setMaxWidth(220);
 
                 VBox shopRoleHeaderBox = new VBox(shopRoleHeader);
                 shopRoleHeaderBox.setPrefWidth(150);
+                shopRoleHeaderBox.setMinWidth(150);
+                shopRoleHeaderBox.setMaxWidth(150);
 
                 VBox shopStatusHeaderBox = new VBox(shopStatusHeader);
                 shopStatusHeaderBox.setPrefWidth(140);
+                shopStatusHeaderBox.setMinWidth(140);
+                shopStatusHeaderBox.setMaxWidth(140);
 
                 VBox shopLoginHeaderBox = new VBox(shopLoginHeader);
                 shopLoginHeaderBox.setPrefWidth(160);
+                shopLoginHeaderBox.setMinWidth(160);
+                shopLoginHeaderBox.setMaxWidth(160);
 
                 VBox shopActionsHeaderBox = new VBox(shopActionsHeader);
                 shopActionsHeaderBox.setPrefWidth(150);
+                shopActionsHeaderBox.setMinWidth(150);
+                shopActionsHeaderBox.setMaxWidth(150);
 
                 HBox shopTableHeader = new HBox(
                                 shopNameHeaderBox,
@@ -1238,18 +1248,28 @@ public class UserManagementPage {
 
                 VBox customerNameHeaderBox = new VBox(customerNameHeader);
                 customerNameHeaderBox.setPrefWidth(220);
+                customerNameHeaderBox.setMinWidth(220);
+                customerNameHeaderBox.setMaxWidth(220);
 
                 VBox customerRoleHeaderBox = new VBox(customerRoleHeader);
                 customerRoleHeaderBox.setPrefWidth(150);
+                customerRoleHeaderBox.setMinWidth(150);
+                customerRoleHeaderBox.setMaxWidth(150);
 
                 VBox customerStatusHeaderBox = new VBox(customerStatusHeader);
                 customerStatusHeaderBox.setPrefWidth(140);
+                customerStatusHeaderBox.setMinWidth(140);
+                customerStatusHeaderBox.setMaxWidth(140);
 
                 VBox customerLoginHeaderBox = new VBox(customerLoginHeader);
                 customerLoginHeaderBox.setPrefWidth(160);
+                customerLoginHeaderBox.setMinWidth(160);
+                customerLoginHeaderBox.setMaxWidth(160);
 
                 VBox customerActionsHeaderBox = new VBox(customerActionsHeader);
                 customerActionsHeaderBox.setPrefWidth(150);
+                customerActionsHeaderBox.setMinWidth(150);
+                customerActionsHeaderBox.setMaxWidth(150);
 
                 HBox customerTableHeader = new HBox(
                                 customerNameHeaderBox,
@@ -1438,9 +1458,13 @@ public class UserManagementPage {
                 Text deliveryUser = new Text("Aarav Patel\naarav.delivery@gmail.com");
                 deliveryUser.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
 
+                deliveryUser.setWrappingWidth(155);
+
                 HBox deliveryUserBox = new HBox(10, deliveryImageView, deliveryUser);
                 deliveryUserBox.setAlignment(Pos.CENTER_LEFT);
                 deliveryUserBox.setPrefWidth(220);
+                deliveryUserBox.setMinWidth(220);
+                deliveryUserBox.setMaxWidth(220);
 
                 Text deliveryRole = new Text("Delivery Partner");
                 deliveryRole.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
@@ -1747,6 +1771,8 @@ public class UserManagementPage {
                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;");
 
+                userInfo.setWrappingWidth(155);
+
                 HBox nameBox = new HBox(
                                 10,
                                 avatar,
@@ -1754,6 +1780,8 @@ public class UserManagementPage {
 
                 nameBox.setAlignment(Pos.CENTER_LEFT);
                 nameBox.setPrefWidth(220);
+                nameBox.setMinWidth(220);
+                nameBox.setMaxWidth(220);
 
                 Text roleText = new Text(role);
                 roleText.setStyle(

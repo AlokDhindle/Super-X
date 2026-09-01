@@ -27,7 +27,7 @@ public class CustomerLogin {
 
     private Scene LoginScene;
 
-    Scene getLoginScene() {
+    public Scene getLoginScene() {
 
         // ================= HEADER =================
 

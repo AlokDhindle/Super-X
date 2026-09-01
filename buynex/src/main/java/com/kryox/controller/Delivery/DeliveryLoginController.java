@@ -1,251 +1,72 @@
 package com.kryox.controller.Delivery;
 
+// import com.buynex.Main;
 import com.kryox.dao.Delivery.DeliveryPartnerDAO;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.kryox.view.Customer.Homepage;
+import com.kryox.view.Delivery.PartnerDashboard;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
 
 public class DeliveryLoginController {
 
-    private final DeliveryPartnerDAO partnerDAO =
-            new DeliveryPartnerDAO();
+    private final DeliveryPartnerDAO partnerDAO = new DeliveryPartnerDAO();
 
-    public void handleLogin(
-            String identifier,
-            String password,
-            Stage primaryStage
-    ) {
-
-        if (identifier == null ||
-                identifier.trim().isEmpty() ||
-                password == null ||
-                password.trim().isEmpty()) {
-
-            showAlert(
-                    Alert.AlertType.WARNING,
-                    "Login Error",
-                    "Please enter your Email and Password."
-            );
-
+    public void handleLogin(String identifier, String password) {
+        if (identifier == null || identifier.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Login Error", "Please enter your Phone Number/Email and Password.");
             return;
         }
 
-        String input =
-                identifier.trim();
+        String input = identifier.trim();
 
-        if (!input.contains("@")) {
+        if (input.contains("@")) {
+            // Direct Email Login
+            partnerDAO.authenticatePartner(input, password)
+                    .thenAccept(partner -> Platform.runLater(() -> {
+                        if (partner != null) {
+                            // Populate PartnerConstants for live UI session rendering
+                            PartnerConstants.UID = partner.getId() != null ? partner.getId() : "";
+                            PartnerConstants.FULL_NAME = partner.getFullName() != null && !partner.getFullName().isEmpty() 
+                                    ? partner.getFullName() : "Partner";
+                            PartnerConstants.EMAIL = partner.getEmail() != null ? partner.getEmail() : input;
+                            PartnerConstants.PHONE = partner.getMobile() != null ? partner.getMobile() : "";
+                            PartnerConstants.VEHICLE_TYPE = partner.getVehicleType() != null ? partner.getVehicleType() : "Bike / Motorcycle";
+                            PartnerConstants.VEHICLE_NUMBER = partner.getVehicleNumber() != null ? partner.getVehicleNumber() : "";
+                            PartnerConstants.BANK_NAME = partner.getBankName() != null ? partner.getBankName() : "HDFC Bank";
+                            PartnerConstants.ACCOUNT_NUMBER = partner.getAccountNumber() != null ? partner.getAccountNumber() : "000000000000";
+                            PartnerConstants.IFSC_CODE = partner.getIfscCode() != null ? partner.getIfscCode() : "HDFC0000123";
 
-            showAlert(
-                    Alert.AlertType.WARNING,
-                    "Email Required",
-                    "Please login using your registered email address."
-            );
-
-            return;
-        }
-
-        partnerDAO.authenticatePartner(
-                input,
-                password
-        )
-                .thenAccept(partner ->
-                        Platform.runLater(() -> {
-
-                            if (partner == null) {
-
-                                showAlert(
-                                        Alert.AlertType.ERROR,
-                                        "Authentication Failed",
-                                        "Unable to load partner profile."
-                                );
-
-                                return;
-                            }
-
-                            PartnerConstants.UID =
-                                    partner.getId() != null
-                                            ? partner.getId()
-                                            : "";
-
-                            PartnerConstants.FULL_NAME =
-                                    partner.getFullName() != null &&
-                                            !partner.getFullName().isEmpty()
-                                            ? partner.getFullName()
-                                            : "Partner";
-
-                            PartnerConstants.EMAIL =
-                                    partner.getEmail() != null
-                                            ? partner.getEmail()
-                                            : input;
-
-                            PartnerConstants.PHONE =
-                                    partner.getMobile() != null
-                                            ? partner.getMobile()
-                                            : "";
-
-                            PartnerConstants.ADDRESS =
-                                    partner.getAddress() != null
-                                            ? partner.getAddress()
-                                            : "";
-
-                            PartnerConstants.VEHICLE_TYPE =
-                                    partner.getVehicleType() != null
-                                            ? partner.getVehicleType()
-                                            : "Bike / Motorcycle";
-
-                            PartnerConstants.VEHICLE_NUMBER =
-                                    partner.getVehicleNumber() != null
-                                            ? partner.getVehicleNumber()
-                                            : "";
-
-                            PartnerConstants.BANK_NAME =
-                                    partner.getBankName() != null
-                                            ? partner.getBankName()
-                                            : "";
-
-                            PartnerConstants.ACCOUNT_NUMBER =
-                                    partner.getAccountNumber() != null
-                                            ? partner.getAccountNumber()
-                                            : "";
-
-                            PartnerConstants.IFSC_CODE =
-                                    partner.getIfscCode() != null
-                                            ? partner.getIfscCode()
-                                            : "";
-
-                            PartnerConstants.STATUS =
-                                    partner.getStatus() != null
-                                            ? partner.getStatus()
-                                            : "APPROVED";
-
-                            if (partner.getProfilePhotoPath() != null &&
-                                    !partner.getProfilePhotoPath().isEmpty()) {
-
-                                PartnerConstants.PROFILE_PHOTO_URL =
-                                        partner.getProfilePhotoPath();
+                            // Load Cloudinary Profile Photo URL into Session
+                            if (partner.getProfilePhotoPath() != null && !partner.getProfilePhotoPath().isEmpty()) {
+                                PartnerConstants.PROFILE_PHOTO_URL = partner.getProfilePhotoPath();
                             }
 
                             if (PartnerConstants.ACCOUNT_NUMBER.length() >= 4) {
-
-                                PartnerConstants.MASKED_ACCOUNT =
-                                        "•••• •••• " +
-                                                PartnerConstants.ACCOUNT_NUMBER.substring(
-                                                        PartnerConstants.ACCOUNT_NUMBER.length() - 4
-                                                );
-
+                                PartnerConstants.MASKED_ACCOUNT = "•••• •••• " + PartnerConstants.ACCOUNT_NUMBER.substring(PartnerConstants.ACCOUNT_NUMBER.length() - 4);
                             } else {
-
-                                PartnerConstants.MASKED_ACCOUNT =
-                                        "•••• •••• " +
-                                                PartnerConstants.ACCOUNT_NUMBER;
+                                PartnerConstants.MASKED_ACCOUNT = "•••• •••• " + PartnerConstants.ACCOUNT_NUMBER;
                             }
 
-                            Stage activeStage =
-                                    primaryStage != null
-                                            ? primaryStage
-                                            : Homepage.HomepageStage;
-
-                            openDashboard(activeStage);
-                        })
-                )
-                .exceptionally(ex -> {
-
-                    Platform.runLater(() -> {
-
-                        Throwable cause =
-                                ex.getCause() != null
-                                        ? ex.getCause()
-                                        : ex;
-
-                        String message =
-                                cause.getMessage();
-
-                        if (message == null ||
-                                message.isBlank()) {
-
-                            message =
-                                    "Login failed.";
+                            // Open Main Dashboard via static scene factory
+                            Homepage.HomepageStage.setScene(PartnerDashboard.partnerDashboardScene());
+                        } else {
+                            showAlert(Alert.AlertType.ERROR, "Authentication Failed", "Incorrect email or password.");
                         }
-
-                        showAlert(
-                                Alert.AlertType.WARNING,
-                                "Login Failed",
-                                message
-                        );
+                    }))
+                    .exceptionally(ex -> {
+                        Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "Authentication Failed", "Incorrect email or password."));
+                        return null;
                     });
-
-                    return null;
-                });
-    }
-
-    private void openDashboard(
-            Stage stage
-    ) {
-
-        if (stage == null) {
-
-            showAlert(
-                    Alert.AlertType.ERROR,
-                    "Dashboard Error",
-                    "Application stage not found."
-            );
-
-            return;
-        }
-
-        try {
-
-            Class<?> dashboardClass =
-                    Class.forName(
-                            "com.kryox.view.Delivery.PartnerDashboard"
-                    );
-
-            dashboardClass
-                    .getMethod(
-                            "show",
-                            Stage.class
-                    )
-                    .invoke(
-                            null,
-                            stage
-                    );
-
-        } catch (ClassNotFoundException e) {
-
-            showAlert(
-                    Alert.AlertType.ERROR,
-                    "Dashboard Error",
-                    "PartnerDashboard.java file not found."
-            );
-
-        } catch (Exception e) {
-
-            showAlert(
-                    Alert.AlertType.ERROR,
-                    "Dashboard Error",
-                    "Unable to open Delivery Partner Dashboard."
-            );
-
-            e.printStackTrace();
         }
     }
 
-    private void showAlert(
-            Alert.AlertType type,
-            String title,
-            String message
-    ) {
-
-        Alert alert =
-                new Alert(type);
-
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-
         alert.showAndWait();
     }
 }
