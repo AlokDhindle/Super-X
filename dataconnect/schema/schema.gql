@@ -1,0 +1,46 @@
+type User @table {
+  role: String!
+  name: String!
+  phone: String!
+  address: String
+  profileImageUrl: String
+}
+
+type Store @table {
+  name: String!
+  location: String!
+  operatingHours: String
+  contactEmail: String
+}
+
+type Product @table {
+  name: String!
+  price: Float!
+  stockQuantity: Int!
+  description: String
+  imageUrl: String
+  category: String
+  store: Store!
+}
+
+type Order @table {
+  status: String!
+  totalAmount: Float!
+  createdAt: Timestamp!
+  customer: User!
+  store: Store!
+}
+
+type OrderItem @table {
+  quantity: Int!
+  priceAtPurchase: Float!
+  order: Order!
+  product: Product!
+}
+
+type Delivery @table {
+  status: String!
+  currentLocation: String!
+  order: Order!
+  assignedPartner: User
+}

@@ -83,10 +83,6 @@ public class ShoppingCartUI {
                 "-fx-text-fill: #E87500;"
         );
 
-        // =====================================================
-        // PREMIUM SHOPPER
-        // =====================================================
-
         HBox premiumBox =
                 new HBox(9);
 
@@ -700,6 +696,20 @@ public class ShoppingCartUI {
 
                 return addcartScene;
         }
+
+    // =========================================================
+    // CLEAR CART
+    // =========================================================
+
+    private void clearCart11() {
+
+        if (products != null) {
+            products.getChildren().clear();
+        }
+
+        System.out.println("Cart cleared successfully.");
+    }
+
 
     // =========================================================
     // PRODUCT IMAGE HELPER
@@ -1458,6 +1468,17 @@ public class ShoppingCartUI {
                 "-fx-background-radius: 6;" +
                 "-fx-cursor: hand;"
         );
+        checkout.setOnAction(event -> {
+
+    PaymentController paymentController =
+            new PaymentController();
+
+    paymentController.startPayment(
+            23.40,
+            () -> handlePaymentSuccess()
+    );
+
+});
 
         checkout.setOnAction(event -> {
 
@@ -1776,6 +1797,7 @@ public class ShoppingCartUI {
                 new VBox(12);
 
         products.setPrefWidth(700);
+        
 
         // Dynamic cart totals
         double[] subtotal = {0.0};
@@ -1938,6 +1960,27 @@ public class ShoppingCartUI {
 
         return page;
     }
+    
+        
+    private void handlePaymentSuccess() {
+
+    System.out.println("================================");
+    System.out.println("ORDER PROCESSING");
+    System.out.println("================================");
+
+    // 1. Order Firestore मध्ये save करणार
+    // 2. Cart clear करणार
+    // 3. My Orders उघडणार
+
+    clearCart11();
+
+    My_orderAllorder myOrders =
+            new My_orderAllorder(userId);
+
+    Homepage.HomepageStage.setScene(
+            myOrders.getAllorderScene()
+    );
+}
 
     
 
@@ -1961,7 +2004,7 @@ public class ShoppingCartUI {
     // PAYMENT SUCCESS
     // =========================================================
 
-    private void handlePaymentSuccess() {
+    private void handlePaymentSuccess1(){
 
         System.out.println("================================");
         System.out.println("ORDER PROCESSING");
@@ -1971,7 +2014,6 @@ public class ShoppingCartUI {
         // 2. Cart clear karna
         // 3. My Orders open karna
 
-        clearCart();
 
         My_orderAllorder myOrders =
                 new My_orderAllorder(userId);

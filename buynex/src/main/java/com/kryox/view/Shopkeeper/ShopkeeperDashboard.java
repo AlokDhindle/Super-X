@@ -8,6 +8,7 @@ import com.kryox.Main;
 import com.kryox.controller.Shopkeeper.OfferController;
 import com.kryox.controller.Shopkeeper.OrderController;
 import com.kryox.controller.Shopkeeper.ProductController;
+import com.kryox.controller.Shopkeeper.BusinessImprovementController;
 import com.kryox.model.Shopkeeper.OfferModel;
 import com.kryox.model.Shopkeeper.OrderModel;
 import com.kryox.model.Shopkeeper.ProductModel;
@@ -260,6 +261,15 @@ public class ShopkeeperDashboard {
                         activeOffers
                 );
 
+        // ============================================================
+        // SUGGEST IMPROVEMENT THROUGH VIDEO
+        // ============================================================
+
+        VBox improvementVideoBox =
+                createImprovementVideoBox(
+                        products
+                );
+
 
         // ============================================================
         // LEFT CONTENT
@@ -270,7 +280,8 @@ public class ShopkeeperDashboard {
                         18,
                         alertsBox,
                         inventoryInsight,
-                        activeOffersBox
+                        activeOffersBox,
+                        improvementVideoBox
                 );
 
         leftContent.setPrefWidth(
@@ -1188,6 +1199,192 @@ public class ShopkeeperDashboard {
                 "-fx-border-radius: 18px;" +
                 "-fx-background-radius: 18px;"
         );
+
+        return box;
+    }
+
+
+    // ================================================================
+    // SUGGEST IMPROVEMENT THROUGH VIDEO
+    // ================================================================
+
+    private static VBox createImprovementVideoBox(
+            ArrayList<ProductModel> products) {
+
+        Text videoIcon =
+                new Text("▶");
+
+        videoIcon.setStyle(
+                "-fx-font-size: 22px;" +
+                "-fx-fill: #A94A18;"
+        );
+
+        Text title =
+                new Text(
+                        "SUGGEST IMPROVEMENT THROUGH VIDEO"
+                );
+
+        title.setStyle(
+                "-fx-font-size: 14px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-font-family: Arial;" +
+                "-fx-fill: #A94A18;"
+        );
+
+        HBox titleRow =
+                new HBox(
+                        10,
+                        videoIcon,
+                        title
+                );
+
+        titleRow.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        Text description =
+                new Text(
+                        "Get AI-powered suggestions for improving " +
+                        "your shop and products using your actual " +
+                        "business data and online business best practices."
+                );
+
+        description.setWrappingWidth(270);
+
+        description.setStyle(
+                "-fx-font-size: 13px;" +
+                "-fx-font-family: Arial;" +
+                "-fx-fill: #666666;"
+        );
+
+        Button videoButton =
+                new Button(
+                        "Generate Improvement Video"
+                );
+
+        videoButton.setPrefHeight(42);
+        videoButton.setMaxWidth(
+                Double.MAX_VALUE
+        );
+
+        videoButton.setStyle(
+                "-fx-background-color: #A94A18;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-font-family: Arial;" +
+                "-fx-background-radius: 10px;" +
+                "-fx-cursor: hand;"
+        );
+
+        videoButton.setOnAction(event -> {
+
+            if (products == null || products.isEmpty()) {
+
+                javafx.scene.control.Alert alert =
+                        new javafx.scene.control.Alert(
+                                javafx.scene.control.Alert.AlertType.INFORMATION
+                        );
+
+                alert.setTitle(
+                        "No Products Available"
+                );
+
+                alert.setHeaderText(null);
+
+                alert.setContentText(
+                        "Add at least one product before " +
+                        "generating an improvement video."
+                );
+
+                alert.showAndWait();
+
+                return;
+            }
+
+            /*
+             * Start the complete AI improvement process.
+             *
+             * The controller will:
+             * 1. Read shopkeeper/shop data.
+             * 2. Use the Firestore product data.
+             * 3. Research relevant online business knowledge.
+             * 4. Analyse gaps and improvements.
+             * 5. Start the video-generation process.
+             *
+             * Long-running work must be handled by a JavaFX Task
+             * inside BusinessImprovementController so that this
+             * dashboard UI never freezes.
+             */
+            BusinessImprovementController.startGeneration(
+                    products
+            );
+        });
+
+        videoButton.setOnMouseEntered(event ->
+                videoButton.setStyle(
+                        "-fx-background-color: #873A12;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 13px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-family: Arial;" +
+                        "-fx-background-radius: 10px;" +
+                        "-fx-cursor: hand;"
+                )
+        );
+
+        videoButton.setOnMouseExited(event ->
+                videoButton.setStyle(
+                        "-fx-background-color: #A94A18;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 13px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-family: Arial;" +
+                        "-fx-background-radius: 10px;" +
+                        "-fx-cursor: hand;"
+                )
+        );
+
+        VBox box =
+                new VBox(
+                        14,
+                        titleRow,
+                        description,
+                        videoButton
+                );
+
+        box.setPadding(
+                new Insets(20)
+        );
+
+        box.setPrefWidth(315);
+        box.setMinHeight(215);
+
+        box.setStyle(
+                "-fx-background-color: #FFF8F3;" +
+                "-fx-border-color: #E3C4B3;" +
+                "-fx-border-width: 1px;" +
+                "-fx-border-radius: 18px;" +
+                "-fx-background-radius: 18px;"
+        );
+
+        DropShadow shadow =
+                new DropShadow();
+
+        shadow.setRadius(10);
+
+        shadow.setSpread(0.02);
+
+        shadow.setColor(
+                Color.rgb(
+                        80,
+                        60,
+                        50,
+                        0.08
+                )
+        );
+
+        box.setEffect(shadow);
 
         return box;
     }
