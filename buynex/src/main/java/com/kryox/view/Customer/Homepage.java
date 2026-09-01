@@ -44,7 +44,7 @@ public class Homepage extends Application {
     // =========================================================
 
     private static final String VIDEO_PATH =
-            "C:\\BuyNex\\Super-X\\buynex\\src\\main\\resources\\assets\\vedio\\Videio1.mp4";
+            "D:\\kryox\\Super-X\\buynex\\src\\main\\resources\\assets\\vedio\\Videio1.mp4";
 
     @Override
     public void start(Stage stage) throws Exception {
