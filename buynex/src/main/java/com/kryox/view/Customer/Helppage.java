@@ -18,25 +18,21 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class Helppage  {
-        public String userId;
-
-
-        public Helppage(String userId) {
-        this.userId = userId;
-    }
-    private Scene HelpScene;
+public class HelpPage extends Application {
 
     private TextField searchField;
-    Scene getHelpScene(Runnable callbacktosetion){
-         // =====================================================
+
+    @Override
+    public void start(Stage stage) {
+
+        // =====================================================
         // MAIN BORDERPANE
         // =====================================================
 
         BorderPane root = new BorderPane();
 
         root.setStyle(
-        "-fx-background-color: #eee5df;"
+        "-fx-background-color: #EEE5DF;"
         );
 
 
@@ -541,9 +537,6 @@ public class Helppage  {
                 "-fx-padding: 8 18;" +
                 "-fx-font-size: 10px;"
         );
-        backBtn.setOnAction(event->{
-           callbacktosetion.run();
-        });
 
 
         // =====================================================
@@ -766,7 +759,14 @@ public class Helppage  {
         // BACK BUTTON FUNCTIONALITY
         // =====================================================
 
-      
+        backBtn.setOnAction(e -> {
+
+            Stage currentStage =
+                    (Stage) backBtn.getScene().getWindow();
+
+            currentStage.close();
+        });
+
 
         // =====================================================
         // ROOT CENTER
@@ -775,7 +775,6 @@ public class Helppage  {
         root.setCenter(
                 contentBox
         );
-        root.setStyle("-fx-background-color: #eee5df;");
 
 
         // =====================================================
@@ -784,17 +783,20 @@ public class Helppage  {
 
         Scene scene = new Scene(
                 root,
-                1530,
+                1550,
                 850
         );
-        HelpScene=scene;
 
 
+        stage.setTitle(
+                "EliteMarket - Help Center"
+        );
 
-        return HelpScene;
+
+        stage.setScene(scene);
+
+        stage.show();
     }
-
-    
 
 
     // =========================================================
@@ -1085,12 +1087,5 @@ public class Helppage  {
 
         alert.showAndWait();
     }
-    public void backtoDashboard() {
-    Seting seting = new Seting(userId);
-    Homepage.HomepageStage.setScene(
-        HelpScene
-        
-    );
-}
 
 }
