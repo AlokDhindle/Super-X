@@ -293,7 +293,7 @@ public class Privacy {
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
                 helpBtn.setOnAction(event->{
-                        Helppage hp=new Helppage(userId);
+                        Helppage hp=new Homepage(userId);
                         Homepage.HomepageStage.setScene(hp.getHelpScene(callbacktoDashboard));
                 });
 
