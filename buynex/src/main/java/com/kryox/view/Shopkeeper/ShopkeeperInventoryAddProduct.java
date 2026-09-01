@@ -57,6 +57,10 @@ public class ShopkeeperInventoryAddProduct {
 
                 HBox headerMainBox = ViewConstants.header();
 
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
                 borderPane.setTop(
                                 headerMainBox);
 
@@ -97,7 +101,7 @@ public class ShopkeeperInventoryAddProduct {
                 centerContent.setSpacing(14);
 
                 centerContent.setStyle(
-                                "-fx-background-color: #F8F7FC;");
+                                "-fx-background-color: #EEE5DF;");
 
                 // ================================================================
                 // BREADCRUMB
@@ -1162,7 +1166,7 @@ public class ShopkeeperInventoryAddProduct {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 centerScroll.setStyle(
-                                "-fx-background-color: #F8F7FC;" +
+                                "-fx-background-color: #EEE5DF;" +
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(
@@ -1270,9 +1274,18 @@ public class ShopkeeperInventoryAddProduct {
 
                         String expiryTracking = expiryTrackingCombo.getValue();
 
-                        String manufacturingDate = manufacturingDatePicker.getValue().toString();
+                        String manufacturingDate = null;
+                        String expiryDate = null;
 
-                        String expiryDate = expiryDatePicker.getValue().toString();
+                        if ("Has Expiry".equals(expiryTracking)) {
+                        if (manufacturingDatePicker.getValue() != null) {
+                                manufacturingDate = manufacturingDatePicker.getValue().toString();
+                        }
+
+                        if (expiryDatePicker.getValue() != null) {
+                                expiryDate = expiryDatePicker.getValue().toString();
+                        }
+                        }
 
                         if (productName.isEmpty() ||
                                         category == null ||
@@ -1300,8 +1313,8 @@ public class ShopkeeperInventoryAddProduct {
                                         return;
                                 }
 
-                                if (LocalDate.parse(manufacturingDate).isBefore(
-                                                LocalDate.parse(manufacturingDate))) {
+                                if (LocalDate.parse(expiryDate).isBefore(
+        LocalDate.parse(manufacturingDate))){
 
                                         System.out.println(
                                                         "Expiry date cannot be before manufacturing date.");
@@ -1382,7 +1395,7 @@ public class ShopkeeperInventoryAddProduct {
                                 850);
 
                 addProductScene.setFill(
-                                Color.web("#F8F7FC"));
+                                Color.web("#EEE5DF"));
 
                 return addProductScene;
         }
@@ -1549,7 +1562,7 @@ public class ShopkeeperInventoryAddProduct {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

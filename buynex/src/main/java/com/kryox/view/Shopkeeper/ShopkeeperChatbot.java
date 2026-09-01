@@ -37,6 +37,11 @@ public class ShopkeeperChatbot {
                 // HEADER
                 // ============================================================
                 HBox headerMainBox = ViewConstants.header();
+
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
                 borderPane.setTop(headerMainBox);
 
                 // ============================================================
@@ -745,7 +750,7 @@ public class ShopkeeperChatbot {
                         );
 
                 chatbotScene.setFill(
-                                Color.web("#F8F7FC"));
+                                Color.web("#EEE5DF"));
 
                 return chatbotScene;
         }
@@ -761,7 +766,7 @@ public class ShopkeeperChatbot {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

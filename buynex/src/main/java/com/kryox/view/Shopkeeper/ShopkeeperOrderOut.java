@@ -27,13 +27,17 @@ public class ShopkeeperOrderOut {
                 BorderPane borderPane = new BorderPane();
 
                 borderPane.setStyle(
-                                "-fx-background-color: #F8F7FC;");
+                                "-fx-background-color: #EEE5DF;");
 
                 // ============================================================
                 // HEADER
                 // ============================================================
 
                 HBox headerMainBox = ViewConstants.header();
+
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
 
                 borderPane.setTop(headerMainBox);
 
@@ -57,7 +61,7 @@ public class ShopkeeperOrderOut {
                 centerMain.setSpacing(15);
 
                 centerMain.setStyle(
-                                "-fx-background-color: #F8F7FC;");
+                                "-fx-background-color: #EEE5DF;");
 
                 // ============================================================
                 // TITLE
@@ -326,7 +330,7 @@ public class ShopkeeperOrderOut {
                                 650);
 
                 ordersScene.setFill(
-                                Color.web("#F8F7FC"));
+                                Color.web("#EEE5DF"));
 
                 return ordersScene;
         }
@@ -808,7 +812,7 @@ public class ShopkeeperOrderOut {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

@@ -30,6 +30,10 @@ public class ShopkeeperSupport {
 
                 HBox headerMainBox = ViewConstants.header();
 
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
                 borderPane.setTop(headerMainBox);
 
                 // ================================================================
@@ -65,7 +69,7 @@ public class ShopkeeperSupport {
                                 20);
 
                 centerContent.setStyle(
-                                "-fx-background-color: #F8F7FC;");
+                                "-fx-background-color: #EEE5DF;");
 
                 // ================================================================
                 // PAGE TITLE
@@ -696,7 +700,7 @@ public class ShopkeeperSupport {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 centerScroll.setStyle(
-                                "-fx-background-color: #F8F7FC;" +
+                                "-fx-background-color: #EEE5DF;" +
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(
@@ -712,7 +716,7 @@ public class ShopkeeperSupport {
                                 650);
 
                 scene.setFill(
-                                Color.web("#F8F7FC"));
+                                Color.web("#EEE5DF"));
 
                 return scene;
         }

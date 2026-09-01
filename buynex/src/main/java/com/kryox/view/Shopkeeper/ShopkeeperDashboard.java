@@ -108,7 +108,7 @@ public class ShopkeeperDashboard {
                 new BorderPane();
 
         borderPane.setStyle(
-                "-fx-background-color: #F8F7FC;"
+                "-fx-background-color: #EEE5DF;"
         );
 
 
@@ -118,6 +118,11 @@ public class ShopkeeperDashboard {
 
         HBox headerMainBox =
                 ViewConstants.header();
+
+// Header background
+        headerMainBox.setStyle(
+                "-fx-background-color: #EBCCB7;"
+        );
 
         borderPane.setTop(
                 headerMainBox
@@ -532,7 +537,7 @@ public class ShopkeeperDashboard {
         );
 
         centerContent.setStyle(
-                "-fx-background-color: #F8F7FC;"
+                "-fx-background-color: #EEE5DF;"
         );
 
 
@@ -558,7 +563,7 @@ public class ShopkeeperDashboard {
         );
 
         scrollPane.setStyle(
-                "-fx-background-color: #F8F7FC;" +
+                "-fx-background-color: #EEE5DF;" +
                 "-fx-border-color: transparent;"
         );
 
@@ -592,7 +597,7 @@ public class ShopkeeperDashboard {
                 );
 
         dashboardScene.setFill(
-                Color.web("#F8F7FC")
+                Color.web("#EEE5DF")
         );
 
         return dashboardScene;
@@ -612,7 +617,7 @@ public class ShopkeeperDashboard {
         sidebar.setMaxWidth(260);
 
         sidebar.setStyle(
-                "-fx-background-color: #F5F4F9;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: #E3C7BA;" +
                 "-fx-border-width: 0 1px 0 0;"
         );

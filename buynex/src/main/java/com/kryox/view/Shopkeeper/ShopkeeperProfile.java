@@ -32,6 +32,10 @@ public class ShopkeeperProfile {
 
                 HBox headerMainBox = ViewConstants.header();
 
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
                 borderPane.setTop(headerMainBox);
 
                 // ============================================================
@@ -51,7 +55,7 @@ public class ShopkeeperProfile {
                                 new Insets(20, 24, 18, 24));
 
                 centerMain.setStyle(
-                                "-fx-background-color: #F8F7FC;");
+                                "-fx-background-color: #EEE5DF;");
 
                 // ============================================================
                 // PROFILE PAGE HEADING
@@ -772,7 +776,7 @@ public class ShopkeeperProfile {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 centerScroll.setStyle(
-                                "-fx-background-color: #F8F7FC;" +
+                                "-fx-background-color: #EEE5DF;" +
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(centerScroll);
@@ -795,7 +799,7 @@ public class ShopkeeperProfile {
                                 ViewConstants.STAGE_HEIGHT);
 
                 profileScene.setFill(
-                                Color.web("#F8F7FC"));
+                                Color.web("#EEE5DF"));
 
                 return profileScene;
         }
@@ -815,7 +819,7 @@ public class ShopkeeperProfile {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

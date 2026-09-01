@@ -83,7 +83,7 @@ public class ViewConstants {
                 headerMainBox.setPrefHeight(60);
 
                 headerMainBox.setStyle(
-                                "-fx-background-color: #F8FBF8;-fx-border-color: #F1E8E1;-fx-border-width: 0 0 1px 0;");
+                                "-fx-background-color: #EBCCB7;-fx-border-color: #F1E8E1;-fx-border-width: 0 0 1px 0;");
 
                 return headerMainBox;
         }
@@ -152,7 +152,7 @@ public class ViewConstants {
                 headerMainBox.setAlignment(Pos.CENTER);
                 headerMainBox.setPrefHeight(70);
                 headerMainBox.setStyle(
-                                "-fx-background-color: #F8FBF8;-fx-border-color: #F1E8E1;-fx-border-width: 0 0 1px 0;");
+                                "-fx-background-color: #EBCCB7;-fx-border-color: #F1E8E1;-fx-border-width: 0 0 1px 0;");
 
                 // ============================================================
                 // HEADER ICONS BUTTON ACTIONS

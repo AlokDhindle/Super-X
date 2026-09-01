@@ -1,4 +1,3 @@
-
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
@@ -27,9 +26,14 @@ public class ShopkeeperDeleteAccountConfirmation {
         // ------------------------------------------------------------------
 
         BorderPane borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color: #F8FBF8;");
+        borderPane.setStyle("-fx-background-color: #EEE5DF;");
 
         HBox headerBox = ViewConstants.loginHeader();
+
+        // Header background
+        headerBox.setStyle(
+                "-fx-background-color: #EBCCB7;");
+
         borderPane.setTop(headerBox);
 
         // DELETE ICON
@@ -142,12 +146,12 @@ public class ShopkeeperDeleteAccountConfirmation {
             System.out.println("Delete account button clicked");
 
             ShopkeeperDAO shopkeeperDAO = new ShopkeeperDAO();
-    
+
                     shopkeeperDAO.deleteAccount();
                     ShopkeeperLogController.resetRegistration();
                     System.out.println("Account deleted");
-                    Homepage.HomepageStage.setScene(            
-                            ShopkeeperLogin.loginscene());  
+                    Homepage.HomepageStage.setScene(
+                            ShopkeeperLogin.loginscene());
         });
 
         // BACK BUTTON
@@ -222,7 +226,7 @@ public class ShopkeeperDeleteAccountConfirmation {
                 new Insets(10, 0, 10, 0));
 
         centerContent.setStyle(
-                "-fx-background-color: #F8FBF8;");
+                "-fx-background-color: #EEE5DF;");
 
         centerContent.setPrefWidth(1280);
 
@@ -244,7 +248,7 @@ public class ShopkeeperDeleteAccountConfirmation {
                 650);
 
         deleteAccountScene.setFill(
-                Color.web("#F8FBF8"));
+                Color.web("#EEE5DF"));
 
         return deleteAccountScene;
     }

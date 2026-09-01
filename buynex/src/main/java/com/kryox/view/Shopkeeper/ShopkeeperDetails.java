@@ -45,13 +45,17 @@ public class ShopkeeperDetails {
         BorderPane borderPane = new BorderPane();
 
         borderPane.setStyle(
-                "-fx-background-color: #ffffff;");
+                "-fx-background-color: #EEE5DF;");
 
         // =========================================================
         // HEADER
         // =========================================================
 
         HBox headerBox = ViewConstants.loginHeader();
+
+        // Header background
+        headerBox.setStyle(
+                "-fx-background-color: #EBCCB7;");
 
         borderPane.setTop(headerBox);
 
@@ -1335,7 +1339,7 @@ public class ShopkeeperDetails {
                     "Shop registration data validated.");
 
             Homepage.HomepageStage.setScene(
-                    ShopkeeperRegisterSucess.registeredScene());
+                    ShopkeeperRegisterSucess.regaisteredScene());
         });
 
         // =========================================================
@@ -1712,7 +1716,7 @@ public class ShopkeeperDetails {
                         0));
 
         centerContent.setStyle(
-                "-fx-background-color: #F8FBF8;");
+                "-fx-background-color: #EEE5DF;");
 
         centerContent.setMaxWidth(800);
 
@@ -1725,7 +1729,7 @@ public class ShopkeeperDetails {
         page.setPrefWidth(1280);
 
         page.setStyle(
-                "-fx-background-color: #F8FBF8;");
+                "-fx-background-color: #EEE5DF;");
 
         // =========================================================
         // SCROLL PANE
@@ -1762,7 +1766,7 @@ public class ShopkeeperDetails {
                         720);
 
         shopDetailsScene.setFill(
-                Color.web("#F8FBF8"));
+                Color.web("#EEE5DF"));
 
         return shopDetailsScene;
     }

@@ -70,6 +70,10 @@ public class ShopkeeperSettings {
 
                 HBox headerMainBox = ViewConstants.header();
 
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
                 borderPane.setTop(
                                 headerMainBox);
 
@@ -976,7 +980,7 @@ public class ShopkeeperSettings {
                                 new Insets(25));
 
                 centerContent.setStyle(
-                                "-fx-background-color: #F8F7FC;");
+                                "-fx-background-color: #EEE5DF;");
 
                 ScrollPane scrollPane = new ScrollPane(
                                 centerContent);
@@ -994,7 +998,7 @@ public class ShopkeeperSettings {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 scrollPane.setStyle(
-                                "-fx-background-color: #F8F7FC;" +
+                                "-fx-background-color: #EEE5DF;" +
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(
@@ -1206,7 +1210,7 @@ public class ShopkeeperSettings {
                                 850);
 
                 settingsScene.setFill(
-                                Color.web("#F8F7FC"));
+                                Color.web("#EEE5DF"));
 
                 return settingsScene;
         }
@@ -1222,7 +1226,7 @@ public class ShopkeeperSettings {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 
