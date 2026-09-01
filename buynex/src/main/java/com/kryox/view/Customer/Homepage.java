@@ -2,6 +2,7 @@ package com.kryox.view.Customer;
 
 
 import com.kryox.view.Admin.AdminLoginPage;
+import com.kryox.view.Delivery.Deliverylogin;
 import com.kryox.view.Shopkeeper.ShopkeeperLogin;
 
 import javafx.animation.Animation;
@@ -914,8 +915,8 @@ public class Homepage extends Application {
                 "-fx-background-radius: 15;"
         );
         b4.setOnAction(event->{
-                // Deliverylogin dl=new Deliverylogin();
-                // Homepage.HomepageStage.setScene(dl.getDelivaryScene());
+                Deliverylogin dl=new Deliverylogin();
+                Homepage.HomepageStage.setScene(dl.deliveryLoginScene());
         });
 
         Region deliverySpacer =

@@ -9,13 +9,14 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 
 public class Firebaseconfig {
+    public static final String WEB_API_KEY = "AIzaSyAmmfnbaq-fPAXz5YUH8guxWrykcEKRZ2g";
 
     static {
         getFirebaseConfig();
     }
 
     private static void getFirebaseConfig() {
-
+        
         try {
 
             FileInputStream serviceAccount =

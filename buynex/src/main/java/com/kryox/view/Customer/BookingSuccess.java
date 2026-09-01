@@ -24,944 +24,760 @@ public class BookingSuccess {
         private Scene Bookingscene;
 
         public Scene getBookingscene() {
+                BorderPane root = new BorderPane();
+
+                root.setStyle("-fx-background-color: " + BG + ";");
+
+                root.setTop(createHeader());
+
+                StackPane centerPane = new StackPane();
+
+                centerPane.setAlignment(Pos.CENTER);
+
+                centerPane.setPadding(new Insets(35));
+
+                VBox successCard = createSuccessCard();
+
+                centerPane.getChildren().add(successCard);
+                root.setCenter(centerPane);
+
+                Bookingscene = new Scene(root, 1550, 850);
+
+                playAnimation(successCard);
+
+                return Bookingscene;
+        }
+
+        private String productName = "Artisanal Sourdough Loaf";
+
+        private String shopName = "BakeHouse Local";
+
+        private String productImage = "/assects/images/products/bread.png";
+
+        private String bookingId = "BK-" +
+                        UUID.randomUUID()
+                                        .toString()
+                                        .substring(0, 4)
+                                        .toUpperCase();
+
+        private static final String ORANGE = "#FF6900";
+        private static final String DARK_ORANGE = "#B94D00";
+        private static final String BG = "#F7F6FA";
+        private static final String TEXT = "#181818";
+        private static final String MUTED = "#766C68";
+
+        private HBox createHeader() {
+
+                HBox header = new HBox();
+
+                header.setPrefHeight(50);
+
+                header.setPadding(
+                                new Insets(
+                                                0,
+                                                38,
+                                                0,
+                                                38));
+
+                header.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                header.setStyle(
+                                "-fx-background-color: #ebccb7" +
+                                                "-fx-border-color: #E8E3E8;" +
+                                                "-fx-border-width: 0 0 1 0;");
+
                 // =====================================================
-        // ROOT
-        // =====================================================
+                // LOGO
+                // =====================================================
 
-        BorderPane root = new BorderPane();
+                Label logo = new Label("BuyNeX");
 
-        root.setStyle(
-                "-fx-background-color: " + BG + ";"
-        );
+                logo.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                                "-fx-font-size: 18px;" +
+                                                "-fx-font-weight: 900;" +
+                                                "-fx-text-fill: " + DARK_ORANGE + ";");
 
-        // =====================================================
-        // HEADER
-        // =====================================================
+                // =====================================================
+                // SPACER
+                // =====================================================
 
-        root.setTop(createHeader());
+                Region spacer = new Region();
 
-        // =====================================================
-        // CENTER
-        // =====================================================
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
 
-        StackPane centerPane = new StackPane();
+                // =====================================================
+                // NOTIFICATION
+                // =====================================================
 
-        centerPane.setAlignment(Pos.CENTER);
+                Button notification = new Button("♧");
 
-        centerPane.setPadding(
-                new Insets(35)
-        );
+                // =====================================================
+                // CART
+                // =====================================================
 
-        VBox successCard =
-                createSuccessCard();
+                Button cart = new Button("🛒");
 
-        centerPane.getChildren().add(
-                successCard
-        );
+                // =====================================================
+                // PROFILE
+                // =====================================================
 
-        root.setCenter(centerPane);
+                Button profile = new Button("●");
 
-        // =====================================================
-        // SCENE
-        // =====================================================
+                String headerButtonStyle = "-fx-background-color: transparent;" +
+                                "-fx-border-width: 0;" +
+                                "-fx-text-fill: #555555;" +
+                                "-fx-font-size: 13px;" +
+                                "-fx-padding: 5;" +
+                                "-fx-cursor: hand;";
 
-        Bookingscene =
-                new Scene(
-                        root,
-                        1550,
-                        850
-                );
+                notification.setStyle(
+                                headerButtonStyle);
 
-        playAnimation(successCard);
+                cart.setStyle(
+                                headerButtonStyle);
 
-        return Bookingscene;
+                profile.setStyle(
+                                headerButtonStyle);
+
+                HBox actions = new HBox(
+                                14,
+                                notification,
+                                cart,
+                                profile);
+
+                actions.setAlignment(
+                                Pos.CENTER_RIGHT);
+
+                header.getChildren().addAll(
+                                logo,
+                                spacer,
+                                actions);
+
+                return header;
         }
 
-    // =========================================================
-    // DYNAMIC BOOKING DATA
-    // =========================================================
+        // =========================================================
+        // SUCCESS CARD
+        // =========================================================
 
-    private String productName =
-            "Artisanal Sourdough Loaf";
+        private VBox createSuccessCard() {
 
-    private String shopName =
-            "BakeHouse Local";
+                VBox card = new VBox(16);
 
-    private String productImage =
-            "/assects/images/products/bread.png";
+                // IMPORTANT:
+                // Bigger than previous 320px card
 
-    private String bookingId =
-            "BK-" +
-            UUID.randomUUID()
-                    .toString()
-                    .substring(0, 4)
-                    .toUpperCase();
+                card.setPrefWidth(390);
+                card.setMaxWidth(390);
 
-    // =========================================================
-    // COLORS
-    // =========================================================
+                card.setMinHeight(0);
 
-    private static final String ORANGE = "#FF6900";
-    private static final String DARK_ORANGE = "#B94D00";
-    private static final String BG = "#F7F6FA";
-    private static final String TEXT = "#181818";
-    private static final String MUTED = "#766C68";
+                card.setPadding(
+                                new Insets(
+                                                24,
+                                                26,
+                                                22,
+                                                26));
 
-    // =========================================================
-    // HEADER
-    // =========================================================
+                card.setAlignment(
+                                Pos.TOP_CENTER);
 
-    private HBox createHeader() {
+                card.setStyle(
+                                "-fx-background-color: white;" +
+                                                "-fx-background-radius: 10;");
 
-        HBox header = new HBox();
+                // =====================================================
+                // SHADOW
+                // =====================================================
 
-        header.setPrefHeight(50);
+                javafx.scene.effect.DropShadow shadow = new javafx.scene.effect.DropShadow();
 
-        header.setPadding(
-                new Insets(
-                        0,
-                        38,
-                        0,
-                        38
-                )
-        );
+                shadow.setRadius(28);
 
-        header.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                shadow.setOffsetY(10);
 
-        header.setStyle(
-                "-fx-background-color: #ebccb7" +
-                "-fx-border-color: #E8E3E8;" +
-                "-fx-border-width: 0 0 1 0;"
-        );
+                shadow.setColor(
+                                Color.rgb(
+                                                0,
+                                                0,
+                                                0,
+                                                0.12));
 
-        // =====================================================
-        // LOGO
-        // =====================================================
+                card.setEffect(shadow);
 
-        Label logo =
-                new Label("BuyNeX");
+                // =====================================================
+                // SUCCESS ICON
+                // =====================================================
 
-        logo.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 18px;" +
-                "-fx-font-weight: 900;" +
-                "-fx-text-fill: " + DARK_ORANGE + ";"
-        );
+                StackPane successIcon = createSuccessIcon();
 
-        // =====================================================
-        // SPACER
-        // =====================================================
+                // =====================================================
+                // TITLE
+                // =====================================================
 
-        Region spacer =
-                new Region();
+                Label title = new Label(
+                                "Product Booked Successfully!");
 
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
+                title.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                                "-fx-font-size: 16px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-text-fill: " + TEXT + ";");
 
-        // =====================================================
-        // NOTIFICATION
-        // =====================================================
+                // =====================================================
+                // SUBTITLE
+                // =====================================================
 
-        Button notification =
-                new Button("♧");
+                Label subtitle = new Label(
+                                "Your reservation for order #" +
+                                                bookingId +
+                                                " has been confirmed.");
 
-        // =====================================================
-        // CART
-        // =====================================================
+                subtitle.setStyle(
+                                "-fx-font-size: 9px;" +
+                                                "-fx-text-fill: " + MUTED + ";");
 
-        Button cart =
-                new Button("🛒");
+                subtitle.setWrapText(true);
 
-        // =====================================================
-        // PROFILE
-        // =====================================================
+                subtitle.setAlignment(
+                                Pos.CENTER);
 
-        Button profile =
-                new Button("●");
+                // =====================================================
+                // PRODUCT CARD
+                // =====================================================
 
-        String headerButtonStyle =
-                "-fx-background-color: transparent;" +
-                "-fx-border-width: 0;" +
-                "-fx-text-fill: #555555;" +
-                "-fx-font-size: 13px;" +
-                "-fx-padding: 5;" +
-                "-fx-cursor: hand;";
+                VBox productCard = createProductCard();
 
-        notification.setStyle(
-                headerButtonStyle
-        );
+                // =====================================================
+                // NEXT STEPS
+                // =====================================================
 
-        cart.setStyle(
-                headerButtonStyle
-        );
+                VBox nextSteps = createNextSteps();
 
-        profile.setStyle(
-                headerButtonStyle
-        );
+                // =====================================================
+                // BUTTONS
+                // =====================================================
 
-        HBox actions =
-                new HBox(
-                        14,
-                        notification,
-                        cart,
-                        profile
-                );
+                Button bookingsButton = createPrimaryButton(
+                                "View My Bookings");
 
-        actions.setAlignment(
-                Pos.CENTER_RIGHT
-        );
+                Button backButton = createSecondaryButton(
+                                "Back to Home");
 
-        header.getChildren().addAll(
-                logo,
-                spacer,
-                actions
-        );
+                // =====================================================
+                // BUTTON ACTION
+                // =====================================================
 
-        return header;
-    }
+                bookingsButton.setOnAction(
+                                e -> showBookingAlert());
 
-    // =========================================================
-    // SUCCESS CARD
-    // =========================================================
+                backButton.setOnAction(
+                                e -> {
 
-    private VBox createSuccessCard() {
+                                        Dashbord ds = new Dashbord(null);
+                                        Homepage.HomepageStage.setScene(ds.getDashbordScene());
+                                });
 
-        VBox card =
-                new VBox(16);
+                // =====================================================
+                // ADD TO CARD
+                // =====================================================
 
-        // IMPORTANT:
-        // Bigger than previous 320px card
+                card.getChildren().addAll(
+                                successIcon,
+                                title,
+                                subtitle,
+                                productCard,
+                                nextSteps,
+                                bookingsButton,
+                                backButton);
 
-        card.setPrefWidth(390);
-        card.setMaxWidth(390);
+                return card;
+        }
 
-        card.setMinHeight(0);
-
-        card.setPadding(
-                new Insets(
-                        24,
-                        26,
-                        22,
-                        26
-                )
-        );
-
-        card.setAlignment(
-                Pos.TOP_CENTER
-        );
-
-        card.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 10;"
-        );
-
-        // =====================================================
-        // SHADOW
-        // =====================================================
-
-        javafx.scene.effect.DropShadow shadow =
-                new javafx.scene.effect.DropShadow();
-
-        shadow.setRadius(28);
-
-        shadow.setOffsetY(10);
-
-        shadow.setColor(
-                Color.rgb(
-                        0,
-                        0,
-                        0,
-                        0.12
-                )
-        );
-
-        card.setEffect(shadow);
-
-        // =====================================================
+        // =========================================================
         // SUCCESS ICON
-        // =====================================================
+        // =========================================================
 
-        StackPane successIcon =
-                createSuccessIcon();
+        private StackPane createSuccessIcon() {
 
-        // =====================================================
-        // TITLE
-        // =====================================================
+                Circle outer = new Circle(
+                                31,
+                                Color.web("#FFF0E5"));
 
-        Label title =
-                new Label(
-                        "Product Booked Successfully!"
-                );
+                Circle inner = new Circle(
+                                20,
+                                Color.web(ORANGE));
 
-        title.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 16px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: " + TEXT + ";"
-        );
+                Label check = new Label("✓");
 
-        // =====================================================
-        // SUBTITLE
-        // =====================================================
+                check.setStyle(
+                                "-fx-text-fill: white;" +
+                                                "-fx-font-size: 21px;" +
+                                                "-fx-font-weight: bold;");
 
-        Label subtitle =
-                new Label(
-                        "Your reservation for order #" +
-                        bookingId +
-                        " has been confirmed."
-                );
+                StackPane icon = new StackPane(
+                                outer,
+                                inner,
+                                check);
 
-        subtitle.setStyle(
-                "-fx-font-size: 9px;" +
-                "-fx-text-fill: " + MUTED + ";"
-        );
+                icon.setPrefSize(
+                                62,
+                                62);
 
-        subtitle.setWrapText(true);
+                return icon;
+        }
 
-        subtitle.setAlignment(
-                Pos.CENTER
-        );
-
-        // =====================================================
+        // =========================================================
         // PRODUCT CARD
-        // =====================================================
+        // =========================================================
 
-        VBox productCard =
-                createProductCard();
+        private VBox createProductCard() {
 
-        // =====================================================
-        // NEXT STEPS
-        // =====================================================
+                VBox box = new VBox(12);
 
-        VBox nextSteps =
-                createNextSteps();
+                box.setPadding(
+                                new Insets(14));
 
-        // =====================================================
-        // BUTTONS
-        // =====================================================
+                box.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        Button bookingsButton =
-                createPrimaryButton(
-                        "View My Bookings"
-                );
+                box.setStyle(
+                                "-fx-background-color: #eee5df" +
+                                                "-fx-background-radius: 7;" +
+                                                "-fx-border-color: #ECE6ED;" +
+                                                "-fx-border-radius: 7;");
 
-        Button backButton =
-                createSecondaryButton(
-                        "Back to Home"
-                );
+                // =====================================================
+                // PRODUCT ROW
+                // =====================================================
 
-        // =====================================================
-        // BUTTON ACTION
-        // =====================================================
+                HBox productRow = new HBox(13);
 
-        bookingsButton.setOnAction(
-                e -> showBookingAlert()
-        );
+                productRow.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        backButton.setOnAction(
-                e -> {
-                 
+                // =====================================================
+                // IMAGE
+                // =====================================================
 
-                  Dashbord ds=new Dashbord(null);
-                  Homepage.HomepageStage.setScene(ds.getDashbordScene());
+                StackPane imageBox = new StackPane();
+
+                imageBox.setPrefSize(
+                                65,
+                                58);
+
+                imageBox.setMinSize(
+                                65,
+                                58);
+
+                imageBox.setMaxSize(
+                                65,
+                                58);
+
+                imageBox.setStyle(
+                                "-fx-background-color: white;" +
+                                                "-fx-background-radius: 5;");
+
+                try {
+
+                        var imageUrl = getClass().getResource(productImage);
+
+                        Image image = imageUrl == null
+                                        ? null
+                                        : new Image(
+                                                        imageUrl.toExternalForm());
+
+                        if (image != null && !image.isError()) {
+
+                                ImageView imageView = new ImageView(image);
+
+                                imageView.setFitWidth(58);
+
+                                imageView.setFitHeight(52);
+
+                                imageView.setPreserveRatio(
+                                                true);
+
+                                imageBox.getChildren().add(
+                                                imageView);
+                        }
+
+                } catch (Exception e) {
+
+                        Label noImage = new Label("IMAGE");
+
+                        noImage.setStyle(
+                                        "-fx-font-size: 8px;" +
+                                                        "-fx-text-fill: #999999;");
+
+                        imageBox.getChildren().add(
+                                        noImage);
                 }
-        );
 
-        // =====================================================
-        // ADD TO CARD
-        // =====================================================
+                // =====================================================
+                // PRODUCT INFO
+                // =====================================================
 
-        card.getChildren().addAll(
-                successIcon,
-                title,
-                subtitle,
-                productCard,
-                nextSteps,
-                bookingsButton,
-                backButton
-        );
+                VBox info = new VBox(5);
 
-        return card;
-    }
+                Label product = new Label(
+                                productName);
 
-    // =========================================================
-    // SUCCESS ICON
-    // =========================================================
+                product.setStyle(
+                                "-fx-font-size: 12px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-text-fill: #222222;");
 
-    private StackPane createSuccessIcon() {
+                Label shop = new Label(
+                                "▣  " + shopName);
 
-        Circle outer =
-                new Circle(
-                        31,
-                        Color.web("#FFF0E5")
-                );
+                shop.setStyle(
+                                "-fx-font-size: 10px;" +
+                                                "-fx-text-fill: #6E625D;");
 
-        Circle inner =
-                new Circle(
-                        20,
-                        Color.web(ORANGE)
-                );
+                info.getChildren().addAll(
+                                product,
+                                shop);
 
-        Label check =
-                new Label("✓");
+                Region spacer = new Region();
 
-        check.setStyle(
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 21px;" +
-                "-fx-font-weight: bold;"
-        );
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
 
-        StackPane icon =
-                new StackPane(
-                        outer,
-                        inner,
-                        check
-                );
+                productRow.getChildren().addAll(
+                                imageBox,
+                                info,
+                                spacer);
 
-        icon.setPrefSize(
-                62,
-                62
-        );
+                // =====================================================
+                // STATUS ROW
+                // =====================================================
 
-        return icon;
-    }
+                HBox statusRow = new HBox();
 
-    // =========================================================
-    // PRODUCT CARD
-    // =========================================================
+                statusRow.setAlignment(
+                                Pos.CENTER_LEFT);
 
-    private VBox createProductCard() {
+                Label status = new Label("Status");
 
-        VBox box =
-                new VBox(12);
+                status.setStyle(
+                                "-fx-font-size: 9px;" +
+                                                "-fx-text-fill: #777777;");
 
-        box.setPadding(
-                new Insets(14)
-        );
+                Region statusSpacer = new Region();
 
-        box.setMaxWidth(
-                Double.MAX_VALUE
-        );
+                HBox.setHgrow(
+                                statusSpacer,
+                                Priority.ALWAYS);
 
-        box.setStyle(
-                "-fx-background-color: #eee5df" +
-                "-fx-background-radius: 7;" +
-                "-fx-border-color: #ECE6ED;" +
-                "-fx-border-radius: 7;"
-        );
+                Label valid = new Label(
+                                "Valid for 24 hours");
 
-        // =====================================================
-        // PRODUCT ROW
-        // =====================================================
+                valid.setPadding(
+                                new Insets(
+                                                4,
+                                                10,
+                                                4,
+                                                10));
 
-        HBox productRow =
-                new HBox(13);
+                valid.setStyle(
+                                "-fx-background-color: #FFE4D5;" +
+                                                "-fx-background-radius: 12;" +
+                                                "-fx-text-fill: " + ORANGE + ";" +
+                                                "-fx-font-size: 8px;" +
+                                                "-fx-font-weight: bold;");
 
-        productRow.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                statusRow.getChildren().addAll(
+                                status,
+                                statusSpacer,
+                                valid);
 
-        // =====================================================
-        // IMAGE
-        // =====================================================
+                box.getChildren().addAll(
+                                productRow,
+                                statusRow);
 
-        StackPane imageBox =
-                new StackPane();
-
-        imageBox.setPrefSize(
-                65,
-                58
-        );
-
-        imageBox.setMinSize(
-                65,
-                58
-        );
-
-        imageBox.setMaxSize(
-                65,
-                58
-        );
-
-        imageBox.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 5;"
-        );
-
-        try {
-
-            var imageUrl =
-                    getClass().getResource(productImage);
-
-            Image image =
-                    imageUrl == null
-                            ? null
-                            : new Image(
-                                    imageUrl.toExternalForm()
-                            );
-
-            if (image != null && !image.isError()) {
-
-                ImageView imageView =
-                        new ImageView(image);
-
-                imageView.setFitWidth(58);
-
-            imageView.setFitHeight(52);
-
-            imageView.setPreserveRatio(
-                    true
-            );
-
-                imageBox.getChildren().add(
-                        imageView
-                );
-            }
-
-        } catch (Exception e) {
-
-            Label noImage =
-                    new Label("IMAGE");
-
-            noImage.setStyle(
-                    "-fx-font-size: 8px;" +
-                    "-fx-text-fill: #999999;"
-            );
-
-            imageBox.getChildren().add(
-                    noImage
-            );
+                return box;
         }
 
-        // =====================================================
-        // PRODUCT INFO
-        // =====================================================
+        // =========================================================
+        // NEXT STEPS
+        // =========================================================
 
-        VBox info =
-                new VBox(5);
+        private VBox createNextSteps() {
 
-        Label product =
-                new Label(
-                        productName
-                );
+                VBox box = new VBox(7);
 
-        product.setStyle(
-                "-fx-font-size: 12px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #222222;"
-        );
+                box.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        Label shop =
-                new Label(
-                        "▣  " + shopName
-                );
+                Label title = new Label(
+                                "⚡  Next Steps");
 
-        shop.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-text-fill: #6E625D;"
-        );
+                title.setStyle(
+                                "-fx-font-size: 11px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-text-fill: #222222;");
 
-        info.getChildren().addAll(
-                product,
-                shop
-        );
+                Label text = new Label(
+                                "Visit the shop within the next 24 hours and show your booking\n" +
+                                                "ID #" +
+                                                bookingId +
+                                                " at the counter to complete your purchase and\n" +
+                                                "pick up your item.");
 
-        Region spacer =
-                new Region();
+                text.setWrapText(true);
 
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
+                text.setStyle(
+                                "-fx-font-size: 10px;" +
+                                                "-fx-line-spacing: 3;" +
+                                                "-fx-text-fill: " + MUTED + ";");
 
-        productRow.getChildren().addAll(
-                imageBox,
-                info,
-                spacer
-        );
+                box.getChildren().addAll(
+                                title,
+                                text);
 
-        // =====================================================
-        // STATUS ROW
-        // =====================================================
-
-        HBox statusRow =
-                new HBox();
-
-        statusRow.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        Label status =
-                new Label("Status");
-
-        status.setStyle(
-                "-fx-font-size: 9px;" +
-                "-fx-text-fill: #777777;"
-        );
-
-        Region statusSpacer =
-                new Region();
-
-        HBox.setHgrow(
-                statusSpacer,
-                Priority.ALWAYS
-        );
-
-        Label valid =
-                new Label(
-                        "Valid for 24 hours"
-                );
-
-        valid.setPadding(
-                new Insets(
-                        4,
-                        10,
-                        4,
-                        10
-                )
-        );
-
-        valid.setStyle(
-                "-fx-background-color: #FFE4D5;" +
-                "-fx-background-radius: 12;" +
-                "-fx-text-fill: " + ORANGE + ";" +
-                "-fx-font-size: 8px;" +
-                "-fx-font-weight: bold;"
-        );
-
-        statusRow.getChildren().addAll(
-                status,
-                statusSpacer,
-                valid
-        );
-
-        box.getChildren().addAll(
-                productRow,
-                statusRow
-        );
-
-        return box;
-    }
-
-    // =========================================================
-    // NEXT STEPS
-    // =========================================================
-
-    private VBox createNextSteps() {
-
-        VBox box =
-                new VBox(7);
-
-        box.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        Label title =
-                new Label(
-                        "⚡  Next Steps"
-                );
-
-        title.setStyle(
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #222222;"
-        );
-
-        Label text =
-                new Label(
-                        "Visit the shop within the next 24 hours and show your booking\n" +
-                        "ID #" +
-                        bookingId +
-                        " at the counter to complete your purchase and\n" +
-                        "pick up your item."
-                );
-
-        text.setWrapText(true);
-
-        text.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-line-spacing: 3;" +
-                "-fx-text-fill: " + MUTED + ";"
-        );
-
-        box.getChildren().addAll(
-                title,
-                text
-        );
-
-        return box;
-    }
-
-    // =========================================================
-    // PRIMARY BUTTON
-    // =========================================================
-
-    private Button createPrimaryButton(
-            String text) {
-
-        Button button =
-                new Button(text);
-
-        button.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        button.setPrefHeight(42);
-
-        button.setStyle(
-                "-fx-background-color: " +
-                ORANGE + ";" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 6;" +
-                "-fx-cursor: hand;"
-        );
-
-        button.setOnMouseEntered(
-                e -> button.setStyle(
-                        "-fx-background-color: " +
-                        DARK_ORANGE + ";" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-size: 11px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;"
-                )
-        );
-
-        button.setOnMouseExited(
-                e -> button.setStyle(
-                        "-fx-background-color: " +
-                        ORANGE + ";" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-size: 11px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;"
-                )
-        );
-
-        return button;
-    }
-
-    // =========================================================
-    // SECONDARY BUTTON
-    // =========================================================
-
-    private Button createSecondaryButton(
-            String text) {
-
-        Button button =
-                new Button(text);
-
-        button.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        button.setPrefHeight(40);
-
-        button.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-text-fill: " +
-                DARK_ORANGE + ";" +
-                "-fx-font-size: 11px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-border-color: " +
-                DARK_ORANGE + ";" +
-                "-fx-border-width: 1;" +
-                "-fx-border-radius: 6;" +
-                "-fx-background-radius: 6;" +
-                "-fx-cursor: hand;"
-        );
-
-        button.setOnMouseEntered(
-                e -> button.setStyle(
-                        "-fx-background-color: #FFF3EC;" +
-                        "-fx-text-fill: " +
-                        DARK_ORANGE + ";" +
-                        "-fx-font-size: 11px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-border-color: " +
-                        DARK_ORANGE + ";" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 6;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;"
-                )
-        );
-
-        button.setOnMouseExited(
-                e -> button.setStyle(
-                        "-fx-background-color: white;" +
-                        "-fx-text-fill: " +
-                        DARK_ORANGE + ";" +
-                        "-fx-font-size: 11px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-border-color: " +
-                        DARK_ORANGE + ";" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 6;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;"
-                )
-        );
-
-        return button;
-    }
-
-    // =========================================================
-    // ANIMATION
-    // =========================================================
-
-    private void playAnimation(
-            VBox card) {
-
-        // =====================================================
-        // INITIAL POSITION
-        // =====================================================
-
-        card.setOpacity(0);
-
-        card.setTranslateY(45);
-
-        card.setScaleX(0.92);
-
-        card.setScaleY(0.92);
-
-        // =====================================================
-        // FADE
-        // =====================================================
-
-        FadeTransition fade =
-                new FadeTransition(
-                        Duration.millis(700),
-                        card
-                );
-
-        fade.setFromValue(0);
-
-        fade.setToValue(1);
-
-        // =====================================================
-        // SLIDE
-        // =====================================================
-
-        TranslateTransition slide =
-                new TranslateTransition(
-                        Duration.millis(700),
-                        card
-                );
-
-        slide.setFromY(45);
-
-        slide.setToY(0);
-
-        // =====================================================
-        // SCALE
-        // =====================================================
-
-        ScaleTransition scale =
-                new ScaleTransition(
-                        Duration.millis(700),
-                        card
-                );
-
-        scale.setFromX(0.92);
-
-        scale.setFromY(0.92);
-
-        scale.setToX(1);
-
-        scale.setToY(1);
-
-        // =====================================================
-        // COMBINE
-        // =====================================================
-
-        ParallelTransition animation =
-                new ParallelTransition(
-                        fade,
-                        slide,
-                        scale
-                );
-
-        animation.play();
-
-        // =====================================================
-        // SUCCESS ICON ANIMATION
-        // =====================================================
-
-        if (!card.getChildren().isEmpty()) {
-
-            StackPane icon =
-                    (StackPane)
-                            card.getChildren()
-                                    .get(0);
-
-            icon.setScaleX(0.4);
-
-            icon.setScaleY(0.4);
-
-            ScaleTransition iconAnimation =
-                    new ScaleTransition(
-                            Duration.millis(500),
-                            icon
-                    );
-
-            iconAnimation.setDelay(
-                    Duration.millis(450)
-            );
-
-            iconAnimation.setFromX(0.4);
-
-            iconAnimation.setFromY(0.4);
-
-            iconAnimation.setToX(1);
-
-            iconAnimation.setToY(1);
-
-            iconAnimation.play();
+                return box;
         }
-    }
 
-    // =========================================================
-    // BOOKING ALERT
-    // =========================================================
+        // =========================================================
+        // PRIMARY BUTTON
+        // =========================================================
 
-    private void showBookingAlert() {
+        private Button createPrimaryButton(
+                        String text) {
 
-        Alert alert =
-                new Alert(
-                        Alert.AlertType.INFORMATION
-                );
+                Button button = new Button(text);
 
-        alert.setTitle(
-                "My Bookings"
-        );
+                button.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        alert.setHeaderText(
-                "Booking Confirmed"
-        );
+                button.setPrefHeight(42);
 
-        alert.setContentText(
-                "Booking ID : #" +
-                bookingId +
-                "\n\n" +
-                "Product : " +
-                productName +
-                "\n" +
-                "Shop : " +
-                shopName +
-                "\n\n" +
-                "Status : Confirmed"
-        );
+                button.setStyle(
+                                "-fx-background-color: " +
+                                                ORANGE + ";" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-font-size: 11px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 6;" +
+                                                "-fx-cursor: hand;");
 
-        alert.showAndWait();
-    }
+                button.setOnMouseEntered(
+                                e -> button.setStyle(
+                                                "-fx-background-color: " +
+                                                                DARK_ORANGE + ";" +
+                                                                "-fx-text-fill: white;" +
+                                                                "-fx-font-size: 11px;" +
+                                                                "-fx-font-weight: bold;" +
+                                                                "-fx-background-radius: 6;" +
+                                                                "-fx-cursor: hand;"));
+
+                button.setOnMouseExited(
+                                e -> button.setStyle(
+                                                "-fx-background-color: " +
+                                                                ORANGE + ";" +
+                                                                "-fx-text-fill: white;" +
+                                                                "-fx-font-size: 11px;" +
+                                                                "-fx-font-weight: bold;" +
+                                                                "-fx-background-radius: 6;" +
+                                                                "-fx-cursor: hand;"));
+
+                return button;
+        }
+
+        // =========================================================
+        // SECONDARY BUTTON
+        // =========================================================
+
+        private Button createSecondaryButton(
+                        String text) {
+
+                Button button = new Button(text);
+
+                button.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                button.setPrefHeight(40);
+
+                button.setStyle(
+                                "-fx-background-color: white;" +
+                                                "-fx-text-fill: " +
+                                                DARK_ORANGE + ";" +
+                                                "-fx-font-size: 11px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-border-color: " +
+                                                DARK_ORANGE + ";" +
+                                                "-fx-border-width: 1;" +
+                                                "-fx-border-radius: 6;" +
+                                                "-fx-background-radius: 6;" +
+                                                "-fx-cursor: hand;");
+
+                button.setOnMouseEntered(
+                                e -> button.setStyle(
+                                                "-fx-background-color: #FFF3EC;" +
+                                                                "-fx-text-fill: " +
+                                                                DARK_ORANGE + ";" +
+                                                                "-fx-font-size: 11px;" +
+                                                                "-fx-font-weight: bold;" +
+                                                                "-fx-border-color: " +
+                                                                DARK_ORANGE + ";" +
+                                                                "-fx-border-width: 1;" +
+                                                                "-fx-border-radius: 6;" +
+                                                                "-fx-background-radius: 6;" +
+                                                                "-fx-cursor: hand;"));
+
+                button.setOnMouseExited(
+                                e -> button.setStyle(
+                                                "-fx-background-color: white;" +
+                                                                "-fx-text-fill: " +
+                                                                DARK_ORANGE + ";" +
+                                                                "-fx-font-size: 11px;" +
+                                                                "-fx-font-weight: bold;" +
+                                                                "-fx-border-color: " +
+                                                                DARK_ORANGE + ";" +
+                                                                "-fx-border-width: 1;" +
+                                                                "-fx-border-radius: 6;" +
+                                                                "-fx-background-radius: 6;" +
+                                                                "-fx-cursor: hand;"));
+
+                return button;
+        }
+
+        // =========================================================
+        // ANIMATION
+        // =========================================================
+
+        private void playAnimation(
+                        VBox card) {
+
+                // =====================================================
+                // INITIAL POSITION
+                // =====================================================
+
+                card.setOpacity(0);
+
+                card.setTranslateY(45);
+
+                card.setScaleX(0.92);
+
+                card.setScaleY(0.92);
+
+                // =====================================================
+                // FADE
+                // =====================================================
+
+                FadeTransition fade = new FadeTransition(
+                                Duration.millis(700),
+                                card);
+
+                fade.setFromValue(0);
+
+                fade.setToValue(1);
+
+                // =====================================================
+                // SLIDE
+                // =====================================================
+
+                TranslateTransition slide = new TranslateTransition(
+                                Duration.millis(700),
+                                card);
+
+                slide.setFromY(45);
+
+                slide.setToY(0);
+
+                // =====================================================
+                // SCALE
+                // =====================================================
+
+                ScaleTransition scale = new ScaleTransition(
+                                Duration.millis(700),
+                                card);
+
+                scale.setFromX(0.92);
+
+                scale.setFromY(0.92);
+
+                scale.setToX(1);
+
+                scale.setToY(1);
+
+                // =====================================================
+                // COMBINE
+                // =====================================================
+
+                ParallelTransition animation = new ParallelTransition(
+                                fade,
+                                slide,
+                                scale);
+
+                animation.play();
+
+                // =====================================================
+                // SUCCESS ICON ANIMATION
+                // =====================================================
+
+                if (!card.getChildren().isEmpty()) {
+
+                        StackPane icon = (StackPane) card.getChildren()
+                                        .get(0);
+
+                        icon.setScaleX(0.4);
+
+                        icon.setScaleY(0.4);
+
+                        ScaleTransition iconAnimation = new ScaleTransition(
+                                        Duration.millis(500),
+                                        icon);
+
+                        iconAnimation.setDelay(
+                                        Duration.millis(450));
+
+                        iconAnimation.setFromX(0.4);
+
+                        iconAnimation.setFromY(0.4);
+
+                        iconAnimation.setToX(1);
+
+                        iconAnimation.setToY(1);
+
+                        iconAnimation.play();
+                }
+        }
+
+        // =========================================================
+        // BOOKING ALERT
+        // =========================================================
+
+        private void showBookingAlert() {
+
+                Alert alert = new Alert(
+                                Alert.AlertType.INFORMATION);
+
+                alert.setTitle(
+                                "My Bookings");
+
+                alert.setHeaderText(
+                                "Booking Confirmed");
+
+                alert.setContentText(
+                                "Booking ID : #" +
+                                                bookingId +
+                                                "\n\n" +
+                                                "Product : " +
+                                                productName +
+                                                "\n" +
+                                                "Shop : " +
+                                                shopName +
+                                                "\n\n" +
+                                                "Status : Confirmed");
+
+                alert.showAndWait();
+        }
 
 }
