@@ -20,7 +20,11 @@ public class ShopkeeperRegisterSucess {
 
         private static Scene registrationSuccessScene;
 
+<<<<<<< HEAD
         public static Scene registeredScene() {
+=======
+        public static Scene regaisteredScene() {
+>>>>>>> Sayali
 
                 // MAIN BORDER PANE
 

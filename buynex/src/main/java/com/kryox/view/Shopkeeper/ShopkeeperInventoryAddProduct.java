@@ -57,6 +57,13 @@ public class ShopkeeperInventoryAddProduct {
 
                 HBox headerMainBox = ViewConstants.header();
 
+<<<<<<< HEAD
+=======
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
+>>>>>>> Sayali
                 borderPane.setTop(
                                 headerMainBox);
 
@@ -97,7 +104,11 @@ public class ShopkeeperInventoryAddProduct {
                 centerContent.setSpacing(14);
 
                 centerContent.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F8F7FC;");
+=======
+                                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
                 // ================================================================
                 // BREADCRUMB
@@ -1162,7 +1173,11 @@ public class ShopkeeperInventoryAddProduct {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 centerScroll.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F8F7FC;" +
+=======
+                                "-fx-background-color: #EEE5DF;" +
+>>>>>>> Sayali
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(
@@ -1270,9 +1285,24 @@ public class ShopkeeperInventoryAddProduct {
 
                         String expiryTracking = expiryTrackingCombo.getValue();
 
+<<<<<<< HEAD
                         String manufacturingDate = manufacturingDatePicker.getValue().toString();
 
                         String expiryDate = expiryDatePicker.getValue().toString();
+=======
+                        String manufacturingDate = null;
+                        String expiryDate = null;
+
+                        if ("Has Expiry".equals(expiryTracking)) {
+                        if (manufacturingDatePicker.getValue() != null) {
+                                manufacturingDate = manufacturingDatePicker.getValue().toString();
+                        }
+
+                        if (expiryDatePicker.getValue() != null) {
+                                expiryDate = expiryDatePicker.getValue().toString();
+                        }
+                        }
+>>>>>>> Sayali
 
                         if (productName.isEmpty() ||
                                         category == null ||
@@ -1300,8 +1330,13 @@ public class ShopkeeperInventoryAddProduct {
                                         return;
                                 }
 
+<<<<<<< HEAD
                                 if (LocalDate.parse(manufacturingDate).isBefore(
                                                 LocalDate.parse(manufacturingDate))) {
+=======
+                                if (LocalDate.parse(expiryDate).isBefore(
+        LocalDate.parse(manufacturingDate))){
+>>>>>>> Sayali
 
                                         System.out.println(
                                                         "Expiry date cannot be before manufacturing date.");
@@ -1382,7 +1417,11 @@ public class ShopkeeperInventoryAddProduct {
                                 850);
 
                 addProductScene.setFill(
+<<<<<<< HEAD
                                 Color.web("#F8F7FC"));
+=======
+                                Color.web("#EEE5DF"));
+>>>>>>> Sayali
 
                 return addProductScene;
         }
@@ -1549,7 +1588,11 @@ public class ShopkeeperInventoryAddProduct {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F5F4F9;" +
+=======
+                                "-fx-background-color: #EBCCB7;" +
+>>>>>>> Sayali
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

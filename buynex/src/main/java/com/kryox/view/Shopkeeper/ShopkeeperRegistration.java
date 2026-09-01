@@ -33,7 +33,11 @@ public class ShopkeeperRegistration {
         BorderPane borderPane = new BorderPane();
 
         borderPane.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8FBF8;");
+=======
+                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
         // =========================================================
         // HEADER
@@ -41,6 +45,13 @@ public class ShopkeeperRegistration {
 
         HBox headerMainBox = ViewConstants.loginHeader();
 
+<<<<<<< HEAD
+=======
+        // Header background
+        headerMainBox.setStyle(
+                "-fx-background-color: #EBCCB7;");
+
+>>>>>>> Sayali
         borderPane.setTop(headerMainBox);
 
         // =========================================================
@@ -818,7 +829,11 @@ public class ShopkeeperRegistration {
                 Pos.TOP_CENTER);
 
         mainVBox1.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8FBF8;");
+=======
+                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
         // =========================================================
         // COMPLETE PAGE
@@ -852,7 +867,11 @@ public class ShopkeeperRegistration {
                 650);
 
         shopkeeperScene.setFill(
+<<<<<<< HEAD
                 Color.web("#F8FBF8"));
+=======
+                Color.web("#EEE5DF"));
+>>>>>>> Sayali
 
         return shopkeeperScene;
     }

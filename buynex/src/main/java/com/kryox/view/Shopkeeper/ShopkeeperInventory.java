@@ -65,8 +65,21 @@ public class ShopkeeperInventory {
         // HEADER
         // ============================================================
 
+<<<<<<< HEAD
         borderPane.setTop(
                 ViewConstants.header()
+=======
+        HBox headerMainBox =
+                ViewConstants.header();
+
+        // Header background
+        headerMainBox.setStyle(
+                "-fx-background-color: #EBCCB7;"
+        );
+
+        borderPane.setTop(
+                headerMainBox
+>>>>>>> Sayali
         );
 
 
@@ -101,7 +114,11 @@ public class ShopkeeperInventory {
         centerContent.setSpacing(14);
 
         centerContent.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8F7FC;"
+=======
+                "-fx-background-color: #EEE5DF;"
+>>>>>>> Sayali
         );
 
 
@@ -475,7 +492,11 @@ public class ShopkeeperInventory {
         );
 
         scrollPane.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8F7FC;" +
+=======
+                "-fx-background-color: #EEE5DF;" +
+>>>>>>> Sayali
                 "-fx-border-color: transparent;"
         );
 
@@ -1593,7 +1614,11 @@ public class ShopkeeperInventory {
         );
 
         sidebar.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F5F4F9;" +
+=======
+                "-fx-background-color: #EBCCB7;" +
+>>>>>>> Sayali
                 "-fx-border-color: #E3C7BA;" +
                 "-fx-border-width: 0 1px 0 0;"
         );

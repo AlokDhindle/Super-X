@@ -30,6 +30,13 @@ public class ShopkeeperSupport {
 
                 HBox headerMainBox = ViewConstants.header();
 
+<<<<<<< HEAD
+=======
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
+>>>>>>> Sayali
                 borderPane.setTop(headerMainBox);
 
                 // ================================================================
@@ -65,7 +72,11 @@ public class ShopkeeperSupport {
                                 20);
 
                 centerContent.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F8F7FC;");
+=======
+                                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
                 // ================================================================
                 // PAGE TITLE
@@ -696,7 +707,11 @@ public class ShopkeeperSupport {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 centerScroll.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F8F7FC;" +
+=======
+                                "-fx-background-color: #EEE5DF;" +
+>>>>>>> Sayali
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(
@@ -712,7 +727,11 @@ public class ShopkeeperSupport {
                                 650);
 
                 scene.setFill(
+<<<<<<< HEAD
                                 Color.web("#F8F7FC"));
+=======
+                                Color.web("#EEE5DF"));
+>>>>>>> Sayali
 
                 return scene;
         }

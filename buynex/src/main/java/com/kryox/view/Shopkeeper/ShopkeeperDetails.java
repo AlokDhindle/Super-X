@@ -45,7 +45,11 @@ public class ShopkeeperDetails {
         BorderPane borderPane = new BorderPane();
 
         borderPane.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #ffffff;");
+=======
+                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
         // =========================================================
         // HEADER
@@ -53,6 +57,13 @@ public class ShopkeeperDetails {
 
         HBox headerBox = ViewConstants.loginHeader();
 
+<<<<<<< HEAD
+=======
+        // Header background
+        headerBox.setStyle(
+                "-fx-background-color: #EBCCB7;");
+
+>>>>>>> Sayali
         borderPane.setTop(headerBox);
 
         // =========================================================
@@ -1335,7 +1346,11 @@ public class ShopkeeperDetails {
                     "Shop registration data validated.");
 
             Homepage.HomepageStage.setScene(
+<<<<<<< HEAD
                     ShopkeeperRegisterSucess.registeredScene());
+=======
+                    ShopkeeperRegisterSucess.regaisteredScene());
+>>>>>>> Sayali
         });
 
         // =========================================================
@@ -1712,7 +1727,11 @@ public class ShopkeeperDetails {
                         0));
 
         centerContent.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8FBF8;");
+=======
+                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
         centerContent.setMaxWidth(800);
 
@@ -1725,7 +1744,11 @@ public class ShopkeeperDetails {
         page.setPrefWidth(1280);
 
         page.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8FBF8;");
+=======
+                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
         // =========================================================
         // SCROLL PANE
@@ -1762,7 +1785,11 @@ public class ShopkeeperDetails {
                         720);
 
         shopDetailsScene.setFill(
+<<<<<<< HEAD
                 Color.web("#F8FBF8"));
+=======
+                Color.web("#EEE5DF"));
+>>>>>>> Sayali
 
         return shopDetailsScene;
     }

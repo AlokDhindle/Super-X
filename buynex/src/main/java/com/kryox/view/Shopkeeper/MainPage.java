@@ -37,7 +37,11 @@ public class MainPage {
         BorderPane borderPane = new BorderPane();
 
         borderPane.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #FAF8FC;"
+=======
+                "-fx-background-color: #EEE5DF;"
+>>>>>>> Sayali
         );
 
 
@@ -315,7 +319,11 @@ public class MainPage {
                 new StackPane();
 
         centerWrapper.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #FAF8FC;"
+=======
+                "-fx-background-color: #EEE5DF;"
+>>>>>>> Sayali
         );
 
 
@@ -461,7 +469,11 @@ public class MainPage {
                 );
 
         mainPageScene.setFill(
+<<<<<<< HEAD
                 Color.web("#FAF8FC")
+=======
+                Color.web("#EEE5DF")
+>>>>>>> Sayali
         );
 
         return mainPageScene;
@@ -497,7 +509,11 @@ public class MainPage {
         );
 
         header.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: rgba(250,248,252,0.97);" +
+=======
+                "-fx-background-color: #EBCCB7;" +
+>>>>>>> Sayali
                 "-fx-border-color: #E9E2E1;" +
                 "-fx-border-width: 0 0 1 0;"
         );

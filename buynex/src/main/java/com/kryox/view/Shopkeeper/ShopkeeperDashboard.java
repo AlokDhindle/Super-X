@@ -108,7 +108,11 @@ public class ShopkeeperDashboard {
                 new BorderPane();
 
         borderPane.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8F7FC;"
+=======
+                "-fx-background-color: #EEE5DF;"
+>>>>>>> Sayali
         );
 
 
@@ -119,6 +123,14 @@ public class ShopkeeperDashboard {
         HBox headerMainBox =
                 ViewConstants.header();
 
+<<<<<<< HEAD
+=======
+// Header background
+        headerMainBox.setStyle(
+                "-fx-background-color: #EBCCB7;"
+        );
+
+>>>>>>> Sayali
         borderPane.setTop(
                 headerMainBox
         );
@@ -532,7 +544,11 @@ public class ShopkeeperDashboard {
         );
 
         centerContent.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8F7FC;"
+=======
+                "-fx-background-color: #EEE5DF;"
+>>>>>>> Sayali
         );
 
 
@@ -558,7 +574,11 @@ public class ShopkeeperDashboard {
         );
 
         scrollPane.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8F7FC;" +
+=======
+                "-fx-background-color: #EEE5DF;" +
+>>>>>>> Sayali
                 "-fx-border-color: transparent;"
         );
 
@@ -592,7 +612,11 @@ public class ShopkeeperDashboard {
                 );
 
         dashboardScene.setFill(
+<<<<<<< HEAD
                 Color.web("#F8F7FC")
+=======
+                Color.web("#EEE5DF")
+>>>>>>> Sayali
         );
 
         return dashboardScene;
@@ -612,7 +636,11 @@ public class ShopkeeperDashboard {
         sidebar.setMaxWidth(260);
 
         sidebar.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F5F4F9;" +
+=======
+                "-fx-background-color: #EBCCB7;" +
+>>>>>>> Sayali
                 "-fx-border-color: #E3C7BA;" +
                 "-fx-border-width: 0 1px 0 0;"
         );

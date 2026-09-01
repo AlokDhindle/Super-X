@@ -662,7 +662,11 @@ public class ShopkeeperLogin {
                                                 ViewConstants.shopkeeperModel = shopkeeperModel;
                                                 Homepage.HomepageStage.setScene(ShopkeeperDashboard.dashboardScene());
                                         }else{
+<<<<<<< HEAD
                                                 Homepage.HomepageStage.setScene(ShopkeeperRegisterSucess.registeredScene());                                }
+=======
+                                                Homepage.HomepageStage.setScene(ShopkeeperRegisterSucess.regaisteredScene());                                }
+>>>>>>> Sayali
                                 } else {
                                         ConstantsMethods.showAlert(
                                                         Alert.AlertType.ERROR,

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> Sayali
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
@@ -27,9 +30,20 @@ public class ShopkeeperDeleteAccountConfirmation {
         // ------------------------------------------------------------------
 
         BorderPane borderPane = new BorderPane();
+<<<<<<< HEAD
         borderPane.setStyle("-fx-background-color: #F8FBF8;");
 
         HBox headerBox = ViewConstants.loginHeader();
+=======
+        borderPane.setStyle("-fx-background-color: #EEE5DF;");
+
+        HBox headerBox = ViewConstants.loginHeader();
+
+        // Header background
+        headerBox.setStyle(
+                "-fx-background-color: #EBCCB7;");
+
+>>>>>>> Sayali
         borderPane.setTop(headerBox);
 
         // DELETE ICON
@@ -142,12 +156,21 @@ public class ShopkeeperDeleteAccountConfirmation {
             System.out.println("Delete account button clicked");
 
             ShopkeeperDAO shopkeeperDAO = new ShopkeeperDAO();
+<<<<<<< HEAD
     
                     shopkeeperDAO.deleteAccount();
                     ShopkeeperLogController.resetRegistration();
                     System.out.println("Account deleted");
                     Homepage.HomepageStage.setScene(            
                             ShopkeeperLogin.loginscene());  
+=======
+
+                    shopkeeperDAO.deleteAccount();
+                    ShopkeeperLogController.resetRegistration();
+                    System.out.println("Account deleted");
+                    Homepage.HomepageStage.setScene(
+                            ShopkeeperLogin.loginscene());
+>>>>>>> Sayali
         });
 
         // BACK BUTTON
@@ -222,7 +245,11 @@ public class ShopkeeperDeleteAccountConfirmation {
                 new Insets(10, 0, 10, 0));
 
         centerContent.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8FBF8;");
+=======
+                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
         centerContent.setPrefWidth(1280);
 
@@ -244,7 +271,11 @@ public class ShopkeeperDeleteAccountConfirmation {
                 650);
 
         deleteAccountScene.setFill(
+<<<<<<< HEAD
                 Color.web("#F8FBF8"));
+=======
+                Color.web("#EEE5DF"));
+>>>>>>> Sayali
 
         return deleteAccountScene;
     }

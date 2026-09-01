@@ -18,6 +18,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+<<<<<<< HEAD
 public class Helppage  {
         public String userId;
 
@@ -30,13 +31,27 @@ public class Helppage  {
     private TextField searchField;
     Scene getHelpScene(Runnable callbacktosetion){
          // =====================================================
+=======
+public class HelpPage extends Application {
+
+    private TextField searchField;
+
+    @Override
+    public void start(Stage stage) {
+
+        // =====================================================
+>>>>>>> Sayali
         // MAIN BORDERPANE
         // =====================================================
 
         BorderPane root = new BorderPane();
 
         root.setStyle(
+<<<<<<< HEAD
         "-fx-background-color: #eee5df;"
+=======
+        "-fx-background-color: #EEE5DF;"
+>>>>>>> Sayali
         );
 
 
@@ -541,9 +556,12 @@ public class Helppage  {
                 "-fx-padding: 8 18;" +
                 "-fx-font-size: 10px;"
         );
+<<<<<<< HEAD
         backBtn.setOnAction(event->{
            callbacktosetion.run();
         });
+=======
+>>>>>>> Sayali
 
 
         // =====================================================
@@ -766,7 +784,18 @@ public class Helppage  {
         // BACK BUTTON FUNCTIONALITY
         // =====================================================
 
+<<<<<<< HEAD
       
+=======
+        backBtn.setOnAction(e -> {
+
+            Stage currentStage =
+                    (Stage) backBtn.getScene().getWindow();
+
+            currentStage.close();
+        });
+
+>>>>>>> Sayali
 
         // =====================================================
         // ROOT CENTER
@@ -775,7 +804,10 @@ public class Helppage  {
         root.setCenter(
                 contentBox
         );
+<<<<<<< HEAD
         root.setStyle("-fx-background-color: #eee5df;");
+=======
+>>>>>>> Sayali
 
 
         // =====================================================
@@ -784,6 +816,7 @@ public class Helppage  {
 
         Scene scene = new Scene(
                 root,
+<<<<<<< HEAD
                 1530,
                 850
         );
@@ -796,6 +829,23 @@ public class Helppage  {
 
     
 
+=======
+                1550,
+                850
+        );
+
+
+        stage.setTitle(
+                "EliteMarket - Help Center"
+        );
+
+
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+>>>>>>> Sayali
 
     // =========================================================
     // CREATE NAV BUTTON
@@ -1085,6 +1135,7 @@ public class Helppage  {
 
         alert.showAndWait();
     }
+<<<<<<< HEAD
     public void backtoDashboard() {
     Seting seting = new Seting(userId);
     Homepage.HomepageStage.setScene(
@@ -1092,5 +1143,7 @@ public class Helppage  {
         
     );
 }
+=======
+>>>>>>> Sayali
 
 }

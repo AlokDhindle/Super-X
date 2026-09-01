@@ -70,6 +70,13 @@ public class ShopkeeperSettings {
 
                 HBox headerMainBox = ViewConstants.header();
 
+<<<<<<< HEAD
+=======
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
+>>>>>>> Sayali
                 borderPane.setTop(
                                 headerMainBox);
 
@@ -976,7 +983,11 @@ public class ShopkeeperSettings {
                                 new Insets(25));
 
                 centerContent.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F8F7FC;");
+=======
+                                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
                 ScrollPane scrollPane = new ScrollPane(
                                 centerContent);
@@ -994,7 +1005,11 @@ public class ShopkeeperSettings {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 scrollPane.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F8F7FC;" +
+=======
+                                "-fx-background-color: #EEE5DF;" +
+>>>>>>> Sayali
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(
@@ -1206,7 +1221,11 @@ public class ShopkeeperSettings {
                                 850);
 
                 settingsScene.setFill(
+<<<<<<< HEAD
                                 Color.web("#F8F7FC"));
+=======
+                                Color.web("#EEE5DF"));
+>>>>>>> Sayali
 
                 return settingsScene;
         }
@@ -1222,7 +1241,11 @@ public class ShopkeeperSettings {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F5F4F9;" +
+=======
+                                "-fx-background-color: #EBCCB7;" +
+>>>>>>> Sayali
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

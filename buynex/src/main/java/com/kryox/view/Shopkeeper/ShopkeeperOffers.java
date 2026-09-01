@@ -39,6 +39,14 @@ public class ShopkeeperOffers {
         HBox headerMainBox =
                 ViewConstants.header();
 
+<<<<<<< HEAD
+=======
+        // Header background
+        headerMainBox.setStyle(
+                "-fx-background-color: #EBCCB7;"
+        );
+
+>>>>>>> Sayali
         borderPane.setTop(headerMainBox);
 
 
@@ -308,7 +316,11 @@ public class ShopkeeperOffers {
 
 
         scrollPane.setStyle(
+<<<<<<< HEAD
                 "-fx-background-color: #F8F7FC;" +
+=======
+                "-fx-background-color: #EEE5DF;" +
+>>>>>>> Sayali
                 "-fx-border-color: transparent;"
         );
 
@@ -344,7 +356,11 @@ public class ShopkeeperOffers {
 
         offersScene.setFill(
                 Color.web(
+<<<<<<< HEAD
                         "#F8F7FC"
+=======
+                        "#EEE5DF"
+>>>>>>> Sayali
                 )
         );
 
@@ -696,7 +712,11 @@ public class ShopkeeperOffers {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F5F4F9;" +
+=======
+                                "-fx-background-color: #EBCCB7;" +
+>>>>>>> Sayali
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

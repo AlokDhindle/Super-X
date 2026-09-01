@@ -29,7 +29,11 @@ public class Cartdao {
                 System.out.println("ERROR: USER ID IS NULL");
                 return;
             }
+<<<<<<< HEAD
 
+=======
+            System.out.println("SAVING TO: Orders/" + userId + "/Cart/" + productcart.getName());
+>>>>>>> Sayali
             db.collection("Orders")
                     .document(userId)
                     .collection("Cart")

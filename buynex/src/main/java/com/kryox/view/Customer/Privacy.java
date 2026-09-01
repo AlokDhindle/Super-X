@@ -293,7 +293,11 @@ public class Privacy {
                                                 "-fx-background-radius: 6;" +
                                                 "-fx-cursor: hand;");
                 helpBtn.setOnAction(event->{
+<<<<<<< HEAD
                         Helppage hp=new Helppage(userId);
+=======
+                        Helppage hp=new Homepage(userId);
+>>>>>>> Sayali
                         Homepage.HomepageStage.setScene(hp.getHelpScene(callbacktoDashboard));
                 });
 

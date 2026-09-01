@@ -28,7 +28,11 @@ public class ShopkeeperOrderPreparing {
                 BorderPane borderPane = new BorderPane();
 
                 borderPane.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F8F7FC;");
+=======
+                                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
                 // ============================================================
                 // HEADER
@@ -36,6 +40,13 @@ public class ShopkeeperOrderPreparing {
 
                 HBox headerMainBox = ViewConstants.header();
 
+<<<<<<< HEAD
+=======
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
+>>>>>>> Sayali
                 borderPane.setTop(headerMainBox);
 
                 // ============================================================
@@ -57,7 +68,11 @@ public class ShopkeeperOrderPreparing {
                 centerMain.setSpacing(15);
 
                 centerMain.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F8F7FC;");
+=======
+                                "-fx-background-color: #EEE5DF;");
+>>>>>>> Sayali
 
                 // ============================================================
                 // TITLE
@@ -327,7 +342,11 @@ public class ShopkeeperOrderPreparing {
                                 650);
 
                 ordersScene.setFill(
+<<<<<<< HEAD
                                 Color.web("#F8F7FC"));
+=======
+                                Color.web("#EEE5DF"));
+>>>>>>> Sayali
 
                 return ordersScene;
         }
@@ -802,7 +821,11 @@ public class ShopkeeperOrderPreparing {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
+<<<<<<< HEAD
                                 "-fx-background-color: #F5F4F9;" +
+=======
+                                "-fx-background-color: #EBCCB7;" +
+>>>>>>> Sayali
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 
