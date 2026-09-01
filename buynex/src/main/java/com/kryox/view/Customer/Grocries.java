@@ -35,6 +35,12 @@ import com.kryox.controller.Shopkeeper.ProductController;
 import com.kryox.model.Shopkeeper.ProductModel;
 import javafx.scene.text.Text;
 
+import com.kryox.view.Customer.ShoppingCartUI;
+import com.kryox.view.Customer.neaby_shope;
+import com.kryox.view.Customer.Seting;
+import com.kryox.view.Customer.Electronics;
+import com.kryox.view.Customer.Homepage;
+
 public class Grocries {
         public String userId;
 

@@ -7,17 +7,9 @@ import com.kryox.model.Shopkeeper.ProductModel;
 
 public class ProductController {
 
-    private static ProductDAO productDAO;
+    private static ProductDAO productDAO = new ProductDAO();
 
-    // ============================================================
-    // CONSTRUCTOR
-    // ============================================================
-
-    public ProductController() {
-
-        productDAO = new ProductDAO();
-
-    }
+    
 
     // ============================================================
     // FETCH PRODUCTS

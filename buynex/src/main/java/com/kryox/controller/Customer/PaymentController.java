@@ -853,10 +853,12 @@ public class PaymentController {
                 orderId
         );
 
+
         // Execute callback only after verified payment success.
         if (paymentSuccessCallback != null) {
             Platform.runLater(paymentSuccessCallback);
         }
+
     }
 
 
