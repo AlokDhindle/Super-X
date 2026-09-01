@@ -20,7 +20,7 @@ public class Firebaseconfig {
 
             FileInputStream serviceAccount =
                     new FileInputStream(
-                            "C:\\BuyNex\\Super-X\\buynex\\src\\main\\resources\\serviceAccount.json"
+                            "D:\\kryox\\Super-X\\buynex\\src\\main\\resources\\serviceAccount.json"
                     );
 
             FirebaseOptions options =
