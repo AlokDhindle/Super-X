@@ -1,5 +1,6 @@
 package com.kryox.view.Customer;
 
+import com.kryox.dao.Customer.UserDao;
 import com.kryox.controller.Customer.Userstorecontroller;
 import com.kryox.controller.Customer.controler;
 import com.kryox.model.Customer.User;
@@ -482,6 +483,20 @@ public class CustomerLogin {
                     System.out.println(
                             "Login done successfully"
                     );
+
+                    Thread activityThread =
+                            new Thread(() -> {
+
+                                UserDao userDao =
+                                        new UserDao();
+
+                                userDao.saveUserActivity(
+                                        email
+                                );
+                            });
+
+                    activityThread.setDaemon(true);
+                    activityThread.start();
 
                     Dashbord db =
                             new Dashbord(userId);

@@ -788,172 +788,8 @@ public class UserManagementPage {
                 topSearchBox.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                Image aiChatbotImage = new Image(getClass().getResource("/assets/images/admin/message.png").toExternalForm());
-                ImageView iv8 = new ImageView(aiChatbotImage);
-                iv8.setFitWidth(22);
-                iv8.setFitHeight(22);
-                iv8.setPreserveRatio(true);
-
-                Image notification = new Image(getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
-                ImageView iv9 = new ImageView(notification);
-                iv9.setFitWidth(22);
-                iv9.setFitHeight(22);
-                // iv9.setPreserveRatio(true);
-
-                Popup notificationPopup = new Popup();
-
-                Text notificationTitle = new Text("Notifications");
-                notificationTitle.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                22));
-
-                Button markRead = new Button("Mark all as read");
-                markRead.setStyle(
-                                "-fx-background-color:transparent;" +
-                                                "-fx-text-fill:#E65300;" +
-                                                "-fx-font-size:15px;");
-
-                Region notificationGrow = new Region();
-                HBox.setHgrow(notificationGrow, Priority.ALWAYS);
-
-                HBox notificationHeader = new HBox(
-                                notificationTitle,
-                                notificationGrow,
-                                markRead);
-
-                notificationHeader.setAlignment(Pos.CENTER_LEFT);
-
-                Circle dot1 = new Circle(5, Color.web("#FF6500"));
-
-                Text notificationText1 = new Text(
-                                "New Shop Registration\n" +
-                                                "Tech Haven needs verification\n" +
-                                                "2 mins ago");
-
-                notificationText1.setStyle("-fx-font-size:15px;");
-
-                HBox notification1 = new HBox(
-                                12,
-                                dot1,
-                                notificationText1);
-
-                notification1.setAlignment(Pos.CENTER_LEFT);
-                notification1.setPadding(new Insets(12));
-                notification1.setStyle(
-                                "-fx-background-color:#FFF4ED;" +
-                                                "-fx-background-radius:8;");
-
-                Circle dot2 = new Circle(5, Color.web("#21B55A"));
-
-                Text notificationText2 = new Text(
-                                "New User Joined\n" +
-                                                "New customer account created\n" +
-                                                "10 mins ago");
-
-                notificationText2.setStyle("-fx-font-size:15px;");
-
-                HBox notification2 = new HBox(
-                                12,
-                                dot2,
-                                notificationText2);
-
-                notification2.setAlignment(Pos.CENTER_LEFT);
-                notification2.setPadding(new Insets(12));
-                notification2.setStyle(
-                                "-fx-background-color:#F4FFF7;" +
-                                                "-fx-background-radius:8;");
-
-                Circle dot3 = new Circle(5, Color.web("#E53935"));
-
-                Text notificationText3 = new Text(
-                                "Flagged Account\n" +
-                                                "Suspicious activity detected\n" +
-                                                "1 hour ago");
-
-                notificationText3.setStyle("-fx-font-size:15px;");
-
-                HBox notification3 = new HBox(
-                                12,
-                                dot3,
-                                notificationText3);
-
-                notification3.setAlignment(Pos.CENTER_LEFT);
-                notification3.setPadding(new Insets(12));
-                notification3.setStyle(
-                                "-fx-background-color:#FFF5F5;" +
-                                                "-fx-background-radius:8;");
-
-                Button viewAll = new Button("View All Notifications");
-                viewAll.setMaxWidth(Double.MAX_VALUE);
-                viewAll.setPrefHeight(42);
-                viewAll.setStyle(
-                                "-fx-background-color:#FF6500;" +
-                                                "-fx-text-fill:white;" +
-                                                "-fx-font-weight:bold;" +
-                                                "-fx-background-radius:7;" +
-                                                "-fx-font-size:15px;");
-
-                VBox notificationBox = new VBox(
-                                12,
-                                notificationHeader,
-                                new Separator(),
-                                notification1,
-                                notification2,
-                                notification3,
-                                viewAll);
-
-                notificationBox.setPrefWidth(330);
-                notificationBox.setPadding(new Insets(18));
-                notificationBox.setStyle(
-                                "-fx-background-color:white;" +
-                                                "-fx-border-color:#E5E1E8;" +
-                                                "-fx-border-width:1;" +
-                                                "-fx-border-radius:10;" +
-                                                "-fx-background-radius:10;" +
-                                                "-fx-effect:dropshadow(gaussian," +
-                                                "rgba(0,0,0,0.18),15,0,0,5);");
-
-                notificationPopup.getContent().add(notificationBox);
-
-                iv9.setOnMouseClicked(e -> {
-
-                        if (notificationPopup.isShowing()) {
-
-                                notificationPopup.hide();
-
-                        } else {
-
-                                Bounds bellPosition = iv9.localToScreen(
-                                                iv9.getBoundsInLocal());
-
-                                if (bellPosition != null) {
-
-                                        notificationPopup.show(
-                                                        iv9,
-                                                        bellPosition.getMaxX() - 330,
-                                                        bellPosition.getMaxY() + 12);
-                                }
-                        }
-                });
-
-                markRead.setOnAction(e -> {
-
-                        notification1.setStyle("-fx-background-color:white;");
-                        notification2.setStyle("-fx-background-color:white;");
-                        notification3.setStyle("-fx-background-color:white;");
-                });
-
-                Text adminName = new Text("Alex");
-
-                adminName.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                18));
-
-                HBox topRight = new HBox(18, iv8, iv9, adminName);
+                HBox topRight =
+                                createTopActions();
 
                 Region topGrow = new Region();
 
@@ -1844,5 +1680,221 @@ public class UserManagementPage {
 
                 return String.valueOf(value).trim();
         }
+
+
+
+    private HBox createTopActions() {
+
+        Image notificationImage = new Image(
+                getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
+
+        ImageView notificationIcon = new ImageView(notificationImage);
+        notificationIcon.setFitWidth(22);
+        notificationIcon.setFitHeight(22);
+        notificationIcon.setPreserveRatio(true);
+
+        Text notificationName = new Text("Notifications");
+        notificationName.setFont(Font.font("Arial", 14));
+
+        HBox notificationAction = new HBox(
+                6,
+                notificationIcon,
+                notificationName);
+
+        notificationAction.setAlignment(Pos.CENTER_LEFT);
+        notificationAction.setStyle("-fx-cursor:hand;");
+
+        Image chatbotImage = new Image(
+                getClass().getResource("/assets/images/admin/message.png").toExternalForm());
+
+        ImageView chatbotIcon = new ImageView(chatbotImage);
+        chatbotIcon.setFitWidth(22);
+        chatbotIcon.setFitHeight(22);
+        chatbotIcon.setPreserveRatio(true);
+
+        Text chatbotName = new Text("ChatBot");
+        chatbotName.setFont(Font.font("Arial", 14));
+
+        HBox chatbotAction = new HBox(
+                6,
+                chatbotIcon,
+                chatbotName);
+
+        chatbotAction.setAlignment(Pos.CENTER_LEFT);
+        chatbotAction.setStyle("-fx-cursor:hand;");
+
+        chatbotAction.setOnMouseClicked(e -> {
+
+            SmartAssistantUI chatPage =
+                    new SmartAssistantUI();
+
+            Homepage.HomepageStage.setScene(
+                    chatPage.getUserScene());
+        });
+
+        javafx.stage.Popup notificationPopup =
+                new javafx.stage.Popup();
+
+        Text notificationTitle =
+                new Text("Notifications");
+
+        notificationTitle.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        20));
+
+        Button markRead =
+                new Button("Mark all as read");
+
+        markRead.setStyle(
+                "-fx-background-color:transparent;" +
+                "-fx-text-fill:#E65300;" +
+                "-fx-font-size:13px;");
+
+        Region notificationGrow =
+                new Region();
+
+        HBox.setHgrow(
+                notificationGrow,
+                Priority.ALWAYS);
+
+        HBox notificationHeader =
+                new HBox(
+                        notificationTitle,
+                        notificationGrow,
+                        markRead);
+
+        notificationHeader.setAlignment(
+                Pos.CENTER_LEFT);
+
+        Text notificationText1 =
+                new Text(
+                        "New Shop Registration\n" +
+                        "Tech Haven needs verification\n" +
+                        "2 mins ago");
+
+        notificationText1.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification1 =
+                new VBox(notificationText1);
+
+        notification1.setPadding(
+                new Insets(12));
+
+        notification1.setStyle(
+                "-fx-background-color:#FFF4ED;" +
+                "-fx-background-radius:8;");
+
+        Text notificationText2 =
+                new Text(
+                        "New User Joined\n" +
+                        "New customer account created\n" +
+                        "10 mins ago");
+
+        notificationText2.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification2 =
+                new VBox(notificationText2);
+
+        notification2.setPadding(
+                new Insets(12));
+
+        notification2.setStyle(
+                "-fx-background-color:#F4FFF7;" +
+                "-fx-background-radius:8;");
+
+        Text notificationText3 =
+                new Text(
+                        "Flagged Account\n" +
+                        "Suspicious activity detected\n" +
+                        "1 hour ago");
+
+        notificationText3.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification3 =
+                new VBox(notificationText3);
+
+        notification3.setPadding(
+                new Insets(12));
+
+        notification3.setStyle(
+                "-fx-background-color:#FFF5F5;" +
+                "-fx-background-radius:8;");
+
+        VBox notificationBox =
+                new VBox(
+                        12,
+                        notificationHeader,
+                        new Separator(),
+                        notification1,
+                        notification2,
+                        notification3);
+
+        notificationBox.setPrefWidth(330);
+        notificationBox.setPadding(
+                new Insets(18));
+
+        notificationBox.setStyle(
+                "-fx-background-color:white;" +
+                "-fx-border-color:#E5E1E8;" +
+                "-fx-border-width:1;" +
+                "-fx-border-radius:10;" +
+                "-fx-background-radius:10;" +
+                "-fx-effect:dropshadow(gaussian," +
+                "rgba(0,0,0,0.18),15,0,0,5);");
+
+        notificationPopup
+                .getContent()
+                .add(notificationBox);
+
+        notificationAction.setOnMouseClicked(e -> {
+
+            if (notificationPopup.isShowing()) {
+
+                notificationPopup.hide();
+
+            } else {
+
+                javafx.geometry.Bounds bellPosition =
+                        notificationAction.localToScreen(
+                                notificationAction.getBoundsInLocal());
+
+                if (bellPosition != null) {
+
+                    notificationPopup.show(
+                            notificationAction,
+                            bellPosition.getMaxX() - 330,
+                            bellPosition.getMaxY() + 10);
+                }
+            }
+        });
+
+        markRead.setOnAction(e -> {
+
+            notification1.setStyle(
+                    "-fx-background-color:white;");
+
+            notification2.setStyle(
+                    "-fx-background-color:white;");
+
+            notification3.setStyle(
+                    "-fx-background-color:white;");
+        });
+
+        HBox topActions =
+                new HBox(
+                        24,
+                        notificationAction,
+                        chatbotAction);
+
+        topActions.setAlignment(
+                Pos.CENTER_RIGHT);
+
+        return topActions;
+    }
 
 }

@@ -1,11 +1,17 @@
 package com.kryox.dao.Customer;
 
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -602,6 +608,160 @@ public class UserDao {
 
             return 0;
         }
+    }
+
+
+    // =====================================================
+    // DASHBOARD - SAVE DAILY USER ACTIVITY
+    // One user is counted only once per day.
+    // =====================================================
+
+    public void saveUserActivity(
+            String email
+    ) {
+
+        try {
+
+            if (email == null ||
+                    email.isBlank()) {
+
+                return;
+            }
+
+            String cleanEmail =
+                    email.trim()
+                            .toLowerCase();
+
+            String date =
+                    LocalDate.now()
+                            .format(
+                                    DateTimeFormatter.ISO_LOCAL_DATE
+                            );
+
+            String encodedEmail =
+                    Base64.getUrlEncoder()
+                            .withoutPadding()
+                            .encodeToString(
+                                    cleanEmail.getBytes(
+                                            StandardCharsets.UTF_8
+                                    )
+                            );
+
+            String activityDocumentId =
+                    date + "_" + encodedEmail;
+
+            Map<String, Object> activity =
+                    new HashMap<>();
+
+            activity.put(
+                    "email",
+                    cleanEmail
+            );
+
+            activity.put(
+                    "date",
+                    date
+            );
+
+            activity.put(
+                    "lastActivity",
+                    FieldValue.serverTimestamp()
+            );
+
+            db.collection(
+                    "user_activity"
+            )
+                    .document(
+                            activityDocumentId
+                    )
+                    .set(activity)
+                    .get();
+
+            System.out.println(
+                    "User activity saved : "
+                            + cleanEmail
+                            + " | "
+                            + date
+            );
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "User activity save error : "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+        }
+    }
+
+    // =====================================================
+    // DASHBOARD - LAST 7 DAYS ACTIVE USER COUNT
+    // Returns date -> unique active users count.
+    // =====================================================
+
+    public Map<String, Integer>
+            getLast7DaysActiveUsers() {
+
+        Map<String, Integer> counts =
+                new LinkedHashMap<>();
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ISO_LOCAL_DATE;
+
+        LocalDate today =
+                LocalDate.now();
+
+        for (int i = 6; i >= 0; i--) {
+
+            String date =
+                    today.minusDays(i)
+                            .format(formatter);
+
+            counts.put(
+                    date,
+                    0
+            );
+        }
+
+        try {
+
+            QuerySnapshot snapshot =
+                    db.collection(
+                            "user_activity"
+                    )
+                            .get()
+                            .get();
+
+            for (QueryDocumentSnapshot document :
+                    snapshot.getDocuments()) {
+
+                String date =
+                        document.getString(
+                                "date"
+                        );
+
+                if (date != null &&
+                        counts.containsKey(date)) {
+
+                    counts.put(
+                            date,
+                            counts.get(date) + 1
+                    );
+                }
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Active users fetch error : "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+        }
+
+        return counts;
     }
 
 }

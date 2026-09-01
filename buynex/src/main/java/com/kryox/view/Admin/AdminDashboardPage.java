@@ -1,6 +1,9 @@
 package com.kryox.view.Admin;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.kryox.dao.Customer.UserDao;
@@ -15,6 +18,10 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
@@ -152,7 +159,7 @@ public class AdminDashboardPage {
 
                 users.setOnMouseEntered(e -> {
                         users.setStyle(
-                                        "-fx-background-color:#D94F00;" +
+                                        "-fx-background-color:transparent;" +
                                                         "-fx-background-radius:10;");
 
                         usersText.setFill(Color.WHITE);
@@ -647,217 +654,13 @@ public class AdminDashboardPage {
                                                 "-fx-background-radius:20;" +
                                                 "-fx-font-size:14px;");
 
-                Image aiChatbotImage = new Image(getClass().getResource("/assets/images/admin/message.png").toExternalForm());
-                ImageView iv8 = new ImageView(aiChatbotImage);
-                iv8.setFitWidth(24);
-                iv8.setFitHeight(24);
-                iv8.setPreserveRatio(true);
-                // Icons 
-                iv8.setOnMouseClicked(e -> {
-                        SmartAssistantUI chatPage = new SmartAssistantUI();
-
-                        Homepage.HomepageStage.setScene(
-                                        chatPage.getUserScene());
-                });
-
-                Image notification = new Image(getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
-                ImageView iv9 = new ImageView(notification);
-                iv9.setFitWidth(24);
-                iv9.setFitHeight(24);
-                iv9.setPreserveRatio(true);
-
-                Popup notificationPopup = new Popup();
-
-                Text notificationTitle = new Text("Notifications");
-                notificationTitle.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                20));
-
-                Button markRead = new Button("Mark all as read");
-
-                markRead.setStyle(
-                                "-fx-background-color:transparent;" +
-                                                "-fx-text-fill:#E65300;" +
-                                                "-fx-font-size:13px;");
-
-                Region notificationGrow = new Region();
-
-                HBox.setHgrow(
-                                notificationGrow,
-                                Priority.ALWAYS);
-
-                HBox notificationHeader = new HBox(
-                                notificationTitle,
-                                notificationGrow,
-                                markRead);
-
-                notificationHeader.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Circle dot1 = new Circle(
-                                5,
-                                Color.web("#FF6500"));
-
-                Text notificationText1 = new Text(
-                                "New Shop Registration\n" +
-                                                "Tech Haven needs verification\n" +
-                                                "2 mins ago");
-
-                notificationText1.setStyle(
-                                "-fx-font-size:13px;");
-
-                HBox notification1 = new HBox(
-                                12,
-                                dot1,
-                                notificationText1);
-
-                notification1.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                notification1.setPadding(
-                                new Insets(12));
-
-                notification1.setStyle(
-                                "-fx-background-color:#FFF4ED;" +
-                                                "-fx-background-radius:8;");
-
-                Circle dot2 = new Circle(
-                                5,
-                                Color.web("#21B55A"));
-
-                Text notificationText2 = new Text(
-                                "New User Joined\n" +
-                                                "New customer account created\n" +
-                                                "10 mins ago");
-
-                notificationText2.setStyle(
-                                "-fx-font-size:13px;");
-
-                HBox notification2 = new HBox(
-                                12,
-                                dot2,
-                                notificationText2);
-
-                notification2.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                notification2.setPadding(
-                                new Insets(12));
-
-                notification2.setStyle(
-                                "-fx-background-color:#F4FFF7;" +
-                                                "-fx-background-radius:8;");
-
-                Circle dot3 = new Circle(
-                                5,
-                                Color.web("#E53935"));
-
-                Text notificationText3 = new Text(
-                                "Flagged Account\n" +
-                                                "Suspicious activity detected\n" +
-                                                "1 hour ago");
-
-                notificationText3.setStyle(
-                                "-fx-font-size:13px;");
-
-                HBox notification3 = new HBox(
-                                12,
-                                dot3,
-                                notificationText3);
-
-                notification3.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                notification3.setPadding(
-                                new Insets(12));
-
-                notification3.setStyle(
-                                "-fx-background-color:#FFF5F5;" +
-                                                "-fx-background-radius:8;");
-
-                Button viewAll = new Button(
-                                "View All Notifications");
-
-                viewAll.setMaxWidth(
-                                Double.MAX_VALUE);
-
-                viewAll.setPrefHeight(42);
-
-                viewAll.setStyle(
-                                "-fx-background-color:#FF6500;" +
-                                                "-fx-text-fill:white;" +
-                                                "-fx-font-weight:bold;" +
-                                                "-fx-background-radius:7;" +
-                                                "-fx-font-size:13px;");
-
-                VBox notificationBox = new VBox(
-                                12,
-                                notificationHeader,
-                                new Separator(),
-                                notification1,
-                                notification2,
-                                notification3,
-                                viewAll);
-
-                notificationBox.setPrefWidth(330);
-
-                notificationBox.setPadding(
-                                new Insets(18));
-
-                notificationBox.setStyle(
-                                "-fx-background-color:white;" +
-                                                "-fx-border-color:#E5E1E8;" +
-                                                "-fx-border-width:1;" +
-                                                "-fx-border-radius:10;" +
-                                                "-fx-background-radius:10;" +
-                                                "-fx-effect:dropshadow(gaussian," +
-                                                "rgba(0,0,0,0.18),15,0,0,5);");
-
-                notificationPopup
-                                .getContent()
-                                .add(notificationBox);
-
-                iv9.setOnMouseClicked(e -> {
-                        iv9.setOnMouseClicked(event -> {
-
-                                if (notificationPopup.isShowing()) {
-
-                                        notificationPopup.hide();
-
-                                } else {
-
-                                        Bounds bellPosition = iv9.localToScreen(
-                                                        iv9.getBoundsInLocal());
-
-                                        notificationPopup.show(
-                                                        iv9,
-                                                        bellPosition.getMaxX() - 330,
-                                                        bellPosition.getMaxY() + 12);
-                                }
-                        });
-
-                });
-
-                Text admin = new Text(
-                                " Admin Portal");
-                admin.setFont(
-                                Font.font("Arial", FontWeight.BOLD, 15));
+                HBox topRight =
+                                createTopActions();
 
                 Region topGrow = new Region();
                 HBox.setHgrow(
                                 topGrow,
                                 Priority.ALWAYS);
-
-                HBox topRight = new HBox(
-                                20,
-                                iv8,
-                                iv9,
-                                admin);
-
-                topRight.setAlignment(
-                                Pos.CENTER_RIGHT);
 
                 top.getChildren().addAll(
                                 search,
@@ -2070,17 +1873,159 @@ public class AdminDashboardPage {
 
                 dailyHeader.setAlignment(
                                 Pos.CENTER_LEFT);
-                Image graph = new Image(getClass().getResource("/assets/images/admin/graph.png").toExternalForm());
-                ImageView iv10 = new ImageView(graph);
+                CategoryAxis activeUsersXAxis =
+                                new CategoryAxis();
 
-                HBox graphBox = new HBox(iv10);
-                graphBox.setPrefHeight(120);
+                NumberAxis activeUsersYAxis =
+                                new NumberAxis();
+
+                activeUsersYAxis.setForceZeroInRange(
+                                true);
+
+                activeUsersYAxis.setTickLabelsVisible(
+                                false);
+
+                activeUsersYAxis.setTickMarkVisible(
+                                false);
+
+                activeUsersYAxis.setMinorTickVisible(
+                                false);
+
+                activeUsersXAxis.setTickMarkVisible(
+                                false);
+
+                LineChart<String, Number> activeUsersChart =
+                                new LineChart<>(
+                                                activeUsersXAxis,
+                                                activeUsersYAxis);
+
+                activeUsersChart.setLegendVisible(
+                                false);
+
+                activeUsersChart.setAnimated(
+                                false);
+
+                activeUsersChart.setCreateSymbols(
+                                true);
+
+                activeUsersChart.setHorizontalGridLinesVisible(
+                                false);
+
+                activeUsersChart.setVerticalGridLinesVisible(
+                                false);
+
+                activeUsersChart.setAlternativeRowFillVisible(
+                                false);
+
+                activeUsersChart.setAlternativeColumnFillVisible(
+                                false);
+
+                activeUsersChart.setPrefHeight(
+                                150);
+
+                activeUsersChart.setMinHeight(
+                                150);
+
+                activeUsersChart.setMaxHeight(
+                                150);
+
+                activeUsersChart.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-padding:0;");
+
+                XYChart.Series<String, Number> activeUsersSeries =
+                                new XYChart.Series<>();
+
+                activeUsersChart
+                                .getData()
+                                .add(
+                                                activeUsersSeries);
+
+                HBox graphBox =
+                                new HBox(
+                                                activeUsersChart);
+
+                graphBox.setPrefHeight(
+                                150);
+
                 graphBox.setAlignment(
                                 Pos.CENTER);
+
+                HBox.setHgrow(
+                                activeUsersChart,
+                                Priority.ALWAYS);
 
                 VBox.setVgrow(
                                 graphBox,
                                 Priority.ALWAYS);
+
+                Thread activeUsersThread =
+                                new Thread(() -> {
+
+                                        Map<String, Integer> activeUsersData =
+                                                        userDao
+                                                                        .getLast7DaysActiveUsers();
+
+                                        Platform.runLater(() -> {
+
+                                                activeUsersSeries
+                                                                .getData()
+                                                                .clear();
+
+                                                DateTimeFormatter dayFormatter =
+                                                                DateTimeFormatter
+                                                                                .ofPattern(
+                                                                                                "EEE");
+
+                                                for (Map.Entry<String, Integer> entry :
+                                                                activeUsersData.entrySet()) {
+
+                                                        LocalDate date =
+                                                                        LocalDate.parse(
+                                                                                        entry.getKey());
+
+                                                        String dayName =
+                                                                        date.format(
+                                                                                        dayFormatter);
+
+                                                        activeUsersSeries
+                                                                        .getData()
+                                                                        .add(
+                                                                                        new XYChart.Data<>(
+                                                                                                        dayName,
+                                                                                                        entry.getValue()));
+                                                }
+
+                                                activeUsersChart.applyCss();
+
+                                                javafx.scene.Node seriesLine =
+                                                                activeUsersChart.lookup(
+                                                                                ".chart-series-line");
+
+                                                if (seriesLine != null) {
+
+                                                        seriesLine.setStyle(
+                                                                        "-fx-stroke:#FF6500;" +
+                                                                                        "-fx-stroke-width:3px;");
+                                                }
+
+                                                for (javafx.scene.Node symbol :
+                                                                activeUsersChart.lookupAll(
+                                                                                ".chart-line-symbol")) {
+
+                                                        symbol.setStyle(
+                                                                        "-fx-background-color:#FF6500, white;" +
+                                                                                        "-fx-background-insets:0, 2;" +
+                                                                                        "-fx-background-radius:6px;" +
+                                                                                        "-fx-padding:4px;");
+                                                }
+                                        });
+                                });
+
+                activeUsersThread.setDaemon(
+                                true);
+
+                activeUsersThread.start();
 
                 Text peakLabel = new Text(
                                 "PEAK TIME");
@@ -2436,5 +2381,221 @@ public class AdminDashboardPage {
 
                 return value;
         }
+
+
+
+    private HBox createTopActions() {
+
+        Image notificationImage = new Image(
+                getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
+
+        ImageView notificationIcon = new ImageView(notificationImage);
+        notificationIcon.setFitWidth(22);
+        notificationIcon.setFitHeight(22);
+        notificationIcon.setPreserveRatio(true);
+
+        Text notificationName = new Text("Notifications");
+        notificationName.setFont(Font.font("Arial", 14));
+
+        HBox notificationAction = new HBox(
+                6,
+                notificationIcon,
+                notificationName);
+
+        notificationAction.setAlignment(Pos.CENTER_LEFT);
+        notificationAction.setStyle("-fx-cursor:hand;");
+
+        Image chatbotImage = new Image(
+                getClass().getResource("/assets/images/admin/message.png").toExternalForm());
+
+        ImageView chatbotIcon = new ImageView(chatbotImage);
+        chatbotIcon.setFitWidth(22);
+        chatbotIcon.setFitHeight(22);
+        chatbotIcon.setPreserveRatio(true);
+
+        Text chatbotName = new Text("ChatBot");
+        chatbotName.setFont(Font.font("Arial", 14));
+
+        HBox chatbotAction = new HBox(
+                6,
+                chatbotIcon,
+                chatbotName);
+
+        chatbotAction.setAlignment(Pos.CENTER_LEFT);
+        chatbotAction.setStyle("-fx-cursor:hand;");
+
+        chatbotAction.setOnMouseClicked(e -> {
+
+            SmartAssistantUI chatPage =
+                    new SmartAssistantUI();
+
+            Homepage.HomepageStage.setScene(
+                    chatPage.getUserScene());
+        });
+
+        javafx.stage.Popup notificationPopup =
+                new javafx.stage.Popup();
+
+        Text notificationTitle =
+                new Text("Notifications");
+
+        notificationTitle.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        20));
+
+        Button markRead =
+                new Button("Mark all as read");
+
+        markRead.setStyle(
+                "-fx-background-color:transparent;" +
+                "-fx-text-fill:#E65300;" +
+                "-fx-font-size:13px;");
+
+        Region notificationGrow =
+                new Region();
+
+        HBox.setHgrow(
+                notificationGrow,
+                Priority.ALWAYS);
+
+        HBox notificationHeader =
+                new HBox(
+                        notificationTitle,
+                        notificationGrow,
+                        markRead);
+
+        notificationHeader.setAlignment(
+                Pos.CENTER_LEFT);
+
+        Text notificationText1 =
+                new Text(
+                        "New Shop Registration\n" +
+                        "Tech Haven needs verification\n" +
+                        "2 mins ago");
+
+        notificationText1.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification1 =
+                new VBox(notificationText1);
+
+        notification1.setPadding(
+                new Insets(12));
+
+        notification1.setStyle(
+                "-fx-background-color:#FFF4ED;" +
+                "-fx-background-radius:8;");
+
+        Text notificationText2 =
+                new Text(
+                        "New User Joined\n" +
+                        "New customer account created\n" +
+                        "10 mins ago");
+
+        notificationText2.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification2 =
+                new VBox(notificationText2);
+
+        notification2.setPadding(
+                new Insets(12));
+
+        notification2.setStyle(
+                "-fx-background-color:#F4FFF7;" +
+                "-fx-background-radius:8;");
+
+        Text notificationText3 =
+                new Text(
+                        "Flagged Account\n" +
+                        "Suspicious activity detected\n" +
+                        "1 hour ago");
+
+        notificationText3.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification3 =
+                new VBox(notificationText3);
+
+        notification3.setPadding(
+                new Insets(12));
+
+        notification3.setStyle(
+                "-fx-background-color:#FFF5F5;" +
+                "-fx-background-radius:8;");
+
+        VBox notificationBox =
+                new VBox(
+                        12,
+                        notificationHeader,
+                        new Separator(),
+                        notification1,
+                        notification2,
+                        notification3);
+
+        notificationBox.setPrefWidth(330);
+        notificationBox.setPadding(
+                new Insets(18));
+
+        notificationBox.setStyle(
+                "-fx-background-color:white;" +
+                "-fx-border-color:#E5E1E8;" +
+                "-fx-border-width:1;" +
+                "-fx-border-radius:10;" +
+                "-fx-background-radius:10;" +
+                "-fx-effect:dropshadow(gaussian," +
+                "rgba(0,0,0,0.18),15,0,0,5);");
+
+        notificationPopup
+                .getContent()
+                .add(notificationBox);
+
+        notificationAction.setOnMouseClicked(e -> {
+
+            if (notificationPopup.isShowing()) {
+
+                notificationPopup.hide();
+
+            } else {
+
+                javafx.geometry.Bounds bellPosition =
+                        notificationAction.localToScreen(
+                                notificationAction.getBoundsInLocal());
+
+                if (bellPosition != null) {
+
+                    notificationPopup.show(
+                            notificationAction,
+                            bellPosition.getMaxX() - 330,
+                            bellPosition.getMaxY() + 10);
+                }
+            }
+        });
+
+        markRead.setOnAction(e -> {
+
+            notification1.setStyle(
+                    "-fx-background-color:white;");
+
+            notification2.setStyle(
+                    "-fx-background-color:white;");
+
+            notification3.setStyle(
+                    "-fx-background-color:white;");
+        });
+
+        HBox topActions =
+                new HBox(
+                        24,
+                        notificationAction,
+                        chatbotAction);
+
+        topActions.setAlignment(
+                Pos.CENTER_RIGHT);
+
+        return topActions;
+    }
 
 }

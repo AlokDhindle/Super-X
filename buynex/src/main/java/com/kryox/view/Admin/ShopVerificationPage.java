@@ -156,7 +156,7 @@ public class ShopVerificationPage {
 
                 users.setOnMouseEntered(e -> {
                         users.setStyle(
-                                        "-fx-background-color:#D94F00;" +
+                                        "-fx-background-color:transparent;" +
                                                         "-fx-background-radius:10;");
 
                         usersText.setFill(Color.WHITE);
@@ -763,9 +763,15 @@ public class ShopVerificationPage {
                                 todayTitle,
                                 todayValue);
 
+                HBox topActions =
+                                createTopActions();
+
+                pageHeader.setSpacing(18);
+
                 pageHeader.getChildren().addAll(
                                 headingText,
                                 headerSpace,
+                                topActions,
                                 pending,
                                 today);
 
@@ -1585,5 +1591,221 @@ public class ShopVerificationPage {
                         e.printStackTrace();
                 }
         }
+
+
+
+    private HBox createTopActions() {
+
+        Image notificationImage = new Image(
+                getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
+
+        ImageView notificationIcon = new ImageView(notificationImage);
+        notificationIcon.setFitWidth(22);
+        notificationIcon.setFitHeight(22);
+        notificationIcon.setPreserveRatio(true);
+
+        Text notificationName = new Text("Notifications");
+        notificationName.setFont(Font.font("Arial", 14));
+
+        HBox notificationAction = new HBox(
+                6,
+                notificationIcon,
+                notificationName);
+
+        notificationAction.setAlignment(Pos.CENTER_LEFT);
+        notificationAction.setStyle("-fx-cursor:hand;");
+
+        Image chatbotImage = new Image(
+                getClass().getResource("/assets/images/admin/message.png").toExternalForm());
+
+        ImageView chatbotIcon = new ImageView(chatbotImage);
+        chatbotIcon.setFitWidth(22);
+        chatbotIcon.setFitHeight(22);
+        chatbotIcon.setPreserveRatio(true);
+
+        Text chatbotName = new Text("ChatBot");
+        chatbotName.setFont(Font.font("Arial", 14));
+
+        HBox chatbotAction = new HBox(
+                6,
+                chatbotIcon,
+                chatbotName);
+
+        chatbotAction.setAlignment(Pos.CENTER_LEFT);
+        chatbotAction.setStyle("-fx-cursor:hand;");
+
+        chatbotAction.setOnMouseClicked(e -> {
+
+            SmartAssistantUI chatPage =
+                    new SmartAssistantUI();
+
+            Homepage.HomepageStage.setScene(
+                    chatPage.getUserScene());
+        });
+
+        javafx.stage.Popup notificationPopup =
+                new javafx.stage.Popup();
+
+        Text notificationTitle =
+                new Text("Notifications");
+
+        notificationTitle.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        20));
+
+        Button markRead =
+                new Button("Mark all as read");
+
+        markRead.setStyle(
+                "-fx-background-color:transparent;" +
+                "-fx-text-fill:#E65300;" +
+                "-fx-font-size:13px;");
+
+        Region notificationGrow =
+                new Region();
+
+        HBox.setHgrow(
+                notificationGrow,
+                Priority.ALWAYS);
+
+        HBox notificationHeader =
+                new HBox(
+                        notificationTitle,
+                        notificationGrow,
+                        markRead);
+
+        notificationHeader.setAlignment(
+                Pos.CENTER_LEFT);
+
+        Text notificationText1 =
+                new Text(
+                        "New Shop Registration\n" +
+                        "Tech Haven needs verification\n" +
+                        "2 mins ago");
+
+        notificationText1.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification1 =
+                new VBox(notificationText1);
+
+        notification1.setPadding(
+                new Insets(12));
+
+        notification1.setStyle(
+                "-fx-background-color:#FFF4ED;" +
+                "-fx-background-radius:8;");
+
+        Text notificationText2 =
+                new Text(
+                        "New User Joined\n" +
+                        "New customer account created\n" +
+                        "10 mins ago");
+
+        notificationText2.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification2 =
+                new VBox(notificationText2);
+
+        notification2.setPadding(
+                new Insets(12));
+
+        notification2.setStyle(
+                "-fx-background-color:#F4FFF7;" +
+                "-fx-background-radius:8;");
+
+        Text notificationText3 =
+                new Text(
+                        "Flagged Account\n" +
+                        "Suspicious activity detected\n" +
+                        "1 hour ago");
+
+        notificationText3.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification3 =
+                new VBox(notificationText3);
+
+        notification3.setPadding(
+                new Insets(12));
+
+        notification3.setStyle(
+                "-fx-background-color:#FFF5F5;" +
+                "-fx-background-radius:8;");
+
+        VBox notificationBox =
+                new VBox(
+                        12,
+                        notificationHeader,
+                        new Separator(),
+                        notification1,
+                        notification2,
+                        notification3);
+
+        notificationBox.setPrefWidth(330);
+        notificationBox.setPadding(
+                new Insets(18));
+
+        notificationBox.setStyle(
+                "-fx-background-color:white;" +
+                "-fx-border-color:#E5E1E8;" +
+                "-fx-border-width:1;" +
+                "-fx-border-radius:10;" +
+                "-fx-background-radius:10;" +
+                "-fx-effect:dropshadow(gaussian," +
+                "rgba(0,0,0,0.18),15,0,0,5);");
+
+        notificationPopup
+                .getContent()
+                .add(notificationBox);
+
+        notificationAction.setOnMouseClicked(e -> {
+
+            if (notificationPopup.isShowing()) {
+
+                notificationPopup.hide();
+
+            } else {
+
+                javafx.geometry.Bounds bellPosition =
+                        notificationAction.localToScreen(
+                                notificationAction.getBoundsInLocal());
+
+                if (bellPosition != null) {
+
+                    notificationPopup.show(
+                            notificationAction,
+                            bellPosition.getMaxX() - 330,
+                            bellPosition.getMaxY() + 10);
+                }
+            }
+        });
+
+        markRead.setOnAction(e -> {
+
+            notification1.setStyle(
+                    "-fx-background-color:white;");
+
+            notification2.setStyle(
+                    "-fx-background-color:white;");
+
+            notification3.setStyle(
+                    "-fx-background-color:white;");
+        });
+
+        HBox topActions =
+                new HBox(
+                        24,
+                        notificationAction,
+                        chatbotAction);
+
+        topActions.setAlignment(
+                Pos.CENTER_RIGHT);
+
+        return topActions;
+    }
 
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
