@@ -1,8 +1,11 @@
-buynex/src/main/java/com/kryox/config/AdminApikey.java
+
+# Java build files
+buynex/target/
+
+# Configuration files containing API keys/secrets
 buynex/src/main/java/com/kryox/config/APIKEYconfig.java
+buynex/src/main/java/com/kryox/config/AdminApikey.java
 buynex/src/main/java/com/kryox/config/CloudinaryConfig.java
-buynex/src/main/java/com/kryox/config/Customerconfig.java
-buynex/src/main/java/com/kryox/config/DelivaryFirebaseConfig.java
 buynex/src/main/java/com/kryox/config/Firebaseconfig.java
 buynex/src/main/java/com/kryox/config/GeminiConfig.java
 buynex/src/main/java/com/kryox/config/RazorPayAPI.java
