@@ -23,12 +23,9 @@ import com.kryox.view.Customer.Homepage;
 public class PartnerNotifications {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EEE5DE";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    // =========================================================================
-    // DYNAMIC FIRESTORE-READY NOTIFICATION DATA MODEL
-    // =========================================================================
     public static class NotificationData {
         public String partnerName = "Alex Walker";
         public String activeFilter = "ALL";
@@ -60,9 +57,6 @@ public class PartnerNotifications {
         }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS
-    // =========================================================================
     public static Scene partnerNotificationsScene() {
         return partnerNotificationsScene("DASHBOARD", new NotificationData());
     }
@@ -85,7 +79,7 @@ public class PartnerNotifications {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
@@ -96,7 +90,7 @@ public class PartnerNotifications {
         topBar.setMinHeight(60);
         topBar.setMaxHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: " + BORDER_COLOR + ";" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-padding: 0 35 0 25;"
@@ -123,6 +117,7 @@ public class PartnerNotifications {
 
         HBox leftGroup = new HBox(16, btnBack, logo);
         leftGroup.setAlignment(Pos.CENTER_LEFT);
+        leftGroup.setStyle("-fx-background-color: #EBCCB7;");
         topBar.setLeft(leftGroup);
 
         Button btnMarkAllRead = new Button("Mark all as read");

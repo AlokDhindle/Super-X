@@ -28,12 +28,9 @@ public class RegistrationSuccess {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EEE5DE";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS
-    // =========================================================================
     public static Scene registrationSuccessScene() {
         return registrationSuccessScene(DEFAULT_IMAGE_PATH);
     }
@@ -47,14 +44,16 @@ public class RegistrationSuccess {
         HBox mainContainer = new HBox(60);
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.setPadding(new Insets(50, 70, 70, 70));
+        mainContainer.setStyle("-fx-background-color: #EEE5DE;");
 
         VBox leftColumn = createLeftColumn(customImagePath);
-        VBox rightColumn = createRightColumn();
+                leftColumn.setStyle("-fx-background-color: #EBCCB7;");
+VBox rightColumn = createRightColumn();
 
         mainContainer.getChildren().addAll(leftColumn, rightColumn);
         root.setCenter(mainContainer);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
@@ -63,7 +62,7 @@ public class RegistrationSuccess {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: " + BORDER_COLOR + ";" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-padding: 0 40 0 40;"

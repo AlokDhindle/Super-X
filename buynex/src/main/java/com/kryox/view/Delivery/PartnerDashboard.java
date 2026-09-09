@@ -1,8 +1,6 @@
 package com.kryox.view.Delivery;
 
-
-
-import com.kryox.config.DelivrayFirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.kryox.view.Customer.Homepage;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -38,16 +36,13 @@ public class PartnerDashboard {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EEE5DE";
     private static final String BORDER_COLOR = "#f0edf2";
-    private static final String SIDEBAR_BG = "#ffffff";
+    private static final String SIDEBAR_BG = "#EBCCB7";
 
     private static final List<Button> navButtons = new ArrayList<>();
     private static ListenerRegistration dashboardOrderListener;
 
-    // =========================================================================
-    // DYNAMIC FIRESTORE-READY DATA MODEL FOR PARTNER DASHBOARD
-    // =========================================================================
     public static class DashboardData {
         public String partnerName;
         public String partnerTier;
@@ -111,9 +106,6 @@ public class PartnerDashboard {
         }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS
-    // =========================================================================
     public static Scene partnerDashboardScene() {
         DashboardData data = new DashboardData();
         Scene scene = partnerDashboardScene(data);
@@ -142,7 +134,7 @@ public class PartnerDashboard {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
@@ -153,8 +145,8 @@ public class PartnerDashboard {
                 dashboardOrderListener.remove();
             }
 
-            Firestore db =DelivrayFirebaseConfig.getFireStore();
-            dashboardOrderListener = db.collection("orders").addSnapshotListener((snapshots, error) -> {
+            Firestore db = Firebaseconfig.gFirestore();
+            dashboardOrderListener = db.collection("Orders").addSnapshotListener((snapshots, error) -> {
                 if (error != null || snapshots == null) {
                     return;
                 }
@@ -162,25 +154,43 @@ public class PartnerDashboard {
                 Platform.runLater(() -> {
                     List<RecentOrderRecord> liveOrders = new ArrayList<>();
                     double earned = 0.0;
+                    double tips = 0.0;
                     int deliveredCount = 0;
+                    int requestedCount = 0;
+                    int activeCount = 0;
 
                     for (DocumentSnapshot doc : snapshots.getDocuments()) {
-                        String status = doc.getString("status");
-                        if (status == null) status = "PLACED";
+                        String status = doc.getString("orderStatus");
+                        if (status == null) status = doc.getString("status");
+                        if (status == null) status = "REQUESTING_DELIVERY";
 
                         String partnerId = doc.getString("deliveryPartnerId");
-                        boolean isForMe = partnerId == null || partnerId.isEmpty()
-                                || (PartnerConstants.UID != null && partnerId.equals(PartnerConstants.UID));
 
-                        if (isForMe) {
-                            String orderId = doc.getId();
-                            String displayId = "DNX-" + (orderId.length() > 4 ? orderId.substring(0, 4).toUpperCase() : orderId);
-                            String subtext = doc.getString("shopName") != null ? doc.getString("shopName") : "Store Order";
+                        boolean isMine = true;
+                        if (PartnerConstants.UID != null && !PartnerConstants.UID.isEmpty()) {
+                            if (partnerId != null && !partnerId.isEmpty() && !PartnerConstants.UID.equals(partnerId)) {
+                                isMine = false;
+                            }
+                        }
+
+                        if (isMine) {
+                            String rawId = doc.getString("orderId");
+                            if (rawId == null || rawId.isEmpty()) rawId = doc.getId();
+                            String displayId = rawId.startsWith("DNX-") ? rawId : "DNX-" + (rawId.length() > 4 ? rawId.substring(0, 4).toUpperCase() : rawId.toUpperCase());
+
+                            String shopName = doc.getString("shopName");
+                            if (shopName == null || shopName.isBlank()) shopName = doc.getString("customerName");
+                            if (shopName == null || shopName.isBlank()) shopName = "Store Order";
+
+                            String distance = doc.getString("riderDistance");
+                            String subtext = shopName + (distance != null && !distance.isBlank() ? " • " + distance : "");
 
                             double amt = 120.00;
-                            if (doc.get("totalAmount") != null) {
+                            Object amtObj = doc.get("totalAmount");
+                            if (amtObj == null) amtObj = doc.get("amount");
+                            if (amtObj != null) {
                                 try {
-                                    amt = Double.parseDouble(doc.get("totalAmount").toString());
+                                    amt = Double.parseDouble(amtObj.toString());
                                 } catch (Exception ignored) {}
                             }
 
@@ -188,16 +198,23 @@ public class PartnerDashboard {
                             String statusColor = "#f97316";
                             String statusBg = "#ffedd5";
 
-                            if ("DELIVERED".equalsIgnoreCase(status) || "COMPLETED".equalsIgnoreCase(status)) {
+                            if ("REQUESTING_DELIVERY".equalsIgnoreCase(status)) {
+                                statusText = "REQUESTED";
+                                statusColor = "#e11d48";
+                                statusBg = "#ffe4e6";
+                                requestedCount++;
+                            } else if ("DELIVERED".equalsIgnoreCase(status) || "COMPLETED".equalsIgnoreCase(status)) {
                                 statusColor = "#16a34a";
                                 statusBg = "#dcfce7";
                                 statusText = "COMPLETED";
-                                earned += amt;
+                                earned += amt * 0.10;
+                                tips += amt * 0.02;
                                 deliveredCount++;
-                            } else if ("ACCEPTED".equalsIgnoreCase(status)) {
+                            } else if ("ACCEPTED".equalsIgnoreCase(status) || "OUT_FOR_DELIVERY".equalsIgnoreCase(status) || "Order is out for Delivery".equalsIgnoreCase(status)) {
                                 statusColor = "#2563eb";
                                 statusBg = "#dbeafe";
                                 statusText = "IN TRANSIT";
+                                activeCount++;
                             }
 
                             liveOrders.add(new RecentOrderRecord(displayId, subtext, amt, statusText, statusColor, statusBg));
@@ -206,9 +223,20 @@ public class PartnerDashboard {
 
                     if (!liveOrders.isEmpty()) {
                         data.recentOrders = liveOrders;
-                        data.todayDeliveries = deliveredCount > 0 ? deliveredCount : liveOrders.size();
-                        data.currentEarnings = earned > 0 ? earned : data.currentEarnings;
-                        if (Homepage.HomepageStage != null) {
+                        data.todayDeliveries = deliveredCount > 0 ? deliveredCount : (requestedCount + activeCount);
+                        data.currentEarnings = earned > 0 ? Math.round(earned * 100.0) / 100.0 : data.currentEarnings;
+                        data.currentTips = tips > 0 ? Math.round(tips * 100.0) / 100.0 : data.currentTips;
+                        data.earningsGoalProgress = Math.min(1.0, data.currentEarnings / 500.0);
+
+                        if (requestedCount > 0) {
+                            data.rankingNotice = "⚡ You have " + requestedCount + " active delivery request(s) waiting near you!";
+                            data.surgeMultiplier = requestedCount + "x higher demand";
+                        }
+
+                        data.weeklyGoalPercent = Math.min(1.0, Math.max(0.1, (double) (deliveredCount + activeCount) / 10.0));
+                        data.deliveriesLeftForBonus = Math.max(0, 10 - deliveredCount);
+
+                        if (Homepage.HomepageStage != null && Homepage.HomepageStage.getScene() != null) {
                             Homepage.HomepageStage.setScene(partnerDashboardScene(data));
                         }
                     }
@@ -223,15 +251,17 @@ public class PartnerDashboard {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                         "-fx-border-color: " + BORDER_COLOR + ";" +
                         "-fx-border-width: 0 0 1 0;" +
                         "-fx-padding: 0 35 0 30;");
 
         Text title = new Text("Partner Dashboard");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #a94717;");
-        topBar.setLeft(new HBox(title));
-        ((HBox) topBar.getLeft()).setAlignment(Pos.CENTER_LEFT);
+        HBox leftGroup = new HBox(title);
+        leftGroup.setAlignment(Pos.CENTER_LEFT);
+        leftGroup.setStyle("-fx-background-color: #EBCCB7;");
+        topBar.setLeft(leftGroup);
 
         HBox rightControls = new HBox(16);
         rightControls.setAlignment(Pos.CENTER_RIGHT);

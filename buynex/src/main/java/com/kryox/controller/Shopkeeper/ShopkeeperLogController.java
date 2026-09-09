@@ -27,15 +27,11 @@ public class ShopkeeperLogController {
         static String registeredEmail;
         static boolean emailVerified = false;
 
-        // =============================================================
         // HTTP CLIENT
-        // =============================================================
 
         static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 
-        // =============================================================
         // LOGIN SHOPKEEPER
-        // =============================================================
 
 
         public static ShopkeeperModel loginShopkeeper(String email, String password) {
@@ -95,10 +91,7 @@ public class ShopkeeperLogController {
 
         
 
-        // =============================================================
         // REGISTER SHOPKEEPER
-        // =============================================================
-
 
         public static void signupShopkeeper(
                         String email,
@@ -107,9 +100,7 @@ public class ShopkeeperLogController {
                         Button verifyButton,
                         Button nextButton) {
 
-                // ---------------------------------------------------------
                 // VALIDATION
-                // ---------------------------------------------------------
 
                 if (email == null ||
                                 email.trim().isEmpty()) {
@@ -165,9 +156,7 @@ public class ShopkeeperLogController {
                         return;
                 }
 
-                // ---------------------------------------------------------
                 // RESET STATE
-                // ---------------------------------------------------------
 
                 firebaseIdToken = null;
                 firebaseUid = null;
@@ -177,9 +166,7 @@ public class ShopkeeperLogController {
                 final String finalEmail = email;
                 final String finalPassword = password;
 
-                // ---------------------------------------------------------
                 // FIREBASE ACCOUNT CREATION
-                // ---------------------------------------------------------
 
                 try {
 
@@ -251,9 +238,7 @@ public class ShopkeeperLogController {
 
         }
 
-        // =============================================================
         // SEND FIREBASE VERIFICATION EMAIL
-        // =============================================================
 
         private static void sendVerificationEmail(
                         Button verifyButton,
@@ -343,9 +328,7 @@ public class ShopkeeperLogController {
                 }
         }
 
-        // =============================================================
         // CHECK EMAIL VERIFICATION
-        // =============================================================
 
         public static void checkEmailVerification(
                         Button verifyButton,
@@ -497,9 +480,7 @@ public class ShopkeeperLogController {
                 }
 
         }
-        // =============================================================
         // CONTINUE REGISTRATION
-        // =============================================================
 
         public static void continueRegistration(
                         String email,
@@ -559,9 +540,7 @@ public class ShopkeeperLogController {
                                 ShopkeeperDetails.detailsScene());
         }
 
-        // =============================================================
         // RESET REGISTRATION
-        // =============================================================
 
         public static void resetRegistration() {
                 new Thread(() -> {
@@ -605,9 +584,7 @@ public class ShopkeeperLogController {
 
         }
 
-        // =============================================================
         // SEND CHANGE PASSWORD OTP
-        // =============================================================
 
         public static void sendChangePasswordLink(String email, Button sendOtpButton) {
 
@@ -670,9 +647,7 @@ public class ShopkeeperLogController {
                         }
                 }).start();
         }
-        // =============================================================
         // GETTERS
-        // =============================================================
 
         public static String getFirebaseIdToken() {
 

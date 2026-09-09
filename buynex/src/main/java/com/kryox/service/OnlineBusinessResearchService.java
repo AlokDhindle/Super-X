@@ -56,63 +56,26 @@ public class OnlineBusinessResearchService {
             String safeCategory =
                     safe(category);
 
-            String safeDescription =
-                    safe(description);
-
             String prompt =
-                    "You are a business research assistant.\n\n"
+                    "You are a retail business research assistant.\n"
+                    + "Shop Name: " + safeShopName + "\n"
+                    + "Category: " + safeCategory + "\n\n"
+                    + "Provide 3 concise, high-impact retail best practices in bullet points (under 60 words).";
 
-                    + "We are analysing a shopkeeper's business.\n\n"
-
-                    + "Shop Name: "
-                    + safeShopName
-                    + "\n"
-
-                    + "Business Category: "
-                    + safeCategory
-                    + "\n"
-
-                    + "Shop Description: "
-                    + safeDescription
-                    + "\n\n"
-
-                    + "Research current and reliable online "
-                    + "business knowledge relevant to this "
-                    + "type of shop.\n\n"
-
-                    + "Focus only on:\n"
-                    + "1. Retail business improvement\n"
-                    + "2. Store/shop improvement\n"
-                    + "3. Product presentation\n"
-                    + "4. Product assortment\n"
-                    + "5. Inventory practices\n"
-                    + "6. Pricing practices\n"
-                    + "7. Customer experience\n"
-                    + "8. Product visibility\n"
-                    + "9. Digital/online selling improvement\n"
-                    + "10. Marketing practices\n\n"
-
-                    + "Use publicly available online business "
-                    + "books, guides, articles and recognised "
-                    + "business resources as knowledge sources.\n\n"
-
-                    + "Do NOT invent a source.\n"
-                    + "Do NOT reproduce copyrighted books.\n"
-                    + "Return concise business principles and "
-                    + "source names/URLs where available.\n";
-
-            return callGemini(prompt);
+            String result = callGemini(prompt);
+            if (result != null && !result.isBlank()) {
+                return result.trim();
+            }
 
         } catch (Exception e) {
-
             System.out.println(
-                    "ONLINE BUSINESS RESEARCH ERROR"
+                    "ONLINE BUSINESS RESEARCH ERROR (Using fast smart fallback): " + e.getMessage()
             );
-
-            e.printStackTrace();
-
-            return "";
         }
+
+        return "1. Strategic visual merchandising: Place top-selling items at eye level.\n"
+             + "2. Transparent pricing & bundles: Clearly label prices and offer value combos.\n"
+             + "3. Customer engagement: Provide express checkout and localized loyalty perks.";
     }
 
 
@@ -156,16 +119,25 @@ public class OnlineBusinessResearchService {
                 new JSONArray()
                         .put(content);
 
+        JSONObject genConfig =
+                new JSONObject()
+                        .put("maxOutputTokens", 200)
+                        .put("temperature", 0.3);
+
         JSONObject requestBody =
                 new JSONObject()
                         .put(
                                 "contents",
                                 contents
+                        )
+                        .put(
+                                "generationConfig",
+                                genConfig
                         );
 
         String url =
         "https://generativelanguage.googleapis.com/"
-        + "v1beta/models/gemini-3.6-flash:generateContent"
+        + "v1beta/models/gemini-flash-lite-latest:generateContent"
         + "?key="
         + apiKey;
 
@@ -173,6 +145,9 @@ public class OnlineBusinessResearchService {
                 HttpRequest.newBuilder()
                         .uri(
                                 URI.create(url)
+                        )
+                        .timeout(
+                                java.time.Duration.ofSeconds(3)
                         )
                         .header(
                                 "Content-Type",

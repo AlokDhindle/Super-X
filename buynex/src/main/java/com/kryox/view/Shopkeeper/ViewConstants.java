@@ -53,9 +53,7 @@ public class ViewConstants {
         }
 
         public static HBox loginHeader() {
-                // ============================================================
                 // HEADER
-                // ============================================================
 
                 // HEADER
                 Text headerBuyNex = new Text("BuyNeX");
@@ -83,15 +81,13 @@ public class ViewConstants {
                 headerMainBox.setPrefHeight(60);
 
                 headerMainBox.setStyle(
-                                "-fx-background-color: #F8FBF8;-fx-border-color: #F1E8E1;-fx-border-width: 0 0 1px 0;");
+                                "-fx-background-color: #EBCCB7;-fx-border-color: #F1E8E1;-fx-border-width: 0 0 1px 0;");
 
                 return headerMainBox;
         }
 
         public static HBox header() {
-                // ============================================================
                 // HEADER
-                // ============================================================
 
                 Text headerBuyNex = new Text("BuyNeX");
                 headerBuyNex.setStyle(
@@ -113,9 +109,7 @@ public class ViewConstants {
                 headerLeftBox.setAlignment(Pos.CENTER_LEFT);
                 headerLeftBox.setPadding(new Insets(0, 0, 0, 25));
 
-                // ============================================================
                 // HEADER ICONS
-                // ============================================================
                 Button notificationIcon = new Button("🔔 Notifications");
                 notificationIcon.setStyle(
                                 "-fx-font-size: 15px;"
@@ -152,11 +146,9 @@ public class ViewConstants {
                 headerMainBox.setAlignment(Pos.CENTER);
                 headerMainBox.setPrefHeight(70);
                 headerMainBox.setStyle(
-                                "-fx-background-color: #F8FBF8;-fx-border-color: #F1E8E1;-fx-border-width: 0 0 1px 0;");
+                                "-fx-background-color: #EBCCB7;-fx-border-color: #F1E8E1;-fx-border-width: 0 0 1px 0;");
 
-                // ============================================================
                 // HEADER ICONS BUTTON ACTIONS
-                // ============================================================
                 notificationIcon.setOnMouseClicked(e -> {
                         System.out.println("Notification Icon clicked");
                         Homepage.HomepageStage.setScene(ShopkeeperNotification.notificationScene());
@@ -249,9 +241,7 @@ public class ViewConstants {
                 return footerBox;
         }
 
-        // ================================================================
         // DASHBOARD LEFT SIDE NAVIGATION BOX BUTTONS
-        // ================================================================
         public static Button createDashboardButton(
                         String icon,
                         String text,
@@ -301,9 +291,7 @@ public class ViewConstants {
 
                 return dashboardButton;
         }
-        // ================================================================
         // ORDER STATUS BUTTONS
-        // ================================================================
 
         public static void setSelectedStatusButton(
                         Button selectedButton) {
@@ -342,9 +330,7 @@ public class ViewConstants {
                                                 + "-fx-cursor: hand;");
         }
 
-        // ================================================================
         // ORDER STATUS BUTTONS
-        // ================================================================
         public static Button createStatusButton(
                         String text) {
 

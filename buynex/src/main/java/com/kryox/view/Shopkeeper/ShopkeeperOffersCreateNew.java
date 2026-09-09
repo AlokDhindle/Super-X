@@ -33,18 +33,19 @@ public class ShopkeeperOffersCreateNew {
         BorderPane borderPane = new BorderPane();
 
 
-        // ============================================================
-        // HEADER
-        // ============================================================
+        // Header
 
         HBox headerMainBox = ViewConstants.header();
+
+    // Header background
+    headerMainBox.setStyle(
+            "-fx-background-color: #EBCCB7;"
+    );
 
         borderPane.setTop(headerMainBox);
 
 
-        // ============================================================
-        // SIDEBAR
-        // ============================================================
+        // Sidebar
 
         VBox sidebar = createSidebar();
 
@@ -52,18 +53,14 @@ public class ShopkeeperOffersCreateNew {
         borderPane.setLeft(sidebar);
 
 
-        // ============================================================
-        // FOOTER
-        // ============================================================
+        // Footer
 
         borderPane.setBottom(
                 ViewConstants.footer()
         );
 
 
-        // ============================================================
-        // CENTER CONTENT
-        // ============================================================
+        // Center Content
 
         VBox centerContent = new VBox();
 
@@ -74,13 +71,11 @@ public class ShopkeeperOffersCreateNew {
         centerContent.setSpacing(12);
 
         centerContent.setStyle(
-                "-fx-background-color: #F8F7FC;"
+                "-fx-background-color: #EEE5DF;"
         );
 
 
-        // ============================================================
-        // PAGE TITLE
-        // ============================================================
+        // Page Title
 
         Text pageTitle =
                 new Text("Create New Offer");
@@ -110,9 +105,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // BASIC INFORMATION CARD
-        // ============================================================
+        // Basic Information Card
 
         VBox basicCard = new VBox();
 
@@ -158,9 +151,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // OFFER NAME
-        // ============================================================
+        // Offer Name
 
         Text offerNameLabel =
                 new Text("Offer Name");
@@ -195,9 +186,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // PROMOTION CODE
-        // ============================================================
+        // Promotion Code
 
         Text promoLabel =
                 new Text("Promotion Code");
@@ -258,9 +247,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // DESCRIPTION
-        // ============================================================
+        // Description
 
         Text descriptionLabel =
                 new Text("Description (Optional)");
@@ -312,9 +299,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // OFFER TYPE & VALUE
-        // ============================================================
+        // Offer Type & Value
 
         Text typeIcon =
                 new Text("◇");
@@ -486,9 +471,7 @@ public class ShopkeeperOffersCreateNew {
                 );
 
 
-        // ============================================================
-        // DISCOUNT VALUE
-        // ============================================================
+        // Discount Value
 
         Text discountLabel =
                 new Text("Discount Value");
@@ -537,9 +520,7 @@ public class ShopkeeperOffersCreateNew {
                 );
 
 
-        // ============================================================
-        // VALIDITY
-        // ============================================================
+        // Validity
 
         Text validityTitle =
                 new Text("Validity");
@@ -587,9 +568,7 @@ public class ShopkeeperOffersCreateNew {
                 );
 
 
-        // ============================================================
-        // USAGE LIMITS
-        // ============================================================
+        // Usage Limits
 
         Text usageTitle =
                 new Text("Usage Limits");
@@ -656,9 +635,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // ADD ALL FORM ELEMENTS
-        // ============================================================
+        // Add All Form Elements
 
         basicCard.getChildren().addAll(
                 infoHeading,
@@ -671,9 +648,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // LIVE PREVIEW CARD
-        // ============================================================
+        // Live Preview Card
 
         VBox previewCard =
                 new VBox();
@@ -793,9 +768,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // MAIN ROW
-        // ============================================================
+        // Main Row
 
         HBox mainRow =
                 new HBox(
@@ -809,9 +782,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // BOTTOM BUTTONS
-        // ============================================================
+        // Bottom Buttons
 
         Region buttonSpacer =
                 new Region();
@@ -858,9 +829,7 @@ public class ShopkeeperOffersCreateNew {
                 );
 
 
-        // ============================================================
-        // CENTER CONTENT
-        // ============================================================
+        // Center Content
 
         centerContent.getChildren().addAll(
                 titleBox,
@@ -885,8 +854,8 @@ public class ShopkeeperOffersCreateNew {
         );
 
         centerScroll.setStyle(
-                "-fx-background: #F8F7FC;" +
-                "-fx-background-color: #F8F7FC;"
+                "-fx-background: #EEE5DF;" +
+                "-fx-background-color: #EEE5DF;"
         );
 
 
@@ -896,9 +865,7 @@ public class ShopkeeperOffersCreateNew {
 
 
      
-        // ============================================================
-        // AUTO GENERATE PROMO CODE
-        // ============================================================
+        // Auto Generate Promo Code
 
         autoGenerate.setOnAction(e -> {
 
@@ -915,9 +882,7 @@ public class ShopkeeperOffersCreateNew {
         });
 
 
-        // ============================================================
-        // LIVE PREVIEW - OFFER NAME
-        // ============================================================
+        // Live Preview - Offer Name
 
         offerNameField.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -939,9 +904,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // LIVE PREVIEW - PROMO CODE
-        // ============================================================
+        // Live Preview - Promo Code
 
         promoField.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -965,9 +928,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // LIVE PREVIEW - DISCOUNT
-        // ============================================================
+        // Live Preview - Discount
 
         discountField.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -1005,9 +966,7 @@ public class ShopkeeperOffersCreateNew {
         });
 
 
-        // ============================================================
-        // DISCARD BUTTON
-        // ============================================================
+        // Discard Button
 
         discardButton.setOnAction(e ->
                 Homepage.HomepageStage.setScene(
@@ -1016,9 +975,7 @@ public class ShopkeeperOffersCreateNew {
         );
 
 
-        // ============================================================
-        // CREATE OFFER
-        // ============================================================
+        // Create Offer
 
         createButton.setOnAction(e -> {
 
@@ -1043,9 +1000,7 @@ public class ShopkeeperOffersCreateNew {
                                 .trim();
 
 
-                // ----------------------------------------------------
-                // VALIDATION
-                // ----------------------------------------------------
+                // Validation
 
                 if (offerName.isEmpty()) {
 
@@ -1114,9 +1069,7 @@ public class ShopkeeperOffersCreateNew {
                 }
 
 
-                // ----------------------------------------------------
-                // DISCOUNT VALUE
-                // ----------------------------------------------------
+                // Discount Value
 
                 double discountValue =
                         Double.parseDouble(
@@ -1161,9 +1114,7 @@ public class ShopkeeperOffersCreateNew {
                 }
 
 
-                // ----------------------------------------------------
-                // USAGE LIMITS
-                // ----------------------------------------------------
+                // Usage Limits
 
                 int maxUsesPerCustomer = 0;
 
@@ -1218,9 +1169,7 @@ public class ShopkeeperOffersCreateNew {
                 }
 
 
-                // ----------------------------------------------------
-                // CREATE OFFER MODEL
-                // ----------------------------------------------------
+                // Create Offer Model
 
                 OfferModel offerModel =
                         new OfferModel(
@@ -1253,27 +1202,21 @@ public class ShopkeeperOffersCreateNew {
                         );
 
 
-                // ----------------------------------------------------
-                // SAVE OFFER
-                // ----------------------------------------------------
+                // Save Offer
 
                 OfferController.addNewOffer(
                         offerModel
                 );
 
 
-                // ----------------------------------------------------
-                // SUCCESS
-                // ----------------------------------------------------
+                // Success
 
                 showSuccess(
                         "Offer created successfully."
                 );
 
 
-                // ----------------------------------------------------
-                // RETURN TO OFFERS PAGE
-                // ----------------------------------------------------
+                // Return to Offers Page
 
                 Homepage.HomepageStage.setScene(
                         ShopkeeperOffers
@@ -1298,9 +1241,7 @@ public class ShopkeeperOffersCreateNew {
         });
 
 
-        // ============================================================
-        // RETURN SCENE
-        // ============================================================
+        // Return Scene
 
         Scene scene =
                 new Scene(
@@ -1310,7 +1251,7 @@ public class ShopkeeperOffersCreateNew {
                 );
 
         scene.setFill(
-                Color.web("#F8F7FC")
+                Color.web("#EEE5DF")
         );
 
 
@@ -1318,9 +1259,7 @@ public class ShopkeeperOffersCreateNew {
     }
 
 
-    // ================================================================
-    // UPDATE DISCOUNT PREVIEW
-    // ================================================================
+    // Update Discount Preview
 
     private static void updateDiscountPreview(
             Text previewDiscount,
@@ -1354,9 +1293,7 @@ public class ShopkeeperOffersCreateNew {
     }
 
 
-    // ================================================================
-    // ERROR ALERT
-    // ================================================================
+    // Error Alert
 
     private static void showError(
             String message) {
@@ -1382,9 +1319,7 @@ public class ShopkeeperOffersCreateNew {
     }
 
 
-    // ================================================================
-    // SUCCESS ALERT
-    // ================================================================
+    // Success Alert
 
     private static void showSuccess(
             String message) {
@@ -1420,7 +1355,7 @@ public class ShopkeeperOffersCreateNew {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

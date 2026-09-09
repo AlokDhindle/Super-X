@@ -4,7 +4,7 @@ package com.kryox.view.Delivery;
 
 
 import com.kryox.config.DelivrayFirebaseConfig;
-import com.kryox.config.Firebaseconfig;
+
 import com.kryox.controller.Delivery.ImageUploadController;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.kryox.view.Customer.Homepage;
@@ -39,12 +39,9 @@ import java.util.Map;
 public class PartnerProfile {
 
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EEE5DE";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS
-    // =========================================================================
     public static Scene partnerProfileScene() {
         return partnerProfileScene(new PartnerSettings.SettingsData());
     }
@@ -63,7 +60,7 @@ public class PartnerProfile {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
@@ -74,7 +71,7 @@ public class PartnerProfile {
         topBar.setMinHeight(60);
         topBar.setMaxHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: " + BORDER_COLOR + ";" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-padding: 0 35 0 25;"
@@ -103,6 +100,7 @@ public class PartnerProfile {
 
         HBox leftGroup = new HBox(16, btnBack, title);
         leftGroup.setAlignment(Pos.CENTER_LEFT);
+        leftGroup.setStyle("-fx-background-color: #EBCCB7;");
         topBar.setLeft(leftGroup);
 
         return topBar;

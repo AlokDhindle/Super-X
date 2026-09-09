@@ -1,3 +1,4 @@
+
 package com.kryox.view.Delivery;
 
 import com.kryox.view.Customer.Homepage;
@@ -22,32 +23,38 @@ import javafx.scene.text.Text;
 public class ChangePayout {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
+
     private static final String ORANGE_GRADIENT =
             "linear-gradient(to right, #B84208, #F36A00)";
 
-    // UPDATED BACKGROUND COLOR
-    private static final String BG_COLOR = "#ebccb7";
+    private static final String BG_COLOR = "#EBCCB7";
 
     private static final String BORDER_COLOR = "#f0edf2";
-
-    // =========================================================================
-    // DYNAMIC FIRESTORE-READY PAYOUT ACCOUNT MODEL
-    // =========================================================================
 
     public static class PayoutAccountData {
 
         public String partnerName = "Alex Walker";
-        public String payoutType = "BANK"; // "BANK" or "UPI"
+
+        public String payoutType = "BANK";
 
         // Bank Details
         public String bankName = "HDFC Bank";
-        public String accountNumber = "50100492819284";
-        public String ifscCode = "HDFC0001245";
-        public String accountHolderName = "ALEX WALKER";
-        public String accountType = "Savings";
+
+        public String accountNumber =
+                "50100492819284";
+
+        public String ifscCode =
+                "HDFC0001245";
+
+        public String accountHolderName =
+                "ALEX WALKER";
+
+        public String accountType =
+                "Savings";
 
         // UPI Details
-        public String upiId = "alexwalker@okhdfcbank";
+        public String upiId =
+                "alexwalker@okhdfcbank";
 
         public PayoutAccountData() {
         }
@@ -61,114 +68,136 @@ public class ChangePayout {
                 String upiId) {
 
             this.bankName = bankName;
-            this.accountNumber = accountNumber;
-            this.ifscCode = ifscCode;
-            this.accountHolderName = accountHolderName;
-            this.accountType = accountType;
-            this.upiId = upiId;
+
+            this.accountNumber =
+                    accountNumber;
+
+            this.ifscCode =
+                    ifscCode;
+
+            this.accountHolderName =
+                    accountHolderName;
+
+            this.accountType =
+                    accountType;
+
+            this.upiId =
+                    upiId;
         }
 
         public String getMaskedAccountNumber() {
 
-            if (accountNumber != null && accountNumber.length() >= 4) {
+            if (accountNumber != null
+                    && accountNumber.length() >= 4) {
+
                 return "•••• •••• "
-                        + accountNumber.substring(accountNumber.length() - 4);
+                        + accountNumber.substring(
+                                accountNumber.length() - 4
+                        );
             }
 
             return "•••• •••• 8219";
         }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS
-    // =========================================================================
-
     public static Scene changePayoutScene() {
-        return changePayoutScene(new PartnerSettings.SettingsData());
+
+        return changePayoutScene(
+                new PartnerSettings.SettingsData()
+        );
     }
 
     public static Scene changePayoutScene(
             PartnerSettings.SettingsData settingsData) {
 
-        BorderPane root = new BorderPane();
+        BorderPane root =
+                new BorderPane();
 
-        // Main background
         root.setStyle(
-                "-fx-background-color: " + BG_COLOR + ";"
+                "-fx-background-color: " +
+                        BG_COLOR + ";"
         );
 
-        // ---------------------------------------------------------------------
-        // 1. TOP BAR
-        // ---------------------------------------------------------------------
+        root.setTop(
+                createTopHeader(
+                        settingsData
+                )
+        );
 
-        root.setTop(createTopHeader(settingsData));
+        VBox mainContent =
+                createMainContent(
+                        settingsData
+                );
 
-        // ---------------------------------------------------------------------
-        // 2. CENTER CONTENT
-        // ---------------------------------------------------------------------
-
-        VBox mainContent = createMainContent(settingsData);
-
-        ScrollPane scrollPane = new ScrollPane(mainContent);
+        ScrollPane scrollPane =
+                new ScrollPane(
+                        mainContent
+                );
 
         scrollPane.setFitToWidth(true);
+
         scrollPane.setPannable(true);
 
         scrollPane.setStyle(
                 "-fx-background-color: transparent;" +
                 "-fx-background: " + BG_COLOR + ";" +
+                "-fx-control-inner-background: " +
+                        BG_COLOR + ";" +
                 "-fx-border-color: transparent;"
         );
 
-        root.setCenter(scrollPane);
+        root.setCenter(
+                scrollPane
+        );
 
-        // ---------------------------------------------------------------------
-        // SCENE
-        // ---------------------------------------------------------------------
+        Scene scene =
+                new Scene(
+                        root,
+                        1550,
+                        850
+                );
 
-        Scene scene = new Scene(root, 1280, 720);
-
-        scene.setFill(Color.web(BG_COLOR));
+        scene.setFill(
+                Color.web(BG_COLOR)
+        );
 
         return scene;
     }
 
-    // =========================================================================
-    // TOP HEADER
-    // =========================================================================
-
     private static BorderPane createTopHeader(
             PartnerSettings.SettingsData settingsData) {
 
-        BorderPane topBar = new BorderPane();
+        BorderPane topBar =
+                new BorderPane();
 
-        topBar.setPrefHeight(60);
-        topBar.setMinHeight(60);
-        topBar.setMaxHeight(60);
+        topBar.setPrefHeight(70);
+
+        topBar.setMinHeight(70);
+
+        topBar.setMaxHeight(70);
 
         topBar.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-border-color: " + BORDER_COLOR + ";" +
-                "-fx-border-width: 0 0 1 0;" +
-                "-fx-padding: 0 35 0 25;"
+                "-fx-background-color: #EBCCB7;" +
+                "-fx-border-color: transparent;" +
+                "-fx-border-width: 0;" +
+                "-fx-padding: 0 40 0 30;"
         );
 
-        // ---------------------------------------------------------------------
-        // BACK BUTTON
-        // ---------------------------------------------------------------------
-
-        Button btnBack = new Button("←  Back to Settings");
+        Button btnBack =
+                new Button(
+                        "←  Back to Settings"
+                );
 
         btnBack.setStyle(
-                "-fx-background-color: #f8f8fb;" +
-                "-fx-border-color: #e5e7eb;" +
+                "-fx-background-color: #F8F1ED;" +
+                "-fx-border-color: #D9B9A5;" +
                 "-fx-border-radius: 8;" +
                 "-fx-background-radius: 8;" +
                 "-fx-font-size: 12px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #374151;" +
                 "-fx-cursor: hand;" +
-                "-fx-padding: 6 14 6 14;"
+                "-fx-padding: 8 16 8 16;"
         );
 
         btnBack.setOnAction(e -> {
@@ -180,46 +209,54 @@ public class ChangePayout {
                                 settingsData
                         )
                 );
+
+                Homepage.HomepageStage.show();
             }
         });
 
-        // ---------------------------------------------------------------------
-        // TITLE
-        // ---------------------------------------------------------------------
-
-        Text title = new Text("Change Payout Account");
+        Text title =
+                new Text(
+                        "Change Payout Account"
+                );
 
         title.setStyle(
-                "-fx-font-size: 18px;" +
+                "-fx-font-size: 20px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-fill: #111827;"
         );
 
-        HBox leftGroup = new HBox(
-                16,
-                btnBack,
-                title
+        HBox leftGroup =
+                new HBox(
+                        18,
+                        btnBack,
+                        title
+                );
+
+        leftGroup.setAlignment(
+                Pos.CENTER_LEFT
         );
 
-        leftGroup.setAlignment(Pos.CENTER_LEFT);
-
-        topBar.setLeft(leftGroup);
-
-        // ---------------------------------------------------------------------
-        // SECURITY PILL
-        // ---------------------------------------------------------------------
-
-        HBox liveDeskPill = new HBox(6);
-
-        liveDeskPill.setAlignment(Pos.CENTER_RIGHT);
-
-        Circle lockIcon = new Circle(
-                4,
-                Color.web("#16a34a")
+        topBar.setLeft(
+                leftGroup
         );
+
+        HBox liveDeskPill =
+                new HBox(6);
+
+        liveDeskPill.setAlignment(
+                Pos.CENTER_RIGHT
+        );
+
+        Circle lockIcon =
+                new Circle(
+                        4,
+                        Color.web("#16a34a")
+                );
 
         Label secureText =
-                new Label("256-Bit Bank Grade Encryption");
+                new Label(
+                        "256-Bit Bank Grade Encryption"
+                );
 
         secureText.setStyle(
                 "-fx-font-size: 11px;" +
@@ -232,33 +269,36 @@ public class ChangePayout {
                 secureText
         );
 
-        topBar.setRight(liveDeskPill);
+        topBar.setRight(
+                liveDeskPill
+        );
 
         return topBar;
     }
 
-    // =========================================================================
-    // MAIN CONTENT
-    // =========================================================================
-
     private static VBox createMainContent(
             PartnerSettings.SettingsData settingsData) {
 
-        VBox content = new VBox(22);
+        VBox content =
+                new VBox(22);
 
         content.setPadding(
-                new Insets(26, 40, 60, 40)
+                new Insets(
+                        30,
+                        50,
+                        60,
+                        50
+                )
         );
 
-        content.setAlignment(Pos.TOP_CENTER);
+        content.setAlignment(
+                Pos.TOP_CENTER
+        );
 
-        // ---------------------------------------------------------------------
-        // FORM CARD
-        // ---------------------------------------------------------------------
+        VBox formCard =
+                new VBox(20);
 
-        VBox formCard = new VBox(20);
-
-        formCard.setMaxWidth(720);
+        formCard.setMaxWidth(850);
 
         formCard.setPadding(
                 new Insets(30)
@@ -268,19 +308,22 @@ public class ChangePayout {
                 "-fx-background-color: white;" +
                 "-fx-background-radius: 14;" +
                 "-fx-border-radius: 14;" +
-                "-fx-border-color: " + BORDER_COLOR + ";" +
+                "-fx-border-color: " +
+                        BORDER_COLOR + ";" +
                 "-fx-border-width: 1;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 10, 0, 0, 2);"
+                "-fx-effect: dropshadow(" +
+                        "gaussian," +
+                        "rgba(0,0,0,0.04)," +
+                        "10,0,0,2);"
         );
 
-        // ---------------------------------------------------------------------
-        // HEADER TITLE
-        // ---------------------------------------------------------------------
-
-        VBox titleBox = new VBox(3);
+        VBox titleBox =
+                new VBox(3);
 
         Text formTitle =
-                new Text("Update Direct Deposit Bank Details");
+                new Text(
+                        "Update Direct Deposit Bank Details"
+                );
 
         formTitle.setStyle(
                 "-fx-font-size: 22px;" +
@@ -290,7 +333,8 @@ public class ChangePayout {
 
         Text formSubtitle =
                 new Text(
-                        "Weekly payouts and incentive bonuses will be credited to this verified account."
+                        "Weekly payouts and incentive bonuses " +
+                        "will be credited to this verified account."
                 );
 
         formSubtitle.setStyle(
@@ -303,18 +347,20 @@ public class ChangePayout {
                 formSubtitle
         );
 
-        // ---------------------------------------------------------------------
-        // CURRENT ACTIVE ACCOUNT
-        // ---------------------------------------------------------------------
-
-        HBox currentAccPill = new HBox(12);
+        HBox currentAccPill =
+                new HBox(12);
 
         currentAccPill.setAlignment(
                 Pos.CENTER_LEFT
         );
 
         currentAccPill.setPadding(
-                new Insets(12, 16, 12, 16)
+                new Insets(
+                        12,
+                        16,
+                        12,
+                        16
+                )
         );
 
         currentAccPill.setStyle(
@@ -324,13 +370,15 @@ public class ChangePayout {
                 "-fx-background-radius: 8;"
         );
 
-        Label cardIcon = new Label("💳");
+        Label cardIcon =
+                new Label("💳");
 
         cardIcon.setStyle(
                 "-fx-font-size: 16px;"
         );
 
-        VBox currMeta = new VBox(1);
+        VBox currMeta =
+                new VBox(1);
 
         Label currTitle =
                 new Label(
@@ -367,10 +415,6 @@ public class ChangePayout {
                 currMeta
         );
 
-        // ---------------------------------------------------------------------
-        // FORM SECTION
-        // ---------------------------------------------------------------------
-
         Label formSec =
                 new Label(
                         "Enter New Account Details (INR ₹)"
@@ -383,14 +427,12 @@ public class ChangePayout {
                 "-fx-padding: 6 0 2 0;"
         );
 
-        GridPane formGrid = new GridPane();
+        GridPane formGrid =
+                new GridPane();
 
         formGrid.setHgap(16);
-        formGrid.setVgap(14);
 
-        // ---------------------------------------------------------------------
-        // INPUT FIELDS
-        // ---------------------------------------------------------------------
+        formGrid.setVgap(14);
 
         TextField bankNameField =
                 createStyledTextField(
@@ -429,10 +471,6 @@ public class ChangePayout {
                 createStyledTextField(
                         "UPI ID for Instant Payouts (Optional)"
                 );
-
-        // ---------------------------------------------------------------------
-        // ADD FIELDS TO GRID
-        // ---------------------------------------------------------------------
 
         formGrid.add(
                 createFieldBlock(
@@ -495,18 +533,20 @@ public class ChangePayout {
                 )
         );
 
-        // ---------------------------------------------------------------------
-        // INFORMATION NOTE
-        // ---------------------------------------------------------------------
-
-        HBox noteBox = new HBox(8);
+        HBox noteBox =
+                new HBox(8);
 
         noteBox.setAlignment(
                 Pos.CENTER_LEFT
         );
 
         noteBox.setPadding(
-                new Insets(10, 14, 10, 14)
+                new Insets(
+                        10,
+                        14,
+                        10,
+                        14
+                )
         );
 
         noteBox.setStyle(
@@ -516,7 +556,8 @@ public class ChangePayout {
                 "-fx-border-radius: 8;"
         );
 
-        Label infoIcon = new Label("ⓘ");
+        Label infoIcon =
+                new Label("ⓘ");
 
         infoIcon.setStyle(
                 "-fx-font-size: 12px;" +
@@ -526,7 +567,9 @@ public class ChangePayout {
 
         Label noteText =
                 new Label(
-                        "Bank account name must match your registered Government ID name to avoid settlement delays."
+                        "Bank account name must match your " +
+                        "registered Government ID name to avoid " +
+                        "settlement delays."
                 );
 
         noteText.setStyle(
@@ -538,10 +581,6 @@ public class ChangePayout {
                 infoIcon,
                 noteText
         );
-
-        // ---------------------------------------------------------------------
-        // SAVE BUTTON
-        // ---------------------------------------------------------------------
 
         Button btnSaveAccount =
                 new Button(
@@ -555,7 +594,8 @@ public class ChangePayout {
         );
 
         btnSaveAccount.setStyle(
-                "-fx-background-color: " + ORANGE_GRADIENT + ";" +
+                "-fx-background-color: " +
+                        ORANGE_GRADIENT + ";" +
                 "-fx-text-fill: white;" +
                 "-fx-font-weight: bold;" +
                 "-fx-font-size: 13px;" +
@@ -575,10 +615,13 @@ public class ChangePayout {
                     accNoField.getText().trim();
 
             if (!newBank.isEmpty()) {
-                settingsData.bankName = newBank;
+
+                settingsData.bankName =
+                        newBank;
             }
 
             if (!newHolder.isEmpty()) {
+
                 settingsData.accountHolderName =
                         newHolder.toUpperCase();
             }
@@ -612,12 +655,10 @@ public class ChangePayout {
                                 settingsData
                         )
                 );
+
+                Homepage.HomepageStage.show();
             }
         });
-
-        // ---------------------------------------------------------------------
-        // ADD EVERYTHING TO CARD
-        // ---------------------------------------------------------------------
 
         formCard.getChildren().addAll(
                 titleBox,
@@ -635,17 +676,15 @@ public class ChangePayout {
         return content;
     }
 
-    // =========================================================================
-    // FIELD BLOCK
-    // =========================================================================
-
     private static VBox createFieldBlock(
             String label,
             javafx.scene.Node control) {
 
-        VBox box = new VBox(4);
+        VBox box =
+                new VBox(4);
 
-        Label lbl = new Label(label);
+        Label lbl =
+                new Label(label);
 
         lbl.setStyle(
                 "-fx-font-size: 11px;" +
@@ -661,14 +700,11 @@ public class ChangePayout {
         return box;
     }
 
-    // =========================================================================
-    // TEXT FIELD STYLE
-    // =========================================================================
-
     private static TextField createStyledTextField(
             String prompt) {
 
-        TextField tf = new TextField();
+        TextField tf =
+                new TextField();
 
         tf.setPromptText(prompt);
 
@@ -685,10 +721,6 @@ public class ChangePayout {
 
         return tf;
     }
-
-    // =========================================================================
-    // PASSWORD FIELD STYLE
-    // =========================================================================
 
     private static PasswordField createStyledPasswordField(
             String prompt) {
@@ -712,3 +744,4 @@ public class ChangePayout {
         return pf;
     }
 }
+

@@ -26,22 +26,20 @@ public class ShopkeeperNotification {
 
                 BorderPane borderPane = new BorderPane();
 
-                // ============================================================
-                // HEADER
-                // ============================================================
+                // Header
                 HBox headerMainBox = ViewConstants.header();
+
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
 
                 borderPane.setTop(headerMainBox);
 
-                // ============================================================
-                // SIDEBAR
-                // ============================================================
+                // Sidebar
 
                 VBox sidebar = createSidebar();
                 borderPane.setLeft(sidebar);
-                // ============================================================
-                // CENTER - NOTIFICATIONS PAGE
-                // ============================================================
+                // Center - Notifications Page
 
                 VBox notificationPage = new VBox();
 
@@ -55,9 +53,7 @@ public class ShopkeeperNotification {
                 notificationPage.setStyle(
                                 "-fx-background-color: white;");
 
-                // ============================================================
-                // NOTIFICATION TITLE
-                // ============================================================
+                // Notification Title
 
                 Text notificationTitle = new Text("Notifications");
 
@@ -111,9 +107,7 @@ public class ShopkeeperNotification {
                                 bellRight,
                                 Pos.CENTER_RIGHT);
 
-                // ============================================================
-                // NOTIFICATION LIST
-                // ============================================================
+                // Notification List
 
                 VBox notificationList = new VBox();
 
@@ -126,9 +120,7 @@ public class ShopkeeperNotification {
 
                 notificationList.setMaxWidth(570);
 
-                // ============================================================
-                // NOTIFICATION 1
-                // ============================================================
+                // Notification 1
 
                 HBox orderIconCircle = new HBox();
 
@@ -194,9 +186,7 @@ public class ShopkeeperNotification {
                                 "-fx-background-color: #F5F4F8;" +
                                                 "-fx-background-radius: 12px;");
 
-                // ============================================================
-                // NOTIFICATION 2
-                // ============================================================
+                // Notification 2
 
                 HBox stockIconCircle = new HBox();
 
@@ -264,9 +254,7 @@ public class ShopkeeperNotification {
                                 "-fx-background-color: #F5F4F8;" +
                                                 "-fx-background-radius: 12px;");
 
-                // ============================================================
-                // NOTIFICATION 3
-                // ============================================================
+                // Notification 3
 
                 HBox aiIconCircle = new HBox();
 
@@ -334,18 +322,14 @@ public class ShopkeeperNotification {
                                 "-fx-background-color: #F5F4F8;" +
                                                 "-fx-background-radius: 12px;");
 
-                // ============================================================
-                // ADD NOTIFICATIONS TO LIST
-                // ============================================================
+                // Add Notifications to List
 
                 notificationList.getChildren().addAll(
                                 orderNotification,
                                 stockNotification,
                                 aiNotification);
 
-                // ============================================================
-                // SCROLL PANE
-                // ============================================================
+                // Scroll Pane
 
                 ScrollPane notificationScrollPane = new ScrollPane(notificationList);
 
@@ -368,9 +352,7 @@ public class ShopkeeperNotification {
                                                 "-fx-background: transparent;" +
                                                 "-fx-border-color: transparent;");
 
-                // ============================================================
-                // VIEW ALL ACTIVITY BUTTON
-                // ============================================================
+                // View All Activity Button
 
                 Button viewAllButton = new Button("View All Activity");
 
@@ -413,24 +395,18 @@ public class ShopkeeperNotification {
 
                 });
 
-                // ============================================================
-                // ADD CENTER COMPONENTS
-                // ============================================================
+                // Add Center Components
 
                 notificationPage.getChildren().addAll(
                                 titleContainer,
                                 notificationScrollPane,
                                 viewAllButton);
 
-                // ============================================================
-                // SET CENTER
-                // ============================================================
+                // Set Center
 
                 borderPane.setCenter(notificationPage);
 
-                // ================================================================
-                // FOOTER
-                // ================================================================
+                // Footer
 
                 VBox footerBox = ViewConstants.footer();
 
@@ -438,17 +414,16 @@ public class ShopkeeperNotification {
 
                 borderPane.setBottom(footerBox);
 
-                // ============================================================
-                // SCENE
-                // ============================================================
+                // Scene
 
                 Scene notificationScene = new Scene(
                                 borderPane,
-                                1550,850
+                                1550,
+                                850
                         );
 
                 notificationScene.setFill(
-                                Color.web("#F8F7FC"));
+                                Color.web("#EEE5DF"));
 
                 return notificationScene;
         }
@@ -464,7 +439,7 @@ public class ShopkeeperNotification {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

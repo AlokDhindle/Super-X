@@ -24,24 +24,60 @@ public class NearbyDeliveries {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EBCCB7";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    // =========================================================================
-    // DYNAMIC FIRESTORE-READY NEARBY DELIVERIES DATA MODEL
-    // =========================================================================
     public static class NearbyData {
-        public String partnerName = "Alex Walker";
-        public String currentZone = "Downtown & Deccan Gymkhana";
-        public double radiusKm = 2.5;
+        public String partnerName = "Rahul Sharma (Rider)";
+        public String currentZone = "Deccan Gymkhana (1.5km Radius)";
+        public double radiusKm = 1.5;
         public int totalNearbyFound = 4;
         public List<NearbyOrderItem> orders = new ArrayList<>();
 
         public NearbyData() {
-            orders.add(new NearbyOrderItem("BN-7712", "0.4 km away", "Fresh Organic Bakery", "Bakery & Confectionery", "12 Baker St, Deccan", "Rahul Deshmukh", "Flat 302, Green Park Apts", 85.00, 3, "2 items (Breads, Croissants)", "12 mins"));
-            orders.add(new NearbyOrderItem("BN-4920", "0.9 km away", "Nature's Basket Grocery", "Grocery & Essentials", "4920 Central Ave, Plaza", "Sarah Jenkins", "102 Highland Terrace, Apt 4C", 145.50, 8, "Grocery Haul (Veggies, Milk)", "15 mins"));
-            orders.add(new NearbyOrderItem("BN-6031", "1.4 km away", "Cafe Goodluck", "Food & Beverages", "Fergusson College Rd", "Aman Sharma", "B-14 Symbiosis Hostel", 95.00, 4, "Bun Maska & Irani Chai", "18 mins"));
-            orders.add(new NearbyOrderItem("BN-5102", "1.9 km away", "Digital Horizon Tech", "Electronics & Accessories", "88 Tech Plaza, FC Road", "Mark Robertson", "704 Skyline Residency", 210.00, 1, "Fast Charger & Cable", "22 mins"));
+            try {
+                var firestoreRequests = com.kryox.controller.Shopkeeper.OrderController.getDeliveryRequests();
+                if (firestoreRequests != null && !firestoreRequests.isEmpty()) {
+                    for (com.kryox.model.Shopkeeper.OrderModel om : firestoreRequests) {
+                        String sName = om.getShopName() != null && !om.getShopName().isBlank() ? om.getShopName() : ("Shopkeeper #" + (om.getShopkeeperUid() != null ? om.getShopkeeperUid() : "Default"));
+                        String cName = om.getCustomerName() != null && !om.getCustomerName().isBlank() ? om.getCustomerName() : "Customer";
+                        String oid = om.getOrderId() != null ? om.getOrderId() : "BN-1001";
+                        double amt = om.getTotalAmount() > 0 ? om.getTotalAmount() : 120.00;
+                        int count = om.getProducts() != null ? om.getProducts().size() : 1;
+
+                        StringBuilder sb = new StringBuilder();
+                        if (om.getProducts() != null && !om.getProducts().isEmpty()) {
+                            for (int i = 0; i < om.getProducts().size(); i++) {
+                                var p = om.getProducts().get(i);
+                                if (p != null) {
+                                    if (i > 0) sb.append(", ");
+                                    sb.append(p.getQuantity()).append("x ").append(p.getProductName() != null ? p.getProductName() : "Item");
+                                }
+                            }
+                        }
+                        String pSummary = sb.length() > 0 ? sb.toString() : "Store Products";
+                        String sAddr = String.format("Pune Shopkeeper (Lat %.4f, Lng %.4f) • 1.5km Zone", om.getShopLat(), om.getShopLng());
+                        String cAddr = om.getCustomerPhone() != null && !om.getCustomerPhone().isBlank() ? ("Phone: " + om.getCustomerPhone() + " • Customer Location") : "Customer Delivery Location";
+
+                        NearbyOrderItem item = new NearbyOrderItem(oid, "0.8 km away", sName, "Grocery & Retail Store", sAddr, cName, cAddr, amt, count, pSummary, "15 mins trip");
+                        item.rawOrder = om;
+
+                        String st = om.getOrderStatus();
+                        if ("OUT_FOR_DELIVERY".equalsIgnoreCase(st) || "DELIVERY".equalsIgnoreCase(st)) {
+                            item.isAccepted = true;
+                        }
+
+                        orders.add(item);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (orders.isEmpty()) {
+                orders.add(new NearbyOrderItem("BN-7712", "0.4 km away", "Fresh Organic Bakery", "Bakery & Confectionery", "12 Baker St, Deccan", "Rahul Deshmukh", "Flat 302, Green Park Apts", 85.00, 3, "2 items (Breads, Croissants)", "12 mins"));
+                orders.add(new NearbyOrderItem("BN-4920", "0.9 km away", "Nature's Basket Grocery", "Grocery & Essentials", "4920 Central Ave, Plaza", "Sarah Jenkins", "102 Highland Terrace, Apt 4C", 145.50, 8, "Grocery Haul (Veggies, Milk)", "15 mins"));
+            }
         }
     }
 
@@ -58,6 +94,7 @@ public class NearbyDeliveries {
         public String itemsSummary;
         public String estDuration;
         public boolean isAccepted = false;
+        public com.kryox.model.Shopkeeper.OrderModel rawOrder;
 
         public NearbyOrderItem(String id, String distanceText, String storeName, String storeCategory, String storeAddress,
                                String customerName, String customerAddress, double payout, int itemCount, String itemsSummary, String estDuration) {
@@ -75,9 +112,6 @@ public class NearbyDeliveries {
         }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS (SHOPKEEPER PATTERN)
-    // =========================================================================
     public static Scene nearbyDeliveriesScene() {
         return nearbyDeliveriesScene(new NearbyData());
     }
@@ -98,21 +132,21 @@ public class NearbyDeliveries {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        // ONLY SIZE CHANGED
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
 
-    // =========================================================================
-    // TOP HEADER
-    // =========================================================================
     private static BorderPane createTopHeader(NearbyData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
         topBar.setMaxHeight(60);
+
+        // ONLY COLOR CHANGED
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: " + BORDER_COLOR + ";" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-padding: 0 35 0 25;"
@@ -130,6 +164,7 @@ public class NearbyDeliveries {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
+
         btnBack.setOnAction(e -> {
             if (Homepage.HomepageStage != null) {
                 Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
@@ -141,6 +176,10 @@ public class NearbyDeliveries {
 
         HBox leftGroup = new HBox(16, btnBack, title);
         leftGroup.setAlignment(Pos.CENTER_LEFT);
+
+        // LEFT SIDE SAME COLOR
+        leftGroup.setStyle("-fx-background-color: #EBCCB7;");
+
         topBar.setLeft(leftGroup);
 
         HBox locPill = new HBox(6);
@@ -154,9 +193,6 @@ public class NearbyDeliveries {
         return topBar;
     }
 
-    // =========================================================================
-    // MAIN CONTENT VIEW
-    // =========================================================================
     private static VBox createMainContent(NearbyData data) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(24, 40, 60, 40));
@@ -213,9 +249,6 @@ public class NearbyDeliveries {
         return content;
     }
 
-    // =========================================================================
-    // NEARBY ORDER ITEM CARD (WITH LIVE ACCEPT TO NAVIGATION)
-    // =========================================================================
     private static VBox createNearbyOrderCard(NearbyData data, NearbyOrderItem item) {
         VBox card = new VBox(12);
         card.setPadding(new Insets(18));
@@ -293,6 +326,7 @@ public class NearbyDeliveries {
             btnNavigate.setStyle(
                     "-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 0 16 0 16; -fx-cursor: hand;"
             );
+
             btnNavigate.setOnAction(e -> {
                 PartnerNavigation.TripData trip = new PartnerNavigation.TripData();
                 trip.orderNumber = "Order #" + item.id;
@@ -301,40 +335,93 @@ public class NearbyDeliveries {
                 trip.dropoffName = item.customerName;
                 trip.dropoffAddress = item.customerAddress;
                 trip.orderEarnings = item.payout;
+
                 if (Homepage.HomepageStage != null) {
-                    Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene(trip));
+                    Homepage.HomepageStage.setScene(
+                            PartnerNavigation.partnerNavigationScene(trip)
+                    );
                 }
             });
+
             footer.setRight(btnNavigate);
+
         } else {
+
             HBox actBtns = new HBox(8);
             actBtns.setAlignment(Pos.CENTER_RIGHT);
 
             Button btnDecline = new Button("Pass");
             btnDecline.setPrefHeight(32);
-            btnDecline.setStyle("-fx-background-color: white; -fx-border-color: #d1d5db; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #4b5563; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 0 12 0 12; -fx-cursor: hand;");
+            btnDecline.setStyle(
+                    "-fx-background-color: white; " +
+                    "-fx-border-color: #d1d5db; " +
+                    "-fx-border-radius: 6; " +
+                    "-fx-background-radius: 6; " +
+                    "-fx-text-fill: #4b5563; " +
+                    "-fx-font-size: 11px; " +
+                    "-fx-font-weight: bold; " +
+                    "-fx-padding: 0 12 0 12; " +
+                    "-fx-cursor: hand;"
+            );
+
             btnDecline.setOnAction(e -> {
                 data.orders.remove(item);
+
                 if (Homepage.HomepageStage != null) {
-                    Homepage.HomepageStage.setScene(nearbyDeliveriesScene(data));
+                    Homepage.HomepageStage.setScene(
+                            nearbyDeliveriesScene(data)
+                    );
                 }
             });
 
-            Button btnAccept = new Button("Accept (₹" + (int)item.payout + ")");
+            Button btnAccept = new Button(
+                    "Accept (₹" + (int)item.payout + ")"
+            );
+
             btnAccept.setPrefHeight(32);
-            btnAccept.setStyle("-fx-background-color: " + ORANGE_GRADIENT + "; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 0 16 0 16; -fx-cursor: hand;");
+
+            btnAccept.setStyle(
+                    "-fx-background-color: " + ORANGE_GRADIENT + "; " +
+                    "-fx-text-fill: white; " +
+                    "-fx-font-size: 11px; " +
+                    "-fx-font-weight: bold; " +
+                    "-fx-background-radius: 6; " +
+                    "-fx-padding: 0 16 0 16; " +
+                    "-fx-cursor: hand;"
+            );
+
             btnAccept.setOnAction(e -> {
                 item.isAccepted = true;
+                if (item.rawOrder != null) {
+                    com.kryox.controller.Shopkeeper.OrderController.assignDeliveryPartner(
+                        item.rawOrder,
+                        data.partnerName != null ? data.partnerName : "Rahul Sharma (Rider)",
+                        "+91 98765 43210",
+                        item.distanceText + " (within 1.5km radius)"
+                    );
+                }
+
                 if (Homepage.HomepageStage != null) {
-                    Homepage.HomepageStage.setScene(nearbyDeliveriesScene(data));
+                    Homepage.HomepageStage.setScene(
+                            nearbyDeliveriesScene(data)
+                    );
                 }
             });
 
-            actBtns.getChildren().addAll(btnDecline, btnAccept);
+            actBtns.getChildren().addAll(
+                    btnDecline,
+                    btnAccept
+            );
+
             footer.setRight(actBtns);
         }
 
-        card.getChildren().addAll(header, pathRow, footer);
+        card.getChildren().addAll(
+                header,
+                pathRow,
+                footer
+        );
+
         return card;
     }
 }

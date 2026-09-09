@@ -26,25 +26,19 @@ import java.util.concurrent.TimeUnit;
 
 public class PaymentController {
 
-    // =========================================================
-    // RAZORPAY TEST KEYS
-    // =========================================================
+
 
     
 
 
-    // =========================================================
-    // PAYMENT SERVER
-    // =========================================================
+
 
     private static final String PAYMENT_SERVER =
             "http://localhost:3000";
     private Runnable paymentSuccessCallback;
 
 
-    // =========================================================
-    // HTTP CLIENT
-    // =========================================================
+
 
     private final HttpClient httpClient =
             HttpClient.newBuilder()
@@ -54,9 +48,7 @@ public class PaymentController {
                     .build();
 
 
-    // =========================================================
-    // PAYMENT POLLING
-    // =========================================================
+
 
     private final ScheduledExecutorService scheduler =
             Executors.newSingleThreadScheduledExecutor();
@@ -64,9 +56,7 @@ public class PaymentController {
     private ScheduledFuture<?> paymentPollingTask;
 
 
-    // =========================================================
-    // START PAYMENT
-    // =========================================================
+
 
     public void startPayment(double amount, Runnable onSuccess) {
         this.paymentSuccessCallback = onSuccess;
@@ -79,9 +69,7 @@ public class PaymentController {
 
         try {
 
-            // -------------------------------------------------
-            // VALIDATE AMOUNT
-            // -------------------------------------------------
+
 
             if (amount <= 0) {
 
@@ -93,9 +81,7 @@ public class PaymentController {
             }
 
 
-            // -------------------------------------------------
-            // RUPEES → PAISE
-            // -------------------------------------------------
+
 
             int amountInPaise =
                     (int) Math.round(
@@ -109,9 +95,7 @@ public class PaymentController {
             );
 
 
-            // -------------------------------------------------
-            // RAZORPAY CLIENT
-            // -------------------------------------------------
+
 
             RazorpayClient razorpay =
                     new RazorpayClient(
@@ -120,9 +104,7 @@ public class PaymentController {
                     );
 
 
-            // -------------------------------------------------
-            // ORDER REQUEST
-            // -------------------------------------------------
+
 
             JSONObject orderRequest =
                     new JSONObject();
@@ -144,9 +126,7 @@ public class PaymentController {
             );
 
 
-            // -------------------------------------------------
-            // CREATE ORDER
-            // -------------------------------------------------
+
 
             System.out.println();
             System.out.println(
@@ -182,19 +162,14 @@ public class PaymentController {
             );
 
 
-            // -------------------------------------------------
-            // IMPORTANT
-            // START POLLING BEFORE OPENING BROWSER
-            // -------------------------------------------------
+            // IMPORTANT: START POLLING BEFORE OPENING BROWSER
 
             startPaymentStatusPolling(
                     orderId
             );
 
 
-            // -------------------------------------------------
-            // OPEN RAZORPAY CHECKOUT
-            // -------------------------------------------------
+
 
             openRazorpayInBrowser(
                     orderId,
@@ -214,9 +189,7 @@ public class PaymentController {
     }
 
 
-    // =========================================================
-    // OPEN RAZORPAY IN BROWSER
-    // =========================================================
+
 
     private void openRazorpayInBrowser(
             String orderId,
@@ -232,9 +205,7 @@ public class PaymentController {
                     );
 
 
-            // -------------------------------------------------
-            // CREATE TEMP HTML
-            // -------------------------------------------------
+
 
             Path htmlFile =
                     Files.createTempFile(
@@ -261,9 +232,7 @@ public class PaymentController {
             );
 
 
-            // -------------------------------------------------
-            // OPEN DEFAULT BROWSER
-            // -------------------------------------------------
+
 
             if (Desktop.isDesktopSupported()) {
 
@@ -291,9 +260,7 @@ public class PaymentController {
     }
 
 
-    // =========================================================
-    // RAZORPAY CHECKOUT HTML
-    // =========================================================
+
 
     private String createCheckoutHTML(
             String orderId,
@@ -421,9 +388,7 @@ public class PaymentController {
     }
 
 
-    // =========================================================
-    // START PAYMENT STATUS POLLING
-    // =========================================================
+
 
     private void startPaymentStatusPolling(
             String orderId
@@ -451,16 +416,12 @@ public class PaymentController {
         );
 
 
-        // -----------------------------------------------------
-        // STOP OLD POLLING
-        // -----------------------------------------------------
+
 
         stopPaymentPolling();
 
 
-        // -----------------------------------------------------
-        // POLL EVERY 2 SECONDS
-        // -----------------------------------------------------
+
 
         paymentPollingTask =
                 scheduler.scheduleAtFixedRate(
@@ -478,9 +439,7 @@ public class PaymentController {
     }
 
 
-    // =========================================================
-    // CHECK PAYMENT STATUS
-    // =========================================================
+
 
     private void checkPaymentStatus(
             String orderId
@@ -488,9 +447,7 @@ public class PaymentController {
 
         try {
 
-            // -------------------------------------------------
-            // URL
-            // -------------------------------------------------
+
 
             String url =
                     PAYMENT_SERVER
@@ -518,9 +475,7 @@ public class PaymentController {
             );
 
 
-            // -------------------------------------------------
-            // REQUEST
-            // -------------------------------------------------
+
 
             HttpRequest request =
                     HttpRequest.newBuilder()
@@ -534,9 +489,7 @@ public class PaymentController {
                             .build();
 
 
-            // -------------------------------------------------
-            // SEND REQUEST
-            // -------------------------------------------------
+
 
             HttpResponse<String> response =
                     httpClient.send(
@@ -545,9 +498,7 @@ public class PaymentController {
                     );
 
 
-            // -------------------------------------------------
-            // PRINT HTTP STATUS
-            // -------------------------------------------------
+
 
             System.out.println(
                     "HTTP Status : "
@@ -555,9 +506,7 @@ public class PaymentController {
             );
 
 
-            // -------------------------------------------------
-            // PRINT RAW RESPONSE
-            // -------------------------------------------------
+
 
             System.out.println(
                     "Server Response : "
@@ -565,9 +514,7 @@ public class PaymentController {
             );
 
 
-            // -------------------------------------------------
-            // HTTP ERROR
-            // -------------------------------------------------
+
 
             if (
                     response.statusCode() != 200
@@ -586,9 +533,7 @@ public class PaymentController {
             }
 
 
-            // -------------------------------------------------
-            // PARSE JSON
-            // -------------------------------------------------
+
 
             JSONObject json =
                     new JSONObject(
@@ -596,9 +541,7 @@ public class PaymentController {
                     );
 
 
-            // -------------------------------------------------
-            // GET STATUS
-            // -------------------------------------------------
+
 
             String status =
                     json.optString(
@@ -613,9 +556,7 @@ public class PaymentController {
             );
 
 
-            // =================================================
-            // SUCCESS
-            // =================================================
+
 
             if (
                     "SUCCESS".equalsIgnoreCase(
@@ -637,16 +578,12 @@ public class PaymentController {
                 );
 
 
-                // -------------------------------------------------
-                // STOP POLLING
-                // -------------------------------------------------
+
 
                 stopPaymentPolling();
 
 
-                // -------------------------------------------------
-                // GET PAYMENT DATA
-                // -------------------------------------------------
+
 
                 String paymentId =
                         json.optString(
@@ -690,9 +627,7 @@ public class PaymentController {
                 );
 
 
-                // -------------------------------------------------
-                // JAVA FX SUCCESS
-                // -------------------------------------------------
+
 
                 paymentSuccessful(
                         paymentId,
@@ -704,9 +639,7 @@ public class PaymentController {
             }
 
 
-            // =================================================
-            // FAILED
-            // =================================================
+
 
             if (
                     "FAILED".equalsIgnoreCase(
@@ -731,9 +664,7 @@ public class PaymentController {
             }
 
 
-            // =================================================
-            // PENDING
-            // =================================================
+
 
             System.out.println(
                     "Payment still pending..."
@@ -746,10 +677,7 @@ public class PaymentController {
 
         } catch (Exception e) {
 
-            // -------------------------------------------------
-            // IMPORTANT:
-            // NOW WE SHOW THE REAL ERROR
-            // -------------------------------------------------
+
 
             System.out.println();
             System.out.println(
@@ -784,9 +712,7 @@ public class PaymentController {
     }
 
 
-    // =========================================================
-    // STOP PAYMENT POLLING
-    // =========================================================
+
 
     private void stopPaymentPolling() {
 
@@ -809,9 +735,7 @@ public class PaymentController {
     }
 
 
-    // =========================================================
-    // PAYMENT SUCCESS
-    // =========================================================
+
 
     public void paymentSuccessful(
             String paymentId,
@@ -862,9 +786,7 @@ public class PaymentController {
     }
 
 
-    // =========================================================
-    // SUCCESS ALERT
-    // =========================================================
+
 
     private void showSuccess(
             String paymentId,
@@ -905,9 +827,7 @@ public class PaymentController {
     }
 
 
-    // =========================================================
-    // ERROR
-    // =========================================================
+
 
     public void showError(
             String message
@@ -941,9 +861,7 @@ public class PaymentController {
     }
 
 
-    // =========================================================
-    // SHUTDOWN
-    // =========================================================
+
 
     public void shutdown() {
 

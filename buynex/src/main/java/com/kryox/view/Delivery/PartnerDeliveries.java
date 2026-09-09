@@ -1,8 +1,10 @@
 package com.kryox.view.Delivery;
 
 
-import com.kryox.config.DelivrayFirebaseConfig;
 
+
+
+import com.kryox.config.DelivrayFirebaseConfig;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.kryox.view.Customer.Homepage;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -18,7 +20,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -41,48 +42,74 @@ public class PartnerDeliveries {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EEE5DE";
     private static final String BORDER_COLOR = "#f0edf2";
-    private static final String SIDEBAR_BG = "#ffffff";
+    private static final String SIDEBAR_BG = "#EBCCB7";
 
     private static ListenerRegistration orderListenerRegistration;
 
-    // =========================================================================
-    // DYNAMIC DATA MODELS
-    // =========================================================================
     public static class DeliveryQueueData {
         public String partnerName;
         public String partnerTier;
         public int availableRequestsCount = 0;
+        public String activeFilter = "ALL";
         public List<OrderSummary> queueOrders = new ArrayList<>();
         public OrderDetail activeOrder;
 
         public DeliveryQueueData() {
-            this.partnerName = PartnerConstants.FULL_NAME;
-            this.partnerTier = PartnerConstants.PARTNER_TIER;
-            loadDummyOrders();
+            this.partnerName = PartnerConstants.FULL_NAME != null && !PartnerConstants.FULL_NAME.isBlank() ? PartnerConstants.FULL_NAME : "Rahul Sharma (Rider)";
+            this.partnerTier = PartnerConstants.PARTNER_TIER != null && !PartnerConstants.PARTNER_TIER.isBlank() ? PartnerConstants.PARTNER_TIER : "Standard Partner";
+            loadFirestoreOrders();
         }
 
-        public void loadDummyOrders() {
+        public void loadFirestoreOrders() {
             queueOrders.clear();
-            queueOrders.add(new OrderSummary(
-                    "BN-4920", "ASSIGNED", "Premium Grocery Haul",
-                    "Sarah Jenkins", "1.2 km", "Whole Foods Market",
-                    "4920 Central Avenue", true));
-            queueOrders.add(new OrderSummary(
-                    "BN-5102", "AVAILABLE", "Tech Accessories",
-                    "Mark Robertson", "3.8 km", "Digital Horizon Store",
-                    "88 Tech Plaza", false));
-            queueOrders.add(new OrderSummary(
-                    "BN-5088", "AVAILABLE", "Organic Bakery Box",
-                    "Elena Glass", "0.6 km", "The Artisan Oven",
-                    "12 Baker Street", false));
+            activeOrder = null;
+            try {
+                var firestoreRequests = com.kryox.controller.Shopkeeper.OrderController.getDeliveryRequests();
+                if (firestoreRequests != null && !firestoreRequests.isEmpty()) {
+                    boolean first = true;
+                    for (com.kryox.model.Shopkeeper.OrderModel om : firestoreRequests) {
+                        String st = om.getOrderStatus();
+                        if (st == null || (!"REQUESTING_DELIVERY".equalsIgnoreCase(st) && !"OUT_FOR_DELIVERY".equalsIgnoreCase(st) && !"ACCEPTED".equalsIgnoreCase(st))) {
+                            continue;
+                        }
 
-            activeOrder = new OrderDetail(
-                    "BN-4920", "Assigned to you 5 mins ago",
-                    "Whole Foods Market", "4920 Central Ave, Plaza District\nFloor 1, North Wing Entrance",
-                    "Private Residence", "102 Highland Terrace, Apt 4C\nSecurity Code: 0842",
-                    "14 Minutes", 124.50, 8, "PENDING");
+                        String oid = om.getOrderId() != null ? om.getOrderId() : "BN-1001";
+                        String statusBadge = "REQUESTING_DELIVERY".equalsIgnoreCase(st) ? "REQUESTED" : ("OUT_FOR_DELIVERY".equalsIgnoreCase(st) ? "ASSIGNED" : "ACCEPTED");
+
+                        String title = "Package (" + (om.getProducts() != null ? om.getProducts().size() : 1) + " Items)";
+                        if (om.getProducts() != null && !om.getProducts().isEmpty() && om.getProducts().get(0) != null) {
+                            String pName = om.getProducts().get(0).getProductName();
+                            if (pName != null && !pName.isBlank()) {
+                                title = pName;
+                            }
+                        }
+
+                        String cName = om.getCustomerName() != null && !om.getCustomerName().isBlank() ? om.getCustomerName() : "Customer";
+                        String sName = om.getShopName() != null && !om.getShopName().isBlank() ? om.getShopName() : ("Shopkeeper #" + (om.getShopkeeperUid() != null ? om.getShopkeeperUid() : "Default"));
+                        String sAddr = String.format("Lat %.4f, Lng %.4f • 1.5km Zone", om.getShopLat(), om.getShopLng());
+                        String cAddr = om.getCustomerPhone() != null && !om.getCustomerPhone().isBlank() ? ("Phone: " + om.getCustomerPhone() + " • Customer Residence") : "Customer Home Address";
+                        String dist = (om.getRiderDistance() != null && !om.getRiderDistance().isBlank()) ? om.getRiderDistance() : "0.8 km";
+
+                        OrderSummary summary = new OrderSummary(oid, statusBadge, title, cName, dist, sName, sAddr, first);
+                        summary.rawOrder = om;
+                        queueOrders.add(summary);
+
+                        if (first) {
+                            activeOrder = new OrderDetail(
+                                oid, "Received recently", sName, sAddr + "\nShopkeeper Pickup Location",
+                                cName + " (Residence)", cAddr, "14 Minutes", om.getTotalAmount() > 0 ? om.getTotalAmount() : 150.00,
+                                om.getProducts() != null ? om.getProducts().size() : 1, st
+                            );
+                            activeOrder.rawOrder = om;
+                            first = false;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             availableRequestsCount = queueOrders.size();
         }
@@ -97,6 +124,7 @@ public class PartnerDeliveries {
         public String storeName;
         public String storeAddress;
         public boolean isSelected;
+        public com.kryox.model.Shopkeeper.OrderModel rawOrder;
 
         public OrderSummary(String id, String statusBadge, String title, String customerName, String distance,
                             String storeName, String storeAddress, boolean isSelected) {
@@ -122,6 +150,7 @@ public class PartnerDeliveries {
         public double totalValue;
         public int itemCount;
         public String orderStatus;
+        public com.kryox.model.Shopkeeper.OrderModel rawOrder;
 
         public OrderDetail(String id, String assignedTime, String pickupStore, String pickupDetails,
                            String deliveryName, String deliveryDetails, String etaText, double totalValue,
@@ -139,9 +168,6 @@ public class PartnerDeliveries {
         }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS
-    // =========================================================================
     public static Scene partnerDeliveriesScene() {
         DeliveryQueueData data = new DeliveryQueueData();
         Scene scene = partnerDeliveriesScene(data);
@@ -170,19 +196,17 @@ public class PartnerDeliveries {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
-    }
-
-    private static void attachRealtimeOrderListener(DeliveryQueueData data) {
+    }    private static void attachRealtimeOrderListener(DeliveryQueueData data) {
         try {
             if (orderListenerRegistration != null) {
                 orderListenerRegistration.remove();
             }
 
-            Firestore db = DelivrayFirebaseConfig.getFireStore();
-            orderListenerRegistration = db.collection("orders").addSnapshotListener((snapshots, error) -> {
+            Firestore db = com.kryox.config.Firebaseconfig.gFirestore();
+            orderListenerRegistration = db.collection("Orders").addSnapshotListener((snapshots, error) -> {
                 if (error != null) {
                     System.err.println("Firestore Listener Error: " + error.getMessage());
                     return;
@@ -195,50 +219,52 @@ public class PartnerDeliveries {
 
                     if (snapshots != null && !snapshots.isEmpty()) {
                         for (DocumentSnapshot doc : snapshots.getDocuments()) {
-                            String status = doc.getString("status");
-                            if (status == null) status = "PLACED";
+                            try {
+                                com.kryox.model.Shopkeeper.OrderModel om = doc.toObject(com.kryox.model.Shopkeeper.OrderModel.class);
+                                if (om == null) om = new com.kryox.model.Shopkeeper.OrderModel();
+                                om.setOrderId(doc.getId());
 
-                            String partnerId = doc.getString("deliveryPartnerId");
-                            boolean isForMe = partnerId == null || partnerId.isEmpty()
-                                    || (PartnerConstants.UID != null && partnerId.equals(PartnerConstants.UID));
+                                String status = om.getOrderStatus() != null ? om.getOrderStatus() : doc.getString("status");
+                                if (status == null) status = "NEW";
 
-                            if (!"DELIVERED".equalsIgnoreCase(status) && !"CANCELLED".equalsIgnoreCase(status) && isForMe) {
-                                String orderId = doc.getId();
-                                String title = doc.getString("orderTitle") != null ? doc.getString("orderTitle") : "Express Package";
-                                String customerName = doc.getString("customerName") != null ? doc.getString("customerName") : "Customer";
-                                String distance = doc.getString("distance") != null ? doc.getString("distance") : "1.8 km";
-                                String shopName = doc.getString("shopName") != null ? doc.getString("shopName") : "Local Store";
-                                String shopAddress = doc.getString("shopAddress") != null ? doc.getString("shopAddress") : "Pune, Maharashtra";
-                                String custAddress = doc.getString("customerAddress") != null ? doc.getString("customerAddress") : "Pune, Maharashtra";
+                                if ("REQUESTING_DELIVERY".equalsIgnoreCase(status) || "OUT_FOR_DELIVERY".equalsIgnoreCase(status) || "ACCEPTED".equalsIgnoreCase(status)) {
+                                    String orderId = doc.getId();
+                                    String title = "Express Package";
+                                    if (om.getProducts() != null && !om.getProducts().isEmpty() && om.getProducts().get(0) != null) {
+                                        title = om.getProducts().get(0).getProductName();
+                                    } else if (doc.getString("orderTitle") != null) {
+                                        title = doc.getString("orderTitle");
+                                    }
 
-                                double totalAmount = 150.00;
-                                if (doc.get("totalAmount") != null) {
-                                    try {
-                                        totalAmount = Double.parseDouble(doc.get("totalAmount").toString());
-                                    } catch (Exception ignored) {}
-                                }
+                                    String customerName = om.getCustomerName() != null && !om.getCustomerName().isBlank() ? om.getCustomerName() : (doc.getString("customerName") != null ? doc.getString("customerName") : "Customer");
+                                    String distance = om.getRiderDistance() != null && !om.getRiderDistance().isBlank() ? om.getRiderDistance() : (doc.getString("distance") != null ? doc.getString("distance") : "0.8 km");
+                                    String shopName = om.getShopName() != null && !om.getShopName().isBlank() ? om.getShopName() : (doc.getString("shopName") != null ? doc.getString("shopName") : "Local Store");
+                                    String shopAddress = String.format("Lat %.4f, Lng %.4f • 1.5km Zone", om.getShopLat(), om.getShopLng());
+                                    String custAddress = om.getCustomerPhone() != null && !om.getCustomerPhone().isBlank() ? ("Phone: " + om.getCustomerPhone()) : "Customer Delivery Location";
 
-                                int itemsCount = 3;
-                                if (doc.get("itemCount") != null) {
-                                    try {
-                                        itemsCount = Integer.parseInt(doc.get("itemCount").toString());
-                                    } catch (Exception ignored) {}
-                                }
+                                    double totalAmount = om.getTotalAmount() > 0 ? om.getTotalAmount() : 150.00;
+                                    int itemsCount = om.getProducts() != null ? om.getProducts().size() : 1;
+                                    String statusBadge = "REQUESTING_DELIVERY".equalsIgnoreCase(status) ? "REQUESTED" : ("OUT_FOR_DELIVERY".equalsIgnoreCase(status) ? "ASSIGNED" : ("ACCEPTED".equalsIgnoreCase(status) ? "ACCEPTED" : "AVAILABLE"));
 
-                                boolean isSelected = orderId.equals(currentActiveId) || (liveOrders.isEmpty() && currentActiveId.isEmpty());
+                                    boolean isSelected = orderId.equals(currentActiveId) || (liveOrders.isEmpty() && currentActiveId.isEmpty());
 
-                                OrderSummary summary = new OrderSummary(
-                                        orderId, status, title, customerName, distance, shopName, shopAddress, isSelected
-                                );
-                                liveOrders.add(summary);
-
-                                if (isSelected) {
-                                    matchedActive = new OrderDetail(
-                                            orderId, "Received just now", shopName, shopAddress,
-                                            customerName + " (Residence)", custAddress,
-                                            "12 Minutes", totalAmount, itemsCount, status
+                                    OrderSummary summary = new OrderSummary(
+                                            orderId, statusBadge, title, customerName, distance, shopName, shopAddress, isSelected
                                     );
+                                    summary.rawOrder = om;
+                                    liveOrders.add(summary);
+
+                                    if (isSelected) {
+                                        matchedActive = new OrderDetail(
+                                                orderId, "Received just now", shopName, shopAddress,
+                                                customerName + " (Residence)", custAddress,
+                                                "12 Minutes", totalAmount, itemsCount, status
+                                        );
+                                        matchedActive.rawOrder = om;
+                                    }
                                 }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
                         }
                     }
@@ -254,15 +280,23 @@ public class PartnerDeliveries {
                             data.activeOrder = new OrderDetail(
                                     first.id, "Received just now", first.storeName, first.storeAddress,
                                     first.customerName + " (Residence)", "Delivery Destination",
-                                    "12 Minutes", 150.00, 3, first.statusBadge
+                                    "12 Minutes", first.rawOrder != null && first.rawOrder.getTotalAmount() > 0 ? first.rawOrder.getTotalAmount() : 150.00,
+                                    first.rawOrder != null && first.rawOrder.getProducts() != null ? first.rawOrder.getProducts().size() : 3,
+                                    first.statusBadge
                             );
+                            data.activeOrder.rawOrder = first.rawOrder;
+                        }
+
+                        if (Homepage.HomepageStage != null) {
+                            Homepage.HomepageStage.setScene(partnerDeliveriesScene(data));
                         }
                     } else {
-                        data.loadDummyOrders();
-                    }
-
-                    if (Homepage.HomepageStage != null) {
-                        Homepage.HomepageStage.setScene(partnerDeliveriesScene(data));
+                        data.queueOrders.clear();
+                        data.availableRequestsCount = 0;
+                        data.activeOrder = null;
+                        if (Homepage.HomepageStage != null) {
+                            Homepage.HomepageStage.setScene(partnerDeliveriesScene(data));
+                        }
                     }
                 });
             });
@@ -275,32 +309,17 @@ public class PartnerDeliveries {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                         "-fx-border-color: " + BORDER_COLOR + ";" +
                         "-fx-border-width: 0 0 1 0;" +
                         "-fx-padding: 0 35 0 30;");
 
-        HBox searchContainer = new HBox(8);
-        searchContainer.setAlignment(Pos.CENTER_LEFT);
-        searchContainer.setMaxWidth(360);
-        searchContainer.setPrefHeight(34);
-        searchContainer.setPadding(new Insets(0, 12, 0, 12));
-        searchContainer.setStyle(
-                "-fx-background-color: #f8f8fb;" +
-                        "-fx-border-color: #e5e7eb;" +
-                        "-fx-border-radius: 18;" +
-                        "-fx-background-radius: 18;");
-
-        Label searchIcon = new Label("🔍");
-        searchIcon.setStyle("-fx-font-size: 11px; -fx-text-fill: #9ca3af;");
-
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search orders...");
-        searchField.setStyle(
-                "-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 12px; -fx-prompt-text-fill: #9ca3af;");
-        HBox.setHgrow(searchField, Priority.ALWAYS);
-        searchContainer.getChildren().addAll(searchIcon, searchField);
-        topBar.setCenter(searchContainer);
+        Text title = new Text("My Deliveries");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #a94717;");
+        HBox leftGroup = new HBox(title);
+        leftGroup.setAlignment(Pos.CENTER_LEFT);
+        leftGroup.setStyle("-fx-background-color: #EBCCB7;");
+        topBar.setLeft(leftGroup);
 
         HBox rightIcons = new HBox(16);
         rightIcons.setAlignment(Pos.CENTER_RIGHT);
@@ -498,11 +517,43 @@ public class PartnerDeliveries {
         main.setPadding(new Insets(24, 30, 40, 30));
         main.setFillWidth(true);
 
+        List<OrderSummary> filteredOrders = new ArrayList<>(data.queueOrders);
+
+        // Ensure activeOrder is synced with filteredOrders
+        boolean activeFound = false;
+        if (data.activeOrder != null) {
+            for (OrderSummary os : filteredOrders) {
+                if (os.id.equalsIgnoreCase(data.activeOrder.id)) {
+                    activeFound = true;
+                    os.isSelected = true;
+                } else {
+                    os.isSelected = false;
+                }
+            }
+        }
+        if (!activeFound && !filteredOrders.isEmpty()) {
+            OrderSummary first = filteredOrders.get(0);
+            for (OrderSummary os : filteredOrders) {
+                os.isSelected = os == first;
+            }
+            data.activeOrder = new OrderDetail(
+                    first.id, "Assigned to you",
+                    first.storeName, first.storeAddress,
+                    first.customerName + " (Residence)", "Selected Delivery Destination",
+                    "12 Minutes", first.rawOrder != null && first.rawOrder.getTotalAmount() > 0 ? first.rawOrder.getTotalAmount() : 150.00,
+                    first.rawOrder != null && first.rawOrder.getProducts() != null ? first.rawOrder.getProducts().size() : 3,
+                    first.statusBadge);
+            data.activeOrder.rawOrder = first.rawOrder;
+        } else if (filteredOrders.isEmpty()) {
+            data.activeOrder = null;
+        }
+
         BorderPane headerRow = new BorderPane();
         VBox titleBox = new VBox(2);
         Text title = new Text("Active Queue");
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: #111827;");
-        Label subTitle = new Label(data.availableRequestsCount + " Requests Available");
+
+        Label subTitle = new Label(filteredOrders.size() + " Requests Available");
         subTitle.setStyle("-fx-font-size: 11px; -fx-text-fill: #6b7280;");
         titleBox.getChildren().addAll(title, subTitle);
         headerRow.setLeft(titleBox);
@@ -510,26 +561,19 @@ public class PartnerDeliveries {
         HBox filterPills = new HBox(8);
         filterPills.setAlignment(Pos.CENTER_RIGHT);
 
-        Button btnNearMe = new Button("Near Me");
-        btnNearMe.setStyle(
-                "-fx-background-color:linear-gradient(to right, #B84208, #F36A00); -fx-text-fill: #ffffff; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 14; -fx-padding: 5 14 5 14; -fx-cursor: hand;");
+        String activeStyle = "-fx-background-color:linear-gradient(to right, #B84208, #F36A00); -fx-text-fill: #ffffff; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 14; -fx-padding: 5 14 5 14; -fx-cursor: hand;";
 
-        Button btnHighValue = new Button("High Value");
-        btnHighValue.setStyle(
-                "-fx-background-color:linear-gradient(to right, #B84208, #F36A00); -fx-text-fill: #ffffff; -fx-font-size: 11px; -fx-font-weight: bold; -fx-background-radius: 14; -fx-padding: 5 14 5 14; -fx-cursor: hand;");
+        Button btnAll = new Button("All");
+        btnAll.setStyle(activeStyle);
 
-        btnNearMe.setOnAction(e -> {
+        btnAll.setOnAction(e -> {
+            data.activeFilter = "ALL";
             if (Homepage.HomepageStage != null) {
-                Homepage.HomepageStage.setScene(NearbyDeliveries.nearbyDeliveriesScene());
-            }
-        });
-        btnHighValue.setOnAction(e -> {
-            if (Homepage.HomepageStage != null) {
-                Homepage.HomepageStage.setScene(HighValueDeliveries.highValueDeliveriesScene());
+                Homepage.HomepageStage.setScene(partnerDeliveriesScene(data));
             }
         });
 
-        filterPills.getChildren().addAll(btnNearMe, btnHighValue);
+        filterPills.getChildren().add(btnAll);
         headerRow.setRight(filterPills);
 
         HBox bodySplit = new HBox(22);
@@ -540,8 +584,28 @@ public class PartnerDeliveries {
         queueCol.setMinWidth(360);
         queueCol.setMaxWidth(360);
 
-        for (OrderSummary order : data.queueOrders) {
-            queueCol.getChildren().add(createQueueOrderCard(data, order));
+        if (filteredOrders.isEmpty()) {
+            VBox emptyBox = new VBox(10);
+            emptyBox.setAlignment(Pos.CENTER);
+            emptyBox.setPadding(new Insets(30, 16, 30, 16));
+            emptyBox.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: " + BORDER_COLOR + "; -fx-border-radius: 10;");
+
+            Label emptyIcon = new Label("📦");
+            emptyIcon.setStyle("-fx-font-size: 26px;");
+
+            Label emptyText = new Label("No Requested Orders");
+            emptyText.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #374151;");
+
+            Label emptySub = new Label("Only orders broadcasted by shopkeepers with 'REQUESTING_DELIVERY' status will appear here to accept.");
+            emptySub.setStyle("-fx-font-size: 10px; -fx-text-fill: #9ca3af; -fx-text-alignment: center;");
+            emptySub.setWrapText(true);
+
+            emptyBox.getChildren().addAll(emptyIcon, emptyText, emptySub);
+            queueCol.getChildren().add(emptyBox);
+        } else {
+            for (OrderSummary order : filteredOrders) {
+                queueCol.getChildren().add(createQueueOrderCard(data, order));
+            }
         }
 
         VBox detailsCol = new VBox(16);
@@ -551,11 +615,37 @@ public class PartnerDeliveries {
             detailsCol.getChildren().addAll(
                     createMapSnapshotCard(data.activeOrder),
                     createOrderDetailsCard(data, data.activeOrder));
+        } else {
+            VBox emptyDetails = new VBox(12);
+            emptyDetails.setAlignment(Pos.CENTER);
+            emptyDetails.setPadding(new Insets(60, 20, 60, 20));
+            emptyDetails.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: " + BORDER_COLOR + ";");
+
+            Label pIcon = new Label("📑");
+            pIcon.setStyle("-fx-font-size: 32px;");
+
+            Label pText = new Label("No Active Order Selected");
+            pText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #6b7280;");
+
+            emptyDetails.getChildren().addAll(pIcon, pText);
+            detailsCol.getChildren().add(emptyDetails);
         }
 
         bodySplit.getChildren().addAll(queueCol, detailsCol);
         main.getChildren().addAll(headerRow, bodySplit);
         return main;
+    }
+
+    private static double parseDistanceKm(String distStr) {
+        if (distStr == null || distStr.isBlank()) return 1.0;
+        try {
+            String cleaned = distStr.replaceAll("[^0-9.]", " ").trim();
+            String[] parts = cleaned.split("\\s+");
+            if (parts.length > 0 && !parts[0].isEmpty()) {
+                return Double.parseDouble(parts[0]);
+            }
+        } catch (Exception ignored) {}
+        return 1.0;
     }
 
     private static VBox createQueueOrderCard(DeliveryQueueData data, OrderSummary order) {
@@ -621,11 +711,17 @@ public class PartnerDeliveries {
             }
             order.isSelected = true;
 
+            var om = order.rawOrder;
+            String cAddr = (om != null && om.getCustomerPhone() != null && !om.getCustomerPhone().isBlank()) ? ("Phone: " + om.getCustomerPhone()) : "Selected Delivery Destination";
+            double amt = (om != null && om.getTotalAmount() > 0) ? om.getTotalAmount() : 150.00;
+            int itemsCount = (om != null && om.getProducts() != null && !om.getProducts().isEmpty()) ? om.getProducts().size() : 1;
+
             data.activeOrder = new OrderDetail(
-                    order.id, "Assigned to you",
+                    order.id, "Received recently",
                     order.storeName, order.storeAddress,
-                    order.customerName + " (Residence)", "Selected Delivery Destination",
-                    "12 Minutes", 150.00, 3, order.statusBadge);
+                    order.customerName + " (Residence)", cAddr,
+                    "12 Minutes", amt, itemsCount, order.statusBadge);
+            data.activeOrder.rawOrder = om;
 
             if (Homepage.HomepageStage != null) {
                 Homepage.HomepageStage.setScene(partnerDeliveriesScene(data));
@@ -699,7 +795,14 @@ public class PartnerDeliveries {
                         "-fx-cursor: hand;");
         btnOpenMaps.setOnAction(e -> {
             if (Homepage.HomepageStage != null) {
-                Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene());
+                PartnerNavigation.TripData trip = new PartnerNavigation.TripData();
+                trip.orderNumber = "Order #" + (active.id != null ? active.id : "BN-1001");
+                trip.pickupName = active.pickupStore != null ? active.pickupStore : "Local Store";
+                trip.pickupAddress = active.pickupDetails != null ? active.pickupDetails : "Shopkeeper Location";
+                trip.dropoffName = active.deliveryName != null ? active.deliveryName : "Customer Residence";
+                trip.dropoffAddress = active.deliveryDetails != null ? active.deliveryDetails : "Customer Destination";
+                trip.orderEarnings = active.totalValue > 0 ? active.totalValue : 150.00;
+                Homepage.HomepageStage.setScene(PartnerNavigation.partnerNavigationScene(trip));
             }
         });
         hud.setRight(btnOpenMaps);
@@ -763,11 +866,23 @@ public class PartnerDeliveries {
                 active.orderStatus = "ACCEPTED";
                 new Thread(() -> {
                     try {
-                        Firestore db = DelivrayFirebaseConfig.getFireStore();
-                        Map<String, Object> update = new HashMap<>();
-                        update.put("status", "ACCEPTED");
-                        update.put("deliveryPartnerId", PartnerConstants.UID);
-                        db.collection("orders").document(active.id).update(update).get();
+                        if (active.rawOrder != null) {
+                            com.kryox.controller.Shopkeeper.OrderController.assignDeliveryPartner(
+                                active.rawOrder,
+                                data.partnerName != null ? data.partnerName : "Rahul Sharma (Rider)",
+                                "+91 98765 43210",
+                                "0.8 km (1.5km radius)"
+                            );
+                        } else {
+                            com.kryox.model.Shopkeeper.OrderModel om = new com.kryox.model.Shopkeeper.OrderModel();
+                            om.setOrderId(active.id);
+                            com.kryox.controller.Shopkeeper.OrderController.assignDeliveryPartner(
+                                om,
+                                data.partnerName != null ? data.partnerName : "Rahul Sharma (Rider)",
+                                "+91 98765 43210",
+                                "0.8 km (1.5km radius)"
+                            );
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -850,11 +965,24 @@ public class PartnerDeliveries {
 
         HBox thumbs = new HBox(8);
         thumbs.setAlignment(Pos.CENTER_LEFT);
-        thumbs.getChildren().addAll(
-                createThumbPill("🍞"),
-                createThumbPill("🥛"),
-                createThumbPill("🍎"),
-                createMorePill("+5"));
+
+        if (active.rawOrder != null && active.rawOrder.getProducts() != null && !active.rawOrder.getProducts().isEmpty()) {
+            var items = active.rawOrder.getProducts();
+            int limit = Math.min(items.size(), 4);
+            for (int i = 0; i < limit; i++) {
+                var it = items.get(i);
+                if (it != null) {
+                    String pName = it.getProductName() != null && !it.getProductName().isBlank() ? it.getProductName() : "Product";
+                    int qty = it.getQuantity() > 0 ? it.getQuantity() : 1;
+                    thumbs.getChildren().add(createProductPill(qty, pName, it.getImageUrl()));
+                }
+            }
+            if (items.size() > 4) {
+                thumbs.getChildren().add(createMorePill("+" + (items.size() - 4)));
+            }
+        } else {
+            thumbs.getChildren().add(createProductPill(1, "Items Package", null));
+        }
 
         pkgBox.getChildren().addAll(pkgMeta, thumbs);
 
@@ -935,6 +1063,33 @@ public class PartnerDeliveries {
 
         step.getChildren().addAll(indicator, meta);
         return step;
+    }
+
+    private static HBox createProductPill(int qty, String name, String imgUrl) {
+        HBox p = new HBox(6);
+        p.setAlignment(Pos.CENTER_LEFT);
+        p.setPadding(new Insets(4, 10, 4, 10));
+        p.setStyle("-fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8; -fx-background-radius: 8;");
+
+        if (imgUrl != null && !imgUrl.isBlank()) {
+            try {
+                ImageView iv = new ImageView(new Image(imgUrl, 24, 24, true, true, true));
+                p.getChildren().add(iv);
+            } catch (Exception ignored) {
+                Label l = new Label("📦");
+                l.setStyle("-fx-font-size: 12px;");
+                p.getChildren().add(l);
+            }
+        } else {
+            Label l = new Label("📦");
+            l.setStyle("-fx-font-size: 12px;");
+            p.getChildren().add(l);
+        }
+
+        Label text = new Label(qty + "x " + name);
+        text.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #374151;");
+        p.getChildren().add(text);
+        return p;
     }
 
     private static StackPane createThumbPill(String emoji) {

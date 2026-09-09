@@ -33,19 +33,19 @@ public class ShopkeeperRegistration {
         BorderPane borderPane = new BorderPane();
 
         borderPane.setStyle(
-                "-fx-background-color: #F8FBF8;");
+                "-fx-background-color: #EEE5DF;");
 
-        // =========================================================
         // HEADER
-        // =========================================================
 
         HBox headerMainBox = ViewConstants.loginHeader();
 
+        // Header background
+        headerMainBox.setStyle(
+                "-fx-background-color: #EBCCB7;");
+
         borderPane.setTop(headerMainBox);
 
-        // =========================================================
         // PAGE INTRODUCTION
-        // =========================================================
 
         Text shopPartnerText1 = new Text(
                 "Become a BuyNeX Shop Partner");
@@ -115,9 +115,7 @@ public class ShopkeeperRegistration {
         introHBox1.setMaxWidth(
                 800);
 
-        // =========================================================
         // PROGRESS LINE
-        // =========================================================
 
         HBox progressMainBox = new HBox();
 
@@ -157,9 +155,7 @@ public class ShopkeeperRegistration {
         pageIntroBox.setPrefWidth(
                 800);
 
-        // =========================================================
         // RIGHT IMAGE
-        // =========================================================
 
         Image image = new Image(
                 "assets\\images\\ShopKeeperLogin.png");
@@ -193,9 +189,7 @@ public class ShopkeeperRegistration {
         imageView.setClip(
                 imageClip);
 
-        // =========================================================
         // RIGHT IMAGE TEXT
-        // =========================================================
 
         Text belowImageText1 = new Text(
                 "Empowering Local Business");
@@ -244,9 +238,7 @@ public class ShopkeeperRegistration {
                 "-fx-background-color: #FFF0E9;" +
                         "-fx-background-radius: 0 20px 20px 0;");
 
-        // =========================================================
         // EMAIL ADDRESS
-        // =========================================================
 
         Text text2 = new Text(
                 "Email Address *");
@@ -279,9 +271,7 @@ public class ShopkeeperRegistration {
                         "-fx-border-radius: 9px;" +
                         "-fx-background-radius: 9px;");
 
-        // =========================================================
         // VERIFY EMAIL BUTTON
-        // =========================================================
 
         Button verifyButton = new Button(
                 "Verify");
@@ -312,9 +302,7 @@ public class ShopkeeperRegistration {
         emailBox.setAlignment(
                 Pos.CENTER_LEFT);
 
-        // =========================================================
         // PASSWORD
-        // =========================================================
 
         Text text3 = new Text(
                 "Password *");
@@ -347,9 +335,7 @@ public class ShopkeeperRegistration {
                         "-fx-border-radius: 9px;" +
                         "-fx-background-radius: 9px;");
 
-        // =========================================================
         // CONFIRM PASSWORD
-        // =========================================================
 
         Text text4 = new Text(
                 "Confirm Password *");
@@ -382,9 +368,7 @@ public class ShopkeeperRegistration {
                         "-fx-border-radius: 9px;" +
                         "-fx-background-radius: 9px;");
 
-        // =========================================================
         // NEXT BUTTON
-        // =========================================================
 
         Button nextButton = new Button(
                 "Next  →");
@@ -414,9 +398,7 @@ public class ShopkeeperRegistration {
         nextButtonBox.setAlignment(
                 Pos.CENTER_RIGHT);
 
-        // =========================================================
         // REGISTER BUTTON ACTION
-        // =========================================================
 
         verifyButton.setOnAction(e -> {
 
@@ -437,9 +419,7 @@ public class ShopkeeperRegistration {
                     nextButton);
         });
 
-        // =========================================================
         // NEXT BUTTON ACTION
-        // =========================================================
 
         nextButton.setOnAction(e -> {
 
@@ -458,9 +438,7 @@ public class ShopkeeperRegistration {
                     confirmPasswordValue);
         });
 
-        // =========================================================
         // BACK TO LOGIN BUTTON
-        // =========================================================
 
         Button backToLoginButton = new Button(
                 "←  Back to Login");
@@ -505,9 +483,7 @@ public class ShopkeeperRegistration {
                     ShopkeeperLogin.loginscene());
         });
 
-        // =========================================================
         // BACK BUTTON BOX
-        // =========================================================
 
         HBox backToLoginBox = new HBox(
                 backToLoginButton);
@@ -522,9 +498,7 @@ public class ShopkeeperRegistration {
                         3,
                         0));
 
-        // =========================================================
         // SPACER
-        // =========================================================
 
         Region backSpacer = new Region();
 
@@ -532,9 +506,7 @@ public class ShopkeeperRegistration {
                 backSpacer,
                 Priority.ALWAYS);
 
-        // =========================================================
         // FORM
-        // =========================================================
 
         VBox getInfoBox = new VBox(
                 5,
@@ -573,9 +545,7 @@ public class ShopkeeperRegistration {
         getInfoBox.setStyle(
                 "-fx-background-color: #FFFFFF;");
 
-        // =========================================================
         // LEFT SIDE
-        // =========================================================
 
         VBox introVBox2 = new VBox(
                 getInfoBox);
@@ -593,9 +563,7 @@ public class ShopkeeperRegistration {
                 "-fx-background-color: #FFFFFF;" +
                         "-fx-background-radius: 20px 0 0 20px;");
 
-        // =========================================================
         // MAIN FORM BOX
-        // =========================================================
 
         HBox inputInfoHBox1 = new HBox(
                 introVBox2,
@@ -610,9 +578,7 @@ public class ShopkeeperRegistration {
         inputInfoHBox1.setAlignment(
                 Pos.CENTER);
 
-        // =========================================================
         // SHADOW
-        // =========================================================
 
         DropShadow shadow = new DropShadow();
 
@@ -638,9 +604,7 @@ public class ShopkeeperRegistration {
         inputInfoHBox1.setEffect(
                 shadow);
 
-        // =========================================================
         // FEATURE 1
-        // =========================================================
 
         Text featureIcon1 = new Text(
                 "ϟ");
@@ -691,9 +655,7 @@ public class ShopkeeperRegistration {
                         "-fx-border-radius: 10px;" +
                         "-fx-background-radius: 10px;");
 
-        // =========================================================
         // FEATURE 2
-        // =========================================================
 
         Text featureIcon2 = new Text(
                 "▣");
@@ -743,9 +705,7 @@ public class ShopkeeperRegistration {
                         "-fx-border-radius: 10px;" +
                         "-fx-background-radius: 10px;");
 
-        // =========================================================
         // FEATURE 3
-        // =========================================================
 
         Text featureIcon3 = new Text(
                 "⌁");
@@ -804,9 +764,7 @@ public class ShopkeeperRegistration {
         featuresBox.setAlignment(
                 Pos.CENTER);
 
-        // =========================================================
         // CENTER MAIN CONTENT
-        // =========================================================
 
         VBox mainVBox1 = new VBox(
                 16,
@@ -818,11 +776,9 @@ public class ShopkeeperRegistration {
                 Pos.TOP_CENTER);
 
         mainVBox1.setStyle(
-                "-fx-background-color: #F8FBF8;");
+                "-fx-background-color: #EEE5DF;");
 
-        // =========================================================
         // COMPLETE PAGE
-        // =========================================================
 
         VBox centerPage = new VBox(
                 mainVBox1);
@@ -833,18 +789,14 @@ public class ShopkeeperRegistration {
         borderPane.setCenter(
                 centerPage);
 
-        // =========================================================
         // FOOTER
-        // =========================================================
 
         VBox footerBox = ViewConstants.footer();
 
         borderPane.setBottom(
                 footerBox);
 
-        // =========================================================
         // SCENE
-        // =========================================================
 
         shopkeeperScene = new Scene(
                 borderPane,
@@ -852,7 +804,7 @@ public class ShopkeeperRegistration {
                 850);
 
         shopkeeperScene.setFill(
-                Color.web("#F8FBF8"));
+                Color.web("#EEE5DF"));
 
         return shopkeeperScene;
     }

@@ -3,12 +3,17 @@ package com.kryox.view.Shopkeeper;
 import org.checkerframework.checker.lock.qual.Holding;
 
 import com.kryox.Main;
+import com.kryox.controller.Shopkeeper.OrderController;
+import com.kryox.model.Shopkeeper.OrderModel;
 import com.kryox.view.Customer.Homepage;
+
+import java.util.ArrayList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
@@ -22,36 +27,31 @@ public class ShopkeeperOrderCompleted {
 
         public static Scene ordersScene() {
 
-                // ============================================================
-                // BORDER PANE
-                // ============================================================
+                // Border Pane
 
                 BorderPane borderPane = new BorderPane();
 
                 borderPane.setStyle(
-                                "-fx-background-color: #F8F7FC;");
+                                "-fx-background-color: #EEE5DF;");
 
-                // ============================================================
-                // HEADER
-                // ============================================================
+                // Header
 
                 HBox headerMainBox = ViewConstants.header();
 
+                // Header background
+                headerMainBox.setStyle(
+                                "-fx-background-color: #EBCCB7;");
+
                 borderPane.setTop(headerMainBox);
 
-                // ============================================================
-                // SIDEBAR
-                // ============================================================
+                // Sidebar
 
                 VBox sidebar = createSidebar();
                 borderPane.setLeft(sidebar);
 
 
 
-                // ============================================================
-                // CENTER
-                // COMPLETED ORDERS PAGE
-                // ============================================================
+                // Center - Completed Orders Page
 
                 VBox centerMain = new VBox();
 
@@ -61,11 +61,9 @@ public class ShopkeeperOrderCompleted {
                 centerMain.setSpacing(15);
 
                 centerMain.setStyle(
-                                "-fx-background-color: #F8F7FC;");
+                                "-fx-background-color: #EEE5DF;");
 
-                // ============================================================
-                // TITLE
-                // ============================================================
+                // Title
 
                 Text pageTitle = new Text("Orders Management");
 
@@ -96,9 +94,7 @@ public class ShopkeeperOrderCompleted {
                                 titleBox,
                                 Priority.ALWAYS);
 
-                // ============================================================
-                // STATUS BUTTONS
-                // ============================================================
+                // Status Buttons
 
                 HBox statusBar = new HBox();
 
@@ -134,9 +130,7 @@ public class ShopkeeperOrderCompleted {
                 Button completedButton = ViewConstants.createStatusButton(
                                 "✓ Completed");
 
-                // ============================================================
-                // BUTTON WIDTHS
-                // ============================================================
+                // Button Widths
 
                 HBox.setHgrow(
                                 newOrderButton,
@@ -158,9 +152,7 @@ public class ShopkeeperOrderCompleted {
                                 completedButton,
                                 Priority.ALWAYS);
 
-                // ============================================================
-                // ADD STATUS BUTTONS
-                // ============================================================
+                // Add Status Buttons
 
                 statusBar.getChildren().addAll(
                                 newOrderButton,
@@ -169,16 +161,12 @@ public class ShopkeeperOrderCompleted {
                                 deliveryButton,
                                 completedButton);
 
-                // ============================================================
-                // COMPLETED SELECTED
-                // ============================================================
+                // Completed Selected
 
                 ViewConstants.setSelectedStatusButton(
                                 completedButton);
 
-                // ============================================================
-                // STATUS BUTTON ACTIONS
-                // ============================================================
+                // Status Button Actions
 
                 newOrderButton.setOnAction(e -> {
 
@@ -210,55 +198,54 @@ public class ShopkeeperOrderCompleted {
                                         "Completed clicked");
                 });
 
-                // ============================================================
-                // COMPLETED ORDER LIST
-                // ============================================================
+                // Completed Order List
 
                 VBox orderList = new VBox(20);
 
                 orderList.setPadding(
                                 new Insets(10, 0, 20, 0));
 
-                // ============================================================
-                // ORDER #4592
-                // ============================================================
+                ArrayList<OrderModel> completedOrders = OrderController.getOrdersByStatus("COMPLETED");
 
-                VBox order4592 = createCompletedOrderCard(
-                                "#4592",
-                                "Sarah Jenkins",
-                                "Oct 24, 2023 • 12:45 PM",
-                                "2x",
-                                "Organic Avocado Toast",
-                                "$24.00",
-                                "1x",
-                                "Cold Brew Coffee",
-                                "$5.50",
-                                "$29.50");
+                if (completedOrders == null || completedOrders.isEmpty()) {
+                        Label noOrdersLabel = new Label("No completed orders yet.");
+                        noOrdersLabel.setStyle("-fx-font-size: 17px; -fx-text-fill: #777777; -fx-padding: 50 0 0 0;");
+                        orderList.getChildren().add(noOrdersLabel);
+                } else {
+                        for (OrderModel order : completedOrders) {
+                                if (order == null) continue;
 
-                // ============================================================
-                // ORDER #4593
-                // ============================================================
+                                String p1Name = "", p1Qty = "", p1Price = "";
+                                String p2Name = "", p2Qty = "", p2Price = "";
 
-                VBox order4593 = createCompletedOrderCard(
-                                "#4593",
-                                "Michael Chen",
-                                "Oct 24, 2023 • 11:30 AM",
-                                "1x",
-                                "Sourdough Loaf",
-                                "$8.00",
-                                "1x",
-                                "Artisanal Butter",
-                                "$6.50",
-                                "$14.50");
+                                if (order.getProducts() != null && !order.getProducts().isEmpty()) {
+                                        var p1 = order.getProducts().get(0);
+                                        p1Name = p1.getProductName() != null ? p1.getProductName() : "";
+                                        p1Qty = p1.getQuantity() + "x";
+                                        p1Price = String.format("₹%.2f", p1.getTotalPrice());
 
-                orderList.getChildren().addAll(
-                                order4592,
-                                order4593);
+                                        if (order.getProducts().size() > 1) {
+                                                var p2 = order.getProducts().get(1);
+                                                p2Name = p2.getProductName() != null ? p2.getProductName() : "";
+                                                p2Qty = p2.getQuantity() + "x";
+                                                p2Price = String.format("₹%.2f", p2.getTotalPrice());
+                                        }
+                                }
 
-                // ============================================================
-                // SCROLL PANE
-                // ONLY ORDER LIST SCROLLS
-                // ============================================================
+                                VBox orderCard = createCompletedOrderCard(
+                                                "#" + (order.getOrderId() != null ? order.getOrderId() : ""),
+                                                order.getCustomerName() != null ? order.getCustomerName() : "Customer",
+                                                order.getOrderDate() != null ? order.getOrderDate() : "Completed",
+                                                p1Qty, p1Name, p1Price,
+                                                p2Qty, p2Name, p2Price,
+                                                String.format("₹%.2f", order.getTotalAmount())
+                                );
+
+                                orderList.getChildren().add(orderCard);
+                        }
+                }
+
+                // Scroll Pane (Only order list scrolls)
 
                 ScrollPane orderScrollPane = new ScrollPane(orderList);
 
@@ -279,34 +266,26 @@ public class ShopkeeperOrderCompleted {
                                 orderScrollPane,
                                 Priority.ALWAYS);
 
-                // ============================================================
-                // ADD CENTER CONTENT
-                // ============================================================
+                // Add Center Content
 
                 centerMain.getChildren().addAll(
                                 titleRow,
                                 statusBar,
                                 orderScrollPane);
 
-                // ============================================================
-                // SET CENTER
-                // ============================================================
+                // Set Center
 
                 borderPane.setCenter(
                                 centerMain);
 
-                // ============================================================
-                // FOOTER
-                // ============================================================
+                // Footer
 
                 VBox footerBox = ViewConstants.footer();
 
                 borderPane.setBottom(
                                 footerBox);
 
-                // ============================================================
-                // SCENE
-                // ============================================================
+                // Scene
 
                 Scene ordersScene = new Scene(
                                 borderPane,
@@ -314,14 +293,12 @@ public class ShopkeeperOrderCompleted {
                                 850);
 
                 ordersScene.setFill(
-                                Color.web("#F8F7FC"));
+                                Color.web("#EEE5DF"));
 
                 return ordersScene;
         }
 
-        // =================================================================
-        // CREATE COMPLETED ORDER CARD
-        // =================================================================
+        // Create Completed Order Card
 
         private static VBox createCompletedOrderCard(
                         String orderNumber,
@@ -335,9 +312,7 @@ public class ShopkeeperOrderCompleted {
                         String price2,
                         String totalAmount) {
 
-                // ============================================================
-                // MAIN CARD
-                // ============================================================
+                // Main Card
 
                 HBox card = new HBox();
 
@@ -368,9 +343,7 @@ public class ShopkeeperOrderCompleted {
 
                 card.setEffect(shadow);
 
-                // ============================================================
-                // COMPLETED LEFT BORDER
-                // ============================================================
+                // Completed Left Border
 
                 VBox completedBorder = new VBox();
 
@@ -380,9 +353,7 @@ public class ShopkeeperOrderCompleted {
                                 "-fx-background-color: #555555;" +
                                                 "-fx-background-radius: 12px 0 0 12px;");
 
-                // ============================================================
-                // LEFT CONTENT
-                // ============================================================
+                // Left Content
 
                 VBox leftContent = new VBox(10);
 
@@ -393,9 +364,7 @@ public class ShopkeeperOrderCompleted {
                                                 18,
                                                 20));
 
-                // ============================================================
-                // ORDER NUMBER + STATUS
-                // ============================================================
+                // Order Number + Status
 
                 Text orderText = new Text(orderNumber);
 
@@ -422,9 +391,7 @@ public class ShopkeeperOrderCompleted {
                 orderHeader.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                // ============================================================
-                // CUSTOMER + DATE
-                // ============================================================
+                // Customer + Date
 
                 Text customerIcon = new Text("♙");
 
@@ -467,9 +434,7 @@ public class ShopkeeperOrderCompleted {
                 customerRow.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                // ============================================================
-                // PRODUCTS BOX
-                // ============================================================
+                // Products Box
 
                 VBox productsBox = new VBox(7);
 
@@ -484,9 +449,7 @@ public class ShopkeeperOrderCompleted {
                                 "-fx-background-color: #F2F1F6;" +
                                                 "-fx-background-radius: 8px;");
 
-                // ============================================================
-                // PRODUCT 1
-                // ============================================================
+                // Product 1
 
                 HBox productRow1 = new HBox();
 
@@ -520,9 +483,7 @@ public class ShopkeeperOrderCompleted {
                                 productName1,
                                 productPrice1);
 
-                // ============================================================
-                // PRODUCT 2
-                // ============================================================
+                // Product 2
 
                 HBox productRow2 = new HBox();
 
@@ -560,9 +521,7 @@ public class ShopkeeperOrderCompleted {
                                 productRow1,
                                 productRow2);
 
-                // ============================================================
-                // ADD LEFT CONTENT
-                // ============================================================
+                // Add Left Content
 
                 leftContent.getChildren().addAll(
                                 orderHeader,
@@ -573,9 +532,7 @@ public class ShopkeeperOrderCompleted {
                                 leftContent,
                                 Priority.ALWAYS);
 
-                // ============================================================
-                // RIGHT CONTENT
-                // ============================================================
+                // Right Content
 
                 VBox rightContent = new VBox();
 
@@ -597,9 +554,7 @@ public class ShopkeeperOrderCompleted {
                                 "-fx-border-color: #E1DFE4;" +
                                                 "-fx-border-width: 0 0 0 1px;");
 
-                // ============================================================
-                // TOTAL AMOUNT
-                // ============================================================
+                // Total Amount
 
                 Text totalLabel = new Text("Total Amount");
 
@@ -621,9 +576,7 @@ public class ShopkeeperOrderCompleted {
                 amountBox.setAlignment(
                                 Pos.CENTER_RIGHT);
 
-                // ============================================================
-                // DOWNLOAD INVOICE BUTTON
-                // ============================================================
+                // Download Invoice Button
 
                 Button invoiceButton = new Button("↓  Download Invoice");
 
@@ -671,9 +624,7 @@ public class ShopkeeperOrderCompleted {
                                                         " - Download Invoice clicked");
                 });
 
-                // ============================================================
-                // BUTTON BOX
-                // ============================================================
+                // Button Box
 
                 VBox buttonsBox = new VBox(
                                 10,
@@ -682,9 +633,7 @@ public class ShopkeeperOrderCompleted {
                 buttonsBox.setAlignment(
                                 Pos.CENTER);
 
-                // ============================================================
-                // ADD RIGHT CONTENT
-                // ============================================================
+                // Add Right Content
 
                 rightContent.getChildren().addAll(
                                 amountBox,
@@ -694,18 +643,14 @@ public class ShopkeeperOrderCompleted {
                                 amountBox,
                                 Priority.ALWAYS);
 
-                // ============================================================
-                // ADD EVERYTHING TO CARD
-                // ============================================================
+                // Add Everything to Card
 
                 card.getChildren().addAll(
                                 completedBorder,
                                 leftContent,
                                 rightContent);
 
-                // ============================================================
-                // WRAPPER
-                // ============================================================
+                // Wrapper
 
                 VBox wrapper = new VBox(card);
 
@@ -723,7 +668,7 @@ public class ShopkeeperOrderCompleted {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

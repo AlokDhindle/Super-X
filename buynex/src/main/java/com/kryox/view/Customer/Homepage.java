@@ -40,10 +40,7 @@ public class Homepage extends Application {
     public static Stage HomepageStage;
     private Scene homeScene;
 
-    // =========================================================
-    // INTRO VIDEO PATH
-    // =========================================================
-
+    
     private static final String VIDEO_PATH =
             "C:\\BuyNex\\Super-X\\buynex\\src\\main\\resources\\assets\\vedio\\Videio1.mp4";
 
@@ -55,9 +52,7 @@ public class Homepage extends Application {
         showIntroVideo(stage);
     }
 
-    // =========================================================
-    // INTRO VIDEO
-    // =========================================================
+   
 
     private void showIntroVideo(Stage stage) {
 
@@ -137,15 +132,19 @@ public class Homepage extends Application {
         }
     }
 
-    // =========================================================
-    // HOMEPAGE
-    // =========================================================
+    public static void showHomepage() {
+        if (HomepageStage != null) {
+            if (javafx.application.Platform.isFxApplicationThread()) {
+                new Homepage().showHomepage(HomepageStage);
+            } else {
+                javafx.application.Platform.runLater(() -> new Homepage().showHomepage(HomepageStage));
+            }
+        }
+    }
 
-    private void showHomepage(Stage stage) {
+    public void showHomepage(Stage stage) {
 
-        // =====================================================
-        // COMMON SHADOW
-        // =====================================================
+       
 
         DropShadow shadow = new DropShadow();
 
@@ -158,9 +157,7 @@ public class Homepage extends Application {
                 Color.rgb(0, 0, 0, 0.12)
         );
 
-        // =====================================================
-        // HEADER
-        // =====================================================
+        
 
         Text logoText = new Text("BuyNeX");
 
@@ -234,10 +231,7 @@ public class Homepage extends Application {
 
         header.setEffect(shadow);
 
-        // =====================================================
-        // WELCOME TEXT
-        // =====================================================
-
+       
         Text welcomeText =
                 new Text("Welcome back to ");
 
@@ -332,9 +326,7 @@ public class Homepage extends Application {
                 Pos.CENTER
         );
 
-        // =====================================================
-        // CARD 1 - SHOPKEEPER
-        // =====================================================
+        
 
         Image shopImage =
                 new Image(
@@ -485,10 +477,6 @@ public class Homepage extends Application {
                 "-fx-border-radius: 18;" +
                 "-fx-border-color: #ffffff;"
         );
-
-        // =====================================================
-        // CARD 2 - CUSTOMER
-        // =====================================================
 
         Image customerImage =
                 new Image(
@@ -648,10 +636,6 @@ public class Homepage extends Application {
                 "-fx-border-color: #ffffff;"
         );
 
-        // =====================================================
-        // CARD 3 - ADMIN
-        // =====================================================
-
         Image adminImage =
                 new Image(
                         "assets/images/protection.png"
@@ -801,10 +785,6 @@ public class Homepage extends Application {
                 "-fx-border-radius: 18;" +
                 "-fx-border-color: #EEEEEE;"
         );
-
-        // =====================================================
-        // CARD 4 - DELIVERY
-        // =====================================================
 
         Image deliveryImage =
                 new Image(
@@ -956,10 +936,6 @@ public class Homepage extends Application {
                 "-fx-border-color: #FFFFFF;"
         );
 
-        // =====================================================
-        // CARD HOVER EFFECT
-        // =====================================================
-
         DropShadow orangeGlow =
                 new DropShadow();
 
@@ -991,9 +967,7 @@ public class Homepage extends Application {
                 orangeGlow
         );
 
-        // =====================================================
-        // FIRST ROW
-        // =====================================================
+       
 
         HBox firstRow =
                 new HBox(
@@ -1006,10 +980,7 @@ public class Homepage extends Application {
                 Pos.CENTER
         );
 
-        // =====================================================
-        // SECOND ROW
-        // =====================================================
-
+        
         HBox secondRow =
                 new HBox(
                         20,
@@ -1021,9 +992,7 @@ public class Homepage extends Application {
                 Pos.CENTER
         );
 
-        // =====================================================
-        // ALL CARDS
-        // =====================================================
+      
 
         VBox cardsBox =
                 new VBox(
@@ -1036,10 +1005,8 @@ public class Homepage extends Application {
                 Pos.CENTER
         );
 
-        // =====================================================
-        // MAIN LAYOUT
-        // =====================================================
-
+       
+        
         VBox mainLayout =
                 new VBox(
                         15,
@@ -1061,9 +1028,7 @@ public class Homepage extends Application {
                 )
         );
 
-        // =====================================================
-        // BACKGROUND GLOW
-        // =====================================================
+       
 
         RadialGradient rightTopGlow =
                 new RadialGradient(
@@ -1166,9 +1131,7 @@ public class Homepage extends Application {
                 )
         );
 
-        // =====================================================
-        // SCENE
-        // =====================================================
+       
 
         Scene scene =
                 new Scene(
@@ -1188,9 +1151,7 @@ public class Homepage extends Application {
         stage.show();
     }
 
-    // =========================================================
-    // HOVER EFFECT METHOD
-    // =========================================================
+    
 
     private void setHoverEffect(
             VBox card,

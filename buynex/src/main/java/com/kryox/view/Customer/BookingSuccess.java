@@ -87,10 +87,6 @@ public class BookingSuccess {
                                                 "-fx-border-color: #E8E3E8;" +
                                                 "-fx-border-width: 0 0 1 0;");
 
-                // =====================================================
-                // LOGO
-                // =====================================================
-
                 Label logo = new Label("BuyNeX");
 
                 logo.setStyle(
@@ -99,31 +95,15 @@ public class BookingSuccess {
                                                 "-fx-font-weight: 900;" +
                                                 "-fx-text-fill: " + DARK_ORANGE + ";");
 
-                // =====================================================
-                // SPACER
-                // =====================================================
-
                 Region spacer = new Region();
 
                 HBox.setHgrow(
                                 spacer,
                                 Priority.ALWAYS);
 
-                // =====================================================
-                // NOTIFICATION
-                // =====================================================
-
                 Button notification = new Button("♧");
 
-                // =====================================================
-                // CART
-                // =====================================================
-
                 Button cart = new Button("🛒");
-
-                // =====================================================
-                // PROFILE
-                // =====================================================
 
                 Button profile = new Button("●");
 
@@ -160,10 +140,6 @@ public class BookingSuccess {
                 return header;
         }
 
-        // =========================================================
-        // SUCCESS CARD
-        // =========================================================
-
         private VBox createSuccessCard() {
 
                 VBox card = new VBox(16);
@@ -190,10 +166,6 @@ public class BookingSuccess {
                                 "-fx-background-color: white;" +
                                                 "-fx-background-radius: 10;");
 
-                // =====================================================
-                // SHADOW
-                // =====================================================
-
                 javafx.scene.effect.DropShadow shadow = new javafx.scene.effect.DropShadow();
 
                 shadow.setRadius(28);
@@ -209,15 +181,7 @@ public class BookingSuccess {
 
                 card.setEffect(shadow);
 
-                // =====================================================
-                // SUCCESS ICON
-                // =====================================================
-
                 StackPane successIcon = createSuccessIcon();
-
-                // =====================================================
-                // TITLE
-                // =====================================================
 
                 Label title = new Label(
                                 "Product Booked Successfully!");
@@ -227,10 +191,6 @@ public class BookingSuccess {
                                                 "-fx-font-size: 16px;" +
                                                 "-fx-font-weight: bold;" +
                                                 "-fx-text-fill: " + TEXT + ";");
-
-                // =====================================================
-                // SUBTITLE
-                // =====================================================
 
                 Label subtitle = new Label(
                                 "Your reservation for order #" +
@@ -246,31 +206,15 @@ public class BookingSuccess {
                 subtitle.setAlignment(
                                 Pos.CENTER);
 
-                // =====================================================
-                // PRODUCT CARD
-                // =====================================================
-
                 VBox productCard = createProductCard();
 
-                // =====================================================
-                // NEXT STEPS
-                // =====================================================
-
                 VBox nextSteps = createNextSteps();
-
-                // =====================================================
-                // BUTTONS
-                // =====================================================
 
                 Button bookingsButton = createPrimaryButton(
                                 "View My Bookings");
 
                 Button backButton = createSecondaryButton(
                                 "Back to Home");
-
-                // =====================================================
-                // BUTTON ACTION
-                // =====================================================
 
                 bookingsButton.setOnAction(
                                 e -> showBookingAlert());
@@ -281,10 +225,6 @@ public class BookingSuccess {
                                         Dashbord ds = new Dashbord(null);
                                         Homepage.HomepageStage.setScene(ds.getDashbordScene());
                                 });
-
-                // =====================================================
-                // ADD TO CARD
-                // =====================================================
 
                 card.getChildren().addAll(
                                 successIcon,
@@ -297,10 +237,6 @@ public class BookingSuccess {
 
                 return card;
         }
-
-        // =========================================================
-        // SUCCESS ICON
-        // =========================================================
 
         private StackPane createSuccessIcon() {
 
@@ -331,10 +267,6 @@ public class BookingSuccess {
                 return icon;
         }
 
-        // =========================================================
-        // PRODUCT CARD
-        // =========================================================
-
         private VBox createProductCard() {
 
                 VBox box = new VBox(12);
@@ -351,18 +283,10 @@ public class BookingSuccess {
                                                 "-fx-border-color: #ECE6ED;" +
                                                 "-fx-border-radius: 7;");
 
-                // =====================================================
-                // PRODUCT ROW
-                // =====================================================
-
                 HBox productRow = new HBox(13);
 
                 productRow.setAlignment(
                                 Pos.CENTER_LEFT);
-
-                // =====================================================
-                // IMAGE
-                // =====================================================
 
                 StackPane imageBox = new StackPane();
 
@@ -418,10 +342,6 @@ public class BookingSuccess {
                                         noImage);
                 }
 
-                // =====================================================
-                // PRODUCT INFO
-                // =====================================================
-
                 VBox info = new VBox(5);
 
                 Label product = new Label(
@@ -453,10 +373,6 @@ public class BookingSuccess {
                                 imageBox,
                                 info,
                                 spacer);
-
-                // =====================================================
-                // STATUS ROW
-                // =====================================================
 
                 HBox statusRow = new HBox();
 
@@ -504,10 +420,6 @@ public class BookingSuccess {
                 return box;
         }
 
-        // =========================================================
-        // NEXT STEPS
-        // =========================================================
-
         private VBox createNextSteps() {
 
                 VBox box = new VBox(7);
@@ -543,10 +455,6 @@ public class BookingSuccess {
 
                 return box;
         }
-
-        // =========================================================
-        // PRIMARY BUTTON
-        // =========================================================
 
         private Button createPrimaryButton(
                         String text) {
@@ -589,10 +497,6 @@ public class BookingSuccess {
 
                 return button;
         }
-
-        // =========================================================
-        // SECONDARY BUTTON
-        // =========================================================
 
         private Button createSecondaryButton(
                         String text) {
@@ -648,16 +552,8 @@ public class BookingSuccess {
                 return button;
         }
 
-        // =========================================================
-        // ANIMATION
-        // =========================================================
-
         private void playAnimation(
                         VBox card) {
-
-                // =====================================================
-                // INITIAL POSITION
-                // =====================================================
 
                 card.setOpacity(0);
 
@@ -667,10 +563,6 @@ public class BookingSuccess {
 
                 card.setScaleY(0.92);
 
-                // =====================================================
-                // FADE
-                // =====================================================
-
                 FadeTransition fade = new FadeTransition(
                                 Duration.millis(700),
                                 card);
@@ -679,10 +571,6 @@ public class BookingSuccess {
 
                 fade.setToValue(1);
 
-                // =====================================================
-                // SLIDE
-                // =====================================================
-
                 TranslateTransition slide = new TranslateTransition(
                                 Duration.millis(700),
                                 card);
@@ -690,10 +578,6 @@ public class BookingSuccess {
                 slide.setFromY(45);
 
                 slide.setToY(0);
-
-                // =====================================================
-                // SCALE
-                // =====================================================
 
                 ScaleTransition scale = new ScaleTransition(
                                 Duration.millis(700),
@@ -707,20 +591,12 @@ public class BookingSuccess {
 
                 scale.setToY(1);
 
-                // =====================================================
-                // COMBINE
-                // =====================================================
-
                 ParallelTransition animation = new ParallelTransition(
                                 fade,
                                 slide,
                                 scale);
 
                 animation.play();
-
-                // =====================================================
-                // SUCCESS ICON ANIMATION
-                // =====================================================
 
                 if (!card.getChildren().isEmpty()) {
 
@@ -749,10 +625,6 @@ public class BookingSuccess {
                         iconAnimation.play();
                 }
         }
-
-        // =========================================================
-        // BOOKING ALERT
-        // =========================================================
 
         private void showBookingAlert() {
 

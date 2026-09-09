@@ -9,9 +9,7 @@ public class ConstantsMethods {
 
         
 
-            // =============================================================
         // EMAIL VALIDATION
-        // =============================================================
 
         public static boolean isValidEmail(
                         String email) {
@@ -20,9 +18,7 @@ public class ConstantsMethods {
                                 "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
         }
 
-        // =============================================================
         // FIREBASE ERROR HANDLER
-        // =============================================================
 
         public static String getFirebaseError(
                         JSONObject responseJson) {
@@ -73,9 +69,7 @@ public class ConstantsMethods {
         }
 
 
-        // =============================================================
         // ALERT
-        // =============================================================
 
         public static void showAlert(
                         Alert.AlertType type,

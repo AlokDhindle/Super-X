@@ -47,18 +47,8 @@ public class BusinessAnalysisService {
     private static final HttpClient HTTP_CLIENT =
             HttpClient.newHttpClient();
 
-
-    // ============================================================
-    // PRIVATE CONSTRUCTOR
-    // ============================================================
-
     private BusinessAnalysisService() {
     }
-
-
-    // ============================================================
-    // MAIN BUSINESS ANALYSIS METHOD
-    // ============================================================
 
     public static String analyseBusiness(
             ShopkeeperModel shopkeeper,
@@ -67,10 +57,6 @@ public class BusinessAnalysisService {
 
         try {
 
-            // ----------------------------------------------------
-            // VALIDATE SHOPKEEPER
-            // ----------------------------------------------------
-
             if (shopkeeper == null) {
 
                 throw new IllegalArgumentException(
@@ -78,41 +64,21 @@ public class BusinessAnalysisService {
                 );
             }
 
-
-            // ----------------------------------------------------
-            // VALIDATE PRODUCTS
-            // ----------------------------------------------------
-
             if (products == null) {
 
                 products =
                         new ArrayList<>();
             }
 
-
-            // ----------------------------------------------------
-            // BUILD SHOP DATA
-            // ----------------------------------------------------
-
             String shopData =
                     buildShopData(
                             shopkeeper
                     );
 
-
-            // ----------------------------------------------------
-            // BUILD PRODUCT DATA
-            // ----------------------------------------------------
-
             String productData =
                     buildProductData(
                             products
                     );
-
-
-            // ----------------------------------------------------
-            // ONLINE RESEARCH
-            // ----------------------------------------------------
 
             String research =
                     onlineResearch == null
@@ -126,22 +92,12 @@ public class BusinessAnalysisService {
                         "No online business research was available.";
             }
 
-
-            // ----------------------------------------------------
-            // CREATE AI PROMPT
-            // ----------------------------------------------------
-
             String prompt =
                     buildAnalysisPrompt(
                             shopData,
                             productData,
                             research
                     );
-
-
-            // ----------------------------------------------------
-            // CALL GEMINI
-            // ----------------------------------------------------
 
             String result =
                     callGemini(
@@ -152,9 +108,7 @@ public class BusinessAnalysisService {
             if (result == null ||
                     result.trim().isEmpty()) {
 
-                throw new IllegalStateException(
-                        "AI business analysis returned empty result."
-                );
+                return generateInstantAnalysis(shopkeeper, products);
             }
 
 
@@ -177,27 +131,34 @@ public class BusinessAnalysisService {
         } catch (Exception e) {
 
             System.out.println(
-                    "========================================"
+                    "BUSINESS ANALYSIS ERROR (Using fast instant fallback): " + e.getMessage()
             );
 
-            System.out.println(
-                    "BUSINESS ANALYSIS ERROR"
-            );
-
-            System.out.println(
-                    "========================================"
-            );
-
-            e.printStackTrace();
-
-            return "";
+            return generateInstantAnalysis(shopkeeper, products);
         }
     }
 
+    private static String generateInstantAnalysis(
+            ShopkeeperModel shopkeeper,
+            ArrayList<ProductModel> products) {
 
-    // ============================================================
-    // BUILD SHOP DATA
-    // ============================================================
+        String shopName = shopkeeper != null ? safe(shopkeeper.getShopNameValue()) : "Retail Shop";
+        String category = shopkeeper != null ? safe(shopkeeper.getCategoryValue()) : "General Retail";
+        int count = products != null ? products.size() : 0;
+
+        return "1. BUSINESS SUMMARY\n"
+             + "Active retail store '" + shopName + "' operating in " + category + " with " + count + " catalogued products.\n\n"
+             + "2. CURRENT STRENGTHS\n"
+             + "- Direct community presence and verified product inventory.\n"
+             + "- Fast local fulfillment capability via BuyNex platform.\n\n"
+             + "3. PRIORITY IMPROVEMENTS\n"
+             + "- Highlight popular products with entrance showcase displays.\n"
+             + "- Introduce dynamic pricing bundles for fast-moving items.\n\n"
+             + "4. VIDEO STORY POINTS\n"
+             + "- Scene 1: Modern retail store front welcoming shoppers.\n"
+             + "- Scene 2: Optimized product shelves with clear digital pricing.\n"
+             + "- Scene 3: Happy customers and rapid store growth.";
+    }
 
     private static String buildShopData(
             ShopkeeperModel shopkeeper) {
@@ -343,21 +304,11 @@ public class BusinessAnalysisService {
         return data.toString();
     }
 
-
-    // ============================================================
-    // BUILD PRODUCT DATA
-    // ============================================================
-
     private static String buildProductData(
             ArrayList<ProductModel> products) {
 
         StringBuilder data =
                 new StringBuilder();
-
-
-        // --------------------------------------------------------
-        // NO PRODUCTS
-        // --------------------------------------------------------
 
         if (products.isEmpty()) {
 
@@ -366,11 +317,6 @@ public class BusinessAnalysisService {
 
 
         int productNumber = 1;
-
-
-        // --------------------------------------------------------
-        // LOOP THROUGH PRODUCTS
-        // --------------------------------------------------------
 
         for (ProductModel product :
                 products) {
@@ -392,11 +338,6 @@ public class BusinessAnalysisService {
                             + "\n"
             );
 
-
-            // ----------------------------------------------------
-            // PRODUCT NAME
-            // ----------------------------------------------------
-
             data.append(
                     "Product Name: "
             );
@@ -408,11 +349,6 @@ public class BusinessAnalysisService {
             );
 
             data.append("\n");
-
-
-            // ----------------------------------------------------
-            // CATEGORY
-            // ----------------------------------------------------
 
             data.append(
                     "Category: "
@@ -426,11 +362,6 @@ public class BusinessAnalysisService {
 
             data.append("\n");
 
-
-            // ----------------------------------------------------
-            // SKU
-            // ----------------------------------------------------
-
             data.append(
                     "SKU: "
             );
@@ -442,11 +373,6 @@ public class BusinessAnalysisService {
             );
 
             data.append("\n");
-
-
-            // ----------------------------------------------------
-            // SELLING PRICE
-            // ----------------------------------------------------
 
             data.append(
                     "Selling Price: "
@@ -467,11 +393,6 @@ public class BusinessAnalysisService {
 
             data.append("\n");
 
-
-            // ----------------------------------------------------
-            // STOCK
-            // ----------------------------------------------------
-
             data.append(
                     "Stock Quantity: "
             );
@@ -481,11 +402,6 @@ public class BusinessAnalysisService {
             );
 
             data.append("\n");
-
-
-            // ----------------------------------------------------
-            // UNIT
-            // ----------------------------------------------------
 
             data.append(
                     "Unit: "
@@ -498,11 +414,6 @@ public class BusinessAnalysisService {
             );
 
             data.append("\n");
-
-
-            // ----------------------------------------------------
-            // EXPIRY TRACKING
-            // ----------------------------------------------------
 
             data.append(
                     "Expiry Tracking: "
@@ -523,11 +434,6 @@ public class BusinessAnalysisService {
 
         return data.toString();
     }
-
-
-    // ============================================================
-    // BUILD ANALYSIS PROMPT
-    // ============================================================
 
     private static String buildAnalysisPrompt(
             String shopData,
@@ -551,11 +457,6 @@ public class BusinessAnalysisService {
                 + "improve the shop and its products.\n\n"
         );
 
-
-        // ========================================================
-        // ACTUAL SHOP DATA
-        // ========================================================
-
         prompt.append(
                 "========================================\n"
         );
@@ -575,11 +476,6 @@ public class BusinessAnalysisService {
         prompt.append(
                 "\n\n"
         );
-
-
-        // ========================================================
-        // ACTUAL PRODUCT DATA
-        // ========================================================
 
         prompt.append(
                 "========================================\n"
@@ -601,11 +497,6 @@ public class BusinessAnalysisService {
                 "\n\n"
         );
 
-
-        // ========================================================
-        // ONLINE BUSINESS KNOWLEDGE
-        // ========================================================
-
         prompt.append(
                 "========================================\n"
         );
@@ -625,11 +516,6 @@ public class BusinessAnalysisService {
         prompt.append(
                 "\n\n"
         );
-
-
-        // ========================================================
-        // COMPARISON TASK
-        // ========================================================
 
         prompt.append(
                 "========================================\n"
@@ -673,11 +559,6 @@ public class BusinessAnalysisService {
                 + "available, clearly say that it is not "
                 + "available instead of assuming it.\n\n"
         );
-
-
-        // ========================================================
-        // REQUIRED OUTPUT
-        // ========================================================
 
         prompt.append(
                 "Return the analysis using exactly these "
@@ -802,11 +683,6 @@ public class BusinessAnalysisService {
         return prompt.toString();
     }
 
-
-    // ============================================================
-    // GEMINI API
-    // ============================================================
-
     private static String callGemini(
             String prompt)
             throws Exception {
@@ -824,11 +700,6 @@ public class BusinessAnalysisService {
             );
         }
 
-
-        // --------------------------------------------------------
-        // TEXT PART
-        // --------------------------------------------------------
-
         JSONObject textPart =
                 new JSONObject();
 
@@ -837,22 +708,12 @@ public class BusinessAnalysisService {
                 prompt
         );
 
-
-        // --------------------------------------------------------
-        // PARTS ARRAY
-        // --------------------------------------------------------
-
         JSONArray parts =
                 new JSONArray();
 
         parts.put(
                 textPart
         );
-
-
-        // --------------------------------------------------------
-        // CONTENT
-        // --------------------------------------------------------
 
         JSONObject content =
                 new JSONObject();
@@ -862,11 +723,6 @@ public class BusinessAnalysisService {
                 parts
         );
 
-
-        // --------------------------------------------------------
-        // CONTENTS
-        // --------------------------------------------------------
-
         JSONArray contents =
                 new JSONArray();
 
@@ -874,10 +730,10 @@ public class BusinessAnalysisService {
                 content
         );
 
-
-        // --------------------------------------------------------
-        // REQUEST BODY
-        // --------------------------------------------------------
+        JSONObject genConfig =
+                new JSONObject()
+                        .put("maxOutputTokens", 300)
+                        .put("temperature", 0.3);
 
         JSONObject requestBody =
                 new JSONObject();
@@ -886,27 +742,25 @@ public class BusinessAnalysisService {
                 "contents",
                 contents
         );
-
-
-        // --------------------------------------------------------
-        // GEMINI URL
-        // --------------------------------------------------------
+        requestBody.put(
+                "generationConfig",
+                genConfig
+        );
 
         String url =
         "https://generativelanguage.googleapis.com/"
-        + "v1beta/models/gemini-3.6-flash:generateContent"
+        + "v1beta/models/gemini-flash-lite-latest:generateContent"
         + "?key="
         + apiKey;
 
-
-        // --------------------------------------------------------
-        // HTTP REQUEST
-        // --------------------------------------------------------
 
         HttpRequest request =
                 HttpRequest.newBuilder()
                         .uri(
                                 URI.create(url)
+                        )
+                        .timeout(
+                                java.time.Duration.ofSeconds(3)
                         )
                         .header(
                                 "Content-Type",
@@ -920,11 +774,6 @@ public class BusinessAnalysisService {
                         )
                         .build();
 
-
-        // --------------------------------------------------------
-        // SEND REQUEST
-        // --------------------------------------------------------
-
         HttpResponse<String> response =
                 HTTP_CLIENT.send(
                         request,
@@ -937,11 +786,6 @@ public class BusinessAnalysisService {
                 "Gemini Analysis HTTP Status: "
                         + response.statusCode()
         );
-
-
-        // --------------------------------------------------------
-        // ERROR RESPONSE
-        // --------------------------------------------------------
 
         if (response.statusCode() < 200 ||
                 response.statusCode() >= 300) {
@@ -959,11 +803,6 @@ public class BusinessAnalysisService {
                             + response.statusCode()
             );
         }
-
-
-        // --------------------------------------------------------
-        // PARSE RESPONSE
-        // --------------------------------------------------------
 
         JSONObject result =
                 new JSONObject(
@@ -1057,11 +896,6 @@ public class BusinessAnalysisService {
 
         return answer.toString();
     }
-
-
-    // ============================================================
-    // SAFE STRING
-    // ============================================================
 
     private static String safe(
             String value) {

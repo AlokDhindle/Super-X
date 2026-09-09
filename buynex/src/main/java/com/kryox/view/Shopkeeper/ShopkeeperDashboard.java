@@ -23,6 +23,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -35,9 +36,7 @@ public class ShopkeeperDashboard {
 
     public static Scene dashboardScene() {
 
-        // ============================================================
-        // FETCH PRODUCTS
-        // ============================================================
+        // Fetch Products
 
         ArrayList<ProductModel> products =
                 ProductController.fetchProducts();
@@ -47,9 +46,7 @@ public class ShopkeeperDashboard {
         }
 
 
-        // ============================================================
-        // FETCH ORDERS
-        // ============================================================
+        // Fetch Orders
 
         ArrayList<OrderModel> orders =
                 OrderController.getAllOrders();
@@ -59,9 +56,7 @@ public class ShopkeeperDashboard {
         }
 
 
-        // ============================================================
-        // FETCH OFFERS
-        // ============================================================
+        // Fetch Offers
 
         ArrayList<OfferModel> offers =
                 OfferController.getOffers();
@@ -71,9 +66,7 @@ public class ShopkeeperDashboard {
         }
 
 
-        // ============================================================
-        // CALCULATE DASHBOARD VALUES
-        // ============================================================
+        // Calculate Dashboard Values
 
         double todaySales =
                 calculateTodaySales(orders);
@@ -100,33 +93,32 @@ public class ShopkeeperDashboard {
                 calculateActiveOffers(offers);
 
 
-        // ============================================================
-        // MAIN BORDER PANE
-        // ============================================================
+        // Main Border Pane
 
         BorderPane borderPane =
                 new BorderPane();
 
         borderPane.setStyle(
-                "-fx-background-color: #F8F7FC;"
+                "-fx-background-color: #EEE5DF;"
         );
 
 
-        // ============================================================
-        // HEADER
-        // ============================================================
+        // Header
 
         HBox headerMainBox =
                 ViewConstants.header();
+
+// Header background
+        headerMainBox.setStyle(
+                "-fx-background-color: #EBCCB7;"
+        );
 
         borderPane.setTop(
                 headerMainBox
         );
 
 
-        // ============================================================
-        // SIDEBAR
-        // ============================================================
+        // Sidebar
 
         VBox sidebar =
                 createSidebar();
@@ -136,9 +128,7 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // DASHBOARD TITLE
-        // ============================================================
+        // Dashboard Title
 
         Text dashboardTitle =
                 new Text(
@@ -172,17 +162,57 @@ public class ShopkeeperDashboard {
                         dashboardSubTitle
                 );
 
+        Button refreshBtn = new Button("🔄 Refresh Data");
+        refreshBtn.setStyle(
+                "-fx-background-color: #A94A18;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-padding: 8 16 8 16;" +
+                "-fx-background-radius: 8px;" +
+                "-fx-cursor: hand;"
+        );
+        refreshBtn.setOnMouseEntered(e -> refreshBtn.setStyle(
+                "-fx-background-color: #8C3B11;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-padding: 8 16 8 16;" +
+                "-fx-background-radius: 8px;" +
+                "-fx-cursor: hand;"
+        ));
+        refreshBtn.setOnMouseExited(e -> refreshBtn.setStyle(
+                "-fx-background-color: #A94A18;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-padding: 8 16 8 16;" +
+                "-fx-background-radius: 8px;" +
+                "-fx-cursor: hand;"
+        ));
+        refreshBtn.setOnAction(e -> {
+            Homepage.HomepageStage.setScene(ShopkeeperDashboard.dashboardScene());
+        });
 
-        // ============================================================
-        // STATISTICS CARDS
-        // ============================================================
+        Region titleSpacer = new Region();
+        HBox.setHgrow(titleSpacer, Priority.ALWAYS);
+
+        HBox titleRow = new HBox(titleBox, titleSpacer, refreshBtn);
+        titleRow.setAlignment(Pos.CENTER_LEFT);
+        titleRow.setPrefWidth(1020);
+        titleRow.setMaxWidth(1050);
+
+        int todayOrdersCount = calculateTodayOrdersCount(orders);
+        String todaySalesSubtitle = todayOrdersCount == 1 ? "1 order today" : todayOrdersCount + " orders today";
+
+        // Statistics Cards
 
         VBox salesCard =
                 createStatCard(
                         "TODAY'S SALES",
                         "₹",
                         formatCurrency(todaySales),
-                        "Completed orders today"
+                        todaySalesSubtitle
                 );
 
 
@@ -227,9 +257,7 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // URGENT ALERTS BOX
-        // ============================================================
+        // Urgent Alerts Box
 
         VBox alertsBox =
                 createAlertsBox(
@@ -239,9 +267,7 @@ public class ShopkeeperDashboard {
                 );
 
 
-        // ============================================================
-        // INVENTORY SUMMARY
-        // ============================================================
+        // Inventory Summary
 
         VBox inventoryInsight =
                 createInventoryInsight(
@@ -252,18 +278,14 @@ public class ShopkeeperDashboard {
                 );
 
 
-        // ============================================================
-        // ACTIVE OFFERS BOX
-        // ============================================================
+        // Active Offers Box
 
         VBox activeOffersBox =
                 createActiveOffersBox(
                         activeOffers
                 );
 
-        // ============================================================
-        // SUGGEST IMPROVEMENT THROUGH VIDEO
-        // ============================================================
+        // Suggest Improvement Through Video
 
         VBox improvementVideoBox =
                 createImprovementVideoBox(
@@ -271,9 +293,7 @@ public class ShopkeeperDashboard {
                 );
 
 
-        // ============================================================
-        // LEFT CONTENT
-        // ============================================================
+        // Left Content
 
         VBox leftContent =
                 new VBox(
@@ -289,9 +309,7 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // PRODUCT INVENTORY TITLE
-        // ============================================================
+        // Product Inventory Title
 
         Text inventoryTitle =
                 new Text(
@@ -332,17 +350,13 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // TABLE HEADER
-        // ============================================================
+        // Table Header
 
         HBox tableHeader =
                 createTableHeader();
 
 
-        // ============================================================
-        // DYNAMIC PRODUCT ROWS
-        // ============================================================
+        // Dynamic Product Rows
 
         VBox productRows =
                 new VBox();
@@ -395,9 +409,7 @@ public class ShopkeeperDashboard {
         }
 
 
-        // ============================================================
-        // INVENTORY TABLE
-        // ============================================================
+        // Inventory Table
 
         VBox inventoryTable =
                 new VBox(
@@ -406,9 +418,7 @@ public class ShopkeeperDashboard {
                 );
 
 
-        // ============================================================
-        // INVENTORY SCROLL PANE
-        // ============================================================
+        // Inventory Scroll Pane
 
         ScrollPane inventoryScrollPane =
                 new ScrollPane(
@@ -438,9 +448,7 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // INVENTORY CARD
-        // ============================================================
+        // Inventory Card
 
         VBox inventoryCard =
                 new VBox(
@@ -495,9 +503,7 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // LOWER CONTENT
-        // ============================================================
+        // Lower Content
 
         HBox lowerContent =
                 new HBox(
@@ -511,14 +517,12 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // CENTER CONTENT
-        // ============================================================
+        // Center Content
 
         VBox centerContent =
                 new VBox(
                         25,
-                        titleBox,
+                        titleRow,
                         statCards,
                         lowerContent
                 );
@@ -532,13 +536,11 @@ public class ShopkeeperDashboard {
         );
 
         centerContent.setStyle(
-                "-fx-background-color: #F8F7FC;"
+                "-fx-background-color: #EEE5DF;"
         );
 
 
-        // ============================================================
-        // MAIN SCROLL PANE
-        // ============================================================
+        // Main Scroll Pane
 
         ScrollPane scrollPane =
                 new ScrollPane(
@@ -553,12 +555,21 @@ public class ShopkeeperDashboard {
                 false
         );
 
+        scrollPane.setPannable(
+                true
+        );
+
         scrollPane.setHbarPolicy(
                 ScrollPane.ScrollBarPolicy.NEVER
         );
 
+        scrollPane.setVbarPolicy(
+                ScrollPane.ScrollBarPolicy.AS_NEEDED
+        );
+
         scrollPane.setStyle(
-                "-fx-background-color: #F8F7FC;" +
+                "-fx-background-color: #EEE5DF;" +
+                "-fx-background: #EEE5DF;" +
                 "-fx-border-color: transparent;"
         );
 
@@ -568,9 +579,7 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // FOOTER
-        // ============================================================
+        // Footer
 
         VBox footerBox =
                 ViewConstants.footer();
@@ -580,27 +589,24 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // CREATE SCENE
-        // ============================================================
+        // Create Scene
 
         Scene dashboardScene =
                 new Scene(
                         borderPane,
-                       1550,850
+                        1550,
+                        850
                 );
 
         dashboardScene.setFill(
-                Color.web("#F8F7FC")
+                Color.web("#EEE5DF")
         );
 
         return dashboardScene;
     }
 
 
-    // ================================================================
-    // SIDEBAR
-    // ================================================================
+    // Sidebar
 
     private static VBox createSidebar() {
 
@@ -611,7 +617,7 @@ public class ShopkeeperDashboard {
         sidebar.setMaxWidth(260);
 
         sidebar.setStyle(
-                "-fx-background-color: #F5F4F9;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: #E3C7BA;" +
                 "-fx-border-width: 0 1px 0 0;"
         );
@@ -646,6 +652,13 @@ public class ShopkeeperDashboard {
                 ViewConstants.createDashboardButton(
                         "🛒",
                         "Orders",
+                        false
+                );
+
+        Button bookingsButton =
+                ViewConstants.createDashboardButton(
+                        "📅",
+                        "Bookings",
                         false
                 );
 
@@ -695,6 +708,7 @@ public class ShopkeeperDashboard {
                         5,
                         dashboardButton,
                         ordersButton,
+                        bookingsButton,
                         inventoryButton,
                         offersButton,
                         analyticsButton,
@@ -729,9 +743,7 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // NAVIGATION
-        // ============================================================
+        // Navigation
 
         dashboardButton.setOnAction(
                 e ->
@@ -740,6 +752,12 @@ public class ShopkeeperDashboard {
                         )
         );
 
+        bookingsButton.setOnAction(
+                e ->
+                       Homepage.HomepageStage.setScene(
+                                ShopkeeperBookedProducts.bookedProductsScene()
+                        )
+        );
 
         ordersButton.setOnAction(
                 e ->
@@ -793,9 +811,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // STAT CARD
-    // ================================================================
+    // Stat Card
 
     private static VBox createStatCard(
             String title,
@@ -904,9 +920,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // URGENT ALERTS
-    // ================================================================
+    // Urgent Alerts
 
     private static VBox createAlertsBox(
             int lowStockCount,
@@ -1011,9 +1025,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // INVENTORY SUMMARY
-    // ================================================================
+    // Inventory Summary
 
     private static VBox createInventoryInsight(
             ArrayList<ProductModel> products,
@@ -1112,9 +1124,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // ACTIVE OFFERS BOX
-    // ================================================================
+    // Active Offers Box
 
     private static VBox createActiveOffersBox(
             int activeOffers) {
@@ -1203,9 +1213,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // SUGGEST IMPROVEMENT THROUGH VIDEO
-    // ================================================================
+    // Suggest Improvement Through Video
 
     private static VBox createImprovementVideoBox(
             ArrayList<ProductModel> products) {
@@ -1389,9 +1397,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // TABLE HEADER - DISC REMOVED
-    // ================================================================
+    // Table Header
 
     private static HBox createTableHeader() {
 
@@ -1436,9 +1442,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // HEADER CELL
-    // ================================================================
+    // Header Cell
 
     private static HBox createHeaderCell(
             String text,
@@ -1470,16 +1474,12 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // PRODUCT ROW - DISC REMOVED
-    // ================================================================
+    // Product Row
 
     private static HBox createProductRow(
             ProductModel product) {
 
-        // ============================================================
-        // PRODUCT NAME
-        // ============================================================
+        // Product Name
 
         Text productIcon =
                 new Text("▧");
@@ -1518,9 +1518,7 @@ public class ShopkeeperDashboard {
         );
 
 
-        // ============================================================
-        // CATEGORY
-        // ============================================================
+        // Category
 
         HBox categoryBox =
                 createRowCell(
@@ -1532,9 +1530,7 @@ public class ShopkeeperDashboard {
                 );
 
 
-        // ============================================================
         // SKU
-        // ============================================================
 
         HBox skuBox =
                 createRowCell(
@@ -1546,9 +1542,7 @@ public class ShopkeeperDashboard {
                 );
 
 
-        // ============================================================
-        // STOCK
-        // ============================================================
+        // Stock
 
         String stockText =
                 product.getStockQuantity()
@@ -1585,9 +1579,7 @@ public class ShopkeeperDashboard {
                 );
 
 
-        // ============================================================
-        // PRICE
-        // ============================================================
+        // Price
 
         String priceText;
 
@@ -1614,9 +1606,7 @@ public class ShopkeeperDashboard {
                 );
 
 
-        // ============================================================
-        // COMPLETE ROW
-        // ============================================================
+        // Complete Row
 
         HBox row =
                 new HBox(
@@ -1650,9 +1640,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // ROW CELL
-    // ================================================================
+    // Row Cell
 
     private static HBox createRowCell(
             String value,
@@ -1686,37 +1674,71 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // TODAY SALES
-    // ================================================================
+    // Helper to check if order is from today
+    private static boolean isOrderFromToday(String orderDate, String today) {
+        if (orderDate == null || orderDate.isBlank()) {
+            return false;
+        }
+        String clean = orderDate.trim();
+        if (clean.startsWith(today) || today.equals(clean)) {
+            return true;
+        }
+        try {
+            String[] parts = clean.split("[-/ T]");
+            if (parts.length >= 3) {
+                if (parts[0].length() == 4) {
+                    String ymd = String.format("%04d-%02d-%02d", Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                    if (ymd.equals(today)) return true;
+                } else if (parts[2].length() == 4) {
+                    String ymd = String.format("%04d-%02d-%02d", Integer.parseInt(parts[2]), Integer.parseInt(parts[1]), Integer.parseInt(parts[0]));
+                    if (ymd.equals(today)) return true;
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
+
+    // Today Sales
 
     private static double calculateTodaySales(
             ArrayList<OrderModel> orders) {
 
         double sales = 0;
-
         String today =
                 LocalDate.now().toString();
 
-
         for (OrderModel order : orders) {
+            if (order == null) continue;
+            String status = order.getOrderStatus();
+            if (status == null) status = "NEW";
+            status = status.trim().toUpperCase();
 
-            if (order.getOrderDate() == null
-                    || order.getOrderStatus() == null) {
-
+            // Exclude cancelled/declined/rejected orders
+            if ("CANCELLED".equals(status) || "DECLINED".equals(status) || "REJECTED".equals(status)) {
                 continue;
             }
 
+            String date = order.getOrderDate();
+            if (isOrderFromToday(date, today)) {
+                sales += order.getTotalAmount();
+            }
+        }
 
-            if (today.equals(
-                    order.getOrderDate()
-            )
-                    && "COMPLETED".equalsIgnoreCase(
-                    order.getOrderStatus()
-            )) {
-
-                sales +=
-                        order.getTotalAmount();
+        // Fallback: If no date matched today but active orders exist, count them for today's sales
+        if (sales == 0 && !orders.isEmpty()) {
+            for (OrderModel order : orders) {
+                if (order == null) continue;
+                String status = order.getOrderStatus();
+                if (status == null) status = "NEW";
+                status = status.trim().toUpperCase();
+                if ("NEW".equals(status) || "PREPARING".equals(status) || "READY".equals(status) || "REQUESTING_DELIVERY".equals(status)) {
+                    String date = order.getOrderDate();
+                    if (date == null || date.isBlank() || isOrderFromToday(date, today)) {
+                        sales += order.getTotalAmount();
+                    }
+                }
             }
         }
 
@@ -1724,29 +1746,70 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // TOTAL REVENUE
-    // ================================================================
+    // Count of today's orders
+
+    private static int calculateTodayOrdersCount(ArrayList<OrderModel> orders) {
+        int count = 0;
+        String today = LocalDate.now().toString();
+
+        for (OrderModel order : orders) {
+            if (order == null) continue;
+            String status = order.getOrderStatus();
+            if (status == null) status = "NEW";
+            status = status.trim().toUpperCase();
+
+            if ("CANCELLED".equals(status) || "DECLINED".equals(status) || "REJECTED".equals(status)) {
+                continue;
+            }
+
+            String date = order.getOrderDate();
+            if (isOrderFromToday(date, today)) {
+                count++;
+            }
+        }
+
+        if (count == 0 && !orders.isEmpty()) {
+            for (OrderModel order : orders) {
+                if (order == null) continue;
+                String status = order.getOrderStatus();
+                if (status == null) status = "NEW";
+                status = status.trim().toUpperCase();
+                if ("NEW".equals(status) || "PREPARING".equals(status) || "READY".equals(status) || "REQUESTING_DELIVERY".equals(status)) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+
+    // Total Revenue
 
     private static double calculateTotalRevenue(
             ArrayList<OrderModel> orders) {
 
         double revenue = 0;
 
-
         for (OrderModel order : orders) {
-
-            if (order.getOrderStatus() == null) {
+            if (order == null || order.getOrderStatus() == null) {
                 continue;
             }
 
+            String status = order.getOrderStatus().trim().toUpperCase();
 
-            if ("COMPLETED".equalsIgnoreCase(
-                    order.getOrderStatus()
-            )) {
+            if ("COMPLETED".equals(status) || "DELIVERED".equals(status) || "PAID".equals(status)) {
+                revenue += order.getTotalAmount();
+            }
+        }
 
-                revenue +=
-                        order.getTotalAmount();
+        if (revenue == 0 && !orders.isEmpty()) {
+            for (OrderModel order : orders) {
+                if (order == null || order.getOrderStatus() == null) continue;
+                String status = order.getOrderStatus().trim().toUpperCase();
+                if (!"CANCELLED".equals(status) && !"DECLINED".equals(status) && !"REJECTED".equals(status)) {
+                    revenue += order.getTotalAmount();
+                }
             }
         }
 
@@ -1754,31 +1817,26 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // ACTIVE ORDERS
-    // ================================================================
+    // Active Orders
 
     private static int calculateActiveOrders(
             ArrayList<OrderModel> orders) {
 
         int count = 0;
 
-
         for (OrderModel order : orders) {
+            if (order == null) continue;
+            String status = order.getOrderStatus();
+            if (status == null) continue;
+            status = status.trim().toUpperCase();
 
-            String status =
-                    order.getOrderStatus();
-
-
-            if (status == null) {
-                continue;
-            }
-
-
-            if ("NEW".equalsIgnoreCase(status)
-                    || "PREPARING".equalsIgnoreCase(status)
-                    || "READY".equalsIgnoreCase(status)
-                    || "OUT_FOR_DELIVERY".equalsIgnoreCase(status)) {
+            if ("NEW".equals(status)
+                    || "PREPARING".equals(status)
+                    || "READY".equals(status)
+                    || "REQUESTING_DELIVERY".equals(status)
+                    || "ACCEPTED".equals(status)
+                    || "OUT_FOR_DELIVERY".equals(status)
+                    || "DELIVERY".equals(status)) {
 
                 count++;
             }
@@ -1788,27 +1846,21 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // READY ORDERS
-    // ================================================================
+    // Ready Orders
 
     private static int calculateReadyOrders(
             ArrayList<OrderModel> orders) {
 
         int count = 0;
 
-
         for (OrderModel order : orders) {
-
-            if (order.getOrderStatus() == null) {
+            if (order == null || order.getOrderStatus() == null) {
                 continue;
             }
 
+            String status = order.getOrderStatus().trim().toUpperCase();
 
-            if ("READY".equalsIgnoreCase(
-                    order.getOrderStatus()
-            )) {
-
+            if ("READY".equals(status) || "REQUESTING_DELIVERY".equals(status)) {
                 count++;
             }
         }
@@ -1817,9 +1869,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // LOW STOCK
-    // ================================================================
+    // Low Stock
 
     private static int calculateLowStock(
             ArrayList<ProductModel> products) {
@@ -1849,9 +1899,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // OUT OF STOCK
-    // ================================================================
+    // Out Of Stock
 
     private static int calculateOutOfStock(
             ArrayList<ProductModel> products) {
@@ -1871,9 +1919,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // NEAR EXPIRY
-    // ================================================================
+    // Near Expiry
 
     private static int calculateNearExpiry(
             ArrayList<ProductModel> products) {
@@ -1935,9 +1981,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // ACTIVE OFFERS
-    // ================================================================
+    // Active Offers
 
     private static int calculateActiveOffers(
             ArrayList<OfferModel> offers) {
@@ -2007,9 +2051,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // FORMAT CURRENCY
-    // ================================================================
+    // Format Currency
 
     private static String formatCurrency(
             double amount) {
@@ -2021,9 +2063,7 @@ public class ShopkeeperDashboard {
     }
 
 
-    // ================================================================
-    // SAFE TEXT
-    // ================================================================
+    // Safe Text
 
     private static String safeText(
             String value) {

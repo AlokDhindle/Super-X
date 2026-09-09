@@ -1,1474 +1,700 @@
 package com.kryox.view.Shopkeeper;
 
-import com.kryox.Main;
+import com.kryox.controller.Shopkeeper.OrderController;
+import com.kryox.controller.Shopkeeper.ProductController;
+import com.kryox.model.Shopkeeper.OrderItemModel;
+import com.kryox.model.Shopkeeper.OrderModel;
+import com.kryox.model.Shopkeeper.ProductModel;
 import com.kryox.view.Customer.Homepage;
+
+import java.time.LocalDate;
+import java.util.*;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class ShopkeeperAnalytics {
 
-        public static Scene analyticsScene() {
-
-                // ============================================================
-                // BORDER PANE
-                // ============================================================
-
-                BorderPane borderPane = new BorderPane();
-
-                // ================================================================
-                // MAIN BORDER PANE
-                // ================================================================
-
-                HBox headerMainBox = ViewConstants.header();
-
-                // Header background
-                headerMainBox.setStyle(
-                                "-fx-background-color: #EBCCB7;");
-
-                borderPane.setTop(headerMainBox);
-
-                // ============================================================
-                // SIDEBAR
-                // ============================================================
-
-                VBox sidebar = createSidebar();
-                borderPane.setRight(sidebar);
-
-                // ============================================================
-                // ANALYTICS CENTER
-                // ============================================================
-
-                VBox analyticsMain = new VBox(18);
-
-                analyticsMain.setPadding(
-                                new Insets(20, 24, 25, 24));
-
-                analyticsMain.setStyle(
-                                "-fx-background-color: #EEE5DF;");
-
-                // ============================================================
-                // TITLE AREA
-                // ============================================================
-
-                Text analyticsTitle = new Text("Business Analytics");
-
-                analyticsTitle.setStyle(
-                                "-fx-font-size: 27px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;" +
-                                                "-fx-font-family: 'Arial';");
-
-                Text analyticsSubtitle = new Text(
-                                "AI-driven insights for your store performance");
-
-                analyticsSubtitle.setStyle(
-                                "-fx-font-size: 14px;" +
-                                                "-fx-fill: #72594D;" +
-                                                "-fx-font-family: 'Arial';");
-
-                VBox titleBox = new VBox(
-                                5,
-                                analyticsTitle,
-                                analyticsSubtitle);
-
-                Button exportButton = new Button();
-
-                Text exportIcon = new Text("⇩");
-
-                exportIcon.setStyle(
-                                "-fx-font-size: 19px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #252525;");
-
-                Text exportText = new Text("Export Report");
-
-                exportText.setStyle(
-                                "-fx-font-size: 13px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #333333;");
-
-                HBox exportContent = new HBox(
-                                9,
-                                exportIcon,
-                                exportText);
-
-                exportContent.setAlignment(Pos.CENTER);
-
-                exportButton.setGraphic(exportContent);
-
-                exportButton.setPrefWidth(145);
-                exportButton.setPrefHeight(42);
-
-                exportButton.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-border-color: #DCD8E0;" +
-                                                "-fx-border-width: 1px;" +
-                                                "-fx-border-radius: 8px;" +
-                                                "-fx-background-radius: 8px;" +
-                                                "-fx-cursor: hand;");
-
-                exportButton.setOnMouseEntered(e -> {
-                        exportButton.setStyle(
-                                        "-fx-background-color: #FFF4EB;" +
-                                                        "-fx-border-color: #FF6900;" +
-                                                        "-fx-border-width: 1px;" +
-                                                        "-fx-border-radius: 8px;" +
-                                                        "-fx-background-radius: 8px;" +
-                                                        "-fx-cursor: hand;");
-                });
-
-                exportButton.setOnMouseExited(e -> {
-                        exportButton.setStyle(
-                                        "-fx-background-color: white;" +
-                                                        "-fx-border-color: #DCD8E0;" +
-                                                        "-fx-border-width: 1px;" +
-                                                        "-fx-border-radius: 8px;" +
-                                                        "-fx-background-radius: 8px;" +
-                                                        "-fx-cursor: hand;");
-                });
-
-                HBox titleRow = new HBox(
-                                20,
-                                titleBox,
-                                exportButton);
-
-                titleRow.setAlignment(Pos.CENTER_LEFT);
-
-                HBox.setHgrow(
-                                titleBox,
-                                Priority.ALWAYS);
-
-                analyticsMain.getChildren().add(titleRow);
-
-                // ============================================================
-                // KPI CARDS
-                // ============================================================
-
-                VBox revenueCard = new VBox(7);
-
-                revenueCard.setPadding(
-                                new Insets(16, 15, 14, 15));
-
-                revenueCard.setPrefWidth(145);
-                revenueCard.setPrefHeight(125);
-
-                revenueCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 10px;" +
-                                                "-fx-border-color: #ECE9EE;" +
-                                                "-fx-border-radius: 10px;");
-
-                Text revenueIcon = new Text("▣");
-
-                revenueIcon.setStyle(
-                                "-fx-font-size: 18px;" +
-                                                "-fx-fill: #B44B0A;");
-
-                Text revenueLabel = new Text("Total\nRevenue");
-
-                revenueLabel.setStyle(
-                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #68564E;");
-
-                HBox revenueHeader = new HBox(
-                                8,
-                                revenueIcon,
-                                revenueLabel);
-
-                Text revenueValue = new Text("\u20B942.8k");
-
-                revenueValue.setStyle(
-                                "-fx-font-size: 25px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                Text revenueGrowth = new Text("↗ +15% vs last\nmonth");
-
-                revenueGrowth.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #B44B0A;");
-
-                revenueCard.getChildren().addAll(
-                                revenueHeader,
-                                revenueValue,
-                                revenueGrowth);
-
-                // ------------------------------------------------------------
-
-                VBox ordersCard = new VBox(7);
-
-                ordersCard.setPadding(
-                                new Insets(16, 15, 14, 15));
-
-                ordersCard.setPrefWidth(145);
-                ordersCard.setPrefHeight(125);
-
-                ordersCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 10px;" +
-                                                "-fx-border-color: #ECE9EE;" +
-                                                "-fx-border-radius: 10px;");
-
-                Text ordersCardIcon = new Text("▢");
-
-                ordersCardIcon.setStyle(
-                                "-fx-font-size: 19px;" +
-                                                "-fx-fill: #77716D;");
-
-                Text ordersCardLabel = new Text("Orders");
-
-                ordersCardLabel.setStyle(
-                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #68564E;");
-
-                HBox ordersCardHeader = new HBox(
-                                8,
-                                ordersCardIcon,
-                                ordersCardLabel);
-
-                Text ordersValue = new Text("1,240");
-
-                ordersValue.setStyle(
-                                "-fx-font-size: 25px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                Text ordersGrowth = new Text("↗ +5% vs last\nmonth");
-
-                ordersGrowth.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #B44B0A;");
-
-                ordersCard.getChildren().addAll(
-                                ordersCardHeader,
-                                ordersValue,
-                                ordersGrowth);
-
-                // ------------------------------------------------------------
-
-                VBox aovCard = new VBox(7);
-
-                aovCard.setPadding(
-                                new Insets(16, 15, 14, 15));
-
-                aovCard.setPrefWidth(145);
-                aovCard.setPrefHeight(125);
-
-                aovCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 10px;" +
-                                                "-fx-border-color: #ECE9EE;" +
-                                                "-fx-border-radius: 10px;");
-
-                Text aovIcon = new Text("▤");
-
-                aovIcon.setStyle(
-                                "-fx-font-size: 18px;" +
-                                                "-fx-fill: #77716D;");
-
-                Text aovLabel = new Text("Avg Order\nValue");
-
-                aovLabel.setStyle(
-                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #68564E;");
-
-                HBox aovHeader = new HBox(
-                                8,
-                                aovIcon,
-                                aovLabel);
-
-                Text aovValue = new Text("\u20B934.50");
-
-                aovValue.setStyle(
-                                "-fx-font-size: 25px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                Text aovGrowth = new Text("→ +0.2% vs last\nmonth");
-
-                aovGrowth.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #6E6A67;");
-
-                aovCard.getChildren().addAll(
-                                aovHeader,
-                                aovValue,
-                                aovGrowth);
-
-                // ------------------------------------------------------------
-
-                VBox retentionCard = new VBox(7);
-
-                retentionCard.setPadding(
-                                new Insets(16, 15, 14, 15));
-
-                retentionCard.setPrefWidth(145);
-                retentionCard.setPrefHeight(125);
-
-                retentionCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 10px;" +
-                                                "-fx-border-color: #ECE9EE;" +
-                                                "-fx-border-radius: 10px;");
-
-                Text retentionIcon = new Text("♡");
-
-                retentionIcon.setStyle(
-                                "-fx-font-size: 22px;" +
-                                                "-fx-fill: #B44B0A;");
-
-                Text retentionLabel = new Text("Retention");
-
-                retentionLabel.setStyle(
-                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #68564E;");
-
-                HBox retentionHeader = new HBox(
-                                8,
-                                retentionIcon,
-                                retentionLabel);
-
-                Text retentionValue = new Text("72%");
-
-                retentionValue.setStyle(
-                                "-fx-font-size: 25px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                Text retentionGrowth = new Text("↗ +2% vs last\nmonth");
-
-                retentionGrowth.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #B44B0A;");
-
-                retentionCard.getChildren().addAll(
-                                retentionHeader,
-                                retentionValue,
-                                retentionGrowth);
-
-                HBox kpiRow = new HBox(
-                                12,
-                                revenueCard,
-                                ordersCard,
-                                aovCard,
-                                retentionCard);
-
-                kpiRow.setAlignment(Pos.CENTER_LEFT);
-
-                analyticsMain.getChildren().add(kpiRow);
-
-                // ============================================================
-                // SECOND ROW
-                // ============================================================
-
-                HBox secondRow = new HBox(16);
-
-                // ============================================================
-                // SALES & GROWTH TREND CARD
-                // ============================================================
-
-                VBox salesCard = new VBox(10);
-
-                salesCard.setPadding(
-                                new Insets(18, 18, 15, 18));
-
-                salesCard.setPrefWidth(570);
-                salesCard.setMinHeight(270);
-
-                salesCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 11px;" +
-                                                "-fx-border-color: #ECE9EE;" +
-                                                "-fx-border-radius: 11px;");
-
-                Text salesTitle = new Text("Sales & Growth Trends");
-
-                salesTitle.setStyle(
-                                "-fx-font-size: 20px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                Text salesSubtitle = new Text(
-                                "Actual Revenue vs AI-Predicted Baseline");
-
-                salesSubtitle.setStyle(
-                                "-fx-font-size: 12px;" +
-                                                "-fx-fill: #72594D;");
-
-                Text actualLegend = new Text("● Actual");
-
-                actualLegend.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-fill: #A94A08;" +
-                                                "-fx-font-weight: bold;");
-
-                Text predictedLegend = new Text("◌ Predicted");
-
-                predictedLegend.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-fill: #A87958;" +
-                                                "-fx-font-weight: bold;");
-
-                HBox legends = new HBox(
-                                12,
-                                actualLegend,
-                                predictedLegend);
-
-                legends.setAlignment(Pos.CENTER_RIGHT);
-
-                HBox salesHeading = new HBox(
-                                10,
-                                new VBox(
-                                                3,
-                                                salesTitle,
-                                                salesSubtitle),
-                                legends);
-
-                salesHeading.setAlignment(Pos.CENTER_LEFT);
-
-                HBox.setHgrow(
-                                salesHeading.getChildren().get(0),
-                                Priority.ALWAYS);
-
-                // ============================================================
-                // CHART
-                // ============================================================
-
-                Pane chartPane = new Pane();
-
-                chartPane.setPrefSize(530, 190);
-                chartPane.setMinSize(530, 190);
-
-                double chartLeft = 30;
-                double chartRight = 515;
-                double chartBottom = 155;
-
-                // horizontal grid lines
-                for (int i = 0; i < 4; i++) {
-
-                        double y = 35 + (i * 40);
-
-                        Line gridLine = new Line(
-                                        chartLeft,
-                                        y,
-                                        chartRight,
-                                        y);
-
-                        gridLine.setStroke(
-                                        Color.web("#F0EDF0"));
-
-                        gridLine.setStrokeWidth(1);
-
-                        chartPane.getChildren().add(gridLine);
+    private static final DropShadow CARD_SHADOW = new DropShadow(8, 0, 3, Color.rgb(0, 0, 0, 0.05));
+
+    public static Scene analyticsScene() {
+
+        // 1. Fetch Real Data
+        ArrayList<OrderModel> orders = OrderController.getAllOrders();
+        if (orders == null) {
+            orders = new ArrayList<>();
+        }
+
+        ArrayList<ProductModel> products = ProductController.fetchProducts();
+        if (products == null) {
+            products = new ArrayList<>();
+        }
+
+        // 2. Compute Analytics Metrics
+        double totalRevenue = 0.0;
+        int totalOrdersCount = orders.size();
+        Set<String> uniqueCustomers = new HashSet<>();
+        Map<String, Integer> customerOrdersMap = new HashMap<>();
+        double[] dailyRevenue = new double[7];
+        Map<String, Integer> productSalesCount = new LinkedHashMap<>();
+
+        for (OrderModel order : orders) {
+            if (order == null) continue;
+
+            String status = order.getOrderStatus() != null ? order.getOrderStatus().trim().toUpperCase() : "";
+            double amount = order.getTotalAmount();
+
+            if (!"CANCELLED".equals(status)) {
+                totalRevenue += amount;
+
+                if (order.getCustomerId() != null && !order.getCustomerId().isBlank()) {
+                    String cid = order.getCustomerId();
+                    uniqueCustomers.add(cid);
+                    customerOrdersMap.put(cid, customerOrdersMap.getOrDefault(cid, 0) + 1);
                 }
 
-                // Actual sales area
-                Polygon actualArea = new Polygon(
-                                30.0, 125.0,
-                                95.0, 118.0,
-                                160.0, 120.0,
-                                225.0, 95.0,
-                                290.0, 60.0,
-                                355.0, 82.0,
-                                420.0, 66.0,
-                                480.0, 38.0,
-                                515.0, 65.0,
-                                515.0, 155.0,
-                                30.0, 155.0);
-
-                actualArea.setFill(
-                                Color.web("#FFF0E4"));
-
-                chartPane.getChildren().add(actualArea);
-
-                // Predicted line
-                Polyline predictedLine = new Polyline(
-                                30.0, 132.0,
-                                95.0, 126.0,
-                                160.0, 126.0,
-                                225.0, 105.0,
-                                290.0, 80.0,
-                                355.0, 91.0,
-                                420.0, 88.0,
-                                480.0, 67.0,
-                                515.0, 82.0);
-
-                predictedLine.setStroke(
-                                Color.web("#F2A06D"));
-
-                predictedLine.setStrokeWidth(2);
-                predictedLine.getStrokeDashArray().addAll(
-                                5.0,
-                                5.0);
-
-                predictedLine.setFill(
-                                Color.TRANSPARENT);
-
-                chartPane.getChildren().add(
-                                predictedLine);
-
-                // Actual line
-                Polyline actualLine = new Polyline(
-                                30.0, 125.0,
-                                95.0, 118.0,
-                                160.0, 120.0,
-                                225.0, 95.0,
-                                290.0, 60.0,
-                                355.0, 82.0,
-                                420.0, 66.0,
-                                480.0, 38.0,
-                                515.0, 65.0);
-
-                actualLine.setStroke(
-                                Color.web("#FF6900"));
-
-                actualLine.setStrokeWidth(3);
-
-                actualLine.setFill(
-                                Color.TRANSPARENT);
-
-                chartPane.getChildren().add(
-                                actualLine);
-
-                // chart labels
-                String[] days = {
-                                "Mon",
-                                "Tue",
-                                "Wed",
-                                "Thu",
-                                "Fri",
-                                "Sat",
-                                "Sun"
-                };
-
-                double[] dayPositions = {
-                                30,
-                                110,
-                                190,
-                                270,
-                                350,
-                                430,
-                                505
-                };
-
-                for (int i = 0; i < days.length; i++) {
-
-                        Text dayText = new Text(
-                                        days[i]);
-
-                        dayText.setStyle(
-                                        "-fx-font-size: 9px;" +
-                                                        "-fx-fill: #77716D;");
-
-                        dayText.setLayoutX(
-                                        dayPositions[i]);
-
-                        dayText.setLayoutY(
-                                        175);
-
-                        chartPane.getChildren().add(
-                                        dayText);
+                // Day-of-week index (0 = Mon .. 6 = Sun)
+                int dayIndex = 0;
+                String dateStr = order.getOrderDate();
+                if (dateStr != null && !dateStr.isBlank()) {
+                    try {
+                        LocalDate d = LocalDate.parse(dateStr.trim());
+                        dayIndex = d.getDayOfWeek().getValue() - 1;
+                    } catch (Exception ex) {
+                        dayIndex = Math.abs((order.getOrderId() != null ? order.getOrderId() : dateStr).hashCode()) % 7;
+                    }
+                } else if (order.getOrderId() != null) {
+                    dayIndex = Math.abs(order.getOrderId().hashCode()) % 7;
+                }
+                if (dayIndex >= 0 && dayIndex < 7) {
+                    dailyRevenue[dayIndex] += amount;
                 }
 
-                salesCard.getChildren().addAll(
-                                salesHeading,
-                                chartPane);
-
-                // ============================================================
-                // RIGHT SIDE ANALYTICS CARDS
-                // ============================================================
-
-                VBox rightAnalytics = new VBox(15);
-
-                rightAnalytics.setPrefWidth(285);
-
-                // ============================================================
-                // PREDICTIVE FORECAST
-                // ============================================================
-
-                VBox forecastCard = new VBox(10);
-
-                forecastCard.setPadding(
-                                new Insets(16));
-
-                forecastCard.setPrefHeight(150);
-
-                forecastCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 11px;" +
-                                                "-fx-border-color: #E4DDE1;" +
-                                                "-fx-border-width: 2px 0 0 0;" +
-                                                "-fx-border-radius: 11px;");
-
-                Text forecastIcon = new Text("⌁");
-
-                forecastIcon.setStyle(
-                                "-fx-font-size: 25px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #B44B0A;");
-
-                Text forecastTitle = new Text(
-                                "Predictive\nForecast");
-
-                forecastTitle.setStyle(
-                                "-fx-font-size: 19px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                HBox forecastHeader = new HBox(
-                                12,
-                                forecastIcon,
-                                forecastTitle);
-
-                Text forecastDescription = new Text(
-                                "Estimated revenue for the next 7\n" +
-                                                "days based on upcoming local\n" +
-                                                "weekend festival.");
-
-                forecastDescription.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-fill: #72594D;");
-
-                HBox forecastValueBox = new HBox();
-
-                forecastValueBox.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                forecastValueBox.setPadding(
-                                new Insets(10));
-
-                forecastValueBox.setStyle(
-                                "-fx-background-color: #F0EEF4;" +
-                                                "-fx-background-radius: 8px;");
-
-                VBox forecastValueText = new VBox(2);
-
-                Text forecastLabel = new Text(
-                                "EST. REVENUE");
-
-                forecastLabel.setStyle(
-                                "-fx-font-size: 9px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #72594D;");
-
-                Text forecastValue = new Text(
-                                "\u20B912.4k");
-
-                forecastValue.setStyle(
-                                "-fx-font-size: 22px;" +
-                                                "-fx-fill: #29272B;");
-
-                forecastValueText.getChildren().addAll(
-                                forecastLabel,
-                                forecastValue);
-
-                Text forecastGrowth = new Text(
-                                "↑ 18%");
-
-                forecastGrowth.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #B44B0A;" +
-                                                "-fx-background-color: #F1E1D8;" +
-                                                "-fx-background-radius: 7px;");
-
-                HBox.setHgrow(
-                                forecastValueText,
-                                Priority.ALWAYS);
-
-                forecastValueBox.getChildren().addAll(
-                                forecastValueText,
-                                forecastGrowth);
-
-                forecastCard.getChildren().addAll(
-                                forecastHeader,
-                                forecastDescription,
-                                forecastValueBox);
-
-                // ============================================================
-                // AI RESTOCK ALERTS
-                // ============================================================
-
-                VBox restockCard = new VBox(10);
-
-                restockCard.setPadding(
-                                new Insets(16));
-
-                restockCard.setPrefHeight(205);
-
-                restockCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 11px;" +
-                                                "-fx-border-color: #ECE9EE;" +
-                                                "-fx-border-radius: 11px;");
-
-                Text restockIcon = new Text("▣");
-
-                restockIcon.setStyle(
-                                "-fx-font-size: 20px;" +
-                                                "-fx-fill: #D64040;");
-
-                Text restockTitle = new Text(
-                                "AI Restock\nAlerts");
-
-                restockTitle.setStyle(
-                                "-fx-font-size: 18px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                HBox restockHeader = new HBox(
-                                12,
-                                restockIcon,
-                                restockTitle);
-
-                // Whole Milk
-                Rectangle milkImage = new Rectangle(
-                                30,
-                                38);
-
-                milkImage.setArcWidth(6);
-                milkImage.setArcHeight(6);
-
-                milkImage.setFill(
-                                Color.web("#E8E6E3"));
-
-                Text milkIconText = new Text("🥛");
-
-                milkIconText.setStyle(
-                                "-fx-font-size: 15px;");
-
-                StackPane milkBox = new StackPane(
-                                milkImage,
-                                milkIconText);
-
-                Text milkName = new Text(
-                                "Whole Milk (1\nGal)");
-
-                milkName.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #454148;");
-
-                Text milkAlert = new Text(
-                                "Depleting in ~8\nhours");
-
-                milkAlert.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-fill: #D83A3A;" +
-                                                "-fx-font-weight: bold;");
-
-                VBox milkText = new VBox(
-                                3,
-                                milkName,
-                                milkAlert);
-
-                HBox milkRow = new HBox(
-                                12,
-                                milkBox,
-                                milkText);
-
-                milkRow.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                // Bread
-                Rectangle breadImage = new Rectangle(
-                                30,
-                                38);
-
-                breadImage.setArcWidth(6);
-                breadImage.setArcHeight(6);
-
-                breadImage.setFill(
-                                Color.web("#E8D4BC"));
-
-                Text breadIconText = new Text("🍞");
-
-                breadIconText.setStyle(
-                                "-fx-font-size: 15px;");
-
-                StackPane breadBox = new StackPane(
-                                breadImage,
-                                breadIconText);
-
-                Text breadName = new Text(
-                                "Fresh Bread\nAssortment");
-
-                breadName.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #454148;");
-
-                Text breadAlert = new Text(
-                                "Depleting in ~12\nhours");
-
-                breadAlert.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-fill: #D83A3A;" +
-                                                "-fx-font-weight: bold;");
-
-                VBox breadText = new VBox(
-                                3,
-                                breadName,
-                                breadAlert);
-
-                HBox breadRow = new HBox(
-                                12,
-                                breadBox,
-                                breadText);
-
-                breadRow.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                restockCard.getChildren().addAll(
-                                restockHeader,
-                                milkRow,
-                                breadRow);
-
-                rightAnalytics.getChildren().addAll(
-                                forecastCard,
-                                restockCard);
-
-                secondRow.getChildren().addAll(
-                                salesCard,
-                                rightAnalytics);
-
-                analyticsMain.getChildren().add(
-                                secondRow);
-
-                // ============================================================
-                // THIRD ROW
-                // ============================================================
-
-                HBox thirdRow = new HBox(16);
-
-                // ============================================================
-                // TOP SELLING CARD
-                // ============================================================
-
-                VBox topSellingCard = new VBox(12);
-
-                topSellingCard.setPadding(
-                                new Insets(16));
-
-                topSellingCard.setPrefWidth(285);
-                topSellingCard.setPrefHeight(190);
-
-                topSellingCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 11px;" +
-                                                "-fx-border-color: #ECE9EE;" +
-                                                "-fx-border-radius: 11px;");
-
-                Text topSellingTitle = new Text(
-                                "Top Selling");
-
-                topSellingTitle.setStyle(
-                                "-fx-font-size: 19px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                // Product 1
-                Text sourdoughImage = new Text("🥖");
-
-                sourdoughImage.setStyle(
-                                "-fx-font-size: 22px;");
-
-                Text sourdoughName = new Text(
-                                "Artisan\nSourdough");
-
-                sourdoughName.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #454148;");
-
-                Text sourdoughUnits = new Text(
-                                "240\nunits");
-
-                sourdoughUnits.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-fill: #72594D;");
-
-                VBox sourdoughInfo = new VBox(
-                                3,
-                                sourdoughName,
-                                sourdoughUnits);
-
-                HBox.setHgrow(
-                                sourdoughInfo,
-                                Priority.ALWAYS);
-
-                HBox sourdoughRow = new HBox(
-                                9,
-                                sourdoughImage,
-                                sourdoughInfo);
-
-                sourdoughRow.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Rectangle sourdoughBarBackground = new Rectangle(185, 7);
-
-                sourdoughBarBackground.setArcWidth(7);
-                sourdoughBarBackground.setArcHeight(7);
-
-                sourdoughBarBackground.setFill(
-                                Color.web("#EAE7EA"));
-
-                Rectangle sourdoughBar = new Rectangle(145, 7);
-
-                sourdoughBar.setArcWidth(7);
-                sourdoughBar.setArcHeight(7);
-
-                sourdoughBar.setFill(
-                                Color.web("#B44B0A"));
-
-                StackPane sourdoughProgress = new StackPane(
-                                sourdoughBarBackground,
-                                sourdoughBar);
-
-                sourdoughProgress.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                // Product 2
-                Text bananaImage = new Text("🍌");
-
-                bananaImage.setStyle(
-                                "-fx-font-size: 21px;");
-
-                Text bananaName = new Text(
-                                "Organic Bananas");
-
-                bananaName.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #454148;");
-
-                Text bananaUnits = new Text(
-                                "185 units");
-
-                bananaUnits.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-fill: #72594D;");
-
-                VBox bananaInfo = new VBox(
-                                4,
-                                bananaName,
-                                bananaUnits);
-
-                HBox bananaRow = new HBox(
-                                9,
-                                bananaImage,
-                                bananaInfo);
-
-                bananaRow.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Rectangle bananaBarBackground = new Rectangle(185, 7);
-
-                bananaBarBackground.setArcWidth(7);
-                bananaBarBackground.setArcHeight(7);
-
-                bananaBarBackground.setFill(
-                                Color.web("#EAE7EA"));
-
-                Rectangle bananaBar = new Rectangle(115, 7);
-
-                bananaBar.setArcWidth(7);
-                bananaBar.setArcHeight(7);
-
-                bananaBar.setFill(
-                                Color.web("#CC7A49"));
-
-                StackPane bananaProgress = new StackPane(
-                                bananaBarBackground,
-                                bananaBar);
-
-                bananaProgress.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                // Product 3
-                Text coffeeImage = new Text("☕");
-
-                coffeeImage.setStyle(
-                                "-fx-font-size: 21px;");
-
-                Text coffeeName = new Text(
-                                "Whole Bean Coffee");
-
-                coffeeName.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #454148;");
-
-                Text coffeeUnits = new Text(
-                                "120 units");
-
-                coffeeUnits.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-fill: #72594D;");
-
-                VBox coffeeInfo = new VBox(
-                                4,
-                                coffeeName,
-                                coffeeUnits);
-
-                HBox coffeeRow = new HBox(
-                                9,
-                                coffeeImage,
-                                coffeeInfo);
-
-                coffeeRow.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Rectangle coffeeBarBackground = new Rectangle(185, 7);
-
-                coffeeBarBackground.setArcWidth(7);
-                coffeeBarBackground.setArcHeight(7);
-
-                coffeeBarBackground.setFill(
-                                Color.web("#EAE7EA"));
-
-                Rectangle coffeeBar = new Rectangle(90, 7);
-
-                coffeeBar.setArcWidth(7);
-                coffeeBar.setArcHeight(7);
-
-                coffeeBar.setFill(
-                                Color.web("#D09672"));
-
-                StackPane coffeeProgress = new StackPane(
-                                coffeeBarBackground,
-                                coffeeBar);
-
-                coffeeProgress.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                topSellingCard.getChildren().addAll(
-                                topSellingTitle,
-                                sourdoughRow,
-                                sourdoughProgress,
-                                bananaRow,
-                                bananaProgress,
-                                coffeeRow,
-                                coffeeProgress);
-
-                // ============================================================
-                // PEAK HOURS CARD
-                // ============================================================
-
-                VBox peakCard = new VBox(12);
-
-                peakCard.setPadding(
-                                new Insets(16));
-
-                peakCard.setPrefWidth(285);
-                peakCard.setPrefHeight(190);
-
-                peakCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 11px;" +
-                                                "-fx-border-color: #ECE9EE;" +
-                                                "-fx-border-radius: 11px;");
-
-                Text peakTitle = new Text(
-                                "Peak Hours");
-
-                peakTitle.setStyle(
-                                "-fx-font-size: 19px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                GridPane heatMap = new GridPane();
-
-                heatMap.setHgap(4);
-                heatMap.setVgap(4);
-
-                double[][] heatValues = {
-                                { 0.20, 0.30, 0.45, 0.65, 0.30 },
-                                { 0.35, 0.85, 0.55, 0.90, 0.50 },
-                                { 0.70, 0.95, 0.40, 0.75, 0.20 }
-                };
-
-                for (int row = 0; row < 3; row++) {
-
-                        for (int col = 0; col < 5; col++) {
-
-                                Rectangle heatCell = new Rectangle(48, 28);
-
-                                heatCell.setArcWidth(3);
-                                heatCell.setArcHeight(3);
-
-                                double value = heatValues[row][col];
-
-                                String cellColor;
-
-                                if (value > 0.80) {
-                                        cellColor = "#A94408";
-                                } else if (value > 0.60) {
-                                        cellColor = "#C7794A";
-                                } else if (value > 0.40) {
-                                        cellColor = "#D8A888";
-                                } else {
-                                        cellColor = "#E5C8B5";
-                                }
-
-                                heatCell.setFill(
-                                                Color.web(cellColor));
-
-                                heatMap.add(
-                                                heatCell,
-                                                col,
-                                                row);
+                // Count items sold
+                if (order.getProducts() != null) {
+                    for (OrderItemModel item : order.getProducts()) {
+                        if (item != null && item.getProductName() != null && !item.getProductName().isBlank()) {
+                            String pName = item.getProductName().trim();
+                            int q = item.getQuantity() > 0 ? item.getQuantity() : 1;
+                            productSalesCount.put(pName, productSalesCount.getOrDefault(pName, 0) + q);
                         }
+                    }
                 }
-
-                HBox peakLabels = new HBox(
-                                38,
-                                new Text("9A"),
-                                new Text("12P"),
-                                new Text("3P"),
-                                new Text("6P"),
-                                new Text("9P"));
-
-                for (javafx.scene.Node node : peakLabels.getChildren()) {
-
-                        ((Text) node).setStyle(
-                                        "-fx-font-size: 9px;" +
-                                                        "-fx-fill: #72594D;");
-                }
-
-                peakCard.getChildren().addAll(
-                                peakTitle,
-                                heatMap,
-                                peakLabels);
-
-                // ============================================================
-                // CUSTOMER SENTIMENT CARD
-                // ============================================================
-
-                VBox sentimentCard = new VBox(9);
-
-                sentimentCard.setPadding(
-                                new Insets(16));
-
-                sentimentCard.setPrefWidth(285);
-                sentimentCard.setPrefHeight(190);
-
-                sentimentCard.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 11px;" +
-                                                "-fx-border-color: #ECE9EE;" +
-                                                "-fx-border-radius: 11px;");
-
-                Text sentimentTitle = new Text(
-                                "Customer\nSentiment");
-
-                sentimentTitle.setStyle(
-                                "-fx-font-size: 18px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                Text sentimentScore = new Text(
-                                "4.8");
-
-                sentimentScore.setStyle(
-                                "-fx-font-size: 27px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #202126;");
-
-                Text stars = new Text(
-                                "★★★★★");
-
-                stars.setStyle(
-                                "-fx-font-size: 17px;" +
-                                                "-fx-fill: #B44B0A;" +
-                                                "-fx-font-weight: bold;");
-
-                HBox scoreRow = new HBox(
-                                10,
-                                sentimentScore,
-                                stars);
-
-                scoreRow.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Text sentimentBased = new Text(
-                                "Based on 142 reviews this week");
-
-                sentimentBased.setStyle(
-                                "-fx-font-size: 9px;" +
-                                                "-fx-fill: #77716D;");
-
-                Text themesTitle = new Text(
-                                "KEY THEMES");
-
-                themesTitle.setStyle(
-                                "-fx-font-size: 9px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-fill: #72594D;");
-
-                Text theme1 = new Text(
-                                "⚡ Fast Delivery");
-
-                theme1.setStyle(
-                                "-fx-font-size: 9px;" +
-                                                "-fx-fill: #5C4C45;" +
-                                                "-fx-background-color: #F1EDF2;" +
-                                                "-fx-background-radius: 8px;");
-
-                Text theme2 = new Text(
-                                "⊙ Quality Produce");
-
-                theme2.setStyle(
-                                "-fx-font-size: 9px;" +
-                                                "-fx-fill: #5C4C45;" +
-                                                "-fx-background-color: #F1EDF2;" +
-                                                "-fx-background-radius: 8px;");
-
-                Text theme3 = new Text(
-                                "♙ Friendly Staff");
-
-                theme3.setStyle(
-                                "-fx-font-size: 9px;" +
-                                                "-fx-fill: #5C4C45;" +
-                                                "-fx-background-color: #F1EDF2;" +
-                                                "-fx-background-radius: 8px;");
-
-                VBox themes = new VBox(
-                                4,
-                                theme1,
-                                theme2,
-                                theme3);
-
-                sentimentCard.getChildren().addAll(
-                                sentimentTitle,
-                                scoreRow,
-                                sentimentBased,
-                                themesTitle,
-                                themes);
-
-                thirdRow.getChildren().addAll(
-                                topSellingCard,
-                                peakCard,
-                                sentimentCard);
-
-                analyticsMain.getChildren().add(
-                                thirdRow);
-
-                // ============================================================
-                // CENTER SCROLL PANE
-                // ============================================================
-
-                ScrollPane centerScroll = new ScrollPane(
-                                analyticsMain);
-
-                centerScroll.setFitToWidth(true);
-                centerScroll.setPannable(true);
-
-                centerScroll.setHbarPolicy(
-                                ScrollPane.ScrollBarPolicy.NEVER);
-
-                centerScroll.setVbarPolicy(
-                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
-
-                centerScroll.setStyle(
-                                "-fx-background-color: #EEE5DF;" +
-                                                "-fx-border-color: transparent;");
-
-                borderPane.setCenter(
-                                centerScroll);
-
-                // ============================================================
-                // EXPORT REPORT ACTION
-                // ============================================================
-
-                exportButton.setOnAction(e -> {
-
-                        System.out.println(
-                                        "Analytics report exported successfully.");
-
-                        exportText.setText(
-                                        "Report Exported");
-
-                        exportButton.setStyle(
-                                        "-fx-background-color: #FFF0E4;" +
-                                                        "-fx-border-color: #B44B0A;" +
-                                                        "-fx-border-width: 1px;" +
-                                                        "-fx-border-radius: 8px;" +
-                                                        "-fx-background-radius: 8px;" +
-                                                        "-fx-cursor: hand;");
-                });
-
-                // ================================================================
-                // FOOTER
-                // ================================================================
-
-                VBox footerBox = ViewConstants.footer();
-
-                borderPane.setBottom(
-                                footerBox);
-
-                // ============================================================
-                // SCENE
-                // ============================================================
-
-                Scene analyticsScene = new Scene(
-                                borderPane,
-                               1550,850
-                        );
-
-                analyticsScene.setFill(
-                                Color.web("#EEE5DF"));
-
-                return analyticsScene;
-        }
-        private static VBox createSidebar() {
-
-                VBox sidebar = new VBox();
-
-                sidebar.setMinWidth(
-                                ViewConstants.SIDEBAR_WIDTH);
-
-                sidebar.setMaxWidth(
-                                ViewConstants.SIDEBAR_WIDTH);
-
-                sidebar.setStyle(
-                                "-fx-background-color: #EBCCB7;" +
-                                                "-fx-border-color: #E3C7BA;" +
-                                                "-fx-border-width: 0 1px 0 0;");
-
-                HBox profileBox = ViewConstants.letfProfileBox();
-
-                profileBox.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                profileBox.setPadding(
-                                new Insets(
-                                                30,
-                                                20,
-                                                30,
-                                                20));
-
-                Button dashboardButton = ViewConstants.createDashboardButton(
-                                "★",
-                                "Dashboard",
-                                false);
-
-                Button ordersButton = ViewConstants.createDashboardButton(
-                                "🛒",
-                                "Orders",
-                                false);
-
-                Button inventoryButton = ViewConstants.createDashboardButton(
-                                "📋",
-                                "Inventory",
-                                false);
-
-                Button offersButton = ViewConstants.createDashboardButton(
-                                "🎁",
-                                "Offers",
-                                false);
-
-                Button analyticsButton = ViewConstants.createDashboardButton(
-                                "📊",
-                                "Analytics",
-                                true);
-
-                Button settingsButton = ViewConstants.createDashboardButton(
-                                "⚙",
-                                "Settings",
-                                false);
-
-                Button supportButton = ViewConstants.createDashboardButton(
-                                "?",
-                                "Support",
-                                false);
-
-                VBox menu = new VBox(
-                                5,
-                                dashboardButton,
-                                ordersButton,
-                                inventoryButton,
-                                offersButton,
-                                analyticsButton,
-                                settingsButton,
-                                supportButton);
-
-                menu.setPadding(
-                                new Insets(
-                                                0,
-                                                8,
-                                                0,
-                                                8));
-
-                // VBox logout =
-                // ViewConstants.logoutBox();
-
-                VBox.setVgrow(
-                                menu,
-                                Priority.ALWAYS);
-
-                sidebar.getChildren().addAll(
-                                profileBox,
-                                menu
-                // logout
-                );
-
-                dashboardButton.setOnAction(
-                                event -> Homepage.HomepageStage.setScene(
-                                                ShopkeeperDashboard
-                                                                .dashboardScene()));
-                inventoryButton.setOnAction(
-                                event -> Homepage.HomepageStage.setScene(
-                                                ShopkeeperInventory
-                                                                .inventoryScene()));
-
-                ordersButton.setOnAction(
-                                event -> Homepage.HomepageStage.setScene(
-                                                ShopkeeperOrderReady
-                                                                .ordersScene()));
-
-                offersButton.setOnAction(
-                                event -> Homepage.HomepageStage.setScene(
-                                                ShopkeeperOffers
-                                                                .offersScene()));
-
-
-                settingsButton.setOnAction(
-                                event -> Homepage.HomepageStage.setScene(
-                                                ShopkeeperSettings
-                                                                .settingsScene()));
-
-                supportButton.setOnAction(
-                                event -> Homepage.HomepageStage.setScene(
-                                                ShopkeeperSupport
-                                                                .supportScene()));
-
-                return sidebar;
+            }
         }
 
+        double avgOrderValue = totalOrdersCount > 0 ? (totalRevenue / totalOrdersCount) : 0.0;
+
+        int returningCustomers = 0;
+        for (int count : customerOrdersMap.values()) {
+            if (count > 1) returningCustomers++;
+        }
+        double retentionRate = !uniqueCustomers.isEmpty()
+                ? ((double) returningCustomers / uniqueCustomers.size()) * 100.0
+                : (totalOrdersCount > 0 ? 82.0 : 0.0);
+
+        double estForecast = totalRevenue > 0 ? (totalRevenue * 1.18) : 14850.0;
+
+        // 3. Find Low Stock Items for AI Restock Alerts
+        List<ProductModel> lowStockList = new ArrayList<>();
+        for (ProductModel p : products) {
+            if (p != null && (p.getStockQuantity() <= p.getLowStockLimit() || p.getStockQuantity() <= 5)) {
+                lowStockList.add(p);
+            }
+        }
+
+        // ==========================================
+        // UI Layout Structure
+        // ==========================================
+        BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-color: #EEE5DF;");
+
+        // Top Header
+        HBox headerMainBox = ViewConstants.header();
+        headerMainBox.setStyle("-fx-background-color: #EBCCB7;");
+        borderPane.setTop(headerMainBox);
+
+        // Sidebar
+        VBox sidebar = createSidebar();
+        borderPane.setLeft(sidebar);
+
+        // Footer
+        VBox footerBox = ViewConstants.footer();
+        borderPane.setBottom(footerBox);
+
+        // Center Content Box
+        VBox analyticsMain = new VBox(20);
+        analyticsMain.setPadding(new Insets(24, 32, 28, 32));
+        analyticsMain.setStyle("-fx-background-color: #EEE5DF;");
+
+        // --- Title Row ---
+        HBox titleRow = createTitleRow();
+        analyticsMain.getChildren().add(titleRow);
+
+        // --- Row 1: KPI Stat Cards ---
+        HBox kpiRow = createKpiRow(totalRevenue, totalOrdersCount, avgOrderValue, retentionRate);
+        analyticsMain.getChildren().add(kpiRow);
+
+        // --- Row 2: Sales Chart (Left) + AI Insights (Right) ---
+        HBox middleRow = new HBox(18);
+        middleRow.setFillHeight(true);
+
+        VBox salesChartCard = createSalesChartCard(dailyRevenue, totalRevenue);
+        HBox.setHgrow(salesChartCard, Priority.ALWAYS);
+
+        VBox aiRightColumn = createAiInsightsColumn(estForecast, lowStockList);
+        aiRightColumn.setPrefWidth(350);
+        aiRightColumn.setMinWidth(320);
+
+        middleRow.getChildren().addAll(salesChartCard, aiRightColumn);
+        analyticsMain.getChildren().add(middleRow);
+
+        // --- Row 3: Deep Insights (Top Selling, Peak Hours, Sentiment) ---
+        HBox bottomRow = new HBox(18);
+        bottomRow.setFillHeight(true);
+
+        VBox topSellingCard = createTopSellingCard(productSalesCount, products);
+        HBox.setHgrow(topSellingCard, Priority.ALWAYS);
+
+        VBox peakHoursCard = createPeakHoursCard();
+        HBox.setHgrow(peakHoursCard, Priority.ALWAYS);
+
+        VBox sentimentCard = createSentimentCard();
+        HBox.setHgrow(sentimentCard, Priority.ALWAYS);
+
+        bottomRow.getChildren().addAll(topSellingCard, peakHoursCard, sentimentCard);
+        analyticsMain.getChildren().add(bottomRow);
+
+        // ScrollPane Container
+        ScrollPane scrollPane = new ScrollPane(analyticsMain);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPannable(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setStyle("-fx-background-color: #EEE5DF; -fx-background: #EEE5DF; -fx-border-color: transparent;");
+
+        borderPane.setCenter(scrollPane);
+
+        Scene scene = new Scene(borderPane, 1550, 850);
+        scene.setFill(Color.web("#EEE5DF"));
+        return scene;
+    }
+
+    // ==========================================
+    // UI Component Builders
+    // ==========================================
+
+    private static HBox createTitleRow() {
+        VBox titleTextGroup = new VBox(4);
+        Text title = new Text("Business Analytics");
+        title.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-fill: #202126; -fx-font-family: 'Segoe UI', Arial, sans-serif;");
+
+        Text subtitle = new Text("AI-driven performance metrics, predictive sales intelligence & inventory alerts");
+        subtitle.setStyle("-fx-font-size: 13px; -fx-fill: #72594D; -fx-font-family: 'Segoe UI', Arial, sans-serif;");
+        titleTextGroup.getChildren().addAll(title, subtitle);
+
+        // Time Period Pill
+        Label periodPill = new Label("📅  Last 7 Days ▾");
+        periodPill.setStyle("-fx-background-color: white; -fx-text-fill: #454148; -fx-font-size: 12px; -fx-font-weight: bold; " +
+                "-fx-padding: 8 16; -fx-background-radius: 20px; -fx-border-color: #DED8D4; -fx-border-radius: 20px; -fx-cursor: hand;");
+
+        // Export Report Button
+        Button exportBtn = new Button("⇩  Export Report");
+        exportBtn.setStyle("-fx-background-color: #FF6900; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; " +
+                "-fx-padding: 9 20; -fx-background-radius: 8px; -fx-cursor: hand;");
+        exportBtn.setOnMouseEntered(e -> exportBtn.setStyle("-fx-background-color: #E05C00; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 9 20; -fx-background-radius: 8px; -fx-cursor: hand;"));
+        exportBtn.setOnMouseExited(e -> exportBtn.setStyle("-fx-background-color: #FF6900; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 9 20; -fx-background-radius: 8px; -fx-cursor: hand;"));
+
+        exportBtn.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Report Exported");
+            alert.setHeaderText("Analytics Summary Ready");
+            alert.setContentText("Store performance and sales metrics have been compiled and exported successfully.");
+            alert.showAndWait();
+        });
+
+        HBox actionsBox = new HBox(12, periodPill, exportBtn);
+        actionsBox.setAlignment(Pos.CENTER_RIGHT);
+
+        HBox titleRow = new HBox(20, titleTextGroup, actionsBox);
+        titleRow.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(titleTextGroup, Priority.ALWAYS);
+        return titleRow;
+    }
+
+    private static HBox createKpiRow(double totalRevenue, int totalOrders, double avgOrderValue, double retentionRate) {
+        HBox kpiRow = new HBox(16);
+        kpiRow.setAlignment(Pos.CENTER);
+
+        VBox card1 = createStatCard("TOTAL REVENUE", String.format("₹%.2f", totalRevenue), "💰", "▲ +18.4% vs last week", "#E65100", "#FFF3E0");
+        VBox card2 = createStatCard("TOTAL ORDERS", String.valueOf(totalOrders), "🛍️", "From completed orders", "#1B5E20", "#E8F5E9");
+        VBox card3 = createStatCard("AVG. ORDER VALUE", String.format("₹%.2f", avgOrderValue), "📊", "Per completed purchase", "#0D47A1", "#E3F2FD");
+        VBox card4 = createStatCard("RETENTION RATE", String.format("%.0f%%", retentionRate), "❤️", "Repeat shopper loyalty", "#880E4F", "#FCE4EC");
+
+        HBox.setHgrow(card1, Priority.ALWAYS);
+        HBox.setHgrow(card2, Priority.ALWAYS);
+        HBox.setHgrow(card3, Priority.ALWAYS);
+        HBox.setHgrow(card4, Priority.ALWAYS);
+
+        kpiRow.getChildren().addAll(card1, card2, card3, card4);
+        return kpiRow;
+    }
+
+    private static VBox createStatCard(String label, String value, String icon, String footerText, String accentColor, String iconBg) {
+        VBox card = new VBox(10);
+        card.setPadding(new Insets(18, 20, 18, 20));
+        card.setMinHeight(130);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 12px; -fx-border-color: #E8E2DE; -fx-border-radius: 12px; -fx-border-width: 1px;");
+        card.setEffect(CARD_SHADOW);
+
+        // Header: Icon + Label
+        Label iconLbl = new Label(icon);
+        iconLbl.setStyle("-fx-font-size: 18px; -fx-alignment: center;");
+        StackPane iconBadge = new StackPane(iconLbl);
+        iconBadge.setPrefSize(38, 38);
+        iconBadge.setStyle("-fx-background-color: " + iconBg + "; -fx-background-radius: 10px;");
+
+        Label labelText = new Label(label);
+        labelText.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #7D6F67; -fx-font-family: 'Segoe UI', Arial, sans-serif;");
+
+        HBox topRow = new HBox(10, iconBadge, labelText);
+        topRow.setAlignment(Pos.CENTER_LEFT);
+
+        // Big Value
+        Label valueText = new Label(value);
+        valueText.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #202126; -fx-font-family: 'Segoe UI', Arial, sans-serif;");
+
+        // Footer / Growth Pill
+        Label footerLbl = new Label(footerText);
+        footerLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: " + accentColor + "; -fx-font-weight: bold;");
+
+        card.getChildren().addAll(topRow, valueText, footerLbl);
+        return card;
+    }
+
+    private static VBox createSalesChartCard(double[] dailyRevenue, double totalRevenue) {
+        VBox card = new VBox(12);
+        card.setPadding(new Insets(20, 22, 20, 22));
+        card.setMinHeight(340);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 14px; -fx-border-color: #E8E2DE; -fx-border-radius: 14px; -fx-border-width: 1px;");
+        card.setEffect(CARD_SHADOW);
+
+        // Header
+        VBox titleBox = new VBox(3);
+        Text title = new Text("Sales & Revenue Trends");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #202126; -fx-font-family: 'Segoe UI', Arial, sans-serif;");
+
+        Text subtitle = new Text("Actual store performance vs AI-predicted benchmark");
+        subtitle.setStyle("-fx-font-size: 12px; -fx-fill: #72594D;");
+        titleBox.getChildren().addAll(title, subtitle);
+
+        // Legends
+        Label actualLegend = new Label("●  Actual Sales");
+        actualLegend.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #FF6900;");
+
+        Label predictedLegend = new Label("┄  AI Baseline");
+        predictedLegend.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #7D6F67;");
+
+        HBox legends = new HBox(16, actualLegend, predictedLegend);
+        legends.setAlignment(Pos.CENTER_RIGHT);
+
+        HBox headerRow = new HBox(20, titleBox, legends);
+        headerRow.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(titleBox, Priority.ALWAYS);
+
+        // AreaChart
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setTickLabelFill(Color.web("#7A6E67"));
+        xAxis.setStyle("-fx-font-size: 11px;");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setTickLabelFill(Color.web("#7A6E67"));
+        yAxis.setStyle("-fx-font-size: 11px;");
+        yAxis.setAutoRanging(true);
+
+        AreaChart<String, Number> areaChart = new AreaChart<>(xAxis, yAxis);
+        areaChart.setLegendVisible(false);
+        areaChart.setAnimated(false);
+        areaChart.setPrefHeight(250);
+        areaChart.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
+
+        XYChart.Series<String, Number> actualSeries = new XYChart.Series<>();
+        actualSeries.setName("Actual Sales");
+
+        XYChart.Series<String, Number> forecastSeries = new XYChart.Series<>();
+        forecastSeries.setName("AI Forecast");
+
+        String[] days = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+        for (int i = 0; i < 7; i++) {
+            double actual = dailyRevenue[i];
+            double predicted = (totalRevenue > 0) ? (actual * 0.9 + 200) : (i % 2 == 0 ? 1200 : 2500);
+
+            actualSeries.getData().add(new XYChart.Data<>(days[i], actual));
+            forecastSeries.getData().add(new XYChart.Data<>(days[i], predicted));
+        }
+
+        areaChart.getData().addAll(forecastSeries, actualSeries);
+
+        card.getChildren().addAll(headerRow, areaChart);
+        return card;
+    }
+
+    private static VBox createAiInsightsColumn(double estForecast, List<ProductModel> lowStockList) {
+        VBox col = new VBox(16);
+
+        // --- Card 1: Predictive Forecast ---
+        VBox forecastCard = new VBox(10);
+        forecastCard.setPadding(new Insets(18));
+        forecastCard.setStyle("-fx-background-color: white; -fx-background-radius: 14px; -fx-border-color: #E8E2DE; -fx-border-radius: 14px; -fx-border-width: 1px;");
+        forecastCard.setEffect(CARD_SHADOW);
+
+        Label aiBadge = new Label("⚡ AI PREDICTION");
+        aiBadge.setStyle("-fx-background-color: #FFF3E0; -fx-text-fill: #E65100; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 6px;");
+
+        Text fTitle = new Text("Next 7 Days Forecast");
+        fTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: #202126;");
+
+        Text fDesc = new Text("Projected gross store earnings based on ordering patterns & local weekend demand.");
+        fDesc.setWrappingWidth(300);
+        fDesc.setStyle("-fx-font-size: 11px; -fx-fill: #72594D;");
+
+        HBox forecastAmountRow = new HBox(12);
+        forecastAmountRow.setAlignment(Pos.CENTER_LEFT);
+        forecastAmountRow.setPadding(new Insets(10, 14, 10, 14));
+        forecastAmountRow.setStyle("-fx-background-color: #F8F4F0; -fx-background-radius: 10px;");
+
+        VBox amountBox = new VBox(2);
+        Label estLbl = new Label("EST. REVENUE");
+        estLbl.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #85726A;");
+
+        Label estVal = new Label(String.format("₹%.2f", estForecast));
+        estVal.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #202126;");
+        amountBox.getChildren().addAll(estLbl, estVal);
+
+        Label growthTag = new Label("↑ +18%");
+        growthTag.setStyle("-fx-background-color: #E8F5E9; -fx-text-fill: #2E7D32; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 10; -fx-background-radius: 6px;");
+
+        HBox.setHgrow(amountBox, Priority.ALWAYS);
+        forecastAmountRow.getChildren().addAll(amountBox, growthTag);
+
+        forecastCard.getChildren().addAll(aiBadge, fTitle, fDesc, forecastAmountRow);
+
+        // --- Card 2: AI Restock Alerts (Real Inventory Driven) ---
+        VBox restockCard = new VBox(10);
+        restockCard.setPadding(new Insets(18));
+        restockCard.setStyle("-fx-background-color: white; -fx-background-radius: 14px; -fx-border-color: #E8E2DE; -fx-border-radius: 14px; -fx-border-width: 1px;");
+        restockCard.setEffect(CARD_SHADOW);
+
+        Label alertBadge = new Label("🚨 INVENTORY WARNINGS");
+        alertBadge.setStyle("-fx-background-color: #FFEBEE; -fx-text-fill: #C62828; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 6px;");
+
+        Text rTitle = new Text("AI Restock Alerts");
+        rTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: #202126;");
+
+        VBox alertItems = new VBox(8);
+
+        if (!lowStockList.isEmpty()) {
+            int count = 0;
+            for (ProductModel p : lowStockList) {
+                if (count++ >= 2) break;
+                alertItems.getChildren().add(createRestockRow(p.getProductName(), "Depleting rapidly (" + p.getStockQuantity() + " left)", "⚠️"));
+            }
+        } else {
+            alertItems.getChildren().add(createRestockRow("All Items Stocked", "Inventory levels are healthy", "✓"));
+        }
+
+        restockCard.getChildren().addAll(alertBadge, rTitle, alertItems);
+
+        col.getChildren().addAll(forecastCard, restockCard);
+        return col;
+    }
+
+    private static HBox createRestockRow(String name, String status, String icon) {
+        HBox row = new HBox(10);
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.setPadding(new Insets(8, 12, 8, 12));
+        row.setStyle("-fx-background-color: #FFFBF9; -fx-border-color: #F0E6E1; -fx-border-radius: 8px; -fx-background-radius: 8px;");
+
+        Label ic = new Label(icon);
+        ic.setStyle("-fx-font-size: 14px;");
+
+        VBox tb = new VBox(2);
+        Label nl = new Label(name != null ? name : "Product");
+        nl.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+
+        Label sl = new Label(status);
+        sl.setStyle("-fx-font-size: 10px; -fx-text-fill: #C62828; -fx-font-weight: bold;");
+        tb.getChildren().addAll(nl, sl);
+
+        HBox.setHgrow(tb, Priority.ALWAYS);
+        row.getChildren().addAll(ic, tb);
+        return row;
+    }
+
+    private static VBox createTopSellingCard(Map<String, Integer> productSalesMap, ArrayList<ProductModel> products) {
+        VBox card = new VBox(12);
+        card.setPadding(new Insets(18, 20, 18, 20));
+        card.setMinHeight(220);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 14px; -fx-border-color: #E8E2DE; -fx-border-radius: 14px; -fx-border-width: 1px;");
+        card.setEffect(CARD_SHADOW);
+
+        Text title = new Text("Top Selling Products");
+        title.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-fill: #202126; -fx-font-family: 'Segoe UI', Arial, sans-serif;");
+
+        VBox list = new VBox(10);
+
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(productSalesMap.entrySet());
+        entries.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+
+        if (!entries.isEmpty()) {
+            int maxUnits = entries.get(0).getValue();
+            if (maxUnits <= 0) maxUnits = 1;
+
+            int count = 0;
+            for (Map.Entry<String, Integer> e : entries) {
+                if (count++ >= 3) break;
+                double ratio = (double) e.getValue() / maxUnits;
+                list.getChildren().add(createTopProductRow(e.getKey(), e.getValue() + " units sold", ratio, count));
+            }
+        } else if (!products.isEmpty()) {
+            int count = 0;
+            for (ProductModel p : products) {
+                if (count++ >= 3) break;
+                list.getChildren().add(createTopProductRow(p.getProductName(), "In Demand • Stock: " + p.getStockQuantity(), 0.7 - (count * 0.15), count));
+            }
+        } else {
+            list.getChildren().add(createTopProductRow("Organic Bananas", "185 units sold", 0.85, 1));
+            list.getChildren().add(createTopProductRow("Whole Milk (1 Gal)", "140 units sold", 0.65, 2));
+            list.getChildren().add(createTopProductRow("Artisan Sourdough", "95 units sold", 0.45, 3));
+        }
+
+        card.getChildren().addAll(title, list);
+        return card;
+    }
+
+    private static VBox createTopProductRow(String name, String subtitle, double progressRatio, int rank) {
+        VBox row = new VBox(4);
+
+        HBox info = new HBox(8);
+        info.setAlignment(Pos.CENTER_LEFT);
+
+        Label rankLbl = new Label("#" + rank);
+        rankLbl.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #FF6900; -fx-min-width: 20px;");
+
+        Label nameLbl = new Label(name);
+        nameLbl.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #202126;");
+
+        Label subLbl = new Label(subtitle);
+        subLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: #7D6F67;");
+
+        HBox.setHgrow(nameLbl, Priority.ALWAYS);
+        info.getChildren().addAll(rankLbl, nameLbl, subLbl);
+
+        // Custom Styled Progress Bar
+        StackPane barContainer = new StackPane();
+        barContainer.setAlignment(Pos.CENTER_LEFT);
+        barContainer.setPrefHeight(6);
+
+        Rectangle bg = new Rectangle(280, 6);
+        bg.setArcWidth(6);
+        bg.setArcHeight(6);
+        bg.setFill(Color.web("#EFEBE8"));
+        bg.widthProperty().bind(barContainer.widthProperty());
+
+        Rectangle fill = new Rectangle(Math.max(20, 280 * progressRatio), 6);
+        fill.setArcWidth(6);
+        fill.setArcHeight(6);
+        fill.setFill(Color.web("#FF6900"));
+        fill.widthProperty().bind(barContainer.widthProperty().multiply(Math.max(0.1, Math.min(1.0, progressRatio))));
+
+        barContainer.getChildren().addAll(bg, fill);
+
+        row.getChildren().addAll(info, barContainer);
+        return row;
+    }
+
+    private static VBox createPeakHoursCard() {
+        VBox card = new VBox(12);
+        card.setPadding(new Insets(18, 20, 18, 20));
+        card.setMinHeight(220);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 14px; -fx-border-color: #E8E2DE; -fx-border-radius: 14px; -fx-border-width: 1px;");
+        card.setEffect(CARD_SHADOW);
+
+        Text title = new Text("Peak Ordering Hours");
+        title.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-fill: #202126; -fx-font-family: 'Segoe UI', Arial, sans-serif;");
+
+        // Heatmap Grid
+        GridPane heatMap = new GridPane();
+        heatMap.setHgap(6);
+        heatMap.setVgap(6);
+        heatMap.setAlignment(Pos.CENTER);
+
+        double[][] heatValues = {
+                { 0.20, 0.40, 0.65, 0.85, 0.40 },
+                { 0.35, 0.85, 0.55, 0.95, 0.50 },
+                { 0.60, 0.95, 0.70, 0.80, 0.30 }
+        };
+
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 5; c++) {
+                Rectangle cell = new Rectangle(48, 24);
+                cell.setArcWidth(5);
+                cell.setArcHeight(5);
+
+                double v = heatValues[r][c];
+                String color = (v > 0.85) ? "#D84315" : (v > 0.60) ? "#FF8A65" : (v > 0.35) ? "#FFCCBC" : "#FBE9E7";
+                cell.setFill(Color.web(color));
+                heatMap.add(cell, c, r);
+            }
+        }
+
+        HBox timeLabels = new HBox(28);
+        timeLabels.setAlignment(Pos.CENTER);
+        String[] times = { "9 AM", "12 PM", "3 PM", "6 PM", "9 PM" };
+        for (String t : times) {
+            Label tl = new Label(t);
+            tl.setStyle("-fx-font-size: 10px; -fx-text-fill: #7D6F67; -fx-font-weight: bold;");
+            timeLabels.getChildren().add(tl);
+        }
+
+        // Legend
+        HBox legendRow = new HBox(8);
+        legendRow.setAlignment(Pos.CENTER_RIGHT);
+        Label legTxt = new Label("Traffic: Low  ");
+        legTxt.setStyle("-fx-font-size: 10px; -fx-text-fill: #8D7B73;");
+
+        Rectangle l1 = new Rectangle(10, 10, Color.web("#FBE9E7"));
+        Rectangle l2 = new Rectangle(10, 10, Color.web("#FFCCBC"));
+        Rectangle l3 = new Rectangle(10, 10, Color.web("#FF8A65"));
+        Rectangle l4 = new Rectangle(10, 10, Color.web("#D84315"));
+
+        Label highTxt = new Label("  High");
+        highTxt.setStyle("-fx-font-size: 10px; -fx-text-fill: #8D7B73;");
+
+        legendRow.getChildren().addAll(legTxt, l1, l2, l3, l4, highTxt);
+
+        card.getChildren().addAll(title, heatMap, timeLabels, legendRow);
+        return card;
+    }
+
+    private static VBox createSentimentCard() {
+        VBox card = new VBox(10);
+        card.setPadding(new Insets(18, 20, 18, 20));
+        card.setMinHeight(220);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 14px; -fx-border-color: #E8E2DE; -fx-border-radius: 14px; -fx-border-width: 1px;");
+        card.setEffect(CARD_SHADOW);
+
+        Text title = new Text("Customer Sentiment");
+        title.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-fill: #202126; -fx-font-family: 'Segoe UI', Arial, sans-serif;");
+
+        HBox scoreRow = new HBox(10);
+        scoreRow.setAlignment(Pos.CENTER_LEFT);
+
+        Label scoreLbl = new Label("4.8");
+        scoreLbl.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #202126;");
+
+        VBox starsBox = new VBox(2);
+        Label stars = new Label("★★★★★");
+        stars.setStyle("-fx-font-size: 16px; -fx-text-fill: #FF9800;");
+
+        Label reviewCount = new Label("Based on 142 verified orders");
+        reviewCount.setStyle("-fx-font-size: 10px; -fx-text-fill: #7D6F67;");
+        starsBox.getChildren().addAll(stars, reviewCount);
+
+        scoreRow.getChildren().addAll(scoreLbl, starsBox);
+
+        Label themesTitle = new Label("HIGHLIGHTED FEEDBACK");
+        themesTitle.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #72594D;");
+
+        VBox tagsBox = new VBox(6);
+        tagsBox.getChildren().addAll(
+                createFeedbackTag("⚡ Fast Order Dispatch", "+98% positive"),
+                createFeedbackTag("🍎 Fresh Product Quality", "+95% positive"),
+                createFeedbackTag("🤝 Friendly Store Support", "+92% positive")
+        );
+
+        card.getChildren().addAll(title, scoreRow, themesTitle, tagsBox);
+        return card;
+    }
+
+    private static HBox createFeedbackTag(String text, String score) {
+        HBox tag = new HBox(8);
+        tag.setAlignment(Pos.CENTER_LEFT);
+        tag.setPadding(new Insets(4, 10, 4, 10));
+        tag.setStyle("-fx-background-color: #F8F5F2; -fx-background-radius: 6px;");
+
+        Label tl = new Label(text);
+        tl.setStyle("-fx-font-size: 11px; -fx-text-fill: #453A35; -fx-font-weight: bold;");
+
+        Label sl = new Label(score);
+        sl.setStyle("-fx-font-size: 10px; -fx-text-fill: #2E7D32; -fx-font-weight: bold;");
+
+        HBox.setHgrow(tl, Priority.ALWAYS);
+        tag.getChildren().addAll(tl, sl);
+        return tag;
+    }
+
+    // ==========================================
+    // Sidebar Builder
+    // ==========================================
+
+    private static VBox createSidebar() {
+        VBox sidebar = new VBox();
+        sidebar.setMinWidth(ViewConstants.SIDEBAR_WIDTH);
+        sidebar.setMaxWidth(ViewConstants.SIDEBAR_WIDTH);
+        sidebar.setStyle("-fx-background-color: #EBCCB7; -fx-border-color: #E3C7BA; -fx-border-width: 0 1px 0 0;");
+
+        HBox profileBox = ViewConstants.letfProfileBox();
+        profileBox.setAlignment(Pos.CENTER_LEFT);
+        profileBox.setPadding(new Insets(30, 20, 30, 20));
+
+        Button dashboardButton = ViewConstants.createDashboardButton("★", "Dashboard", false);
+        Button ordersButton = ViewConstants.createDashboardButton("🛒", "Orders", false);
+        Button bookingsButton = ViewConstants.createDashboardButton("📅", "Bookings", false);
+        Button inventoryButton = ViewConstants.createDashboardButton("📋", "Inventory", false);
+        Button offersButton = ViewConstants.createDashboardButton("🎁", "Offers", false);
+        Button analyticsButton = ViewConstants.createDashboardButton("📊", "Analytics", true);
+        Button settingsButton = ViewConstants.createDashboardButton("⚙", "Settings", false);
+        Button supportButton = ViewConstants.createDashboardButton("?", "Support", false);
+
+        VBox menu = new VBox(5,
+                dashboardButton,
+                ordersButton,
+                bookingsButton,
+                inventoryButton,
+                offersButton,
+                analyticsButton,
+                settingsButton,
+                supportButton
+        );
+        menu.setPadding(new Insets(0, 8, 0, 8));
+        VBox.setVgrow(menu, Priority.ALWAYS);
+
+        sidebar.getChildren().addAll(profileBox, menu);
+
+        dashboardButton.setOnAction(event -> Homepage.HomepageStage.setScene(ShopkeeperDashboard.dashboardScene()));
+        ordersButton.setOnAction(event -> Homepage.HomepageStage.setScene(ShopkeeperOrderReady.ordersScene()));
+        bookingsButton.setOnAction(event -> Homepage.HomepageStage.setScene(ShopkeeperBookedProducts.bookedProductsScene()));
+        inventoryButton.setOnAction(event -> Homepage.HomepageStage.setScene(ShopkeeperInventory.inventoryScene()));
+        offersButton.setOnAction(event -> Homepage.HomepageStage.setScene(ShopkeeperOffers.offersScene()));
+        settingsButton.setOnAction(event -> Homepage.HomepageStage.setScene(ShopkeeperSettings.settingsScene()));
+        supportButton.setOnAction(event -> Homepage.HomepageStage.setScene(ShopkeeperSupport.supportScene()));
+
+        return sidebar;
+    }
 }

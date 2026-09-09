@@ -23,10 +23,12 @@ import com.kryox.view.Customer.Homepage;
 
 public class DeliverySupport {
 
-    private static final String ORANGE_PRIMARY = "#f46a06";
-    private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
-    private static final String BORDER_COLOR = "#f0edf2";
+    private static final String ORANGE_PRIMARY = "#f08b3e";
+    private static final String ORANGE_GRADIENT = "linear-gradient(to right, #D66F1C, #F39A52)";
+
+    private static final String BG_COLOR = "#F5E0D3";
+
+    private static final String BORDER_COLOR = "#ebc6aa";
 
     public static class SupportData {
         public String helplinePhone = "+91 1800 209 8822";
@@ -35,9 +37,6 @@ public class DeliverySupport {
         public String activePartner = "Alex Walker";
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS (SHOPKEEPER PATTERN)
-    // =========================================================================
     public static Scene supportScene() {
         return supportScene("LOGIN", new SupportData());
     }
@@ -66,7 +65,8 @@ public class DeliverySupport {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        // ONLY SCENE SIZE CHANGED
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
@@ -76,8 +76,10 @@ public class DeliverySupport {
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
         topBar.setMaxHeight(60);
+
+        // ONLY TOP BAR COLOR CHANGED
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: " + BORDER_COLOR + ";" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-padding: 0 35 0 25;"
@@ -130,6 +132,12 @@ public class DeliverySupport {
 
         HBox leftGroup = new HBox(16, btnBack, logo);
         leftGroup.setAlignment(Pos.CENTER_LEFT);
+
+        // LEFT SIDE ALSO SAME BACKGROUND
+        leftGroup.setStyle(
+                "-fx-background-color: #EBCCB7;"
+        );
+
         topBar.setLeft(leftGroup);
 
         HBox liveDeskPill = new HBox(6);
@@ -158,7 +166,11 @@ public class DeliverySupport {
         HBox contactCards = new HBox(16);
         VBox phoneCard = createContactCard("📞 Emergency Helpline", data.helplinePhone, "Toll-Free (24x7 Active)", () -> launchPhone(data.helplinePhone));
         VBox emailCard = createContactCard("✉ Email Support", data.supportEmail, "Response within 1 hour", () -> launchEmail(data.supportEmail));
-        VBox chatCard = createContactCard("💬 Live Partner Chat", "Instant Agent Connect", "Avg wait: < 2 mins", () -> {});
+        VBox chatCard = createContactCard("💬 Live Partner Chat", "Instant Agent Connect", "Avg wait: < 2 mins", () -> {
+            if (Homepage.HomepageStage != null) {
+                Homepage.HomepageStage.setScene(PartnerChatSupport.partnerChatSupportScene("SUPPORT"));
+            }
+        });
 
         contactCards.getChildren().addAll(phoneCard, emailCard, chatCard);
         HBox.setHgrow(phoneCard, Priority.ALWAYS);

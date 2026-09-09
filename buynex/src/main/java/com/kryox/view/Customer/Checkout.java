@@ -24,10 +24,6 @@ import java.util.UUID;
 
 public class Checkout extends Application {
 
-    // =========================================================
-    // PRODUCT MODEL
-    // =========================================================
-
     public static class CartProduct {
 
         private final StringProperty name =
@@ -83,10 +79,6 @@ public class Checkout extends Application {
         }
     }
 
-    // =========================================================
-    // DYNAMIC CART DATA
-    // =========================================================
-
     private final ObservableList<CartProduct> cartProducts =
             FXCollections.observableArrayList(
 
@@ -105,10 +97,6 @@ public class Checkout extends Application {
                     )
             );
 
-    // =========================================================
-    // DYNAMIC ADDRESS
-    // =========================================================
-
     private String customerName =
             "Alex Rivera";
 
@@ -121,10 +109,6 @@ public class Checkout extends Application {
     private String phone =
             "+1 (555) 123-4567";
 
-    // =========================================================
-    // DELIVERY
-    // =========================================================
-
     private double deliveryFee = 0.00;
 
     private final double TAX_RATE = 0.085;
@@ -134,34 +118,18 @@ public class Checkout extends Application {
     private Label taxValue;
     private Label totalValue;
 
-    // =========================================================
-    // PAGE NAVIGATION
-    // =========================================================
-
     private Scene checkoutScene;
     private Stage currentStage;
-
-    // =========================================================
-    // COLORS
-    // =========================================================
 
     private final String ORANGE = "#B84C00";
     private final String LIGHT_ORANGE = "#FFF1E8";
     private final String BORDER = "#E7DDD8";
     private final String BACKGROUND = "#F7F5F8";
 
-    // =========================================================
-    // START
-    // =========================================================
-
     @Override
     public void start(Stage stage) {
 
         currentStage = stage;
-
-        // =====================================================
-        // MAIN BORDER PANE
-        // =====================================================
 
         BorderPane root =
                 new BorderPane();
@@ -170,18 +138,10 @@ public class Checkout extends Application {
                 "-fx-background-color: " + BACKGROUND + ";"
         );
 
-        // =====================================================
-        // TOP HEADER
-        // =====================================================
-
         HBox header =
                 createHeader();
 
         root.setTop(header);
-
-        // =====================================================
-        // MAIN CONTENT
-        // =====================================================
 
         HBox content =
                 new HBox(20);
@@ -194,10 +154,6 @@ public class Checkout extends Application {
                         55
                 )
         );
-
-        // =====================================================
-        // LEFT SIDE
-        // =====================================================
 
         VBox leftSide =
                 new VBox(18);
@@ -227,10 +183,6 @@ public class Checkout extends Application {
                 paymentBox
         );
 
-        // =====================================================
-        // RIGHT SIDE
-        // =====================================================
-
         VBox rightSide =
                 createOrderSummary();
 
@@ -240,10 +192,6 @@ public class Checkout extends Application {
         );
 
         root.setCenter(content);
-
-        // =====================================================
-        // SCROLL
-        // =====================================================
 
         ScrollPane scroll =
                 new ScrollPane(content);
@@ -260,10 +208,6 @@ public class Checkout extends Application {
         );
 
         root.setCenter(scroll);
-
-        // =====================================================
-        // SCENE
-        // =====================================================
 
         Scene scene =
                 new Scene(
@@ -286,10 +230,6 @@ public class Checkout extends Application {
 
         updateTotals();
     }
-
-    // =========================================================
-    // HEADER
-    // =========================================================
 
     private HBox createHeader() {
 
@@ -364,10 +304,6 @@ public class Checkout extends Application {
         return header;
     }
 
-    // =========================================================
-    // CHECKOUT TITLE
-    // =========================================================
-
     private VBox createCheckoutTitle() {
 
         VBox box =
@@ -406,10 +342,6 @@ public class Checkout extends Application {
 
         return box;
     }
-
-    // =========================================================
-    // SHIPPING ADDRESS
-    // =========================================================
 
     private VBox createShippingAddress() {
 
@@ -461,10 +393,6 @@ public class Checkout extends Application {
                 spacer,
                 change
         );
-
-        // =====================================================
-        // ADDRESS BOX
-        // =====================================================
 
         HBox addressBox =
                 new HBox(12);
@@ -563,10 +491,6 @@ public class Checkout extends Application {
         return card;
     }
 
-    // =========================================================
-    // DELIVERY METHOD
-    // =========================================================
-
     private VBox createDeliveryMethod() {
 
         VBox card =
@@ -585,10 +509,6 @@ public class Checkout extends Application {
 
         ToggleGroup deliveryGroup =
                 new ToggleGroup();
-
-        // =====================================================
-        // EXPRESS
-        // =====================================================
 
         RadioButton express =
                 new RadioButton();
@@ -626,7 +546,7 @@ public class Checkout extends Application {
         );
 
         Label expressPrice =
-                new Label("+$6.99");
+                new Label("+₹6.99");
 
         expressPrice.setStyle(
                 "-fx-font-size: 10px;" +
@@ -666,10 +586,6 @@ public class Checkout extends Application {
                 "-fx-background-radius: 6;"
         );
 
-        // =====================================================
-        // HYPERLOCAL
-        // =====================================================
-
         RadioButton hyperlocal =
                 new RadioButton();
 
@@ -706,7 +622,7 @@ public class Checkout extends Application {
         );
 
         Label hyperPrice =
-                new Label("+$4.99");
+                new Label("+₹4.99");
 
         hyperPrice.setStyle(
                 "-fx-font-size: 10px;" +
@@ -745,10 +661,6 @@ public class Checkout extends Application {
                 "-fx-border-radius: 6;" +
                 "-fx-background-radius: 6;"
         );
-
-        // =====================================================
-        // STANDARD
-        // =====================================================
 
         RadioButton standard =
                 new RadioButton();
@@ -829,10 +741,6 @@ public class Checkout extends Application {
                 "-fx-background-radius: 6;"
         );
 
-        // =====================================================
-        // DELIVERY EVENT
-        // =====================================================
-
         express.setOnAction(e -> {
 
             deliveryFee = 6.99;
@@ -898,10 +806,6 @@ public class Checkout extends Application {
         return card;
     }
 
-    // =========================================================
-    // DELIVERY SELECTION STYLE
-    // =========================================================
-
     private void updateDeliverySelection(
             HBox selected,
             HBox other1,
@@ -929,10 +833,6 @@ public class Checkout extends Application {
                 "-fx-background-radius: 6;"
         );
     }
-
-    // =========================================================
-    // PAYMENT METHOD
-    // =========================================================
 
     private VBox createPaymentMethod() {
 
@@ -967,10 +867,6 @@ public class Checkout extends Application {
                 "-fx-text-fill: #222222;"
         );
 
-        // =====================================================
-        // CARD NUMBER
-        // =====================================================
-
         TextField cardNumber =
                 new TextField();
 
@@ -981,10 +877,6 @@ public class Checkout extends Application {
         cardNumber.setPrefHeight(32);
 
         styleTextField(cardNumber);
-
-        // =====================================================
-        // EXPIRY + CVC
-        // =====================================================
 
         TextField expiry =
                 new TextField();
@@ -1022,10 +914,6 @@ public class Checkout extends Application {
                 cvc
         );
 
-        // =====================================================
-        // CARD FORM
-        // =====================================================
-
         VBox cardForm =
                 new VBox(9);
 
@@ -1046,10 +934,6 @@ public class Checkout extends Application {
                 cardNumber,
                 cardDetails
         );
-
-        // =====================================================
-        // OTHER PAYMENT
-        // =====================================================
 
         RadioButton upi =
                 new RadioButton(
@@ -1086,10 +970,6 @@ public class Checkout extends Application {
 
         return card;
     }
-
-    // =========================================================
-    // ORDER SUMMARY
-    // =========================================================
 
     private VBox createOrderSummary() {
 
@@ -1137,16 +1017,16 @@ public class Checkout extends Application {
                 new Separator();
 
         subtotalValue =
-                new Label("$0.00");
+                new Label("₹0.00");
 
         deliveryValue =
-                new Label("$0.00");
+                new Label("₹0.00");
 
         taxValue =
-                new Label("$0.00");
+                new Label("₹0.00");
 
         totalValue =
-                new Label("$0.00");
+                new Label("₹0.00");
 
         HBox subtotal =
                 summaryRow(
@@ -1203,10 +1083,6 @@ public class Checkout extends Application {
                 totalSpacer,
                 totalValue
         );
-
-        // =====================================================
-        // PLACE ORDER BUTTON
-        // =====================================================
 
         Button placeOrder =
                 new Button(
@@ -1265,10 +1141,6 @@ public class Checkout extends Application {
 
         return summary;
     }
-
-    // =========================================================
-    // SUMMARY PRODUCT
-    // =========================================================
 
     private HBox createSummaryProduct(
             CartProduct product) {
@@ -1363,7 +1235,7 @@ public class Checkout extends Application {
         Label price =
                 new Label(
                         String.format(
-                                "$%.2f",
+                                "₹%.2f",
                                 product.getPrice()
                                         * product.getQuantity()
                         )
@@ -1383,10 +1255,6 @@ public class Checkout extends Application {
 
         return box;
     }
-
-    // =========================================================
-    // SUMMARY ROW
-    // =========================================================
 
     private HBox summaryRow(
             String title,
@@ -1425,10 +1293,6 @@ public class Checkout extends Application {
         return row;
     }
 
-    // =========================================================
-    // CARD STYLE
-    // =========================================================
-
     private VBox createCard() {
 
         VBox card =
@@ -1448,10 +1312,6 @@ public class Checkout extends Application {
         return card;
     }
 
-    // =========================================================
-    // TEXT FIELD STYLE
-    // =========================================================
-
     private void styleTextField(
             TextField field) {
 
@@ -1466,10 +1326,6 @@ public class Checkout extends Application {
                 "-fx-font-size: 10px;"
         );
     }
-
-    // =========================================================
-    // UPDATE TOTALS
-    // =========================================================
 
     private void updateTotals() {
 
@@ -1495,7 +1351,7 @@ public class Checkout extends Application {
 
             subtotalValue.setText(
                     String.format(
-                            "$%.2f",
+                            "₹%.2f",
                             subtotal
                     )
             );
@@ -1505,7 +1361,7 @@ public class Checkout extends Application {
 
             deliveryValue.setText(
                     String.format(
-                            "$%.2f",
+                            "₹%.2f",
                             deliveryFee
                     )
             );
@@ -1515,7 +1371,7 @@ public class Checkout extends Application {
 
             taxValue.setText(
                     String.format(
-                            "$%.2f",
+                            "₹%.2f",
                             tax
                     )
             );
@@ -1525,26 +1381,18 @@ public class Checkout extends Application {
 
             totalValue.setText(
                     String.format(
-                            "$%.2f",
+                            "₹%.2f",
                             total
                     )
             );
         }
     }
 
-    // =========================================================
-    // PLACE ORDER
-    // =========================================================
-
     private void showOrderConfirmation() {
 
         // Open the proper booking-success page instead of a small Alert.
         showBookingSuccessPage();
     }
-
-    // =========================================================
-    // BOOKING SUCCESS PAGE
-    // =========================================================
 
     private void showBookingSuccessPage() {
 
@@ -1560,10 +1408,6 @@ public class Checkout extends Application {
         root.setStyle(
                 "-fx-background-color: #F7F5F8;"
         );
-
-        // =====================================================
-        // SIMPLE BUY-NEX HEADER
-        // =====================================================
 
         HBox header = new HBox();
 
@@ -1607,10 +1451,6 @@ public class Checkout extends Application {
 
         root.setTop(header);
 
-        // =====================================================
-        // MAIN SUCCESS CARD
-        // =====================================================
-
         VBox card = new VBox(12);
 
         card.setPrefWidth(390);
@@ -1639,10 +1479,6 @@ public class Checkout extends Application {
         );
 
         card.setEffect(shadow);
-
-        // =====================================================
-        // SUCCESS ICON
-        // =====================================================
 
         StackPane successIcon =
                 new StackPane();
@@ -1677,10 +1513,6 @@ public class Checkout extends Application {
                 check
         );
 
-        // =====================================================
-        // TITLE
-        // =====================================================
-
         Label title =
                 new Label(
                         "Product Booked Successfully!"
@@ -1691,10 +1523,6 @@ public class Checkout extends Application {
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #171717;"
         );
-
-        // =====================================================
-        // SUBTITLE
-        // =====================================================
 
         Label subtitle =
                 new Label(
@@ -1707,10 +1535,6 @@ public class Checkout extends Application {
                 "-fx-font-size: 9px;" +
                 "-fx-text-fill: #786F6B;"
         );
-
-        // =====================================================
-        // BOOKED PRODUCT
-        // =====================================================
 
         CartProduct bookedProduct =
                 cartProducts.isEmpty()
@@ -1824,10 +1648,6 @@ public class Checkout extends Application {
                 productInfo
         );
 
-        // =====================================================
-        // STATUS ROW
-        // =====================================================
-
         HBox statusRow =
                 new HBox();
 
@@ -1891,10 +1711,6 @@ public class Checkout extends Application {
                 statusRow
         );
 
-        // =====================================================
-        // NEXT STEPS
-        // =====================================================
-
         VBox nextSteps =
                 new VBox(5);
 
@@ -1931,10 +1747,6 @@ public class Checkout extends Application {
                 nextTitle,
                 nextText
         );
-
-        // =====================================================
-        // BUTTONS
-        // =====================================================
 
         Button bookingsButton =
                 new Button("View My Bookings");
@@ -2023,10 +1835,6 @@ public class Checkout extends Application {
                 backButton
         );
 
-        // =====================================================
-        // CENTER THE CARD
-        // =====================================================
-
         StackPane center =
                 new StackPane(card);
 
@@ -2040,10 +1848,6 @@ public class Checkout extends Application {
 
         root.setCenter(center);
 
-        // =====================================================
-        // SUCCESS SCENE
-        // =====================================================
-
         Scene successScene =
                 new Scene(
                         root,
@@ -2054,10 +1858,6 @@ public class Checkout extends Application {
         currentStage.setScene(
                 successScene
         );
-
-        // =====================================================
-        // SMOOTH ENTRY ANIMATION
-        // =====================================================
 
         card.setOpacity(0);
         card.setTranslateY(15);
@@ -2119,12 +1919,4 @@ public class Checkout extends Application {
 
         iconAnimation.play();
     }
-
-
-    // =========================================================
-    // MAIN
-    // =========================================================
-
-   
-    
 }

@@ -56,11 +56,6 @@ public class neaby_shope {
         private Scene nearByscene;
 
         Scene getNearby_shopes(Runnable callbackDashbord) {
-
-                // =====================================================
-                // SHADOWS
-                // =====================================================
-
                 DropShadow shadow = new DropShadow();
                 shadow.setRadius(18);
                 shadow.setSpread(0.05);
@@ -74,20 +69,18 @@ public class neaby_shope {
                 cardShadow.setSpread(0.02);
                 cardShadow.setColor(Color.rgb(0, 0, 0, 0.10));
 
-                // =====================================================
-                // LOGO
-                // =====================================================
+                DropShadow smallShadow = new DropShadow();
+                smallShadow.setRadius(8);
+                smallShadow.setOffsetY(2);
+                smallShadow.setSpread(0.02);
+                smallShadow.setColor(Color.rgb(0, 0, 0, 0.08));
 
                 Label name = new Label("BuyNeX");
                 name.setStyle(
                                 "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 28px;" +
-                                                "-fx-font-weight: 900;" +
-                                                "-fx-text-fill: #E87500;");
-
-                // =====================================================
-                // PREMIUM SHOPPER
-                // =====================================================
+                                "-fx-font-size: 28px;" +
+                                "-fx-font-weight: 900;" +
+                                "-fx-text-fill: #E87500;");
 
                 HBox premiumBox = new HBox(9);
                 premiumBox.setPrefSize(205, 58);
@@ -97,33 +90,29 @@ public class neaby_shope {
                 premiumBox.setPadding(new Insets(8, 13, 8, 13));
                 premiumBox.setStyle(
                                 "-fx-background-color: #FFFFFF;" +
-                                                "-fx-background-radius: 15;" +
-                                                "-fx-border-color: #E9E2EA;" +
-                                                "-fx-border-width: 1;" +
-                                                "-fx-border-radius: 15;");
+                                "-fx-background-radius: 15;" +
+                                "-fx-border-color: #E9E2EA;" +
+                                "-fx-border-width: 1;" +
+                                "-fx-border-radius: 15;");
                 premiumBox.setEffect(cardShadow);
 
                 VBox textBox = new VBox(3);
                 Label title = new Label("Premium Shopper");
                 title.setStyle(
                                 "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #222222;");
+                                "-fx-font-size: 12px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-text-fill: #222222;");
 
                 Label subtitle = new Label("● AI Assistant Active");
                 subtitle.setStyle(
                                 "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 9px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #FF6900;");
+                                "-fx-font-size: 9px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-text-fill: #FF6900;");
 
                 textBox.getChildren().addAll(title, subtitle);
                 premiumBox.getChildren().add(textBox);
-
-                // =====================================================
-                // DASHBOARD
-                // =====================================================
 
                 Image di = new Image("/assets/images/Dashbord/dashboard.png");
                 ImageView div = new ImageView(di);
@@ -188,10 +177,6 @@ public class neaby_shope {
                                                         "-fx-cursor: hand;");
                 });
 
-                // =====================================================
-                // NEARBY SHOPS
-                // =====================================================
-
                 Image di2 = new Image("/assets/images/store.png");
                 ImageView div2 = new ImageView(di2);
                 div2.setFitHeight(23);
@@ -250,10 +235,6 @@ public class neaby_shope {
                                                         "-fx-alignment: CENTER_LEFT;" +
                                                         "-fx-cursor: hand;");
                 });
-
-                // =====================================================
-                // DEALS
-                // =====================================================
 
                 Image di3 = new Image("/assets/images/Dashbord/hot-sale.png");
                 ImageView div3 = new ImageView(di3);
@@ -324,10 +305,6 @@ public class neaby_shope {
                                                         "-fx-cursor: hand;");
                 });
 
-                // =====================================================
-                // MY ORDERS
-                // =====================================================
-
                 Image di4 = new Image("/assets/images/Dashbord/package.png");
                 ImageView div4 = new ImageView(di4);
                 div4.setFitHeight(23);
@@ -390,10 +367,6 @@ public class neaby_shope {
                                                         "-fx-alignment: CENTER_LEFT;" +
                                                         "-fx-cursor: hand;");
                 });
-
-                // =====================================================
-                // ANALYTICS
-                // =====================================================
 
                 Image di5 = new Image("/assets/images/Dashbord/line-chart.png");
                 ImageView div5 = new ImageView(di5);
@@ -463,58 +436,7 @@ public class neaby_shope {
                                                         "-fx-cursor: hand;");
                 });
 
-                // =====================================================
-                // UPGRADE CARD
-                // =====================================================
-
-                VBox upgradeCard = new VBox(7);
-                upgradeCard.setPrefWidth(205);
-                upgradeCard.setMinWidth(205);
-                upgradeCard.setMaxWidth(205);
-                upgradeCard.setPrefHeight(112);
-                upgradeCard.setPadding(new Insets(15));
-                upgradeCard.setAlignment(Pos.CENTER_LEFT);
-
-                LinearGradient upgradeGradient = new LinearGradient(
-                                0, 0, 1, 1, true,
-                                CycleMethod.NO_CYCLE,
-                                new Stop(0, Color.web("#25262A")),
-                                new Stop(1, Color.web("#45474D")));
-
-                upgradeCard.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                upgradeGradient,
-                                                                new CornerRadii(17),
-                                                                Insets.EMPTY)));
-
-                Label upgradeTitle = new Label("Unlock Gold");
-                upgradeTitle.setStyle(
-                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: white;");
-
-                Label upgradeText = new Label("Smarter deals & exclusive rewards");
-                upgradeText.setStyle(
-                                "-fx-font-size: 8px;" +
-                                                "-fx-text-fill: #BEBFC3;");
-
-                Button upgradeGold = new Button("Upgrade to Gold");
-                upgradeGold.setPrefWidth(175);
-                upgradeGold.setPrefHeight(30);
-                upgradeGold.setStyle(
-                                "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 10;" +
-                                                "-fx-cursor: hand;");
-
-                upgradeCard.getChildren().addAll(upgradeTitle, upgradeText, upgradeGold);
-
-                // =====================================================
-                // SETTINGS
-                // =====================================================
+                VBox upgradeCard = CustomerPlanUpgradeCard.createUpgradeCard(userId);
 
                 Image di6 = new Image("/assets/images/Dashbord/category.png");
                 ImageView div6 = new ImageView(di6);
@@ -542,10 +464,6 @@ public class neaby_shope {
                 hbInDashboard6.setPrefHeight(34);
                 hbInDashboard6.setAlignment(Pos.CENTER_LEFT);
                 hbInDashboard6.setPadding(new Insets(0, 8, 0, 18));
-
-                // =====================================================
-                // HELP
-                // =====================================================
 
                 Image di7 = new Image("/assets/images/Dashbord/question.png");
                 ImageView div7 = new ImageView(di7);
@@ -583,10 +501,6 @@ public class neaby_shope {
                 hbInDashboard7.setAlignment(Pos.CENTER_LEFT);
                 hbInDashboard7.setPadding(new Insets(0, 8, 0, 18));
 
-                // =====================================================
-                // LEFT BOX
-                // =====================================================
-
                 VBox leftBox = new VBox(14);
                 leftBox.setPrefWidth(245);
                 leftBox.setMinWidth(245);
@@ -612,10 +526,6 @@ public class neaby_shope {
                                 upgradeCard,
                                 hbInDashboard6,
                                 hbInDashboard7);
-
-                // =====================================================
-                // TOP NAVIGATION
-                // =====================================================
 
                 Button t1 = new Button("Offers");
                 Button t2 = new Button("Shops");
@@ -666,31 +576,12 @@ public class neaby_shope {
 
                 t3.setOnMouseExited(e -> t3.setStyle(topButtonStyle));
 
+                t1.setOnAction(e -> CustomerNavigation.navigateToDeals(userId));
+                t2.setOnAction(e -> CustomerNavigation.navigateToNearbyShops(userId));
+                t3.setOnAction(e -> CustomerNavigation.navigateToHelp(userId));
+
                 HBox topLinks = new HBox(6, t1, t2, t3);
                 topLinks.setAlignment(Pos.CENTER_LEFT);
-
-                // =====================================================
-                // SEARCH
-                // =====================================================
-
-                TextField searchBox = new TextField();
-                searchBox.setPromptText("Search products, shops or deals with AI...");
-                searchBox.setPrefWidth(310);
-                searchBox.setPrefHeight(39);
-                searchBox.setStyle(
-                                "-fx-background-color: #F8F7FA;" +
-                                                "-fx-background-radius: 20;" +
-                                                "-fx-border-color: #E5E1E8;" +
-                                                "-fx-border-radius: 20;" +
-                                                "-fx-border-width: 1;" +
-                                                "-fx-padding: 0 16 0 16;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-text-fill: #444444;" +
-                                                "-fx-prompt-text-fill: #999999;");
-
-                // =====================================================
-                // LOCATION
-                // =====================================================
 
                 Label locationIcon = new Label("📍");
                 Label locationText = new Label("Downtown Manhattan⌄");
@@ -701,10 +592,8 @@ public class neaby_shope {
 
                 HBox locationBox = new HBox(4, locationIcon, locationText);
                 locationBox.setAlignment(Pos.CENTER_LEFT);
-
-                // =====================================================
-                // ACTIONS
-                // =====================================================
+                locationBox.setStyle("-fx-cursor: hand;");
+                locationBox.setOnMouseClicked(e -> CustomerNavigation.navigateToNearbyShops(userId));
 
                 Button b1 = new Button("🔔");
                 Button b2 = new Button("🛒");
@@ -747,23 +636,17 @@ public class neaby_shope {
                 b3.setOnMouseEntered(e -> b3.setStyle(actionHoverStyle));
                 b3.setOnMouseExited(e -> b3.setStyle(actionStyle));
 
+                b1.setOnAction(e -> CustomerNavigation.navigateToNotifications(userId));
+                b2.setOnAction(e -> CustomerNavigation.navigateToCart(userId));
+                b3.setOnAction(e -> CustomerNavigation.navigateToSettings(userId));
+
                 HBox actionBox = new HBox(7, b1, b2, b3);
                 actionBox.setAlignment(Pos.CENTER_RIGHT);
 
-                // =====================================================
-                // NAVIGATION SPACERS
-                // =====================================================
+                Region navSpacer = new Region();
+                HBox.setHgrow(navSpacer, Priority.ALWAYS);
 
-                Region navSpacer1 = new Region();
-                HBox.setHgrow(navSpacer1, Priority.ALWAYS);
-                Region navSpacer2 = new Region();
-                HBox.setHgrow(navSpacer2, Priority.ALWAYS);
-
-                // =====================================================
-                // NAV BOX
-                // ====================================================
-
-                HBox navBox = new HBox(12, topLinks, navSpacer1, searchBox, navSpacer2, locationBox, actionBox);
+                HBox navBox = new HBox(12, topLinks, navSpacer, locationBox, actionBox);
                 navBox.setPrefHeight(68);
                 navBox.setPadding(new Insets(12, 24, 12, 24));
                 navBox.setAlignment(Pos.CENTER_LEFT);
@@ -772,10 +655,6 @@ public class neaby_shope {
                                                 "-fx-background-color: #ebccb7;" +
                                                 "-fx-border-width: 0 0 1 0;");
                 navBox.setTranslateX(-28);
-
-                // =====================================================
-                // NEARBY SHOPS CONTENT + GOOGLE MAP
-                // =====================================================
 
                 // Shop list shown immediately beside the existing sidebar.
                 VBox shopList = new VBox(12);
@@ -842,18 +721,6 @@ public class neaby_shope {
                                 fastDeliveryButton);
                 filterRow.setAlignment(Pos.CENTER_LEFT);
 
-                // =====================================================
-                // OPENSTREETMAP MAP - NATIVE JAVAFX
-                //
-                // Created here (before the shop cards) so the cards'
-                // "View Shop" buttons can be wired directly to this
-                // same map instance and draw routes on it.
-                // =====================================================
-
-                // =====================================================
-                // FIXED MAP SIZE
-                // =====================================================
-
                 final double MAP_WIDTH = 900;
                 final double MAP_HEIGHT = 700;
 
@@ -888,23 +755,7 @@ public class neaby_shope {
 
                 mapContainer.setEffect(cardShadow);
 
-                // -----------------------------------------------------
-                // FIX: clip mapContainer to its own bounds.
-                //
-                // Region/StackPane/Pane do NOT clip children to their
-                // layout bounds by default. OsmMapView draws OSM tiles
-                // at raw pixel coordinates (tilePane.setLayoutX/Y) which
-                // routinely fall outside the visible 900x700 box while
-                // panning/zooming. Without a clip, those tiles paint
-                // straight through and cover whatever is drawn after
-                // this node in the scene graph (here: the sidebar),
-                // which is exactly the "map takes over the whole
-                // window" bug seen in the screenshot.
-                //
-                // Binding a Rectangle clip to mapContainer's own
-                // width/height guarantees nothing the map draws can
-                // ever escape its container, regardless of window size.
-                // -----------------------------------------------------
+                // Clip mapContainer to its own bounds
                 Rectangle mapContainerClip = new Rectangle();
                 mapContainerClip.widthProperty().bind(mapContainer.widthProperty());
                 mapContainerClip.heightProperty().bind(mapContainer.heightProperty());
@@ -920,37 +771,29 @@ public class neaby_shope {
                 VBox cardsBox = new VBox(12);
 
                 cardsBox.getChildren().addAll(
+                                // Jijau Mess
                                 createShopCard(
-                                                "Core2web",
-                                                "Grocery",
-                                                "0.8 miles away",
-                                                "15 min",
-                                                "$0 fee",
+                                                "Jijau Mess",
+                                                "Restaurant",
+                                                "0.2 miles away",
+                                                "10 min",
+                                                "₹0 fee",
                                                 "4.8",
                                                 true,
-                                                40.7505,
-                                                73.8245,
+                                                18.4515,
+                                                73.8340,
                                                 mapView),
+
+                                // Core2web
                                 createShopCard(
-                                                "Tech Haven",
-                                                "Electronics",
-                                                "1.2 miles away",
-                                                "30 min",
-                                                "$2.99 fee",
-                                                "4.9",
+                                                "Core2web",
+                                                "Education",
+                                                "0.3 miles away",
+                                                "15 min",
+                                                "₹0 fee",
+                                                "4.8",
                                                 true,
-                                                40.7505,
-                                                73.8245,
-                                                mapView),
-                                createShopCard(
-                                                "Nature's Pharmacy",
-                                                "Health",
-                                                "0.5 miles away",
-                                                "20 min",
-                                                "Opens 9 AM",
-                                                "4.7",
-                                                false,
-                                                40.7306,
+                                                18.4577,
                                                 73.8245,
                                                 mapView));
 
@@ -974,17 +817,9 @@ public class neaby_shope {
                 nearbyContent.setAlignment(Pos.TOP_LEFT);
                 nearbyContent.setFillHeight(false);
 
-                // =====================================================
-                // RIGHT CONTENT
-                // =====================================================
-
                 VBox Rightvbox = new VBox(12, navBox, nearbyContent);
                 Rightvbox.setPadding(new Insets(0, 26, 20, 0));
                 Rightvbox.setStyle("-fx-background-color: #eee5df");
-
-                // =====================================================
-                // SUBTLE ORANGE BACKGROUND GLOW
-                // =====================================================
 
                 RadialGradient orangeGlow1 = new RadialGradient(
                                 0, 0, 0.84, 0.16, 0.42, true,
@@ -1000,28 +835,16 @@ public class neaby_shope {
                                                                 CornerRadii.EMPTY,
                                                                 Insets.EMPTY)));
 
-                // =====================================================
-                // BORDER PANE
-                // =====================================================
-
                 BorderPane mainBox = new BorderPane();
                 mainBox.setLeft(leftBox);
                 mainBox.setCenter(Rightvbox);
                 mainBox.setStyle("-fx-background-color: #eee5df");
-
-                // =====================================================
-                // SCENE
-                // =====================================================
 
                 Scene sc = new Scene(mainBox, 1530, 850);
                 nearByscene = sc;
 
                 return nearByscene;
         }
-
-        // =====================================================
-        // SHOP CARD
-        // =====================================================
 
         private VBox createShopCard(
                         String shopName,
@@ -1149,38 +972,18 @@ public class neaby_shope {
                                 statusLabel,
                                 actionRow);
 
-                // Clicking Directions still opens the route in the browser
-                // via Google Maps -> unchanged from before.
                 directions.setOnAction(event -> {
                         String url = "https://www.google.com/maps/dir/?api=1&destination=" + latitude + "," + longitude;
 
                         getHostServicesSafely(url);
                 });
 
-                // -----------------------------------------------------
-                // Clicking "View Shop" draws the exact start -> destination
-                // route directly on our own embedded OsmMapView (no browser,
-                // no Google Maps redirect). The map fetches a real road
-                // route from OSRM and falls back to a straight line if
-                // the routing request fails for any reason.
-                // -----------------------------------------------------
                 viewShop.setOnAction(event -> {
                         mapView.showRouteFromCurrentLocation(latitude, longitude);
                 });
 
                 return card;
         }
-
-        // =====================================================
-        // OPENSTREETMAP NATIVE JAVAFX MAP
-        //
-        // This does NOT use WebView, Google Maps JavaScript,
-        // Leaflet or any external JavaScript library.
-        //
-        // OSM tiles are downloaded directly and displayed in
-        // JavaFX ImageViews. This avoids the JavaFX WebView
-        // rendering problems with modern Leaflet maps.
-        // =====================================================
 
         private static class OsmMapView extends StackPane {
 
@@ -1236,13 +1039,6 @@ public class neaby_shope {
                                         routePane,
                                         markerPane);
 
-                        // -----------------------------------------------------
-                        // FIX: clip this StackPane (and therefore tilePane /
-                        // markerPane) to its own real layout bounds so tiles
-                        // and markers can never be painted outside the map
-                        // box, no matter what world-pixel coordinates the
-                        // tile-loading math produces during pan/zoom.
-                        // -----------------------------------------------------
                         Rectangle selfClip = new Rectangle();
                         selfClip.widthProperty().bind(widthProperty());
                         selfClip.heightProperty().bind(heightProperty());
@@ -1609,27 +1405,21 @@ public class neaby_shope {
                                 double leftWorld,
                                 double topWorld) {
 
+                        // Jijau Mess
+                        addMarker(
+                                        "Jijau Mess",
+                                        "Restaurant",
+                                        18.4515,
+                                        73.8340,
+                                        leftWorld,
+                                        topWorld);
+
+                        // Core2web
                         addMarker(
                                         "Core2web",
-                                        "Grocery",
+                                        "Education",
                                         18.4577,
                                         73.8245,
-                                        leftWorld,
-                                        topWorld);
-
-                        addMarker(
-                                        "Tech Haven",
-                                        "Electronics",
-                                        18.5204,
-                                        73.8567,
-                                        leftWorld,
-                                        topWorld);
-
-                        addMarker(
-                                        "Nature's Pharmacy",
-                                        "Health",
-                                        18.5074,
-                                        73.8077,
                                         leftWorld,
                                         topWorld);
                 }
@@ -1691,16 +1481,6 @@ public class neaby_shope {
                                         marker);
                 }
 
-                // =====================================================
-                // ROUTING (drawn directly on this embedded map, no
-                // browser / Google Maps redirect involved)
-                // =====================================================
-
-                /**
-                 * Convenience entry point used by the "View Shop" button:
-                 * routes from this map's initial/current-location point
-                 * to the given shop destination.
-                 */
                 void showRouteFromCurrentLocation(
                                 double destinationLatitude,
                                 double destinationLongitude) {

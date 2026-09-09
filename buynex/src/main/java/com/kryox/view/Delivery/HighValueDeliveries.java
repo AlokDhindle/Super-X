@@ -24,12 +24,9 @@ public class HighValueDeliveries {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EBCCB7";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    // =========================================================================
-    // DYNAMIC FIRESTORE-READY HIGH VALUE DATA MODEL
-    // =========================================================================
     public static class HighValueData {
         public String partnerName = "Alex Walker";
         public String currentZone = "Pune Tech Corridor & Prime Hubs";
@@ -133,9 +130,6 @@ public class HighValueDeliveries {
         }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS (SHOPKEEPER PATTERN)
-    // =========================================================================
     public static Scene highValueDeliveriesScene() {
         return highValueDeliveriesScene(new HighValueData());
     }
@@ -156,21 +150,21 @@ public class HighValueDeliveries {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        // ONLY SIZE CHANGED
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
 
-    // =========================================================================
-    // TOP HEADER
-    // =========================================================================
     private static BorderPane createTopHeader(HighValueData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setMinHeight(60);
         topBar.setMaxHeight(60);
+
+        // ONLY TOP BAR COLOR CHANGED
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: " + BORDER_COLOR + ";" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-padding: 0 35 0 25;"
@@ -188,6 +182,7 @@ public class HighValueDeliveries {
                 "-fx-cursor: hand;" +
                 "-fx-padding: 6 14 6 14;"
         );
+
         btnBack.setOnAction(e -> {
             if (Homepage.HomepageStage != null) {
                 Homepage.HomepageStage.setScene(PartnerDeliveries.partnerDeliveriesScene());
@@ -199,6 +194,12 @@ public class HighValueDeliveries {
 
         HBox leftGroup = new HBox(16, btnBack, title);
         leftGroup.setAlignment(Pos.CENTER_LEFT);
+
+        // LEFT SIDE SAME BACKGROUND
+        leftGroup.setStyle(
+                "-fx-background-color: #EBCCB7;"
+        );
+
         topBar.setLeft(leftGroup);
 
         HBox primePill = new HBox(6);
@@ -213,9 +214,6 @@ public class HighValueDeliveries {
         return topBar;
     }
 
-    // =========================================================================
-    // MAIN CONTENT VIEW
-    // =========================================================================
     private static VBox createMainContent(HighValueData data) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(24, 40, 60, 40));
@@ -272,9 +270,6 @@ public class HighValueDeliveries {
         return content;
     }
 
-    // =========================================================================
-    // HIGH VALUE ORDER CARD
-    // =========================================================================
     private static VBox createHighValueCard(HighValueData data, HighValueOrderItem item) {
         VBox card = new VBox(12);
         card.setPadding(new Insets(18));

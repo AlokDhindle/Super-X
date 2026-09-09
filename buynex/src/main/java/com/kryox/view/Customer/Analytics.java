@@ -14,6 +14,15 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
+
+import com.kryox.controller.Customer.CARTcontroller;
+import com.kryox.model.Customer.Productcart;
+import com.kryox.dao.Customer.OrderDAO;
+import com.kryox.model.Shopkeeper.OrderModel;
+import com.kryox.model.Shopkeeper.OrderItemModel;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -32,24 +41,40 @@ public class Analytics {
         DropShadow cardShadow = new DropShadow();
 
         public VBox createSummaryCard(String label, String value, String icon) {
-                VBox card = new VBox(4);
-                card.setPadding(new Insets(18, 20, 18, 20));
+                VBox card = new VBox(6);
+                card.setPrefWidth(240);
+                card.setMinWidth(220);
+                card.setPrefHeight(130);
+                card.setMinHeight(120);
+                card.setPadding(new Insets(18, 22, 18, 22));
                 card.setAlignment(Pos.CENTER_LEFT);
                 card.setStyle("-fx-background-color: white;-fx-background-radius: 14;-fx-border-color: #E9E2EA;-fx-border-radius: 14;-fx-border-width: 1;");
                 card.setEffect(cardShadow);
 
                 Label iconLabel = new Label(icon);
-                iconLabel.setStyle("-fx-font-size: 18px;");
+                iconLabel.setStyle("-fx-font-size: 20px;");
 
                 Label valueLabel = new Label(value);
                 valueLabel.setStyle(
-                                "-fx-font-family: 'Montserrat';-fx-font-size: 20px;-fx-font-weight: bold;-fx-text-fill: #222222;");
+                                "-fx-font-family: 'Montserrat';-fx-font-size: 22px;-fx-font-weight: bold;-fx-text-fill: #222222;");
 
                 Label descLabel = new Label(label);
-                descLabel.setStyle("-fx-font-family: 'Montserrat';-fx-font-size: 10px;-fx-text-fill: #888888;");
+                descLabel.setStyle("-fx-font-family: 'Montserrat';-fx-font-size: 11px;-fx-font-weight: 500;-fx-text-fill: #888888;");
 
                 card.getChildren().addAll(iconLabel, valueLabel, descLabel);
                 return card;
+        }
+
+        public Scene getAnalyticsScene() {
+                return getAnalyticscene(() -> CustomerNavigation.navigateToDashboard(userId));
+        }
+
+        public Scene getAnalyticsScene(Runnable callback) {
+                return getAnalyticscene(callback);
+        }
+
+        public Scene getAnalyticscene() {
+                return getAnalyticsScene();
         }
 
         public Scene getAnalyticscene(Runnable callbacktodashboard) {
@@ -279,45 +304,7 @@ public class Analytics {
                                         "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
 
-                VBox upgradeCard = new VBox(7);
-                upgradeCard.setPrefWidth(223);
-                upgradeCard.setMinWidth(223);
-                upgradeCard.setMaxWidth(223);
-                upgradeCard.setPrefHeight(123);
-                upgradeCard.setPadding(new Insets(15));
-                upgradeCard.setAlignment(Pos.CENTER_LEFT);
-
-                LinearGradient upgradeGradient = new LinearGradient(
-                                0, 0, 1, 1, true,
-                                CycleMethod.NO_CYCLE,
-                                new Stop(0, Color.web("#25262A")),
-                                new Stop(1, Color.web("#45474D")));
-
-                upgradeCard.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                upgradeGradient,
-                                                                new CornerRadii(17),
-                                                                Insets.EMPTY)));
-
-                Label upgradeTitle = new Label("Unlock Gold");
-                upgradeTitle.setStyle("-fx-font-size: 12px;-fx-font-weight: bold;-fx-text-fill: white;");
-
-                Label upgradeText = new Label("Smarter deals & exclusive rewards");
-                upgradeText.setStyle("-fx-font-size: 8px;-fx-text-fill: #BEBFC3;");
-
-                Button upgradeGold = new Button("Upgrade to Gold");
-                upgradeGold.setPrefWidth(193);
-                upgradeGold.setPrefHeight(30);
-                upgradeGold.setStyle(
-                                "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 10;" +
-                                                "-fx-cursor: hand;");
-
-                upgradeCard.getChildren().addAll(upgradeTitle, upgradeText, upgradeGold);
+                VBox upgradeCard = CustomerPlanUpgradeCard.createUpgradeCard(userId);
 
                 Image di6 = new Image("/assets/images/Dashbord/category.png");
                 ImageView div6 = new ImageView(di6);
@@ -424,16 +411,12 @@ public class Analytics {
                 t3.setOnMouseEntered(e -> t3.setStyle(
                                 "-fx-background-color: transparent;-fx-text-fill: #FF6900;-fx-font-size: 10px;-fx-font-weight: bold;-fx-padding: 6 8 6 8;-fx-border-width: 0;-fx-cursor: hand;"));
 
-                t3.setOnMouseExited(e -> t3.setStyle(topButtonStyle));
+                t1.setOnAction(e -> CustomerNavigation.navigateToDeals(userId));
+                t2.setOnAction(e -> CustomerNavigation.navigateToNearbyShops(userId));
+                t3.setOnAction(e -> CustomerNavigation.navigateToHelp(userId));
+
                 HBox topLinks = new HBox(6, t1, t2, t3);
                 topLinks.setAlignment(Pos.CENTER_LEFT);
-
-                TextField searchBox = new TextField();
-                searchBox.setPromptText("Search products, shops or deals with AI...");
-                searchBox.setPrefWidth(340);
-                searchBox.setPrefHeight(40);
-                searchBox.setStyle(
-                                "-fx-background-color: #F8F7FA;-fx-background-radius: 20;-fx-border-color: #E5E1E8;-fx-border-radius: 20;-fx-border-width: 1;-fx-padding: 0 16 0 16;-fx-font-size: 10px;-fx-text-fill: #444444;-fx-prompt-text-fill: #999999;");
 
                 Label locationIcon = new Label("📍");
                 Label locationText = new Label("Downtown Manhattan⌄");
@@ -441,6 +424,8 @@ public class Analytics {
 
                 HBox locationBox = new HBox(4, locationIcon, locationText);
                 locationBox.setAlignment(Pos.CENTER_LEFT);
+                locationBox.setStyle("-fx-cursor: hand;");
+                locationBox.setOnMouseClicked(e -> CustomerNavigation.navigateToNearbyShops(userId));
 
                 Button b1 = new Button("🔔");
                 Button b2 = new Button("🛒");
@@ -483,21 +468,21 @@ public class Analytics {
                 b3.setOnMouseEntered(e -> b3.setStyle(actionHoverStyle));
                 b3.setOnMouseExited(e -> b3.setStyle(actionStyle));
 
+                b1.setOnAction(e -> CustomerNavigation.navigateToNotifications(userId));
+                b2.setOnAction(e -> CustomerNavigation.navigateToCart(userId));
+                b3.setOnAction(e -> CustomerNavigation.navigateToSettings(userId));
+
                 HBox actionBox = new HBox(7, b1, b2, b3);
                 actionBox.setTranslateX(0);
                 actionBox.setAlignment(Pos.CENTER_RIGHT);
 
-                Region navSpacer1 = new Region();
-                HBox.setHgrow(navSpacer1, Priority.ALWAYS);
-                Region navSpacer2 = new Region();
-                HBox.setHgrow(navSpacer2, Priority.ALWAYS);
+                Region navSpacer = new Region();
+                HBox.setHgrow(navSpacer, Priority.ALWAYS);
 
                 HBox navBox = new HBox(
                                 12,
                                 topLinks,
-                                navSpacer1,
-                                searchBox,
-                                navSpacer2,
+                                navSpacer,
                                 locationBox,
                                 actionBox);
 
@@ -524,40 +509,127 @@ public class Analytics {
                 VBox headerBox = new VBox(4, analyticsTitle, analyticsSubtitle);
                 headerBox.setPadding(new Insets(0, 0, 4, 0));
 
-                HBox summaryCards = new HBox(18);
+                HBox summaryCards = new HBox(28);
                 summaryCards.setAlignment(Pos.CENTER_LEFT);
                 summaryCards.setFillHeight(true);
+
+                String effectiveUserId = this.userId;
+                if (effectiveUserId == null || effectiveUserId.isBlank() || "guest".equalsIgnoreCase(effectiveUserId)) {
+                        if (com.kryox.view.Customer.CustomerLogin.loggedInUserId != null && !com.kryox.view.Customer.CustomerLogin.loggedInUserId.isBlank()) {
+                                effectiveUserId = com.kryox.view.Customer.CustomerLogin.loggedInUserId;
+                        }
+                }
+
+                double totalSpending = 0.0;
+                int totalOrders = 0;
+                double refunds = 0.0;
+                Map<String, Double> productSpendingMap = new LinkedHashMap<>();
+
+                try {
+                        OrderDAO orderDAO = new OrderDAO();
+                        List<OrderModel> orders = orderDAO.getCustomerOrders(effectiveUserId);
+
+                        if (orders != null && !orders.isEmpty()) {
+                                for (OrderModel order : orders) {
+                                        if (order == null) continue;
+
+                                        String status = order.getOrderStatus() != null ? order.getOrderStatus().trim().toUpperCase() : "";
+                                        double amount = order.getTotalAmount();
+
+                                        if ("CANCELLED".equals(status) || "REFUNDED".equals(status)) {
+                                                refunds += amount;
+                                        } else {
+                                                totalSpending += amount;
+                                                totalOrders++;
+
+                                                if (order.getProducts() != null) {
+                                                        for (OrderItemModel item : order.getProducts()) {
+                                                                if (item == null) continue;
+                                                                String pName = item.getProductName();
+                                                                if (pName == null || pName.isBlank()) pName = "Product";
+                                                                double itemTotal = item.getTotalPrice();
+                                                                if (itemTotal <= 0) {
+                                                                        itemTotal = item.getPrice() * (item.getQuantity() > 0 ? item.getQuantity() : 1);
+                                                                }
+                                                                productSpendingMap.put(pName, productSpendingMap.getOrDefault(pName, 0.0) + itemTotal);
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+
+                        // Fallback if no placed orders found yet (e.g. guest or only cart items)
+                        if (totalOrders == 0 && productSpendingMap.isEmpty()) {
+                                CARTcontroller cartController = new CARTcontroller();
+                                List<Productcart> products = cartController.getCart(effectiveUserId != null ? effectiveUserId : userId);
+                                if (products != null) {
+                                        for (Productcart product : products) {
+                                                if (product == null) continue;
+                                                double price = product.getPrice();
+                                                int quantity = product.getQuantity() <= 0 ? 1 : product.getQuantity();
+                                                double pTotal = price * quantity;
+                                                totalSpending += pTotal;
+                                                totalOrders++;
+                                                String pName = product.getName() != null ? product.getName() : "Item";
+                                                productSpendingMap.put(pName, productSpendingMap.getOrDefault(pName, 0.0) + pTotal);
+                                        }
+                                }
+                        }
+
+                } catch (Exception e) {
+                        System.out.println("Error calculating customer analytics: " + e.getMessage());
+                        e.printStackTrace();
+                }
+
+                // Average Order Value
+                double averageOrderValue = 0.0;
+
+                if (totalOrders > 0) {
+                        averageOrderValue = totalSpending / totalOrders;
+                }
+
                 summaryCards.getChildren().addAll(
-                                createSummaryCard("TOTAL SPENDING", "\u20B92,450.80", "💰"),
-                                createSummaryCard("ORDERS", "18", "📦"),
-                                createSummaryCard("AVG. ORDER VALUE", "\u20B9136.15", "📊"),
-                                createSummaryCard("REFUNDS", "\u20B945.00", "↩️"));
+
+                                createSummaryCard(
+                                                "TOTAL SPENDING",
+                                                String.format("₹%.2f", totalSpending),
+                                                "💰"),
+
+                                createSummaryCard(
+                                                "ORDERS",
+                                                String.valueOf(totalOrders),
+                                                "📦"),
+
+                                createSummaryCard(
+                                                "AVG. ORDER VALUE",
+                                                String.format("₹%.2f", averageOrderValue),
+                                                "📊"),
+
+                                createSummaryCard(
+                                                "REFUNDS",
+                                                String.format("₹%.2f", refunds),
+                                                "↩️"));
 
                 CategoryAxis xAxis = new CategoryAxis();
-                xAxis.setLabel("Week");
-                xAxis.getCategories().addAll("Week 1", "Week 2", "Week 3", "Week 4");
+                xAxis.setLabel("Products");
 
                 NumberAxis yAxis = new NumberAxis();
                 yAxis.setLabel("Spending (\u20B9)");
-                yAxis.setAutoRanging(false);
-                yAxis.setLowerBound(0);
-                yAxis.setUpperBound(2500);
-                yAxis.setTickUnit(500);
+                yAxis.setAutoRanging(true);
 
                 LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
-                lineChart.setTitle("Spending Trends");
+                lineChart.setTitle("Spending by Product");
                 lineChart.setPrefHeight(380);
                 lineChart.setPrefWidth(1000);
                 lineChart.setAnimated(false);
-
                 lineChart.setStyle("-fx-background-color: transparent;");
 
                 XYChart.Series<String, Number> series = new XYChart.Series<>();
-                series.setName("Weekly Spending");
-                series.getData().add(new XYChart.Data<>("Week 1", 1200));
-                series.getData().add(new XYChart.Data<>("Week 2", 1500));
-                series.getData().add(new XYChart.Data<>("Week 3", 2000));
-                series.getData().add(new XYChart.Data<>("Week 4", 1800));
+                series.setName("Product Spending");
+
+                for (Map.Entry<String, Double> entry : productSpendingMap.entrySet()) {
+                        series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+                }
 
                 lineChart.getData().add(series);
 

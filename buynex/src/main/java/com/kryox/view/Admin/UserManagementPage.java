@@ -1,14 +1,26 @@
 package com.kryox.view.Admin;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.kryox.dao.Customer.UserDao;
+import com.kryox.dao.Delivery.DeliveryPartnerDAO;
+import com.kryox.dao.Shopkeeper.ShopkeeperDAO;
 import com.kryox.view.Customer.Homepage;
 
 import javafx.animation.ScaleTransition;
-import javafx.application.Application;
+
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -17,6 +29,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -29,6 +42,16 @@ import javafx.util.Duration;
 
 public class UserManagementPage {
 
+        private String initialSearchQuery = "";
+
+        public UserManagementPage() {
+                this.initialSearchQuery = "";
+        }
+
+        public UserManagementPage(String initialSearchQuery) {
+                this.initialSearchQuery = (initialSearchQuery != null) ? initialSearchQuery.trim() : "";
+        }
+
         public Scene getUserScene() {
                 VBox left = new VBox();
 
@@ -37,7 +60,7 @@ public class UserManagementPage {
                 left.setPadding(new Insets(30, 15, 20, 15));
 
                 left.setStyle(
-                                "-fx-background-color:#F3E3D3;");
+                                "-fx-background-color: #ebccb7");
 
                 Text logo = new Text("Admin Panel");
 
@@ -309,6 +332,70 @@ public class UserManagementPage {
                                         shopPage.getUserScene());
                 });
 
+                HBox delivery = new HBox();
+                delivery.setSpacing(10);
+                delivery.setAlignment(Pos.CENTER_LEFT);
+                delivery.setPadding(new Insets(10, 12, 10, 12));
+                delivery.setPrefWidth(180);
+                delivery.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-background-radius:10;");
+
+                Text deliveryIcon = new Text("🚚");
+                deliveryIcon.setFont(Font.font("Arial", 18));
+
+                Text deliveryText = new Text("Delivery");
+                deliveryText.setFill(Color.web("#333333"));
+                deliveryText.setFont(Font.font("Arial", 15));
+
+                delivery.getChildren().addAll(
+                                deliveryIcon,
+                                deliveryText);
+
+                delivery.setOnMouseEntered(e -> {
+                        delivery.setStyle(
+                                        "-fx-background-color:#D94F00;" +
+                                                        "-fx-background-radius:10;");
+
+                        deliveryText.setFill(Color.WHITE);
+                        deliveryText.setFont(
+                                        Font.font("Arial", FontWeight.BOLD, 15));
+
+                        ScaleTransition st = new ScaleTransition(
+                                        Duration.millis(120),
+                                        delivery);
+
+                        st.setToX(1.03);
+                        st.setToY(1.03);
+                        st.play();
+                });
+
+                delivery.setOnMouseExited(e -> {
+                        delivery.setStyle(
+                                        "-fx-background-color:transparent;" +
+                                                        "-fx-background-radius:10;");
+
+                        deliveryText.setFill(Color.web("#333333"));
+                        deliveryText.setFont(Font.font("Arial", 15));
+
+                        ScaleTransition st = new ScaleTransition(
+                                        Duration.millis(120),
+                                        delivery);
+
+                        st.setToX(1);
+                        st.setToY(1);
+                        st.play();
+                });
+
+                delivery.setOnMouseClicked(e -> {
+
+                        DeliveryVerificationPage deliveryPage =
+                                        new DeliveryVerificationPage();
+
+                        Homepage.HomepageStage.setScene(
+                                        deliveryPage.getUserScene());
+                });
+
                 HBox offers = new HBox();
 
                 offers.setSpacing(10);
@@ -475,6 +562,7 @@ public class UserManagementPage {
                                 dashboard,
                                 users,
                                 shops,
+                                delivery,
                                 offers,
                                 analytics);
 
@@ -597,6 +685,10 @@ public class UserManagementPage {
                         st.setToY(1);
                         st.play();
                 });
+                settings.setOnMouseClicked(e->{
+                        SettingsPage setting = new SettingsPage();
+                        Homepage.HomepageStage.setScene(setting.getUserScene());
+                });
 
                 support.setOnMouseEntered(e -> {
 
@@ -641,47 +733,16 @@ public class UserManagementPage {
                         st.setToY(1);
                         st.play();
                 });
+                support.setOnMouseClicked(e->{
+                        SupportPage supports = new SupportPage();
+                        Homepage.HomepageStage.setScene(supports.getUserScene());
+                });
 
-                javafx.scene.shape.Circle avatar = new javafx.scene.shape.Circle(
-                                19,
-                                Color.web("#D9B79C"));
+                AdminProfileCard adminProfileCard =
+                                new AdminProfileCard();
 
-                Text alex = new Text("Alex Rivera");
-
-                alex.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                14));
-
-                Text superAdmin = new Text(
-                                "Super Admin");
-
-                superAdmin.setFont(
-                                Font.font("Arial", 12));
-
-                superAdmin.setFill(
-                                Color.web("#777777"));
-
-                VBox names = new VBox(
-                                2,
-                                alex,
-                                superAdmin);
-
-                HBox profile = new HBox(
-                                10,
-                                avatar,
-                                names);
-
-                profile.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                profile.setPadding(
-                                new Insets(10));
-
-                profile.setStyle(
-                                "-fx-background-color:#E4E2E7;" +
-                                                "-fx-background-radius:12;");
+                HBox profile =
+                                adminProfileCard.getProfileCard();
 
                 Region leftGrow = new Region();
 
@@ -696,15 +757,14 @@ public class UserManagementPage {
                                 bottomMenu,
                                 leftGrow,
                                 profile);
-
+                
                 VBox rightBox = new VBox();
 
                 rightBox.setSpacing(20);
-                rightBox.setPadding(
-                                new Insets(20, 25, 20, 25));
+                rightBox.setPadding(new Insets(20, 25, 20, 25));
 
                 rightBox.setStyle(
-                                "-fx-background-color:#FAF8FC;");
+                                "-fx-background-color: #eee5df;");
 
                 Text searchIcon = new Text("⌕");
 
@@ -715,6 +775,10 @@ public class UserManagementPage {
 
                 topSearch.setPromptText(
                                 "Search anything...");
+
+                if (this.initialSearchQuery != null && !this.initialSearchQuery.isEmpty()) {
+                        topSearch.setText(this.initialSearchQuery);
+                }
 
                 topSearch.setPrefWidth(290);
 
@@ -734,172 +798,8 @@ public class UserManagementPage {
                 topSearchBox.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                Image aiChatbotImage = new Image(getClass().getResource("/assets/images/admin/message.png").toExternalForm());
-                ImageView iv8 = new ImageView(aiChatbotImage);
-                iv8.setFitWidth(22);
-                iv8.setFitHeight(22);
-                iv8.setPreserveRatio(true);
-
-                Image notification = new Image(getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
-                ImageView iv9 = new ImageView(notification);
-                iv9.setFitWidth(22);
-                iv9.setFitHeight(22);
-                // iv9.setPreserveRatio(true);
-
-                Popup notificationPopup = new Popup();
-
-                Text notificationTitle = new Text("Notifications");
-                notificationTitle.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                22));
-
-                Button markRead = new Button("Mark all as read");
-                markRead.setStyle(
-                                "-fx-background-color:transparent;" +
-                                                "-fx-text-fill:#E65300;" +
-                                                "-fx-font-size:15px;");
-
-                Region notificationGrow = new Region();
-                HBox.setHgrow(notificationGrow, Priority.ALWAYS);
-
-                HBox notificationHeader = new HBox(
-                                notificationTitle,
-                                notificationGrow,
-                                markRead);
-
-                notificationHeader.setAlignment(Pos.CENTER_LEFT);
-
-                Circle dot1 = new Circle(5, Color.web("#FF6500"));
-
-                Text notificationText1 = new Text(
-                                "New Shop Registration\n" +
-                                                "Tech Haven needs verification\n" +
-                                                "2 mins ago");
-
-                notificationText1.setStyle("-fx-font-size:15px;");
-
-                HBox notification1 = new HBox(
-                                12,
-                                dot1,
-                                notificationText1);
-
-                notification1.setAlignment(Pos.CENTER_LEFT);
-                notification1.setPadding(new Insets(12));
-                notification1.setStyle(
-                                "-fx-background-color:#FFF4ED;" +
-                                                "-fx-background-radius:8;");
-
-                Circle dot2 = new Circle(5, Color.web("#21B55A"));
-
-                Text notificationText2 = new Text(
-                                "New User Joined\n" +
-                                                "New customer account created\n" +
-                                                "10 mins ago");
-
-                notificationText2.setStyle("-fx-font-size:15px;");
-
-                HBox notification2 = new HBox(
-                                12,
-                                dot2,
-                                notificationText2);
-
-                notification2.setAlignment(Pos.CENTER_LEFT);
-                notification2.setPadding(new Insets(12));
-                notification2.setStyle(
-                                "-fx-background-color:#F4FFF7;" +
-                                                "-fx-background-radius:8;");
-
-                Circle dot3 = new Circle(5, Color.web("#E53935"));
-
-                Text notificationText3 = new Text(
-                                "Flagged Account\n" +
-                                                "Suspicious activity detected\n" +
-                                                "1 hour ago");
-
-                notificationText3.setStyle("-fx-font-size:15px;");
-
-                HBox notification3 = new HBox(
-                                12,
-                                dot3,
-                                notificationText3);
-
-                notification3.setAlignment(Pos.CENTER_LEFT);
-                notification3.setPadding(new Insets(12));
-                notification3.setStyle(
-                                "-fx-background-color:#FFF5F5;" +
-                                                "-fx-background-radius:8;");
-
-                Button viewAll = new Button("View All Notifications");
-                viewAll.setMaxWidth(Double.MAX_VALUE);
-                viewAll.setPrefHeight(42);
-                viewAll.setStyle(
-                                "-fx-background-color:#FF6500;" +
-                                                "-fx-text-fill:white;" +
-                                                "-fx-font-weight:bold;" +
-                                                "-fx-background-radius:7;" +
-                                                "-fx-font-size:15px;");
-
-                VBox notificationBox = new VBox(
-                                12,
-                                notificationHeader,
-                                new Separator(),
-                                notification1,
-                                notification2,
-                                notification3,
-                                viewAll);
-
-                notificationBox.setPrefWidth(330);
-                notificationBox.setPadding(new Insets(18));
-                notificationBox.setStyle(
-                                "-fx-background-color:white;" +
-                                                "-fx-border-color:#E5E1E8;" +
-                                                "-fx-border-width:1;" +
-                                                "-fx-border-radius:10;" +
-                                                "-fx-background-radius:10;" +
-                                                "-fx-effect:dropshadow(gaussian," +
-                                                "rgba(0,0,0,0.18),15,0,0,5);");
-
-                notificationPopup.getContent().add(notificationBox);
-
-                iv9.setOnMouseClicked(e -> {
-
-                        if (notificationPopup.isShowing()) {
-
-                                notificationPopup.hide();
-
-                        } else {
-
-                                Bounds bellPosition = iv9.localToScreen(
-                                                iv9.getBoundsInLocal());
-
-                                if (bellPosition != null) {
-
-                                        notificationPopup.show(
-                                                        iv9,
-                                                        bellPosition.getMaxX() - 330,
-                                                        bellPosition.getMaxY() + 12);
-                                }
-                        }
-                });
-
-                markRead.setOnAction(e -> {
-
-                        notification1.setStyle("-fx-background-color:white;");
-                        notification2.setStyle("-fx-background-color:white;");
-                        notification3.setStyle("-fx-background-color:white;");
-                });
-
-                Text adminName = new Text("Alex");
-
-                adminName.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                18));
-
-                HBox topRight = new HBox(18, iv8, iv9, adminName);
+                HBox topRight =
+                                createTopActions();
 
                 Region topGrow = new Region();
 
@@ -1004,6 +904,10 @@ public class UserManagementPage {
                 userSearch.setPromptText(
                                 "e.g. John Doe");
 
+                if (this.initialSearchQuery != null && !this.initialSearchQuery.isEmpty()) {
+                        userSearch.setText(this.initialSearchQuery);
+                }
+
                 userSearch.setPrefWidth(300);
                 userSearch.setPrefHeight(42);
 
@@ -1027,24 +931,23 @@ public class UserManagementPage {
                                                 FontWeight.BOLD,
                                                 13));
 
-                Button roleButton = new Button(
-                                "All Roles        ˅");
+                ComboBox<String> roleCombo = new ComboBox<>();
+                roleCombo.getItems().add("All Roles");
+                roleCombo.setValue("All Roles");
+                roleCombo.setPrefWidth(150);
+                roleCombo.setPrefHeight(42);
 
-                roleButton.setPrefWidth(150);
-                roleButton.setPrefHeight(42);
-
-                roleButton.setStyle(
+                roleCombo.setStyle(
                                 "-fx-background-color:#F8F5FA;" +
                                                 "-fx-border-color:#E5E1E8;" +
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;" +
-                                                "-fx-alignment:CENTER_LEFT;" +
                                                 "-fx-font-size:15px;");
 
                 VBox roleBox = new VBox(
                                 5,
                                 roleLabel,
-                                roleButton);
+                                roleCombo);
 
                 Text statusLabel = new Text("Status");
 
@@ -1054,24 +957,23 @@ public class UserManagementPage {
                                                 FontWeight.BOLD,
                                                 13));
 
-                Button statusButton = new Button(
-                                "All Status        ˅");
+                ComboBox<String> statusCombo = new ComboBox<>();
+                statusCombo.getItems().add("All Status");
+                statusCombo.setValue("All Status");
+                statusCombo.setPrefWidth(150);
+                statusCombo.setPrefHeight(42);
 
-                statusButton.setPrefWidth(150);
-                statusButton.setPrefHeight(42);
-
-                statusButton.setStyle(
+                statusCombo.setStyle(
                                 "-fx-background-color:#F8F5FA;" +
                                                 "-fx-border-color:#E5E1E8;" +
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;" +
-                                                "-fx-alignment:CENTER_LEFT;" +
                                                 "-fx-font-size:15px;");
 
                 VBox statusBox = new VBox(
                                 5,
                                 statusLabel,
-                                statusButton);
+                                statusCombo);
 
                 Button filter = new Button("≡");
 
@@ -1123,18 +1025,28 @@ public class UserManagementPage {
 
                 VBox shopNameHeaderBox = new VBox(shopNameHeader);
                 shopNameHeaderBox.setPrefWidth(220);
+                shopNameHeaderBox.setMinWidth(220);
+                shopNameHeaderBox.setMaxWidth(220);
 
                 VBox shopRoleHeaderBox = new VBox(shopRoleHeader);
                 shopRoleHeaderBox.setPrefWidth(150);
+                shopRoleHeaderBox.setMinWidth(150);
+                shopRoleHeaderBox.setMaxWidth(150);
 
                 VBox shopStatusHeaderBox = new VBox(shopStatusHeader);
                 shopStatusHeaderBox.setPrefWidth(140);
+                shopStatusHeaderBox.setMinWidth(140);
+                shopStatusHeaderBox.setMaxWidth(140);
 
                 VBox shopLoginHeaderBox = new VBox(shopLoginHeader);
                 shopLoginHeaderBox.setPrefWidth(160);
+                shopLoginHeaderBox.setMinWidth(160);
+                shopLoginHeaderBox.setMaxWidth(160);
 
                 VBox shopActionsHeaderBox = new VBox(shopActionsHeader);
                 shopActionsHeaderBox.setPrefWidth(150);
+                shopActionsHeaderBox.setMinWidth(150);
+                shopActionsHeaderBox.setMaxWidth(150);
 
                 HBox shopTableHeader = new HBox(
                                 shopNameHeaderBox,
@@ -1147,80 +1059,16 @@ public class UserManagementPage {
                 shopTableHeader.setPadding(new Insets(12));
                 shopTableHeader.setStyle("-fx-background-color:#F8F5FA;");
 
-                Image userImage1 = null;
-                ImageView userImageView1 = new ImageView(userImage1);
-                userImageView1.setFitWidth(40);
-                userImageView1.setFitHeight(40);
-                userImageView1.setPreserveRatio(false);
-                userImageView1.setClip(new Circle(20, 20, 20));
+                VBox shopkeeperRows = new VBox();
 
-                Text user1 = new Text("Marcus Kinsley\nmarcus@localhost.com");
-                user1.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
-
-                HBox userBox1 = new HBox(10, userImageView1, user1);
-                userBox1.setAlignment(Pos.CENTER_LEFT);
-                userBox1.setPrefWidth(220);
-
-                Text role1 = new Text("Shopkeeper");
-                role1.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
-                role1.setWrappingWidth(150);
-
-                Text status1 = new Text("● Active");
-                status1.setStyle("-fx-font-size:14px;-fx-fill:#1FA64B;-fx-font-weight:bold;");
-                status1.setWrappingWidth(140);
-
-                Text login1 = new Text("2 hours ago");
-                login1.setFont(Font.font("Arial", 14));
-                login1.setWrappingWidth(160);
-
-                Text action1 = new Text("◉   ✎   ⊘");
-                action1.setStyle("-fx-font-size:20px;-fx-fill:#666666;");
-                action1.setWrappingWidth(150);
-
-                HBox row1 = new HBox(userBox1, role1, status1, login1, action1);
-                row1.setAlignment(Pos.CENTER_LEFT);
-                row1.setPadding(new Insets(12));
-                row1.setStyle("-fx-border-color:transparent transparent #F0EDF2 transparent;");
-
-                Image userImage4 = null;
-                ImageView userImageView4 = new ImageView(userImage4);
-                userImageView4.setFitWidth(40);
-                userImageView4.setFitHeight(40);
-                userImageView4.setPreserveRatio(false);
-                userImageView4.setClip(new Circle(20, 20, 20));
-
-                Text user4 = new Text("Elena Rodriguez\nelena@freshfoods.io");
-                user4.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
-
-                HBox userBox4 = new HBox(10, userImageView4, user4);
-                userBox4.setAlignment(Pos.CENTER_LEFT);
-                userBox4.setPrefWidth(220);
-
-                Text role4 = new Text("Shopkeeper");
-                role4.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
-                role4.setWrappingWidth(150);
-
-                Text status4 = new Text("● Active");
-                status4.setStyle("-fx-font-size:14px;-fx-fill:#1FA64B;-fx-font-weight:bold;");
-                status4.setWrappingWidth(140);
-
-                Text login4 = new Text("3 mins ago");
-                login4.setFont(Font.font("Arial", 14));
-                login4.setWrappingWidth(160);
-
-                Text action4 = new Text("◉   ✎   ⊘");
-                action4.setStyle("-fx-font-size:20px;-fx-fill:#666666;");
-                action4.setWrappingWidth(150);
-
-                HBox row4 = new HBox(userBox4, role4, status4, login4, action4);
-                row4.setAlignment(Pos.CENTER_LEFT);
-                row4.setPadding(new Insets(12));
+                Text loadingShopkeepers = new Text("Loading shopkeepers...");
+                loadingShopkeepers.setStyle("-fx-font-size:14px;-fx-fill:#777777;");
+                shopkeeperRows.getChildren().add(loadingShopkeepers);
 
                 VBox shopkeeperTable = new VBox(
                                 shopkeeperSectionTitle,
                                 shopTableHeader,
-                                row1,
-                                row4);
+                                shopkeeperRows);
 
                 shopkeeperTable.setSpacing(0);
                 shopkeeperTable.setPadding(new Insets(15));
@@ -1248,18 +1096,28 @@ public class UserManagementPage {
 
                 VBox customerNameHeaderBox = new VBox(customerNameHeader);
                 customerNameHeaderBox.setPrefWidth(220);
+                customerNameHeaderBox.setMinWidth(220);
+                customerNameHeaderBox.setMaxWidth(220);
 
                 VBox customerRoleHeaderBox = new VBox(customerRoleHeader);
                 customerRoleHeaderBox.setPrefWidth(150);
+                customerRoleHeaderBox.setMinWidth(150);
+                customerRoleHeaderBox.setMaxWidth(150);
 
                 VBox customerStatusHeaderBox = new VBox(customerStatusHeader);
                 customerStatusHeaderBox.setPrefWidth(140);
+                customerStatusHeaderBox.setMinWidth(140);
+                customerStatusHeaderBox.setMaxWidth(140);
 
                 VBox customerLoginHeaderBox = new VBox(customerLoginHeader);
                 customerLoginHeaderBox.setPrefWidth(160);
+                customerLoginHeaderBox.setMinWidth(160);
+                customerLoginHeaderBox.setMaxWidth(160);
 
                 VBox customerActionsHeaderBox = new VBox(customerActionsHeader);
                 customerActionsHeaderBox.setPrefWidth(150);
+                customerActionsHeaderBox.setMinWidth(150);
+                customerActionsHeaderBox.setMaxWidth(150);
 
                 HBox customerTableHeader = new HBox(
                                 customerNameHeaderBox,
@@ -1272,80 +1130,16 @@ public class UserManagementPage {
                 customerTableHeader.setPadding(new Insets(12));
                 customerTableHeader.setStyle("-fx-background-color:#F8F5FA;");
 
-                Image userImage2 = null;
-                ImageView userImageView2 = new ImageView(userImage2);
-                userImageView2.setFitWidth(40);
-                userImageView2.setFitHeight(40);
-                userImageView2.setPreserveRatio(false);
-                userImageView2.setClip(new Circle(20, 20, 20));
+                VBox customerRows = new VBox();
 
-                Text user2 = new Text("Sarah Chen\nsarah.c@gmail.com");
-                user2.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
-
-                HBox userBox2 = new HBox(10, userImageView2, user2);
-                userBox2.setAlignment(Pos.CENTER_LEFT);
-                userBox2.setPrefWidth(220);
-
-                Text role2 = new Text("Customer");
-                role2.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
-                role2.setWrappingWidth(150);
-
-                Text status2 = new Text("● Suspended");
-                status2.setStyle("-fx-font-size:14px;-fx-fill:#E53935;-fx-font-weight:bold;");
-                status2.setWrappingWidth(140);
-
-                Text login2 = new Text("Yesterday, 4:15 PM");
-                login2.setFont(Font.font("Arial", 14));
-                login2.setWrappingWidth(160);
-
-                Text action2 = new Text("◉   ✎   ↶");
-                action2.setStyle("-fx-font-size:20px;-fx-fill:#666666;");
-                action2.setWrappingWidth(150);
-
-                HBox row2 = new HBox(userBox2, role2, status2, login2, action2);
-                row2.setAlignment(Pos.CENTER_LEFT);
-                row2.setPadding(new Insets(12));
-                row2.setStyle("-fx-border-color:transparent transparent #F0EDF2 transparent;");
-
-                Image userImage3 = null;
-                ImageView userImageView3 = new ImageView(userImage3);
-                userImageView3.setFitWidth(40);
-                userImageView3.setFitHeight(40);
-                userImageView3.setPreserveRatio(false);
-                userImageView3.setClip(new Circle(20, 20, 20));
-
-                Text user3 = new Text("Ben Jameson\nben.j@outlook.com");
-                user3.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
-
-                HBox userBox3 = new HBox(10, userImageView3, user3);
-                userBox3.setAlignment(Pos.CENTER_LEFT);
-                userBox3.setPrefWidth(220);
-
-                Text role3 = new Text("Customer");
-                role3.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
-                role3.setWrappingWidth(150);
-
-                Text status3 = new Text("● Active");
-                status3.setStyle("-fx-font-size:14px;-fx-fill:#1FA64B;-fx-font-weight:bold;");
-                status3.setWrappingWidth(140);
-
-                Text login3 = new Text("Jun 12, 09:30 AM");
-                login3.setFont(Font.font("Arial", 14));
-                login3.setWrappingWidth(160);
-
-                Text action3 = new Text("◉   ✎   ⊘");
-                action3.setStyle("-fx-font-size:20px;-fx-fill:#666666;");
-                action3.setWrappingWidth(150);
-
-                HBox row3 = new HBox(userBox3, role3, status3, login3, action3);
-                row3.setAlignment(Pos.CENTER_LEFT);
-                row3.setPadding(new Insets(12));
+                Text loadingCustomers = new Text("Loading customers...");
+                loadingCustomers.setStyle("-fx-font-size:14px;-fx-fill:#777777;");
+                customerRows.getChildren().add(loadingCustomers);
 
                 VBox customerTable = new VBox(
                                 customerSectionTitle,
                                 customerTableHeader,
-                                row2,
-                                row3);
+                                customerRows);
 
                 customerTable.setSpacing(0);
                 customerTable.setPadding(new Insets(15));
@@ -1373,18 +1167,28 @@ public class UserManagementPage {
 
                 VBox deliveryNameHeaderBox = new VBox(deliveryNameHeader);
                 deliveryNameHeaderBox.setPrefWidth(220);
+                deliveryNameHeaderBox.setMinWidth(220);
+                deliveryNameHeaderBox.setMaxWidth(220);
 
                 VBox deliveryRoleHeaderBox = new VBox(deliveryRoleHeader);
                 deliveryRoleHeaderBox.setPrefWidth(150);
+                deliveryRoleHeaderBox.setMinWidth(150);
+                deliveryRoleHeaderBox.setMaxWidth(150);
 
                 VBox deliveryStatusHeaderBox = new VBox(deliveryStatusHeader);
                 deliveryStatusHeaderBox.setPrefWidth(140);
+                deliveryStatusHeaderBox.setMinWidth(140);
+                deliveryStatusHeaderBox.setMaxWidth(140);
 
                 VBox deliveryLoginHeaderBox = new VBox(deliveryLoginHeader);
                 deliveryLoginHeaderBox.setPrefWidth(160);
+                deliveryLoginHeaderBox.setMinWidth(160);
+                deliveryLoginHeaderBox.setMaxWidth(160);
 
                 VBox deliveryActionsHeaderBox = new VBox(deliveryActionsHeader);
                 deliveryActionsHeaderBox.setPrefWidth(150);
+                deliveryActionsHeaderBox.setMinWidth(150);
+                deliveryActionsHeaderBox.setMaxWidth(150);
 
                 HBox deliveryTableHeader = new HBox(
                                 deliveryNameHeaderBox,
@@ -1397,50 +1201,15 @@ public class UserManagementPage {
                 deliveryTableHeader.setPadding(new Insets(12));
                 deliveryTableHeader.setStyle("-fx-background-color:#F8F5FA;");
 
-                Image deliveryImage = null;
-                ImageView deliveryImageView = new ImageView(deliveryImage);
-                deliveryImageView.setFitWidth(40);
-                deliveryImageView.setFitHeight(40);
-                deliveryImageView.setPreserveRatio(false);
-                deliveryImageView.setClip(new Circle(20, 20, 20));
-
-                Text deliveryUser = new Text("Aarav Patel\naarav.delivery@gmail.com");
-                deliveryUser.setStyle("-fx-font-size:14px;-fx-font-weight:bold;");
-
-                HBox deliveryUserBox = new HBox(10, deliveryImageView, deliveryUser);
-                deliveryUserBox.setAlignment(Pos.CENTER_LEFT);
-                deliveryUserBox.setPrefWidth(220);
-
-                Text deliveryRole = new Text("Delivery Partner");
-                deliveryRole.setStyle("-fx-font-size:14px;-fx-background-color:#E5E3E4;-fx-padding:5px 10px;-fx-background-radius:12;");
-                deliveryRole.setWrappingWidth(150);
-
-                Text deliveryStatus = new Text("● Active");
-                deliveryStatus.setStyle("-fx-font-size:14px;-fx-fill:#1FA64B;-fx-font-weight:bold;");
-                deliveryStatus.setWrappingWidth(140);
-
-                Text deliveryLogin = new Text("5 mins ago");
-                deliveryLogin.setFont(Font.font("Arial", 14));
-                deliveryLogin.setWrappingWidth(160);
-
-                Text deliveryAction = new Text("◉   ✎   ⊘");
-                deliveryAction.setStyle("-fx-font-size:20px;-fx-fill:#666666;");
-                deliveryAction.setWrappingWidth(150);
-
-                HBox deliveryRow = new HBox(
-                                deliveryUserBox,
-                                deliveryRole,
-                                deliveryStatus,
-                                deliveryLogin,
-                                deliveryAction);
-
-                deliveryRow.setAlignment(Pos.CENTER_LEFT);
-                deliveryRow.setPadding(new Insets(12));
+                VBox deliveryRows = new VBox();
+                Text loadingDelivery = new Text("Loading delivery partners...");
+                loadingDelivery.setStyle("-fx-font-size:14px;-fx-fill:#777777;");
+                deliveryRows.getChildren().add(loadingDelivery);
 
                 VBox deliveryTable = new VBox(
                                 deliverySectionTitle,
                                 deliveryTableHeader,
-                                deliveryRow);
+                                deliveryRows);
 
                 deliveryTable.setSpacing(0);
                 deliveryTable.setPadding(new Insets(15));
@@ -1450,8 +1219,309 @@ public class UserManagementPage {
                                                 "-fx-border-radius:10;" +
                                                 "-fx-background-radius:10;");
 
-                Text showing = new Text("Showing 1 to 5 of 258 users");
+                Text showing = new Text("Loading users...");
                 showing.setStyle("-fx-font-size:14px;-fx-fill:#555555;");
+
+                List<UserRowData> allRecords = new ArrayList<>();
+
+                Runnable applyFilters = () -> {
+
+                        shopkeeperRows.getChildren().clear();
+                        customerRows.getChildren().clear();
+                        deliveryRows.getChildren().clear();
+
+                        String search = userSearch.getText() == null
+                                        ? ""
+                                        : userSearch.getText().trim().toLowerCase();
+
+                        String selectedRole = roleCombo.getValue() == null
+                                        ? "All Roles"
+                                        : roleCombo.getValue();
+
+                        String selectedStatus = statusCombo.getValue() == null
+                                        ? "All Status"
+                                        : statusCombo.getValue();
+
+                        int shopkeeperCount = 0;
+                        int customerCount = 0;
+                        int deliveryCount = 0;
+                        int visibleCount = 0;
+
+                        for (UserRowData record : allRecords) {
+
+                                String normalizedRole = normalizeRole(record.role);
+
+                                boolean searchMatches =
+                                                search.isBlank()
+                                                                || (record.name != null && record.name.toLowerCase().contains(search))
+                                                                || (record.email != null && record.email.toLowerCase().contains(search))
+                                                                || (record.role != null && record.role.toLowerCase().contains(search))
+                                                                || (record.status != null && record.status.toLowerCase().contains(search));
+
+                                boolean roleMatches =
+                                                selectedRole.equalsIgnoreCase("All Roles")
+                                                                || normalizeRole(selectedRole)
+                                                                                .equalsIgnoreCase(normalizedRole);
+
+                                boolean statusMatches =
+                                                selectedStatus.equalsIgnoreCase("All Status")
+                                                                || record.status.equalsIgnoreCase(selectedStatus);
+
+                                if (!searchMatches || !roleMatches || !statusMatches) {
+                                        continue;
+                                }
+
+                                HBox row = createDatabaseUserRow(record);
+                                visibleCount++;
+
+                                if (normalizedRole.equalsIgnoreCase("Shopkeeper")) {
+                                        shopkeeperRows.getChildren().add(row);
+                                        shopkeeperCount++;
+
+                                } else if (normalizedRole.equalsIgnoreCase("Delivery Partner")) {
+                                        deliveryRows.getChildren().add(row);
+                                        deliveryCount++;
+
+                                } else {
+                                        customerRows.getChildren().add(row);
+                                        customerCount++;
+                                }
+                        }
+
+                        boolean allRoles =
+                                        selectedRole.equalsIgnoreCase("All Roles");
+
+                        boolean showShopkeepers =
+                                        allRoles
+                                                        || normalizeRole(selectedRole)
+                                                                        .equalsIgnoreCase("Shopkeeper");
+
+                        boolean showCustomers =
+                                        allRoles
+                                                        || normalizeRole(selectedRole)
+                                                                        .equalsIgnoreCase("Customer");
+
+                        boolean showDelivery =
+                                        allRoles
+                                                        || normalizeRole(selectedRole)
+                                                                        .equalsIgnoreCase("Delivery Partner");
+
+                        shopkeeperTable.setVisible(showShopkeepers);
+                        shopkeeperTable.setManaged(showShopkeepers);
+
+                        customerTable.setVisible(showCustomers);
+                        customerTable.setManaged(showCustomers);
+
+                        deliveryTable.setVisible(showDelivery);
+                        deliveryTable.setManaged(showDelivery);
+
+                        if (showShopkeepers && shopkeeperCount == 0) {
+                                shopkeeperRows.getChildren().add(
+                                                createEmptyMessage("No matching shopkeepers found."));
+                        }
+
+                        if (showCustomers && customerCount == 0) {
+                                customerRows.getChildren().add(
+                                                createEmptyMessage("No matching customers found."));
+                        }
+
+                        if (showDelivery && deliveryCount == 0) {
+                                deliveryRows.getChildren().add(
+                                                createEmptyMessage("No matching delivery partners found."));
+                        }
+
+                        showing.setText(
+                                        "Showing "
+                                                        + visibleCount
+                                                        + " of "
+                                                        + allRecords.size()
+                                                        + " users");
+                };
+
+                topSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+                        String clean = newValue != null ? newValue : "";
+                        if (!clean.equals(userSearch.getText())) {
+                                userSearch.setText(clean);
+                        }
+                        applyFilters.run();
+                });
+
+                topSearch.setOnAction(event -> applyFilters.run());
+                searchIcon.setStyle("-fx-cursor: hand;");
+                searchIcon.setOnMouseClicked(e -> applyFilters.run());
+
+                userSearch.textProperty().addListener(
+                                (observable, oldValue, newValue) -> {
+                                        String clean = newValue != null ? newValue : "";
+                                        if (!clean.equals(topSearch.getText())) {
+                                                topSearch.setText(clean);
+                                        }
+                                        applyFilters.run();
+                                });
+
+                roleCombo.setOnAction(event ->
+                                applyFilters.run());
+
+                statusCombo.setOnAction(event ->
+                                applyFilters.run());
+
+                filter.setOnAction(event ->
+                                applyFilters.run());
+
+                Thread userThread = new Thread(() -> {
+
+                        try {
+
+                                UserDao userDao = new UserDao();
+                                DeliveryPartnerDAO deliveryPartnerDAO = new DeliveryPartnerDAO();
+                                ShopkeeperDAO shopkeeperDAO = new ShopkeeperDAO();
+
+                                List<QueryDocumentSnapshot> userDocuments =
+                                                userDao.getAllUserDocumentsForAdmin();
+
+                                List<QueryDocumentSnapshot> deliveryDocuments =
+                                                deliveryPartnerDAO.getAllPartners();
+
+                                List<QueryDocumentSnapshot> shopDocuments =
+                                                shopkeeperDAO.getAllShopkeepers();
+
+                                List<UserRowData> loadedRecords = new ArrayList<>();
+
+                                if (userDocuments != null) {
+                                        for (QueryDocumentSnapshot document : userDocuments) {
+                                                String role = getStringValue(document, "role");
+                                                String normalizedRole = "Customer";
+                                                if (role != null && !role.isBlank()) {
+                                                        String clean = role.trim().toLowerCase();
+                                                        if (clean.contains("shop")) {
+                                                                boolean isRealShop = document.contains("shopName") || document.contains("businessLicenseUrl") || document.contains("gstCertificateUrl");
+                                                                normalizedRole = isRealShop ? "Shopkeeper" : "Customer";
+                                                        } else if (clean.contains("deliver")) {
+                                                                normalizedRole = "Delivery Partner";
+                                                        } else {
+                                                                normalizedRole = "Customer";
+                                                        }
+                                                }
+
+                                                loadedRecords.add(
+                                                                createUserRowData(
+                                                                                document,
+                                                                                normalizedRole));
+                                        }
+                                }
+
+                                if (deliveryDocuments != null) {
+                                        for (QueryDocumentSnapshot document : deliveryDocuments) {
+                                                loadedRecords.add(
+                                                                createUserRowData(
+                                                                                document,
+                                                                                "Delivery Partner"));
+                                        }
+                                }
+
+                                if (shopDocuments != null) {
+                                        for (QueryDocumentSnapshot document : shopDocuments) {
+                                                String email = getFirstStringValue(document, "email", "userEmail");
+                                                String mobile = getFirstStringValue(document, "mobileValue", "mobile", "phone");
+                                                String name = getFirstStringValue(document, "ownerNameValue", "shopNameValue", "name", "fullName");
+
+                                                UserRowData existing = null;
+                                                for (UserRowData r : loadedRecords) {
+                                                        if (!email.isBlank() && email.equalsIgnoreCase(r.email)) {
+                                                                existing = r;
+                                                                break;
+                                                        }
+                                                        if (!mobile.isBlank() && mobile.equalsIgnoreCase(r.email)) {
+                                                                existing = r;
+                                                                break;
+                                                        }
+                                                        if (!name.isBlank() && name.equalsIgnoreCase(r.name)) {
+                                                                existing = r;
+                                                                break;
+                                                        }
+                                                }
+
+                                                UserRowData shopRow = createUserRowData(document, "Shopkeeper");
+                                                if (existing != null) {
+                                                        existing.setRole("Shopkeeper");
+                                                        if ("Approved".equalsIgnoreCase(shopRow.status)) {
+                                                                existing.setStatus("Approved");
+                                                        }
+                                                } else {
+                                                        loadedRecords.add(shopRow);
+                                                }
+                                        }
+                                }
+
+                                Platform.runLater(() -> {
+
+                                        allRecords.clear();
+                                        allRecords.addAll(loadedRecords);
+
+                                        Set<String> roles = new LinkedHashSet<>();
+                                        Set<String> statuses = new LinkedHashSet<>();
+
+                                        for (UserRowData record : allRecords) {
+                                                roles.add(normalizeRole(record.role));
+                                                statuses.add(record.status);
+                                        }
+
+                                        String oldRole = roleCombo.getValue();
+                                        roleCombo.getItems().clear();
+                                        roleCombo.getItems().add("All Roles");
+                                        roleCombo.getItems().addAll(roles);
+
+                                        if (oldRole != null
+                                                        && roleCombo.getItems().contains(oldRole)) {
+                                                roleCombo.setValue(oldRole);
+                                        } else {
+                                                roleCombo.setValue("All Roles");
+                                        }
+
+                                        String oldStatus = statusCombo.getValue();
+                                        statusCombo.getItems().clear();
+                                        statusCombo.getItems().add("All Status");
+                                        statusCombo.getItems().addAll(statuses);
+
+                                        if (oldStatus != null
+                                                        && statusCombo.getItems().contains(oldStatus)) {
+                                                statusCombo.setValue(oldStatus);
+                                        } else {
+                                                statusCombo.setValue("All Status");
+                                        }
+
+                                        applyFilters.run();
+                                });
+
+                        } catch (Exception exception) {
+
+                                exception.printStackTrace();
+
+                                Platform.runLater(() -> {
+
+                                        shopkeeperRows.getChildren().clear();
+                                        customerRows.getChildren().clear();
+                                        deliveryRows.getChildren().clear();
+
+                                        shopkeeperRows.getChildren().add(
+                                                        createErrorMessage(
+                                                                        "Unable to load shopkeepers."));
+
+                                        customerRows.getChildren().add(
+                                                        createErrorMessage(
+                                                                        "Unable to load customers."));
+
+                                        deliveryRows.getChildren().add(
+                                                        createErrorMessage(
+                                                                        "Unable to load delivery partners."));
+
+                                        showing.setText("Unable to load users");
+                                });
+                        }
+                });
+
+                userThread.setDaemon(true);
+                userThread.start();
 
                 Button previous = new Button("<");
                 previous.setPrefWidth(30);
@@ -1616,7 +1686,7 @@ public class UserManagementPage {
                 root.setCenter(centerScroll);
 
                 root.setStyle(
-                                "-fx-background-color:#FAF8FC;");
+                                "-fx-background-color: #eee5df;");
 
                 Scene scene = new Scene(
                                 root,
@@ -1624,5 +1694,620 @@ public class UserManagementPage {
                                 850);
                 return scene;
         }
+
+
+        private HBox createDatabaseUserRow(
+                        UserRowData record) {
+
+                String name = record.name;
+                String email = record.email;
+                String role = record.role;
+                String status = record.status;
+                String profileUrl = record.profileUrl;
+
+                StackPane avatar = new StackPane();
+                avatar.setPrefSize(40, 40);
+                avatar.setMinSize(40, 40);
+                avatar.setMaxSize(40, 40);
+
+                Circle avatarCircle = new Circle(
+                                20,
+                                Color.web("#FFE5D5"));
+
+                avatar.getChildren().add(avatarCircle);
+
+                if (!profileUrl.isBlank()) {
+                        try {
+                                Image image = new Image(
+                                                profileUrl,
+                                                40,
+                                                40,
+                                                false,
+                                                true,
+                                                true);
+
+                                ImageView imageView = new ImageView(image);
+                                imageView.setFitWidth(40);
+                                imageView.setFitHeight(40);
+                                imageView.setPreserveRatio(false);
+                                imageView.setClip(new Circle(20, 20, 20));
+
+                                avatar.getChildren().add(imageView);
+
+                        } catch (Exception ignored) {
+                                addAvatarLetter(avatar, name);
+                        }
+
+                } else {
+                        addAvatarLetter(avatar, name);
+                }
+
+                Text userInfo = new Text(
+                                name + "\n" + email);
+
+                userInfo.setStyle(
+                                "-fx-font-size:14px;" +
+                                                "-fx-font-weight:bold;");
+
+                userInfo.setWrappingWidth(155);
+
+                HBox nameBox = new HBox(
+                                10,
+                                avatar,
+                                userInfo);
+
+                nameBox.setAlignment(Pos.CENTER_LEFT);
+                nameBox.setPrefWidth(220);
+                nameBox.setMinWidth(220);
+                nameBox.setMaxWidth(220);
+
+                Text roleText = new Text(role);
+                roleText.setStyle(
+                                "-fx-font-size:14px;" +
+                                                "-fx-background-color:#E5E3E4;" +
+                                                "-fx-padding:5px 10px;" +
+                                                "-fx-background-radius:12;");
+                roleText.setWrappingWidth(150);
+
+                String displayStatus = status;
+                if (status == null || status.isBlank()) {
+                        displayStatus = "Pending";
+                } else if (status.equalsIgnoreCase("Active") || status.equalsIgnoreCase("Approved")) {
+                        displayStatus = status.equalsIgnoreCase("Active") ? "Active" : "Approved";
+                } else if (status.equalsIgnoreCase("Pending")
+                                || status.equalsIgnoreCase("PENDING_APPROVAL")
+                                || status.equalsIgnoreCase("Pending Approval")) {
+                        displayStatus = "Pending";
+                } else if (status.toUpperCase().contains("REJECT") || status.toUpperCase().contains("DECLIN")) {
+                        displayStatus = "Rejected";
+                }
+
+                Text statusText = new Text("● " + displayStatus);
+
+                if (displayStatus.equalsIgnoreCase("Active")
+                                || displayStatus.equalsIgnoreCase("Approved")) {
+
+                        statusText.setStyle(
+                                        "-fx-font-size:14px;" +
+                                                        "-fx-fill:#1FA64B;" +
+                                                        "-fx-font-weight:bold;");
+
+                } else if (displayStatus.equalsIgnoreCase("Pending")) {
+
+                        statusText.setStyle(
+                                        "-fx-font-size:14px;" +
+                                                        "-fx-fill:#E67E22;" +
+                                                        "-fx-font-weight:bold;");
+
+                } else {
+
+                        statusText.setStyle(
+                                        "-fx-font-size:14px;" +
+                                                        "-fx-fill:#D9534F;" +
+                                                        "-fx-font-weight:bold;");
+                }
+
+                statusText.setWrappingWidth(140);
+
+                Text lastLogin = new Text(record.lastLogin);
+                lastLogin.setFont(Font.font("Arial", 14));
+                lastLogin.setWrappingWidth(160);
+
+                Text action = new Text("◉   ✎   ⊘");
+                action.setStyle(
+                                "-fx-font-size:20px;" +
+                                                "-fx-fill:#666666;");
+                action.setWrappingWidth(150);
+
+                HBox row = new HBox(
+                                nameBox,
+                                roleText,
+                                statusText,
+                                lastLogin,
+                                action);
+
+                row.setAlignment(Pos.CENTER_LEFT);
+                row.setPadding(new Insets(12));
+                row.setStyle(
+                                "-fx-border-color:transparent transparent #F0EDF2 transparent;");
+
+                return row;
+        }
+
+        private boolean isDocumentApproved(QueryDocumentSnapshot document) {
+                if (document == null) {
+                        return false;
+                }
+                for (String field : new String[]{"approved", "isApproved", "verified", "isVerified"}) {
+                        Object val = document.get(field);
+                        if (val instanceof Boolean && (Boolean) val) {
+                                return true;
+                        }
+                        if (val != null && "true".equalsIgnoreCase(String.valueOf(val).trim())) {
+                                return true;
+                        }
+                }
+                return false;
+        }
+
+        private UserRowData createUserRowData(
+                        QueryDocumentSnapshot document,
+                        String fallbackRole) {
+
+                String name = getFirstStringValue(
+                                document,
+                                "name",
+                                "fullName",
+                                "username",
+                                "ownerNameValue",
+                                "shopNameValue",
+                                "ownerName",
+                                "shopName");
+
+                String email = getFirstStringValue(
+                                document,
+                                "email",
+                                "userEmail");
+
+                if (email.isBlank()) {
+                        email = getFirstStringValue(
+                                        document,
+                                        "mobileValue",
+                                        "mobile",
+                                        "phone",
+                                        "contact");
+                }
+
+                String role = getFirstStringValue(
+                                document,
+                                "role");
+
+                String rawStatus = getFirstStringValue(
+                                document,
+                                "status",
+                                "partnerStatus",
+                                "accountStatus",
+                                "verificationStatus");
+
+                String lastLogin = getFirstStringValue(
+                                document,
+                                "lastLogin",
+                                "lastLoginAt",
+                                "lastActivity",
+                                "updatedAt");
+
+                String profileUrl = getFirstStringValue(
+                                document,
+                                "profileImageUrl",
+                                "profileUrl",
+                                "imageUrl",
+                                "profileImage",
+                                "shopLogoURL");
+
+                if (name.isBlank()) {
+                        name = "Unknown";
+                }
+
+                if (email.isBlank()) {
+                        email = "-";
+                }
+
+                if (fallbackRole != null && !fallbackRole.isBlank()) {
+                        role = fallbackRole;
+                } else if (role.isBlank()) {
+                        role = "Customer";
+                }
+
+                role = normalizeRole(role);
+
+                boolean isApproved = isDocumentApproved(document);
+                if (rawStatus.equalsIgnoreCase("APPROVED")
+                                || rawStatus.equalsIgnoreCase("Approved")
+                                || rawStatus.equalsIgnoreCase("ACTIVE")
+                                || rawStatus.equalsIgnoreCase("Active")
+                                || rawStatus.equalsIgnoreCase("VERIFIED")
+                                || rawStatus.equalsIgnoreCase("Verified")) {
+                        isApproved = true;
+                }
+
+                boolean isRejected = rawStatus.toUpperCase().contains("REJECT")
+                                || rawStatus.toUpperCase().contains("DECLIN");
+
+                String status;
+                if (role.equalsIgnoreCase("Shopkeeper")
+                                || role.equalsIgnoreCase("Delivery Partner")) {
+                        if (isApproved) {
+                                status = "Approved";
+                        } else if (isRejected) {
+                                status = "Rejected";
+                        } else {
+                                status = "Pending";
+                        }
+                } else {
+                        // Customer
+                        if (isRejected || rawStatus.equalsIgnoreCase("Blocked") || rawStatus.equalsIgnoreCase("Inactive")) {
+                                status = "Inactive";
+                        } else {
+                                status = "Active";
+                        }
+                }
+
+                if (lastLogin.isBlank()) {
+                        lastLogin = "-";
+                }
+
+                return new UserRowData(
+                                name,
+                                email,
+                                role,
+                                status,
+                                lastLogin,
+                                profileUrl);
+        }
+
+        private String getFirstStringValue(
+                        QueryDocumentSnapshot document,
+                        String... fieldNames) {
+
+                for (String fieldName : fieldNames) {
+
+                        String value = getStringValue(
+                                        document,
+                                        fieldName);
+
+                        if (!value.isBlank()) {
+                                return value;
+                        }
+                }
+
+                return "";
+        }
+
+        private String getStringValue(
+                        QueryDocumentSnapshot document,
+                        String fieldName) {
+
+                Object value = document.get(fieldName);
+
+                if (value == null) {
+                        return "";
+                }
+
+                return String.valueOf(value).trim();
+        }
+
+        private String normalizeRole(String role) {
+
+                if (role == null || role.isBlank()) {
+                        return "Customer";
+                }
+
+                String cleanRole = role.trim().toLowerCase();
+
+                if (cleanRole.contains("shop")) {
+                        return "Shopkeeper";
+                }
+
+                if (cleanRole.contains("deliver")) {
+                        return "Delivery Partner";
+                }
+
+                if (cleanRole.contains("customer")
+                                || cleanRole.equals("user")) {
+                        return "Customer";
+                }
+
+                return role.trim();
+        }
+
+        private Text createEmptyMessage(String message) {
+
+                Text text = new Text(message);
+                text.setStyle(
+                                "-fx-font-size:14px;" +
+                                                "-fx-fill:#777777;");
+                return text;
+        }
+
+        private Text createErrorMessage(String message) {
+
+                Text text = new Text(message);
+                text.setStyle(
+                                "-fx-font-size:14px;" +
+                                                "-fx-fill:#E53935;");
+                return text;
+        }
+
+        private void addAvatarLetter(
+                        StackPane avatar,
+                        String name) {
+
+                String firstLetter =
+                                name == null || name.isBlank()
+                                                ? "U"
+                                                : name.substring(0, 1).toUpperCase();
+
+                Text avatarText = new Text(firstLetter);
+
+                avatarText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                15));
+
+                avatarText.setFill(
+                                Color.web("#A83E00"));
+
+                avatar.getChildren().add(avatarText);
+        }
+
+        private static class UserRowData {
+
+                private final String name;
+                private final String email;
+                private String role;
+                private String status;
+                private final String lastLogin;
+                private final String profileUrl;
+
+                private UserRowData(
+                                String name,
+                                String email,
+                                String role,
+                                String status,
+                                String lastLogin,
+                                String profileUrl) {
+
+                        this.name = name;
+                        this.email = email;
+                        this.role = role;
+                        this.status = status;
+                        this.lastLogin = lastLogin;
+                        this.profileUrl = profileUrl;
+                }
+
+                public void setStatus(String status) {
+                        this.status = status;
+                }
+
+                public void setRole(String role) {
+                        this.role = role;
+                }
+        }
+
+
+    private HBox createTopActions() {
+
+        Image notificationImage = new Image(
+                getClass().getResource("/assets/images/admin/bell.png").toExternalForm());
+
+        ImageView notificationIcon = new ImageView(notificationImage);
+        notificationIcon.setFitWidth(22);
+        notificationIcon.setFitHeight(22);
+        notificationIcon.setPreserveRatio(true);
+
+        Text notificationName = new Text("Notifications");
+        notificationName.setFont(Font.font("Arial", 14));
+
+        HBox notificationAction = new HBox(
+                6,
+                notificationIcon,
+                notificationName);
+
+        notificationAction.setAlignment(Pos.CENTER_LEFT);
+        notificationAction.setStyle("-fx-cursor:hand;");
+
+        Image chatbotImage = new Image(
+                getClass().getResource("/assets/images/admin/message.png").toExternalForm());
+
+        ImageView chatbotIcon = new ImageView(chatbotImage);
+        chatbotIcon.setFitWidth(22);
+        chatbotIcon.setFitHeight(22);
+        chatbotIcon.setPreserveRatio(true);
+
+        Text chatbotName = new Text("ChatBot");
+        chatbotName.setFont(Font.font("Arial", 14));
+
+        HBox chatbotAction = new HBox(
+                6,
+                chatbotIcon,
+                chatbotName);
+
+        chatbotAction.setAlignment(Pos.CENTER_LEFT);
+        chatbotAction.setStyle("-fx-cursor:hand;");
+
+        chatbotAction.setOnMouseClicked(e -> {
+
+            SmartAssistantUI chatPage =
+                    new SmartAssistantUI();
+
+            Homepage.HomepageStage.setScene(
+                    chatPage.getUserScene());
+        });
+
+        javafx.stage.Popup notificationPopup =
+                new javafx.stage.Popup();
+
+        Text notificationTitle =
+                new Text("Notifications");
+
+        notificationTitle.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        20));
+
+        Button markRead =
+                new Button("Mark all as read");
+
+        markRead.setStyle(
+                "-fx-background-color:transparent;" +
+                "-fx-text-fill:#E65300;" +
+                "-fx-font-size:13px;");
+
+        Region notificationGrow =
+                new Region();
+
+        HBox.setHgrow(
+                notificationGrow,
+                Priority.ALWAYS);
+
+        HBox notificationHeader =
+                new HBox(
+                        notificationTitle,
+                        notificationGrow,
+                        markRead);
+
+        notificationHeader.setAlignment(
+                Pos.CENTER_LEFT);
+
+        Text notificationText1 =
+                new Text(
+                        "New Shop Registration\n" +
+                        "Tech Haven needs verification\n" +
+                        "2 mins ago");
+
+        notificationText1.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification1 =
+                new VBox(notificationText1);
+
+        notification1.setPadding(
+                new Insets(12));
+
+        notification1.setStyle(
+                "-fx-background-color:#FFF4ED;" +
+                "-fx-background-radius:8;");
+
+        Text notificationText2 =
+                new Text(
+                        "New User Joined\n" +
+                        "New customer account created\n" +
+                        "10 mins ago");
+
+        notificationText2.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification2 =
+                new VBox(notificationText2);
+
+        notification2.setPadding(
+                new Insets(12));
+
+        notification2.setStyle(
+                "-fx-background-color:#F4FFF7;" +
+                "-fx-background-radius:8;");
+
+        Text notificationText3 =
+                new Text(
+                        "Flagged Account\n" +
+                        "Suspicious activity detected\n" +
+                        "1 hour ago");
+
+        notificationText3.setStyle(
+                "-fx-font-size:13px;");
+
+        VBox notification3 =
+                new VBox(notificationText3);
+
+        notification3.setPadding(
+                new Insets(12));
+
+        notification3.setStyle(
+                "-fx-background-color:#FFF5F5;" +
+                "-fx-background-radius:8;");
+
+        VBox notificationBox =
+                new VBox(
+                        12,
+                        notificationHeader,
+                        new Separator(),
+                        notification1,
+                        notification2,
+                        notification3);
+
+        notificationBox.setPrefWidth(330);
+        notificationBox.setPadding(
+                new Insets(18));
+
+        notificationBox.setStyle(
+                "-fx-background-color:white;" +
+                "-fx-border-color:#E5E1E8;" +
+                "-fx-border-width:1;" +
+                "-fx-border-radius:10;" +
+                "-fx-background-radius:10;" +
+                "-fx-effect:dropshadow(gaussian," +
+                "rgba(0,0,0,0.18),15,0,0,5);");
+
+        notificationPopup
+                .getContent()
+                .add(notificationBox);
+
+        notificationAction.setOnMouseClicked(e -> {
+
+            if (notificationPopup.isShowing()) {
+
+                notificationPopup.hide();
+
+            } else {
+
+                javafx.geometry.Bounds bellPosition =
+                        notificationAction.localToScreen(
+                                notificationAction.getBoundsInLocal());
+
+                if (bellPosition != null) {
+
+                    notificationPopup.show(
+                            notificationAction,
+                            bellPosition.getMaxX() - 330,
+                            bellPosition.getMaxY() + 10);
+                }
+            }
+        });
+
+        markRead.setOnAction(e -> {
+
+            notification1.setStyle(
+                    "-fx-background-color:white;");
+
+            notification2.setStyle(
+                    "-fx-background-color:white;");
+
+            notification3.setStyle(
+                    "-fx-background-color:white;");
+        });
+
+        HBox topActions =
+                new HBox(
+                        24,
+                        notificationAction,
+                        chatbotAction);
+
+        topActions.setAlignment(
+                Pos.CENTER_RIGHT);
+
+        return topActions;
+    }
 
 }

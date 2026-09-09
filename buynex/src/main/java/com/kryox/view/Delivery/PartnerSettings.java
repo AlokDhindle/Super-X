@@ -21,7 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -40,13 +39,10 @@ public class PartnerSettings {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EBCCB7";
     private static final String BORDER_COLOR = "#f0edf2";
-    private static final String SIDEBAR_BG = "#ffffff";
+    private static final String SIDEBAR_BG = "#EBCCB7";
 
-    // =========================================================================
-    // DYNAMIC DATA MODEL FOR PARTNER SETTINGS
-    // =========================================================================
     public static class SettingsData {
         public String partnerName;
         public String partnerTier;
@@ -157,7 +153,7 @@ public class PartnerSettings {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
@@ -166,38 +162,18 @@ public class PartnerSettings {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: " + BORDER_COLOR + ";" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-padding: 0 35 0 30;"
         );
 
-        HBox searchContainer = new HBox(8);
-        searchContainer.setAlignment(Pos.CENTER_LEFT);
-        searchContainer.setMaxWidth(380);
-        searchContainer.setPrefHeight(36);
-        searchContainer.setPadding(new Insets(0, 12, 0, 12));
-        searchContainer.setStyle(
-                "-fx-background-color: #f8f8fb;" +
-                "-fx-border-color: #e5e7eb;" +
-                "-fx-border-radius: 20;" +
-                "-fx-background-radius: 20;"
-        );
-
-        Label searchIcon = new Label("🔍");
-        searchIcon.setStyle("-fx-font-size: 11px; -fx-text-fill: #9ca3af;");
-
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search settings, vehicle, profile...");
-        searchField.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-border-color: transparent;" +
-                "-fx-font-size: 12px;" +
-                "-fx-prompt-text-fill: #9ca3af;"
-        );
-        HBox.setHgrow(searchField, Priority.ALWAYS);
-        searchContainer.getChildren().addAll(searchIcon, searchField);
-        topBar.setCenter(searchContainer);
+        Text title = new Text("Partner Settings");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #a94717;");
+        HBox leftGroup = new HBox(title);
+        leftGroup.setAlignment(Pos.CENTER_LEFT);
+        leftGroup.setStyle("-fx-background-color: #EBCCB7;");
+        topBar.setLeft(leftGroup);
 
         HBox rightIcons = new HBox(16);
         rightIcons.setAlignment(Pos.CENTER_RIGHT);

@@ -43,6 +43,30 @@ public class DeliveryPartnerDAO {
         CompletableFuture<String> future =
                 new CompletableFuture<>();
 
+        if (partner == null) {
+            future.completeExceptionally(
+                    new IllegalArgumentException("Delivery partner details are required.")
+            );
+            return future;
+        }
+
+        if (partner.getEmail() == null || partner.getEmail().trim().isEmpty()) {
+            future.completeExceptionally(
+                    new IllegalArgumentException("Email is required.")
+            );
+            return future;
+        }
+
+        if (password == null || password.length() < 8) {
+            future.completeExceptionally(
+                    new IllegalArgumentException("Password must be at least 8 characters.")
+            );
+            return future;
+        }
+
+        final String registerEmail = partner.getEmail().trim();
+        final String registerPassword = password;
+
         new Thread(() -> {
 
             try {
@@ -58,11 +82,11 @@ public class DeliveryPartnerDAO {
                         new JSONObject()
                                 .put(
                                         "email",
-                                        partner.getEmail().trim()
+                                        registerEmail
                                 )
                                 .put(
                                         "password",
-                                        password
+                                        registerPassword
                                 )
                                 .put(
                                         "returnSecureToken",
@@ -97,7 +121,9 @@ public class DeliveryPartnerDAO {
                 if (authResponse.statusCode() != 200) {
 
                     String responseBody =
-                            authResponse.body();
+                            authResponse.body() == null
+                                    ? ""
+                                    : authResponse.body();
 
                     String userError =
                             "Unable to create delivery partner account.";
@@ -116,6 +142,16 @@ public class DeliveryPartnerDAO {
 
                         userError =
                                 "Please enter a valid email address.";
+
+                    } else if (responseBody.contains("OPERATION_NOT_ALLOWED")) {
+
+                        userError =
+                                "Email/password authentication is disabled in Firebase.";
+
+                    } else if (responseBody.contains("API_KEY_INVALID")) {
+
+                        userError =
+                                "Firebase Web API key is invalid.";
                     }
 
                     throw new Exception(userError);
@@ -135,7 +171,12 @@ public class DeliveryPartnerDAO {
                 partner.setCreatedAt(
                         System.currentTimeMillis()
                 );
-Map<String, Object> partnerMap =
+                partner.setApproved(false);
+                partner.setStatus(
+                        "PENDING_APPROVAL"
+                );
+
+                Map<String, Object> partnerMap =
                         new HashMap<>();
 
                 partnerMap.put(
@@ -247,7 +288,43 @@ Map<String, Object> partnerMap =
                         "rcBookPath",
                         rcBookUrl
                 );
-partnerMap.put(
+
+                partnerMap.put(
+                        "licenseStatus",
+                        "Pending Approval"
+                );
+
+                partnerMap.put(
+                        "governmentIdStatus",
+                        "Pending Approval"
+                );
+
+                partnerMap.put(
+                        "rcBookStatus",
+                        "Pending Approval"
+                );
+
+                partnerMap.put(
+                        "insuranceStatus",
+                        "Pending Approval"
+                );
+
+                partnerMap.put(
+                        "approved",
+                        false
+                );
+
+                partnerMap.put(
+                        "isAdminApproved",
+                        false
+                );
+
+                partnerMap.put(
+                        "status",
+                        "PENDING_APPROVAL"
+                );
+
+                partnerMap.put(
                         "ratingScore",
                         5.0
                 );
@@ -311,7 +388,41 @@ partnerMap.put(
                         "createdAt",
                         partner.getCreatedAt()
                 );
-db.collection(
+
+                Map<String, Object> adminReview =
+                        new HashMap<>();
+
+                adminReview.put(
+                        "idCardUrl",
+                        idCardUrl
+                );
+
+                adminReview.put(
+                        "licenseDocUrl",
+                        licenseDocUrl
+                );
+
+                adminReview.put(
+                        "rcBookUrl",
+                        rcBookUrl
+                );
+
+                adminReview.put(
+                        "verificationStatus",
+                        "PENDING_APPROVAL"
+                );
+
+                adminReview.put(
+                        "submittedAt",
+                        System.currentTimeMillis()
+                );
+
+                partnerMap.put(
+                        "adminVerification",
+                        adminReview
+                );
+
+                db.collection(
                         COLLECTION_NAME
                 )
                         .document(uid)
@@ -319,7 +430,7 @@ db.collection(
                         .get();
 
                 System.out.println(
-                        "Delivery Partner saved successfully"
+                        "Delivery Partner saved with approved = false"
                 );
 
                 future.complete(uid);
@@ -338,6 +449,7 @@ db.collection(
             String email,
             String password
     ) {
+
         CompletableFuture<DeliveryPartner> future =
                 new CompletableFuture<>();
 
@@ -355,26 +467,45 @@ db.collection(
         final String loginPassword = password;
 
         new Thread(() -> {
+
             try {
+
                 String url =
                         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="
                                 + DelivrayFirebaseConfig.WEB_API_KEY;
 
                 JSONObject requestJson =
                         new JSONObject()
-                                .put("email", loginEmail)
-                                .put("password", loginPassword)
-                                .put("returnSecureToken", true);
+                                .put(
+                                        "email",
+                                        loginEmail
+                                )
+                                .put(
+                                        "password",
+                                        loginPassword
+                                )
+                                .put(
+                                        "returnSecureToken",
+                                        true
+                                );
 
-                HttpClient client = HttpClient.newHttpClient();
+                HttpClient client =
+                        HttpClient.newHttpClient();
 
                 HttpRequest request =
                         HttpRequest.newBuilder()
-                                .uri(URI.create(url))
-                                .header("Content-Type", "application/json")
-                                .POST(HttpRequest.BodyPublishers.ofString(
-                                        requestJson.toString()
-                                ))
+                                .uri(
+                                        URI.create(url)
+                                )
+                                .header(
+                                        "Content-Type",
+                                        "application/json"
+                                )
+                                .POST(
+                                        HttpRequest.BodyPublishers.ofString(
+                                                requestJson.toString()
+                                        )
+                                )
                                 .build();
 
                 HttpResponse<String> response =
@@ -383,72 +514,179 @@ db.collection(
                                 HttpResponse.BodyHandlers.ofString()
                         );
 
-                if (response.statusCode() != 200) {
-                    String body = response.body() == null ? "" : response.body();
-                    String message = "Incorrect email or password.";
+                if (response.statusCode() == 200) {
 
-                    if (body.contains("EMAIL_NOT_FOUND") ||
-                            body.contains("INVALID_LOGIN_CREDENTIALS")) {
-                        message = "Invalid email or password.";
-                    } else if (body.contains("INVALID_PASSWORD")) {
-                        message = "Incorrect password. Please try again.";
-                    } else if (body.contains("USER_DISABLED")) {
-                        message = "This account has been disabled.";
-                    } else if (body.contains("OPERATION_NOT_ALLOWED")) {
-                        message = "Email/password login is disabled in Firebase.";
-                    } else if (body.contains("API_KEY_INVALID")) {
-                        message = "Firebase Web API key is invalid.";
+                    JSONObject responseJson =
+                            new JSONObject(
+                                    response.body()
+                            );
+
+                    String uid =
+                            responseJson.getString(
+                                    "localId"
+                            );
+
+                    Firestore db =
+                            DelivrayFirebaseConfig.getFireStore();
+
+                    DocumentSnapshot snapshot =
+                            db.collection(
+                                    COLLECTION_NAME
+                            )
+                                    .document(uid)
+                                    .get()
+                                    .get();
+
+                    if (!snapshot.exists()) {
+
+                        future.completeExceptionally(
+                                new Exception(
+                                        "Delivery partner profile not found."
+                                )
+                        );
+
+                        return;
                     }
 
-                    future.completeExceptionally(new Exception(message));
-                    return;
-                }
+                    Boolean approved =
+                            snapshot.getBoolean(
+                                    "approved"
+                            );
 
-                JSONObject responseJson = new JSONObject(response.body());
-                String uid = responseJson.getString("localId");
+                    String status =
+                            snapshot.getString(
+                                    "status"
+                            );
 
-                Firestore db = DelivrayFirebaseConfig.getFireStore();
+                    boolean isApproved =
+                            Boolean.TRUE.equals(
+                                    approved
+                            )
+                                    || "APPROVED".equalsIgnoreCase(
+                                            status
+                                    );
 
-                DocumentSnapshot snapshot =
-                        db.collection(COLLECTION_NAME)
-                                .document(uid)
-                                .get()
-                                .get();
+                    if (!isApproved) {
 
-                if (!snapshot.exists()) {
+                        if ("REJECTED".equalsIgnoreCase(
+                                status
+                        )) {
+
+                            future.completeExceptionally(
+                                    new Exception(
+                                            "Your delivery partner verification was rejected."
+                                    )
+                            );
+
+                        } else {
+
+                            future.completeExceptionally(
+                                    new Exception(
+                                            "Your account is pending for admin approval."
+                                    )
+                            );
+                        }
+
+                        return;
+                    }
+
+                    DeliveryPartner partner =
+                            snapshot.toObject(
+                                    DeliveryPartner.class
+                            );
+
+                    if (partner == null) {
+
+                        partner =
+                                new DeliveryPartner();
+                    }
+
+                    partner.setId(uid);
+                    partner.setApproved(true);
+                    partner.setStatus(
+                            status == null
+                                    ? "APPROVED"
+                                    : status
+                    );
+
+                    Map<String, Object> data =
+                            snapshot.getData();
+
+                    if (data != null) {
+
+                        extractDocumentUrlsFromData(
+                                data,
+                                partner
+                        );
+
+                        Platform.runLater(() ->
+                                PartnerConstants.setLoggedInPartner(
+                                        data
+                                )
+                        );
+                    }
+
+                    PartnerConstants.UID =
+                            uid;
+
+                    future.complete(partner);
+
+                } else {
+
+                    String responseBody =
+                            response.body() == null
+                                    ? ""
+                                    : response.body();
+
+                    String userError =
+                            "Incorrect email or password.";
+
+                    if (responseBody.contains(
+                            "EMAIL_NOT_FOUND"
+                    )) {
+
+                        userError =
+                                "No account found with this email address.";
+
+                    } else if (
+                            responseBody.contains(
+                                    "INVALID_PASSWORD"
+                            )
+                                    || responseBody.contains(
+                                            "INVALID_LOGIN_CREDENTIALS"
+                                    )
+                    ) {
+
+                        userError =
+                                "Incorrect password. Please try again.";
+
+                    } else if (
+                            responseBody.contains(
+                                    "USER_DISABLED"
+                            )
+                    ) {
+
+                        userError =
+                                "This account has been suspended by an administrator.";
+                    }
+
                     future.completeExceptionally(
                             new Exception(
-                                    "Login successful, but delivery partner profile was not found."
+                                    userError
                             )
                     );
-                    return;
                 }
-
-                DeliveryPartner partner =
-                        snapshot.toObject(DeliveryPartner.class);
-
-                if (partner == null) {
-                    partner = new DeliveryPartner();
-                }
-
-                partner.setId(uid);
-
-                Map<String, Object> data = snapshot.getData();
-
-                if (data != null) {
-                    extractDocumentUrlsFromData(data, partner);
-
-                    Platform.runLater(() ->
-                            PartnerConstants.setLoggedInPartner(data)
-                    );
-                }
-
-                PartnerConstants.UID = uid;
-                future.complete(partner);
 
             } catch (Exception e) {
-                future.completeExceptionally(e);
+
+                future.completeExceptionally(
+                        new Exception(
+                                "Network or authentication error: "
+                                        + e.getMessage()
+                        )
+                );
             }
+
         }).start();
 
         return future;
@@ -491,6 +729,202 @@ db.collection(
         }
 
         return allPartners;
+    }
+
+    public List<QueryDocumentSnapshot> getPendingPartners() {
+
+        List<QueryDocumentSnapshot> pending =
+                new ArrayList<>();
+
+        try {
+
+            Firestore db =
+                    DelivrayFirebaseConfig.getFireStore();
+
+            QuerySnapshot snapshot =
+                    db.collection(
+                            COLLECTION_NAME
+                    )
+                            .get()
+                            .get();
+
+            for (QueryDocumentSnapshot document :
+                    snapshot.getDocuments()) {
+
+                Boolean approved =
+                        document.getBoolean(
+                                "approved"
+                        );
+
+                String status =
+                        document.getString(
+                                "status"
+                        );
+
+                boolean isApproved =
+                        Boolean.TRUE.equals(
+                                approved
+                        )
+                                || "APPROVED".equalsIgnoreCase(
+                                        status
+                                );
+
+                boolean isRejected =
+                        "REJECTED".equalsIgnoreCase(
+                                status
+                        );
+
+                if (!isApproved &&
+                        !isRejected) {
+
+                    pending.add(
+                            document
+                    );
+                }
+            }
+
+            System.out.println(
+                    "Pending Delivery Partners = "
+                            + pending.size()
+            );
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Pending Delivery Partner fetch error: "
+                            + e.getMessage()
+            );
+
+            e.printStackTrace();
+        }
+
+        return pending;
+    }
+
+    public boolean approvePartner(
+            String uid
+    ) {
+
+        try {
+
+            Firestore db =
+                    DelivrayFirebaseConfig.getFireStore();
+
+            Map<String, Object> updates =
+                    new HashMap<>();
+
+            updates.put(
+                    "approved",
+                    true
+            );
+
+            updates.put(
+                    "isAdminApproved",
+                    true
+            );
+
+            updates.put(
+                    "status",
+                    "APPROVED"
+            );
+
+            updates.put(
+                    "adminVerification.verificationStatus",
+                    "APPROVED"
+            );
+
+            updates.put(
+                    "adminVerification.reviewedAt",
+                    System.currentTimeMillis()
+            );
+
+            db.collection(
+                    COLLECTION_NAME
+            )
+                    .document(uid)
+                    .update(updates)
+                    .get();
+
+            System.out.println(
+                    "Delivery Partner approved: "
+                            + uid
+            );
+
+            return true;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+    public boolean rejectPartner(
+            String uid,
+            String reason
+    ) {
+
+        try {
+
+            Firestore db =
+                    DelivrayFirebaseConfig.getFireStore();
+
+            Map<String, Object> updates =
+                    new HashMap<>();
+
+            updates.put(
+                    "approved",
+                    false
+            );
+
+            updates.put(
+                    "isAdminApproved",
+                    false
+            );
+
+            updates.put(
+                    "status",
+                    "REJECTED"
+            );
+
+            updates.put(
+                    "adminVerification.verificationStatus",
+                    "REJECTED"
+            );
+
+            updates.put(
+                    "adminVerification.reviewNote",
+                    reason != null
+                            ? reason
+                            : ""
+            );
+
+            updates.put(
+                    "adminVerification.reviewedAt",
+                    System.currentTimeMillis()
+            );
+
+            db.collection(
+                    COLLECTION_NAME
+            )
+                    .document(uid)
+                    .update(updates)
+                    .get();
+
+            System.out.println(
+                    "Delivery Partner rejected: "
+                            + uid
+            );
+
+            return true;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return false;
+        }
     }
 
     public static void listenToPartnerUpdates(
@@ -557,32 +991,104 @@ db.collection(
             Map<String, Object> data,
             DeliveryPartner partner
     ) {
+
         String profilePhoto =
-                getVal(data, "profilePhotoUrl", "profilePhotoPath");
+                getVal(
+                        data,
+                        "profilePhotoUrl",
+                        "profilePhotoPath"
+                );
 
         String idCard =
-                getVal(data, "idCardUrl", "idCardPath");
+                getVal(
+                        data,
+                        "idCardUrl",
+                        "idCardPath"
+                );
 
         String licenseDoc =
-                getVal(data, "licenseDocUrl", "licenseDocPath");
+                getVal(
+                        data,
+                        "licenseDocUrl",
+                        "licenseDocPath"
+                );
 
         String rcBook =
-                getVal(data, "rcBookUrl", "rcBookPath");
+                getVal(
+                        data,
+                        "rcBookUrl",
+                        "rcBookPath"
+                );
+
+        if ((idCard.isEmpty() ||
+                licenseDoc.isEmpty() ||
+                rcBook.isEmpty())
+                && data.get(
+                        "adminVerification"
+                ) instanceof Map) {
+
+            Map<String, Object> adminMap =
+                    (Map<String, Object>) data.get(
+                            "adminVerification"
+                    );
+
+            if (idCard.isEmpty()) {
+
+                idCard =
+                        getVal(
+                                adminMap,
+                                "idCardUrl",
+                                "idCardPath"
+                        );
+            }
+
+            if (licenseDoc.isEmpty()) {
+
+                licenseDoc =
+                        getVal(
+                                adminMap,
+                                "licenseDocUrl",
+                                "licenseDocPath"
+                        );
+            }
+
+            if (rcBook.isEmpty()) {
+
+                rcBook =
+                        getVal(
+                                adminMap,
+                                "rcBookUrl",
+                                "rcBookPath"
+                        );
+            }
+        }
 
         if (!profilePhoto.isEmpty()) {
-            partner.setProfilePhotoPath(profilePhoto);
+
+            partner.setProfilePhotoPath(
+                    profilePhoto
+            );
         }
 
         if (!idCard.isEmpty()) {
-            partner.setIdCardPath(idCard);
+
+            partner.setIdCardPath(
+                    idCard
+            );
         }
 
         if (!licenseDoc.isEmpty()) {
-            partner.setLicenseDocPath(licenseDoc);
+
+            partner.setLicenseDocPath(
+                    licenseDoc
+            );
         }
 
         if (!rcBook.isEmpty()) {
-            partner.setRcBookPath(rcBook);
+
+            partner.setRcBookPath(
+                    rcBook
+            );
         }
     }
 

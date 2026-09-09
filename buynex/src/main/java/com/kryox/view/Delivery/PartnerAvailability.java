@@ -1,11 +1,12 @@
 package com.kryox.view.Delivery;
 
-
-
-import com.kryox.config.DelivrayFirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.kryox.view.Customer.Homepage;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.ListenerRegistration;
+
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -39,16 +40,15 @@ public class PartnerAvailability {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EEE5DE";
     private static final String BORDER_COLOR = "#f0edf2";
-    private static final String SIDEBAR_BG = "#ffffff";
+    private static final String SIDEBAR_BG = "#EBCCB7";
 
     private static final double REGULAR_HOURLY_RATE = 180.00;
     private static final double PEAK_HOURLY_BONUS = 60.00;
 
-    // =========================================================================
-    // DYNAMIC FIRESTORE-READY AVAILABILITY DATA MODEL
-    // =========================================================================
+    private static ListenerRegistration availabilityListener;
+
     public static class AvailabilityData {
         public String partnerName;
         public String partnerTier;
@@ -60,7 +60,8 @@ public class PartnerAvailability {
         public Map<String, Boolean> activeShifts = new HashMap<>();
 
         public int scheduledHours = 0;
-        public int completedHours = 14;
+        public int completedHours = 0;
+        public int completedMinutes = 0;
         public double baseRate = 0.0;
         public double peakHoursBonus = 0.0;
         public double projectedTotal = 0.0;
@@ -106,15 +107,16 @@ public class PartnerAvailability {
         public double getProgressPercentage() {
             if (scheduledHours == 0)
                 return 0.0;
-            return Math.min(1.0, (double) completedHours / scheduledHours);
+            double totalCompletedHours = completedHours + (completedMinutes / 60.0);
+            return Math.min(1.0, totalCompletedHours / scheduledHours);
         }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS (SHOPKEEPER PATTERN)
-    // =========================================================================
     public static Scene availabilityScene() {
-        return availabilityScene(new AvailabilityData());
+        AvailabilityData data = new AvailabilityData();
+        Scene scene = availabilityScene(data);
+        attachRealtimeAvailabilityListener(data);
+        return scene;
     }
 
     public static Scene availabilityScene(AvailabilityData data) {
@@ -143,19 +145,90 @@ public class PartnerAvailability {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
 
-    // =========================================================================
-    // TOP HEADER
-    // =========================================================================
+    private static void attachRealtimeAvailabilityListener(AvailabilityData data) {
+        try {
+            if (availabilityListener != null) {
+                availabilityListener.remove();
+            }
+
+            Firestore db = Firebaseconfig.gFirestore();
+
+            if (PartnerConstants.UID != null && !PartnerConstants.UID.isEmpty()) {
+                new Thread(() -> {
+                    try {
+                        DocumentSnapshot doc = db.collection("delivery_partners").document(PartnerConstants.UID).get().get();
+                        if (doc.exists() && doc.get("availability") != null) {
+                            Object availObj = doc.get("availability");
+                            if (availObj instanceof Map) {
+                                Map<String, Object> availMap = (Map<String, Object>) availObj;
+                                if (availMap.get("autoAcceptOrders") != null) {
+                                    data.autoAcceptOrders = Boolean.parseBoolean(availMap.get("autoAcceptOrders").toString());
+                                }
+                                if (availMap.get("operatingZone") != null) {
+                                    data.selectedZone = availMap.get("operatingZone").toString();
+                                }
+                                if (availMap.get("activeShifts") instanceof Map) {
+                                    Map<String, Object> savedShifts = (Map<String, Object>) availMap.get("activeShifts");
+                                    data.activeShifts.clear();
+                                    for (Map.Entry<String, Object> entry : savedShifts.entrySet()) {
+                                        data.activeShifts.put(entry.getKey(), Boolean.parseBoolean(entry.getValue().toString()));
+                                    }
+                                    data.recalculateMetrics();
+                                    Platform.runLater(() -> {
+                                        if (Homepage.HomepageStage != null && Homepage.HomepageStage.getScene() != null) {
+                                            Homepage.HomepageStage.setScene(availabilityScene(data));
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    } catch (Exception ignored) {}
+                }).start();
+            }
+
+            availabilityListener = db.collection("Orders").addSnapshotListener((snapshots, error) -> {
+                if (error != null || snapshots == null) {
+                    return;
+                }
+
+                Platform.runLater(() -> {
+                    int completedCount = 0;
+                    for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                        String status = doc.getString("orderStatus");
+                        if (status == null) status = doc.getString("status");
+                        String partnerId = doc.getString("deliveryPartnerId");
+
+                        boolean isMine = PartnerConstants.UID != null && PartnerConstants.UID.equals(partnerId);
+                        if (isMine && ("DELIVERED".equalsIgnoreCase(status) || "COMPLETED".equalsIgnoreCase(status))) {
+                            completedCount++;
+                        }
+                    }
+
+                    int totalMinutes = completedCount * 45;
+                    data.completedHours = totalMinutes / 60;
+                    data.completedMinutes = totalMinutes % 60;
+                    data.recalculateMetrics();
+
+                    if (Homepage.HomepageStage != null && Homepage.HomepageStage.getScene() != null) {
+                        Homepage.HomepageStage.setScene(availabilityScene(data));
+                    }
+                });
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private static BorderPane createTopHeader(AvailabilityData data) {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: #f0edf2;" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-padding: 0 35 0 30;"
@@ -163,8 +236,10 @@ public class PartnerAvailability {
 
         Text title = new Text("Available");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #a94717;");
-        topBar.setLeft(new HBox(title));
-        ((HBox) topBar.getLeft()).setAlignment(Pos.CENTER_LEFT);
+        HBox leftGroup = new HBox(title);
+        leftGroup.setAlignment(Pos.CENTER_LEFT);
+        leftGroup.setStyle("-fx-background-color: #EBCCB7;");
+        topBar.setLeft(leftGroup);
 
         HBox rightControls = new HBox(16);
         rightControls.setAlignment(Pos.CENTER_RIGHT);
@@ -251,9 +326,6 @@ public class PartnerAvailability {
         return topBar;
     }
 
-    // =========================================================================
-    // 1. LEFT SIDEBAR
-    // =========================================================================
     private static VBox createSidebar(AvailabilityData data) {
         VBox sidebar = new VBox(12);
         sidebar.setPrefWidth(220);
@@ -367,9 +439,6 @@ public class PartnerAvailability {
         return sidebar;
     }
 
-    // =========================================================================
-    // 2. MAIN CONTENT
-    // =========================================================================
     private static VBox createMainContent(AvailabilityData data) {
         VBox content = new VBox(22);
         content.setPadding(new Insets(24, 35, 60, 35));
@@ -403,7 +472,7 @@ public class PartnerAvailability {
 
             new Thread(() -> {
                 try {
-                    Firestore db = DelivrayFirebaseConfig.getFireStore();
+                    Firestore db = Firebaseconfig.gFirestore();
                     if (PartnerConstants.UID != null && !PartnerConstants.UID.isEmpty()) {
                         Map<String, Object> scheduleMap = new HashMap<>();
                         scheduleMap.put("autoAcceptOrders", data.autoAcceptOrders);
@@ -542,9 +611,6 @@ public class PartnerAvailability {
         return card;
     }
 
-    // =========================================================================
-    // 3. INTERACTIVE 7-DAY SHIFT SCHEDULER
-    // =========================================================================
     private static VBox createInteractiveWeeklyGrid(AvailabilityData data) {
         VBox card = createCard();
         card.setPadding(new Insets(0));
@@ -672,9 +738,6 @@ public class PartnerAvailability {
         return btn;
     }
 
-    // =========================================================================
-    // 4. DYNAMIC PROJECTED EARNINGS CARD
-    // =========================================================================
     private static VBox createProjectedEarningsCard(AvailabilityData data) {
         VBox card = createCard();
         card.setPadding(new Insets(18));
@@ -723,9 +786,6 @@ public class PartnerAvailability {
         return card;
     }
 
-    // =========================================================================
-    // 5. DYNAMIC WEEK SUMMARY CARD
-    // =========================================================================
     private static VBox createWeekSummaryCard(AvailabilityData data) {
         VBox card = createCard();
         card.setPadding(new Insets(18));
@@ -762,7 +822,7 @@ public class PartnerAvailability {
         compLbl.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #374151;");
         compLeft.getChildren().addAll(check, compLbl);
 
-        Label compVal = new Label(data.completedHours + "h 30m");
+        Label compVal = new Label(data.completedHours + "h " + String.format("%02dm", data.completedMinutes));
         compVal.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #111827;");
         compRow.setLeft(compLeft);
         compRow.setRight(compVal);
@@ -787,9 +847,6 @@ public class PartnerAvailability {
         return card;
     }
 
-    // =========================================================================
-    // 6. DYNAMIC "VIEW PAST WEEKS" ACTION BUTTON
-    // =========================================================================
     private static Button createPastWeeksButton() {
         Button btn = new Button("↺   View Past Weeks");
         btn.setMaxWidth(Double.MAX_VALUE);
@@ -812,9 +869,6 @@ public class PartnerAvailability {
         return btn;
     }
 
-    // =========================================================================
-    // DYNAMIC AVATAR BUILDER
-    // =========================================================================
     private static StackPane createAvatarNode(double radius) {
         StackPane avatarPane = new StackPane();
         avatarPane.setPrefSize(radius * 2, radius * 2);

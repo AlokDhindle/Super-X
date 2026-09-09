@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
+
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -25,7 +25,7 @@ public class CongratulationsPage {
         StackPane root = new StackPane();
 
         root.setStyle(
-                "-fx-background-color:linear-gradient(to bottom right,#FFFFFF,#FFF5EF);"
+                "-fx-background-color: #eee5df;"
         );
 
         VBox main = new VBox();
@@ -43,11 +43,6 @@ public class CongratulationsPage {
                 "-fx-background-radius:28;" +
                 "-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),30,0,0,8);"
         );
-
-
-        // =========================
-        // SUCCESS ICON
-        // =========================
 
         StackPane successIcon = new StackPane();
 
@@ -72,11 +67,6 @@ public class CongratulationsPage {
                 check
         );
 
-
-        // =========================
-        // TITLE
-        // =========================
-
         Text title = new Text(
                 "Congratulations!"
         );
@@ -92,11 +82,6 @@ public class CongratulationsPage {
         title.setFill(
                 Color.web("#1C1C1C")
         );
-
-
-        // =========================
-        // DESCRIPTION
-        // =========================
 
         Text description = new Text(
                 "Your Admin Account has been created successfully.\n" +
@@ -118,11 +103,6 @@ public class CongratulationsPage {
         description.setFill(
                 Color.web("#6B6B6B")
         );
-
-
-        // =========================
-        // FEATURE CARDS
-        // =========================
 
         HBox features = new HBox(16);
 
@@ -159,25 +139,20 @@ public class CongratulationsPage {
                 autoSetupCard
         );
 
-
-        // =========================
-        // DASHBOARD BUTTON
-        // =========================
-
-        Button dashboardButton =
+        Button loginButton =
                 new Button(
-                        "Go to Admin Dashboard"
+                        "login"
                 );
 
-        dashboardButton.setPrefWidth(
+        loginButton.setPrefWidth(
                 370
         );
 
-        dashboardButton.setPrefHeight(
+        loginButton.setPrefHeight(
                 54
         );
 
-        dashboardButton.setStyle(
+        loginButton.setStyle(
                 "-fx-background-color:linear-gradient(to right,#C64F00,#FFAE81);" +
                 "-fx-text-fill:white;" +
                 "-fx-font-size:16px;" +
@@ -185,11 +160,6 @@ public class CongratulationsPage {
                 "-fx-background-radius:25;" +
                 "-fx-cursor:hand;"
         );
-
-
-        // =========================
-        // INVITE SECTION
-        // =========================
 
         VBox inviteBox = new VBox(5);
 
@@ -239,24 +209,14 @@ public class CongratulationsPage {
                 inviteLink
         );
 
-
-        // =========================
-        // ADD CARD CONTENT
-        // =========================
-
         card.getChildren().addAll(
                 successIcon,
                 title,
                 description,
                 features,
-                dashboardButton,
+                loginButton,
                 inviteBox
         );
-
-
-        // =========================
-        // FOOTER
-        // =========================
 
         HBox footer = new HBox(8);
 
@@ -317,14 +277,9 @@ public class CongratulationsPage {
 
         root.getChildren().add(main);
 
+        loginButton.setOnMouseEntered(e -> {
 
-        // =========================
-        // BUTTON HOVER
-        // =========================
-
-        dashboardButton.setOnMouseEntered(e -> {
-
-            dashboardButton.setStyle(
+            loginButton.setStyle(
                     "-fx-background-color:#C64F00;" +
                     "-fx-text-fill:white;" +
                     "-fx-font-size:16px;" +
@@ -335,9 +290,9 @@ public class CongratulationsPage {
 
         });
 
-        dashboardButton.setOnMouseExited(e -> {
+        loginButton.setOnMouseExited(e -> {
 
-            dashboardButton.setStyle(
+                loginButton.setStyle(
                     "-fx-background-color:linear-gradient(to right,#C64F00,#FFAE81);" +
                     "-fx-text-fill:white;" +
                     "-fx-font-size:16px;" +
@@ -348,18 +303,13 @@ public class CongratulationsPage {
 
         });
 
+        loginButton.setOnAction(e -> {
 
-        // =========================
-        // GO TO DASHBOARD
-        // =========================
-
-        dashboardButton.setOnAction(e -> {
-
-            AdminDashboardPage dashboard =
-                    new AdminDashboardPage();
+            AdminLoginPage dashboard =
+                    new AdminLoginPage();
 
             Homepage.HomepageStage.setScene(
-                    dashboard.getUserScene()
+                    dashboard.getLoginScene()
             );
 
         });
@@ -486,7 +436,6 @@ public class CongratulationsPage {
                 iconBox,
                 texts
         );
-
         return card;
     }
 }

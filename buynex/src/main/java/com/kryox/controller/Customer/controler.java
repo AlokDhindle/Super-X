@@ -19,7 +19,7 @@ public class controler {
     // Logged-in Firebase user ID
     public String userId;
 
-    // ================= SIGN UP =================
+    // SIGN UP
 
     public boolean singUp(String email, String password) {
 
@@ -34,7 +34,7 @@ public class controler {
 
             URI uri = URI.create(
                     "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="
-                            + API_KEY
+                            + API_KEY 
             );
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -91,7 +91,7 @@ public class controler {
         }
     }
 
-    // ================= LOGIN =================
+    // LOGIN
 
     public boolean logIn(String email, String password) {
 
@@ -164,7 +164,7 @@ public class controler {
         }
     }
 
-    // ================= GET USER ID =================
+    // GET USER ID
 
     public String getUserId() {
 

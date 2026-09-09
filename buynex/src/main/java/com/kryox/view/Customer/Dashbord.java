@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -34,11 +35,7 @@ public class Dashbord  {
 
     private Scene Dashbordscene;
 
-    Scene getDashbordScene(){
-        // =====================================================
-        // SHADOWS
-        // =====================================================
-
+    public Scene getDashbordScene(){
         DropShadow shadow = new DropShadow();
         shadow.setRadius(18);
         shadow.setSpread(0.05);
@@ -52,10 +49,6 @@ public class Dashbord  {
         cardShadow.setSpread(0.02);
         cardShadow.setColor(Color.rgb(0, 0, 0, 0.10));
 
-        // =====================================================
-        // LOGO
-        // =====================================================
-
         Label name = new Label("BuyNeX");
         name.setStyle(
         "-fx-font-family: 'Montserrat';" +
@@ -63,10 +56,6 @@ public class Dashbord  {
         "-fx-font-weight: 900;" +
         "-fx-text-fill: #E87500;"
         );
-
-        // =====================================================
-        // PREMIUM SHOPPER
-        // =====================================================
 
         HBox premiumBox = new HBox(9);
         premiumBox.setPrefSize(205, 58);
@@ -84,7 +73,9 @@ public class Dashbord  {
         premiumBox.setEffect(cardShadow);
 
         VBox textBox = new VBox(3);
-        Label title = new Label("Premium Shopper");
+        String currentPlan = CustomerManagePlan.CustomerPlanState.getCurrentPlan(userId);
+        String shopperTitle = "Gold".equalsIgnoreCase(currentPlan) ? "👑 Gold Shopper" : ("Platinum".equalsIgnoreCase(currentPlan) ? "💎 Platinum VIP" : "Premium Shopper");
+        Label title = new Label(shopperTitle);
         title.setStyle(
         "-fx-font-family: 'Montserrat';" +
         "-fx-font-size: 12px;" +
@@ -102,10 +93,6 @@ public class Dashbord  {
 
         textBox.getChildren().addAll(title, subtitle);
         premiumBox.getChildren().add(textBox);
-
-        // =====================================================
-        // DASHBOARD
-        // =====================================================
 
         Image di = new Image("/assets/images/Dashbord/dashboard.png");
         ImageView div = new ImageView(di);
@@ -127,6 +114,8 @@ public class Dashbord  {
         "-fx-alignment: CENTER_LEFT;" +
         "-fx-cursor: hand;"
         );
+
+        lefButton1.setOnAction(e -> CustomerNavigation.navigateToDashboard(userId));
 
         HBox hbInDashboard = new HBox(17, div, lefButton1);
         hbInDashboard.setPrefWidth(205);
@@ -169,10 +158,6 @@ public class Dashbord  {
             "-fx-cursor: hand;"
             );
         });
-
-        // =====================================================
-        // NEARBY SHOPS
-        // =====================================================
 
         Image di2 = new Image("/assets/images/store.png");
         ImageView div2 = new ImageView(di2);
@@ -247,10 +232,6 @@ public class Dashbord  {
             );
         });
 
-        // =====================================================
-        // DEALS
-        // =====================================================
-
         Image di3 = new Image("/assets/images/Dashbord/hot-sale.png");
         ImageView div3 = new ImageView(di3);
         div3.setFitHeight(23);
@@ -323,10 +304,6 @@ public class Dashbord  {
             );
         });
 
-        // =====================================================
-        // MY ORDERS
-        // =====================================================
-
         Image di4 = new Image("/assets/images/Dashbord/package.png");
         ImageView div4 = new ImageView(di4);
         div4.setFitHeight(23);
@@ -392,10 +369,6 @@ public class Dashbord  {
             "-fx-cursor: hand;"
             );
         });
-
-        // =====================================================
-        // ANALYTICS
-        // =====================================================
 
         Image di5 = new Image("/assets/images/Dashbord/line-chart.png");
         ImageView div5 = new ImageView(di5);
@@ -469,65 +442,7 @@ public class Dashbord  {
             );
         });
 
-        // =====================================================
-        // UPGRADE CARD
-        // =====================================================
-
-        VBox upgradeCard = new VBox(7);
-        upgradeCard.setPrefWidth(205);
-        upgradeCard.setMinWidth(205);
-        upgradeCard.setMaxWidth(205);
-        upgradeCard.setPrefHeight(112);
-        upgradeCard.setPadding(new Insets(15));
-        upgradeCard.setAlignment(Pos.CENTER_LEFT);
-
-        LinearGradient upgradeGradient = new LinearGradient(
-        0, 0, 1, 1, true,
-        CycleMethod.NO_CYCLE,
-        new Stop(0, Color.web("#25262A")),
-        new Stop(1, Color.web("#45474D"))
-        );
-
-        upgradeCard.setBackground(
-        new Background(
-        new BackgroundFill(
-        upgradeGradient,
-        new CornerRadii(17),
-        Insets.EMPTY
-        )
-        )
-        );
-
-        Label upgradeTitle = new Label("Unlock Gold");
-        upgradeTitle.setStyle(
-        "-fx-font-size: 12px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-text-fill: white;"
-        );
-
-        Label upgradeText = new Label("Smarter deals & exclusive rewards");
-        upgradeText.setStyle(
-        "-fx-font-size: 8px;" +
-        "-fx-text-fill: #BEBFC3;"
-        );
-
-        Button upgradeGold = new Button("Upgrade to Gold");
-        upgradeGold.setPrefWidth(175);
-        upgradeGold.setPrefHeight(30);
-        upgradeGold.setStyle(
-        "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
-        "-fx-text-fill: white;" +
-        "-fx-font-size: 10px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-background-radius: 10;" +
-        "-fx-cursor: hand;"
-        );
-
-        upgradeCard.getChildren().addAll(upgradeTitle, upgradeText, upgradeGold);
-
-        // =====================================================
-        // SETTINGS
-        // =====================================================
+        VBox upgradeCard = CustomerPlanUpgradeCard.createUpgradeCard(userId);
 
         Image di6 = new Image("/assets/images/Dashbord/category.png");
         ImageView div6 = new ImageView(di6);
@@ -566,10 +481,6 @@ public class Dashbord  {
         hbInDashboard6.setAlignment(Pos.CENTER_LEFT);
         hbInDashboard6.setPadding(new Insets(0, 8, 0, 18));
 
-        // =====================================================
-        // HELP
-        // =====================================================
-
         Image di7 = new Image("/assets/images/Dashbord/question.png");
         ImageView div7 = new ImageView(di7);
         div7.setFitHeight(19);
@@ -589,6 +500,10 @@ public class Dashbord  {
         "-fx-alignment: CENTER_LEFT;" +
         "-fx-cursor: hand;"
         );
+        lefButton7.setOnAction(e -> {
+            Helppage hp = new Helppage(userId);
+            Homepage.HomepageStage.setScene(hp.getHelpScene(this::backTodashbord));
+        });
 
         HBox hbInDashboard7 = new HBox(10, div7, lefButton7);
         hbInDashboard7.setPrefWidth(205);
@@ -597,10 +512,6 @@ public class Dashbord  {
         hbInDashboard7.setPrefHeight(34);
         hbInDashboard7.setAlignment(Pos.CENTER_LEFT);
         hbInDashboard7.setPadding(new Insets(0, 8, 0, 18));
-
-        // =====================================================
-        // LEFT BOX
-        // =====================================================
 
         VBox leftBox = new VBox(14);
         leftBox.setPrefWidth(245);
@@ -629,13 +540,13 @@ public class Dashbord  {
         hbInDashboard7
         );
 
-        // =====================================================
-        // TOP NAVIGATION
-        // =====================================================
-
         Button t1 = new Button("Offers");
         Button t2 = new Button("Shops");
         Button t3 = new Button("Support");
+
+        t1.setOnAction(e -> CustomerNavigation.navigateToDeals(userId));
+        t2.setOnAction(e -> CustomerNavigation.navigateToNearbyShops(userId));
+        t3.setOnAction(e -> CustomerNavigation.navigateToHelp(userId));
 
         String topButtonStyle = "-fx-background-color: transparent;" +
         "-fx-text-fill: #666666;" +
@@ -688,30 +599,45 @@ public class Dashbord  {
         HBox topLinks = new HBox(6, t1, t2, t3);
         topLinks.setAlignment(Pos.CENTER_LEFT);
 
-        // =====================================================
-        // SEARCH
-        // =====================================================
-
         TextField searchBox = new TextField();
         searchBox.setPromptText("Search products, shops or deals with AI...");
-        searchBox.setPrefWidth(310);
+        searchBox.setPrefWidth(300);
         searchBox.setPrefHeight(39);
         searchBox.setStyle(
-        "-fx-background-color: #F8F7FA;" +
-        "-fx-background-radius: 20;" +
-        "-fx-border-color: #E5E1E8;" +
-        "-fx-border-radius: 20;" +
-        "-fx-border-width: 1;" +
-        "-fx-padding: 0 16 0 16;" +
-        "-fx-font-size: 10px;" +
+        "-fx-background-color: transparent;" +
+        "-fx-border-width: 0;" +
+        "-fx-padding: 0 10 0 14;" +
+        "-fx-font-size: 11px;" +
         "-fx-text-fill: #444444;" +
         "-fx-prompt-text-fill: #999999;"
         );
-        searchBox.setTranslateX(-200);
 
-        // =====================================================
-        // LOCATION
-        // =====================================================
+        Button searchBtn = new Button("🔍");
+        searchBtn.setStyle(
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: #FF6900;" +
+            "-fx-font-size: 13px;" +
+            "-fx-cursor: hand;" +
+            "-fx-padding: 0 10 0 0;"
+        );
+        searchBtn.setOnAction(e -> {
+            CustomerNavigation.performSearch(userId, searchBox.getText(), this::backTodashbord);
+        });
+
+        searchBox.setOnAction(e -> {
+            CustomerNavigation.performSearch(userId, searchBox.getText(), this::backTodashbord);
+        });
+
+        HBox searchContainer = new HBox(searchBox, searchBtn);
+        searchContainer.setAlignment(Pos.CENTER_LEFT);
+        searchContainer.setPrefHeight(39);
+        searchContainer.setStyle(
+            "-fx-background-color: #F8F7FA;" +
+            "-fx-background-radius: 20;" +
+            "-fx-border-color: #E5E1E8;" +
+            "-fx-border-radius: 20;" +
+            "-fx-border-width: 1;"
+        );
 
         Label locationIcon = new Label("📍");
         Label locationText = new Label("Downtown Manhattan⌄");
@@ -723,11 +649,8 @@ public class Dashbord  {
 
         HBox locationBox = new HBox(4, locationIcon, locationText);
         locationBox.setAlignment(Pos.CENTER_LEFT);
-        //locationBox.setTranslateX();
-
-        // =====================================================
-        // ACTIONS
-        // =====================================================
+        locationBox.setStyle("-fx-cursor: hand;");
+        locationBox.setOnMouseClicked(e -> CustomerNavigation.navigateToNearbyShops(userId));
 
         Button b1 = new Button("🔔");
         Button b2 = new Button("🛒");
@@ -742,6 +665,10 @@ public class Dashbord  {
         "-fx-border-width: 1;" +
         "-fx-padding: 0;" +
         "-fx-cursor: hand;";
+
+        b1.setOnAction(e -> CustomerNavigation.navigateToNotifications(userId));
+        b2.setOnAction(e -> CustomerNavigation.navigateToCart(userId));
+        b3.setOnAction(e -> CustomerNavigation.navigateToSettings(userId));
 
         b1.setPrefSize(37, 37);
         b2.setPrefSize(37, 37);
@@ -772,224 +699,28 @@ public class Dashbord  {
 
         HBox actionBox = new HBox(10, b1, b2, b3);
         actionBox.setAlignment(Pos.CENTER_RIGHT);
-        actionBox.setTranslateX(-400);
-
-        // =====================================================
-        // NAVIGATION SPACERS
-        // =====================================================
 
         Region navSpacer1 = new Region();
         HBox.setHgrow(navSpacer1, Priority.ALWAYS);
         Region navSpacer2 = new Region();
         HBox.setHgrow(navSpacer2, Priority.ALWAYS);
 
-        // =====================================================
-        // NAV BOX
-        // =====================================================
-
-        HBox navBox = new HBox(12, topLinks, navSpacer1, searchBox, navSpacer2, locationBox, actionBox);
+        HBox navBox = new HBox(12, topLinks, navSpacer1, searchContainer, navSpacer2, locationBox, actionBox);
         navBox.setPrefHeight(68);
-        navBox.setTranslateX(-20);
         navBox.setPadding(new Insets(12, 24, 12, 24));
         navBox.setAlignment(Pos.CENTER_LEFT);
         navBox.setStyle(
-        "-fx-background-color: white;" +
         "-fx-background-color: #ebccb7;" +
+        "-fx-border-color: #dfc1ac;" +
         "-fx-border-width: 0 0 1 0;"
         );
-        // navBox.setTranslateX(-28);
 
-        // =====================================================
-        // HERO BOX
-        // =====================================================
-
-        HBox hbright = new HBox(35);
-
-        hbright.setPrefWidth(1200);
-        hbright.setPrefHeight(315);
-        hbright.setPadding(new Insets(34, 40, 34, 40));
-        hbright.setAlignment(Pos.CENTER_LEFT);
-
-        LinearGradient darkGradient = new LinearGradient(
-        0, 0, 1, 0, true,
-        CycleMethod.NO_CYCLE,
-        new Stop(0.0, Color.web("#242529")),
-        new Stop(0.55, Color.web("#303136")),
-        new Stop(1.0, Color.web("#563A2B"))
+        HBox hbright = CustomerAIHeroBanner.createHeroBanner(
+                userId,
+                () -> CustomerNavigation.navigateToGroceries(userId),
+                () -> CustomerNavigation.navigateToDeals(userId)
         );
 
-        hbright.setBackground(
-        new Background(
-        new BackgroundFill(
-        darkGradient,
-        new CornerRadii(22),
-        Insets.EMPTY
-        )
-        )
-        );
-        hbright.setEffect(cardShadow);
-
-        // =====================================================
-        // HERO LEFT CONTENT
-        // =====================================================
-
-        VBox leftContent = new VBox(13);
-        leftContent.setPrefWidth(600);
-        leftContent.setAlignment(Pos.CENTER_LEFT);
-
-        Label badge = new Label("✦  NEXT-GEN INTELLIGENCE");
-        badge.setStyle(
-        "-fx-background-color: #503629;" +
-        "-fx-text-fill: #FF9D67;" +
-        "-fx-font-size: 8px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-background-radius: 20;" +
-        "-fx-padding: 7 13 7 13;"
-        );
-
-        Text heading = new Text("What are you\nlooking for today?");
-        heading.setStyle(
-        "-fx-fill: white;" +
-        "-fx-font-family: 'Montserrat';" +
-        "-fx-font-size: 30px;" +
-        "-fx-font-weight: 900;"
-        );
-
-        Text description = new Text(
-        "Your hyper-local AI is ready to source, compare,\n" +
-        "and deliver from your favorite downtown spots."
-        );
-        description.setStyle(
-        "-fx-fill: #C9C9C9;" +
-        "-fx-font-size: 11px;"
-        );
-
-        Button groceries = new Button("♧  Combine Groceries");
-        groceries.setPrefHeight(42);
-        groceries.setStyle(
-        "-fx-background-color: #45464B;" +
-        "-fx-text-fill: white;" +
-        "-fx-font-size: 9px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-background-radius: 11;" +
-        "-fx-padding: 10 16 10 16;" +
-        "-fx-cursor: hand;"
-        );
-
-        Button bestPrice = new Button("⌁  Find Best Price");
-        bestPrice.setPrefHeight(42);
-        bestPrice.setStyle(
-        "-fx-background-color: #FF6900;" +
-        "-fx-text-fill: white;" +
-        "-fx-font-size: 9px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-background-radius: 11;" +
-        "-fx-padding: 10 17 10 17;" +
-        "-fx-cursor: hand;"
-        );
-
-        HBox buttons = new HBox(10, groceries, bestPrice);
-        leftContent.getChildren().addAll(badge, heading, description, buttons);
-
-        // =====================================================
-        // AI RECOMMENDATION CARD
-        // =====================================================
-
-        VBox notification = new VBox(13);
-        notification.setPrefWidth(300);
-        notification.setMinWidth(300);
-        notification.setMaxWidth(300);
-        notification.setPrefHeight(245);
-        notification.setPadding(new Insets(20));
-        notification.setAlignment(Pos.TOP_LEFT);
-        notification.setStyle(
-        "-fx-background-color: #ECEAE9;" +
-        "-fx-background-radius: 18;" +
-        "-fx-border-color: rgba(255,255,255,0.35);" +
-        "-fx-border-radius: 18;" +
-        "-fx-border-width: 1;"
-        );
-        notification.setEffect(cardShadow);
-
-        Label aiCircle = new Label("✦");
-        aiCircle.setPrefSize(38, 38);
-        aiCircle.setAlignment(Pos.CENTER);
-        aiCircle.setStyle(
-        "-fx-background-color: #FF6900;" +
-        "-fx-text-fill: white;" +
-        "-fx-font-size: 14px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-background-radius: 50%;"
-        );
-
-        VBox aiHeading = new VBox(2);
-        Label aiTitle = new Label("AI Recommendation");
-        aiTitle.setStyle(
-        "-fx-font-size: 11px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-text-fill: #333333;"
-        );
-
-        Label aiStatus = new Label("PERSONALIZED FOR YOU");
-        aiStatus.setStyle(
-        "-fx-font-size: 7px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-text-fill: #FF6900;"
-        );
-
-        aiHeading.getChildren().addAll(aiTitle, aiStatus);
-
-        HBox aiHeader = new HBox(10, aiCircle, aiHeading);
-        aiHeader.setAlignment(Pos.CENTER_LEFT);
-
-        Text notificationText = new Text(
-        "You usually order coffee beans on Tuesdays.\n\n" +
-        "Artisan Pantry has your favorite\n" +
-        "brand in stock today."
-        );
-        notificationText.setStyle(
-        "-fx-fill: #444444;" +
-        "-fx-font-size: 10px;" +
-        "-fx-font-weight: bold;"
-        );
-
-        Region notificationSpacer = new Region();
-        VBox.setVgrow(notificationSpacer, Priority.ALWAYS);
-
-        Button dismiss = new Button("Dismiss");
-        dismiss.setStyle(
-        "-fx-background-color: transparent;" +
-        "-fx-text-fill: #777777;" +
-        "-fx-font-size: 9px;" +
-        "-fx-cursor: hand;"
-        );
-
-        Button checkStock = new Button("Check Stock");
-        checkStock.setStyle(
-        "-fx-background-color: #FF6900;" +
-        "-fx-text-fill: white;" +
-        "-fx-font-size: 9px;" +
-        "-fx-font-weight: bold;" +
-        "-fx-background-radius: 10;" +
-        "-fx-padding: 8 13 8 13;" +
-        "-fx-cursor: hand;"
-        );
-
-        HBox notificationButtons = new HBox(8, dismiss, checkStock);
-        notificationButtons.setAlignment(Pos.CENTER_RIGHT);
-
-        notification.getChildren().addAll(
-        aiHeader,
-        notificationText,
-        notificationSpacer,
-        notificationButtons
-        );
-
-        hbright.getChildren().addAll(leftContent, notification);
-
-        // =====================================================
-        // CATEGORY TITLE
-        // =====================================================
 
         HBox categoryHeader = new HBox();
         categoryHeader.setAlignment(Pos.CENTER_LEFT);
@@ -1008,15 +739,15 @@ public class Dashbord  {
         "-fx-text-fill: #FF6900;" +
         "-fx-cursor: hand;"
         );
+        viewAll.setOnMouseClicked(e -> {
+            Electronics es = new Electronics(userId, "All");
+            Homepage.HomepageStage.setScene(es.getElectrScene(this::backTodashbord));
+        });
 
         Region categorySpacer = new Region();
         HBox.setHgrow(categorySpacer, Priority.ALWAYS);
 
         categoryHeader.getChildren().addAll(categoryTitle, categorySpacer, viewAll);
-
-        // =====================================================
-        // CATEGORY BUTTONS
-        // =====================================================
 
         Button grocerie = new Button("🛒\nGroceries");
         grocerie.setOnAction(event->{
@@ -1032,18 +763,43 @@ public class Dashbord  {
         Button electronics = new Button("▣\nElectronics");
         electronics.setOnAction(event->{
             Electronics es=new Electronics(userId);
-            Homepage.HomepageStage.setScene(es.getElectrScene());
+            Runnable rn=new Runnable() {
+                public void run(){
+                    backTodashbord();
+                }
+            };
+
+            Homepage.HomepageStage.setScene(es.getElectrScene(rn));
         });
         Button fashion = new Button("♧\nFashion");
+        fashion.setOnAction(e -> openCategoryView(userId, "Fashion"));
+
         Button health = new Button("✚\nHealth");
+        health.setOnAction(e -> openCategoryView(userId, "Health"));
+
         Button home = new Button("⌂\nHome");
+        home.setOnAction(e -> openCategoryView(userId, "Home"));
+
         Button gifts = new Button("♧\nGifts");
+        gifts.setOnAction(e -> openCategoryView(userId, "Gifts"));
+
         Button beauty = new Button("✦\nBeauty");
+        beauty.setOnAction(e -> openCategoryView(userId, "Beauty"));
+
         Button pharmacy = new Button("✚\nPharmacy");
+        pharmacy.setOnAction(e -> openCategoryView(userId, "Pharmacy"));
+
         Button sports = new Button("⚽\nSports");
+        sports.setOnAction(e -> openCategoryView(userId, "Sports"));
+
         Button furniture = new Button("⌂\nFurniture");
+        furniture.setOnAction(e -> openCategoryView(userId, "Furniture"));
+
         Button toys = new Button("♟\nToys");
+        toys.setOnAction(e -> openCategoryView(userId, "Toys"));
+
         Button stationery = new Button("✎\nStationery");
+        stationery.setOnAction(e -> openCategoryView(userId, "Stationery"));
 
         String categoryStyle = "-fx-background-color: white;" +
         "-fx-text-fill: #D94F0B;" +
@@ -1085,38 +841,30 @@ public class Dashbord  {
             button.setOnMouseExited(e -> button.setStyle(categoryStyle));
         }
 
-        // =====================================================
-        // CATEGORY ROWS
-        // =====================================================
-
         HBox categoriesRow1 = new HBox(12, grocerie, electronics, fashion, health, home, gifts);
         categoriesRow1.setAlignment(Pos.CENTER_LEFT);
-
-        // =====================================================
-        // CATEGORY ROW 2
-        // =====================================================
 
         HBox categoriesRow2 = new HBox(12, beauty, pharmacy, sports, furniture, toys, stationery);
         categoriesRow2.setAlignment(Pos.CENTER_LEFT);
 
-        // =====================================================
-        // CATEGORY SECTION
-        // =====================================================
-
         VBox categorySection = new VBox(13, categoryHeader, categoriesRow1, categoriesRow2);
-        categorySection.setPadding(new Insets(0, 8, 20, 8));
+        categorySection.setPadding(new Insets(0, 0, 20, 0));
 
-        // =====================================================
-        // RIGHT VBOX
-        // =====================================================
+        VBox specialCampaignsSection = CustomerCampaignSection.createSpecialCampaignsSection(userId, this::backTodashbord);
 
-        VBox Rightvbox = new VBox(22, navBox, hbright, categorySection);
-        Rightvbox.setPadding(new Insets(0, 10, 20, 10));
+        VBox dashContent = new VBox(22, hbright, specialCampaignsSection, categorySection);
+        dashContent.setPadding(new Insets(20, 26, 25, 26));
+
+        ScrollPane contentScroll = new ScrollPane(dashContent);
+        contentScroll.setFitToWidth(true);
+        contentScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        contentScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        contentScroll.setStyle("-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;");
+        VBox.setVgrow(contentScroll, Priority.ALWAYS);
+
+        VBox Rightvbox = new VBox(0, navBox, contentScroll);
+        Rightvbox.setFillWidth(true);
         Rightvbox.setStyle("-fx-background-color: #F7F5F8;");
-
-        // =====================================================
-        // SUBTLE ORANGE BACKGROUND GLOW
-        // =====================================================
 
         RadialGradient orangeGlow1 = new RadialGradient(
         0, 0, 0.84, 0.16, 0.42, true,
@@ -1136,18 +884,10 @@ public class Dashbord  {
         )
         );
 
-        // =====================================================
-        // BORDER PANE
-        // =====================================================
-
         BorderPane mainBox = new BorderPane();
         mainBox.setLeft(leftBox);
         mainBox.setCenter(Rightvbox);
         mainBox.setStyle("-fx-background-color: #F7F5F8;");
-
-        // =====================================================
-        // FLOATING CHATBOT BUTTON
-        // =====================================================
 
         Image chatbotImage = new Image("/assets/images/chatbot (1).png");
         ImageView chatbotView = new ImageView(chatbotImage);
@@ -1161,7 +901,6 @@ public class Dashbord  {
         chatbotButton.setPrefSize(50, 50);
         chatbotButton.setMinSize(50, 50);
         chatbotButton.setMaxSize(50, 50);
-        chatbotButton.setTranslateX(-400);
 
         chatbotButton.setStyle(
         "-fx-background-color: #FF6900;" +
@@ -1213,10 +952,6 @@ public class Dashbord  {
             Homepage.HomepageStage.setScene(chAssistantUI.getSmartAssisstantui());
         });
 
-        // =====================================================
-        // ROOT STACKPANE
-        // =====================================================
-
         StackPane root = new StackPane();
         root.getChildren().add(mainBox);
 
@@ -1225,16 +960,18 @@ public class Dashbord  {
 
         root.getChildren().add(chatbotButton);
 
-        // =====================================================
-        // SCENE
-        // =====================================================
-
-        Scene sc = new Scene(root, 1900, 800);
+        Scene sc = new Scene(root, 1550, 850);
         Dashbordscene=sc;
         return Dashbordscene;
     }
 
     public void backTodashbord(){
         Homepage.HomepageStage.setScene(Dashbordscene);
+    }
+
+    private void openCategoryView(String uId, String catName) {
+        Electronics catView = new Electronics(uId, catName);
+        Runnable rn = this::backTodashbord;
+        Homepage.HomepageStage.setScene(catView.getElectrScene(rn));
     }
 }

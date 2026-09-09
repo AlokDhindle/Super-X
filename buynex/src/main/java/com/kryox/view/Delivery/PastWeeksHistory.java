@@ -21,12 +21,9 @@ import com.kryox.view.Customer.Homepage;
 
 public class PastWeeksHistory {
 
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EEE5DE";
     private static final String BORDER_COLOR = "#f0edf2";
 
-    // =========================================================================
-    // DYNAMIC FIRESTORE-READY HISTORICAL LOG MODEL
-    // =========================================================================
     public static class PastWeeksData {
         public String partnerName = "Alex Walker";
         public String overallAverageCompletion = "94.2%";
@@ -65,9 +62,6 @@ public class PastWeeksHistory {
         }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS
-    // =========================================================================
     public static Scene pastWeeksHistoryScene() {
         return pastWeeksHistoryScene(new PastWeeksData());
     }
@@ -86,7 +80,7 @@ public class PastWeeksHistory {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
@@ -97,7 +91,7 @@ public class PastWeeksHistory {
         topBar.setMinHeight(60);
         topBar.setMaxHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                 "-fx-border-color: " + BORDER_COLOR + ";" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-padding: 0 35 0 25;"

@@ -35,14 +35,10 @@ import com.kryox.controller.Shopkeeper.ProductController;
 import com.kryox.model.Shopkeeper.ProductModel;
 import javafx.scene.text.Text;
 
-import com.kryox.view.Customer.ShoppingCartUI;
-import com.kryox.view.Customer.neaby_shope;
-import com.kryox.view.Customer.Seting;
-import com.kryox.view.Customer.Electronics;
-import com.kryox.view.Customer.Homepage;
 
 public class Grocries {
         public String userId;
+        private Runnable currentReturnCallback;
 
         private final ProductController productController =
                         new ProductController();
@@ -151,12 +147,6 @@ public class Grocries {
         }
 
 
-        // ============================================================
-        // VIEW PRODUCT MODEL
-        //
-        // Only the required 11 fields are used by this View.
-        // ============================================================
-
         private static class Product {
 
                 private final String imageUrl;
@@ -172,6 +162,7 @@ public class Grocries {
                 private final String category;
                 private final String brand;
                 private final String descriptionValue;
+                private final String shopkeeperUid;
 
                 Product(
                                 String imageUrl,
@@ -184,7 +175,8 @@ public class Grocries {
                                 String productName,
                                 String category,
                                 String brand,
-                                String descriptionValue) {
+                                String descriptionValue,
+                                String shopkeeperUid) {
 
                         this.imageUrl = imageUrl;
                         this.status = status;
@@ -197,12 +189,9 @@ public class Grocries {
                         this.category = category;
                         this.brand = brand;
                         this.descriptionValue = descriptionValue;
+                        this.shopkeeperUid = shopkeeperUid;
                 }
         }
-
-        // ============================================================
-        // FETCH PRODUCTS THROUGH CONTROLLER
-        // ============================================================
 
         private List<Product> getProducts() {
 
@@ -255,7 +244,9 @@ public class Grocries {
 
                                                                 productModel.getBrand(),
 
-                                                                productModel.getDescriptionValue()
+                                                                productModel.getDescriptionValue(),
+
+                                                                productModel.getShopkeeperUid()
                                                 );
 
                                 products.add(product);
@@ -276,9 +267,6 @@ public class Grocries {
                 return products;
         }
 
-        // ============================================================
-        // CREATE PRODUCT CARD DYNAMICALLY
-        // ============================================================
         private VBox createProductCard(Product product,
                                         DropShadow cardShadow3) {
 
@@ -294,14 +282,16 @@ public class Grocries {
                                 "-fx-background-radius: 12;" +
                                 "-fx-border-color: #EAE6EC;" +
                                 "-fx-border-radius: 12;" +
-                                "-fx-border-width: 1;";
+                                "-fx-border-width: 1;" +
+                                "-fx-cursor: hand;";
 
                 String hoverStyle =
                                 "-fx-background-color: #FFFFFF;" +
                                 "-fx-background-radius: 12;" +
                                 "-fx-border-color: #FFD8C4;" +
                                 "-fx-border-radius: 12;" +
-                                "-fx-border-width: 1.5;";
+                                "-fx-border-width: 1.5;" +
+                                "-fx-cursor: hand;";
 
                 card.setStyle(normalStyle);
                 card.setEffect(cardShadow3);
@@ -318,105 +308,57 @@ public class Grocries {
                 productDetails.setAlignment(Pos.CENTER);
 
                 Label nameLabel = new Label(
-                                product.productName == null
-                                                ? "Unnamed Product"
+                                product.productName == null || product.productName.isEmpty()
+                                                ? "Product Name"
                                                 : product.productName);
-                nameLabel.setWrapText(true);
-                nameLabel.setAlignment(Pos.CENTER);
-                nameLabel.setMaxWidth(240);
+
                 nameLabel.setStyle(
                                 "-fx-font-family: 'Montserrat';" +
-                                "-fx-font-size: 14px;" +
-                                "-fx-font-weight: 700;" +
-                                "-fx-text-fill: #222222;");
-
-                Label descLabel = new Label(
-                                product.descriptionValue == null
-                                                ? ""
-                                                : product.descriptionValue);
-                descLabel.setWrapText(true);
-                descLabel.setAlignment(Pos.CENTER);
-                descLabel.setMaxWidth(240);
-                descLabel.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                "-fx-font-size: 11px;" +
-                                "-fx-text-fill: #777777;");
-
-                HBox priceRow = new HBox(8);
-                priceRow.setAlignment(Pos.CENTER);
-
-                double sellingPrice =
-                                product.sellingPrice == null
-                                                ? 0.0
-                                                : product.sellingPrice;
-
-                double costPrice =
-                                product.costPrice == null
-                                                ? sellingPrice
-                                                : product.costPrice;
-
-                Label priceLabel =
-                                new Label(
-                                                "$" +
-                                                String.format(
-                                                                "%.2f",
-                                                                sellingPrice));
-
-                priceLabel.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                "-fx-font-size: 16px;" +
+                                "-fx-font-size: 13px;" +
                                 "-fx-font-weight: 800;" +
                                 "-fx-text-fill: #222222;");
 
-                priceRow.getChildren().add(priceLabel);
+                Label shopLabel = new Label();
+                shopLabel.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 10px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-text-fill: #B84200;");
+                CustomerShopResolver.bindShopName(shopLabel, product.shopkeeperUid);
 
-                if (costPrice > sellingPrice) {
+                String descText = product.descriptionValue == null || product.descriptionValue.isEmpty()
+                                ? "No description available"
+                                : product.descriptionValue;
 
-                        double discount =
-                                        product.discount != null
-                                                        ? product.discount
-                                                        : ((costPrice > 0)
-                                                                        ? ((costPrice - sellingPrice) /
-                                                                                costPrice) * 100.0
-                                                                        : 0.0);
+                Label descLabel = new Label(descText);
+                descLabel.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 10px;" +
+                                "-fx-text-fill: #777777;");
 
-                        Label discountLabel =
-                                        new Label(String.format("%.0f%% OFF", discount));
+                double sellingPrice = product.sellingPrice != null ? product.sellingPrice : 0.0;
+                double originalPrice = product.costPrice != null ? product.costPrice : sellingPrice;
 
-                        discountLabel.setStyle(
-                                        "-fx-background-color: #FFE8E0;" +
-                                        "-fx-text-fill: #FF6900;" +
-                                        "-fx-font-size: 10px;" +
-                                        "-fx-font-weight: 700;" +
-                                        "-fx-background-radius: 12;" +
-                                        "-fx-padding: 2 10 2 10;");
+                Label priceLabel = new Label("₹" + (int) sellingPrice);
+                priceLabel.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-weight: 900;" +
+                                "-fx-text-fill: #FF6900;");
 
-                        Label originalPriceLabel =
-                                        new Label("$" +
-                                                        String.format("%.2f",
-                                                                        costPrice));
+                Label oldPriceLabel = new Label("₹" + (int) originalPrice);
+                oldPriceLabel.setStyle(
+                                "-fx-font-family: 'Montserrat';" +
+                                "-fx-font-size: 10px;" +
+                                "-fx-text-fill: #999999;" +
+                                "-fx-strikethrough: true;");
 
-                        originalPriceLabel.setStyle(
-                                        "-fx-font-size: 11px;" +
-                                        "-fx-text-fill: #AAAAAA;" +
-                                        "-fx-strikethrough: true;");
+                HBox priceRow = new HBox(6, priceLabel, oldPriceLabel);
+                priceRow.setAlignment(Pos.CENTER);
 
-                        priceRow.getChildren().addAll(
-                                        discountLabel,
-                                        originalPriceLabel);
-                }
-
-
-                String statusText =
-                                product.status == null ||
-                                product.status.isEmpty()
-                                                ? "Available"
-                                                : product.status;
-
-                Label stockLabel = new Label(
-                                statusText +
-                                " • Stock: " +
-                                product.stockQuantity);
+                Label stockLabel = new Label(product.stockQuantity > 0
+                                ? "In Stock: " + product.stockQuantity
+                                : "Out of Stock");
 
                 stockLabel.setStyle(
                                 "-fx-font-family: 'Montserrat';" +
@@ -427,12 +369,10 @@ public class Grocries {
 
                 productDetails.getChildren().addAll(
                                 nameLabel,
+                                shopLabel,
                                 descLabel,
                                 priceRow);
 
-                // ====================================================
-                // QUANTITY CONTROLS
-                // ====================================================
                 int availableStock =
                                 Math.max(0, product.stockQuantity);
 
@@ -490,13 +430,10 @@ public class Grocries {
                         }
                 });
 
-                HBox quantityBox =
-                                new HBox(8, minusButton, quantityLabel, plusButton);
+                HBox quantityBox = new HBox(8, minusButton, quantityLabel, plusButton);
                 quantityBox.setAlignment(Pos.CENTER);
+                quantityBox.setPadding(new Insets(5, 0, 5, 0));
 
-                // ====================================================
-                // ADD TO CART
-                // ====================================================
                 Button addToCart = new Button("Add to Cart");
                 addToCart.setPrefHeight(36);
                 addToCart.setMaxWidth(Double.MAX_VALUE);
@@ -531,7 +468,8 @@ public class Grocries {
                                         product.productName,
                                         sellingPrice,
                                         product.brand,
-                                        quantity);
+                                        quantity,
+                                        product.shopkeeperUid);
                 });
 
                 productRow.getChildren().addAll(
@@ -542,9 +480,6 @@ public class Grocries {
 
                 card.getChildren().add(productRow);
 
-                // ====================================================
-                // HOVER EFFECT
-                // ====================================================
                 card.setOnMouseEntered(e -> {
                         card.setStyle(hoverStyle);
 
@@ -563,10 +498,42 @@ public class Grocries {
                         card.setEffect(cardShadow3);
                 });
 
+                card.setOnMouseClicked(e -> {
+                        if (e.getTarget() instanceof javafx.scene.Node) {
+                                javafx.scene.Node target = (javafx.scene.Node) e.getTarget();
+                                while (target != null && target != card) {
+                                        if (target instanceof Button) {
+                                                return;
+                                        }
+                                        target = target.getParent();
+                                }
+                        }
+
+                        ProductModel pm = new ProductModel();
+                        pm.setImageUrl(product.imageUrl);
+                        pm.setStatus(product.status);
+                        pm.setStockQuantity(product.stockQuantity);
+                        pm.setLowStockLimit(product.lowStockLimit);
+                        pm.setCostPrice(product.costPrice);
+                        pm.setSellingPrice(product.sellingPrice);
+                        pm.setDiscount(product.discount);
+                        pm.setProductName(product.productName);
+                        pm.setCategory(product.category != null ? product.category : "Groceries");
+                        pm.setBrand(product.brand);
+                        pm.setDescriptionValue(product.descriptionValue);
+                        pm.setShopkeeperUid(product.shopkeeperUid);
+
+                        CustomerProductDetails details = new CustomerProductDetails(userId, pm, () -> {
+                                Homepage.HomepageStage.setScene(getGrocriescene(currentReturnCallback));
+                        });
+                        Homepage.HomepageStage.setScene(details.getScene());
+                });
+
                 return card;
         }
 
         Scene getGrocriescene(Runnable callbacktoRunnable) {
+                this.currentReturnCallback = callbacktoRunnable;
 
                 DropShadow shadow = new DropShadow();
                 shadow.setRadius(18);
@@ -922,50 +889,7 @@ public class Grocries {
                                                         "-fx-cursor: hand;");
                 });
 
-                VBox upgradeCard = new VBox(7);
-                upgradeCard.setPrefWidth(205);
-                upgradeCard.setMinWidth(205);
-                upgradeCard.setMaxWidth(205);
-                upgradeCard.setPrefHeight(112);
-                upgradeCard.setPadding(new Insets(15));
-                upgradeCard.setAlignment(Pos.CENTER_LEFT);
-
-                LinearGradient upgradeGradient = new LinearGradient(
-                                0, 0, 1, 1, true,
-                                CycleMethod.NO_CYCLE,
-                                new Stop(0, Color.web("#25262A")),
-                                new Stop(1, Color.web("#45474D")));
-
-                upgradeCard.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                upgradeGradient,
-                                                                new CornerRadii(17),
-                                                                Insets.EMPTY)));
-
-                Label upgradeTitle = new Label("Unlock Gold");
-                upgradeTitle.setStyle(
-                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: white;");
-
-                Label upgradeText = new Label("Smarter deals & exclusive rewards");
-                upgradeText.setStyle(
-                                "-fx-font-size: 8px;" +
-                                                "-fx-text-fill: #BEBFC3;");
-
-                Button upgradeGold = new Button("Upgrade to Gold");
-                upgradeGold.setPrefWidth(175);
-                upgradeGold.setPrefHeight(30);
-                upgradeGold.setStyle(
-                                "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 10;" +
-                                                "-fx-cursor: hand;");
-
-                upgradeCard.getChildren().addAll(upgradeTitle, upgradeText, upgradeGold);
+                VBox upgradeCard = CustomerPlanUpgradeCard.createUpgradeCard(userId);
 
                 Image di6 = new Image("/assets/images/Dashbord/category.png");
                 ImageView div6 = new ImageView(di6);
@@ -1105,24 +1029,52 @@ public class Grocries {
 
                 t3.setOnMouseExited(e -> t3.setStyle(topButtonStyle));
 
+                t1.setOnAction(e -> CustomerNavigation.navigateToDeals(userId));
+                t2.setOnAction(e -> CustomerNavigation.navigateToNearbyShops(userId));
+                t3.setOnAction(e -> CustomerNavigation.navigateToHelp(userId));
+
                 HBox topLinks = new HBox(6, t1, t2, t3);
                 topLinks.setAlignment(Pos.CENTER_LEFT);
 
                 TextField searchBox = new TextField();
                 searchBox.setPromptText("Search products, shops or deals with AI...");
-                searchBox.setPrefWidth(310);
+                searchBox.setPrefWidth(270);
                 searchBox.setPrefHeight(39);
                 searchBox.setStyle(
-                                "-fx-background-color: #F8F7FA;" +
-                                                "-fx-background-radius: 20;" +
-                                                "-fx-border-color: #E5E1E8;" +
-                                                "-fx-border-radius: 20;" +
-                                                "-fx-border-width: 1;" +
-                                                "-fx-padding: 0 16 0 16;" +
+                                "-fx-background-color: transparent;" +
+                                                "-fx-border-width: 0;" +
+                                                "-fx-padding: 0 10 0 14;" +
                                                 "-fx-font-size: 10px;" +
                                                 "-fx-text-fill: #444444;" +
                                                 "-fx-prompt-text-fill: #999999;");
-                searchBox.setTranslateX(-100);
+
+                Button searchBtn = new Button("🔍");
+                searchBtn.setStyle(
+                    "-fx-background-color: transparent;" +
+                    "-fx-text-fill: #FF6900;" +
+                    "-fx-font-size: 13px;" +
+                    "-fx-cursor: hand;" +
+                    "-fx-padding: 0 10 0 0;"
+                );
+                searchBtn.setOnAction(e -> {
+                    CustomerNavigation.performSearch(userId, searchBox.getText(), () -> CustomerNavigation.navigateToGroceries(userId));
+                });
+
+                searchBox.setOnAction(e -> {
+                    CustomerNavigation.performSearch(userId, searchBox.getText(), () -> CustomerNavigation.navigateToGroceries(userId));
+                });
+
+                HBox searchContainer = new HBox(searchBox, searchBtn);
+                searchContainer.setAlignment(Pos.CENTER_LEFT);
+                searchContainer.setPrefHeight(39);
+                searchContainer.setStyle(
+                    "-fx-background-color: #F8F7FA;" +
+                    "-fx-background-radius: 20;" +
+                    "-fx-border-color: #E5E1E8;" +
+                    "-fx-border-radius: 20;" +
+                    "-fx-border-width: 1;"
+                );
+                searchContainer.setTranslateX(-100);
 
                 Label locationIcon = new Label("📍");
                 Label locationText = new Label("Downtown Manhattan⌄");
@@ -1134,6 +1086,8 @@ public class Grocries {
                 HBox locationBox = new HBox(4, locationIcon, locationText);
                 locationBox.setAlignment(Pos.CENTER_LEFT);
                 locationBox.setTranslateX(-200);
+                locationBox.setStyle("-fx-cursor: hand;");
+                locationBox.setOnMouseClicked(e -> CustomerNavigation.navigateToNearbyShops(userId));
 
                 Button b1 = new Button("🔔");
                 Button b2 = new Button("🛒");
@@ -1157,11 +1111,9 @@ public class Grocries {
                 b2.setStyle(actionStyle);
                 b3.setStyle(actionStyle);
 
-                b2.setOnAction(e -> {
-
-                        ShoppingCartUI sp = new ShoppingCartUI(userId);
-                        Homepage.HomepageStage.setScene(sp.getaddcartScene());
-                });
+                b1.setOnAction(e -> CustomerNavigation.navigateToNotifications(userId));
+                b2.setOnAction(e -> CustomerNavigation.navigateToCart(userId));
+                b3.setOnAction(e -> CustomerNavigation.navigateToSettings(userId));
 
                 String actionHoverStyle = "-fx-background-color: #FFF2E9;" +
                                 "-fx-text-fill: #FF6900;" +
@@ -1191,7 +1143,7 @@ public class Grocries {
                 Region navSpacer2 = new Region();
                 HBox.setHgrow(navSpacer2, Priority.ALWAYS);
 
-                HBox navBox = new HBox(12, topLinks, navSpacer1, searchBox, navSpacer2, locationBox, actionBox);
+                HBox navBox = new HBox(12, topLinks, navSpacer1, searchContainer, navSpacer2, locationBox, actionBox);
                 navBox.setPrefHeight(68);
                 navBox.setPadding(new Insets(12, 24, 12, 24));
                 navBox.setAlignment(Pos.CENTER_LEFT);
@@ -1201,161 +1153,11 @@ public class Grocries {
                                                 "-fx-border-width: 0 0 1 0;");
                 navBox.setTranslateX(-28);
 
-                HBox hbright = new HBox(35);
-                hbright.setPrefWidth(1200);
-                hbright.setPrefHeight(315);
-                hbright.setPadding(new Insets(34, 40, 34, 40));
-                hbright.setAlignment(Pos.CENTER_LEFT);
-
-                LinearGradient darkGradient = new LinearGradient(
-                                0, 0, 1, 0, true,
-                                CycleMethod.NO_CYCLE,
-                                new Stop(0.0, Color.web("#242529")),
-                                new Stop(0.55, Color.web("#303136")),
-                                new Stop(1.0, Color.web("#563A2B")));
-
-                hbright.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                darkGradient,
-                                                                new CornerRadii(22),
-                                                                Insets.EMPTY)));
-                hbright.setEffect(cardShadow);
-
-                VBox leftContent = new VBox(13);
-                leftContent.setPrefWidth(600);
-                leftContent.setAlignment(Pos.CENTER_LEFT);
-
-                Label badge = new Label("✦  NEXT-GEN INTELLIGENCE");
-                badge.setStyle(
-                                "-fx-background-color: #503629;" +
-                                                "-fx-text-fill: #FF9D67;" +
-                                                "-fx-font-size: 8px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 20;" +
-                                                "-fx-padding: 7 13 7 13;");
-
-                Text heading = new Text("What are you\nlooking for today?");
-                heading.setStyle(
-                                "-fx-fill: white;" +
-                                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 30px;" +
-                                                "-fx-font-weight: 900;");
-
-                Text description = new Text(
-                                "Your hyper-local AI is ready to source, compare,\n" +
-                                                "and deliver from your favorite downtown spots.");
-                description.setStyle(
-                                "-fx-fill: #C9C9C9;" +
-                                                "-fx-font-size: 11px;");
-
-                Button groceries = new Button("♧  Combine Groceries");
-                groceries.setPrefHeight(42);
-                groceries.setStyle(
-                                "-fx-background-color: #45464B;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 9px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 11;" +
-                                                "-fx-padding: 10 16 10 16;" +
-                                                "-fx-cursor: hand;");
-
-                Button bestPrice = new Button("⌁  Find Best Price");
-                bestPrice.setPrefHeight(42);
-                bestPrice.setStyle(
-                                "-fx-background-color: #FF6900;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 9px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 11;" +
-                                                "-fx-padding: 10 17 10 17;" +
-                                                "-fx-cursor: hand;");
-
-                HBox buttons = new HBox(10, groceries, bestPrice);
-                leftContent.getChildren().addAll(badge, heading, description, buttons);
-
-                VBox notification = new VBox(13);
-                notification.setPrefWidth(300);
-                notification.setMinWidth(300);
-                notification.setMaxWidth(300);
-                notification.setPrefHeight(245);
-                notification.setPadding(new Insets(20));
-                notification.setAlignment(Pos.TOP_LEFT);
-                notification.setStyle(
-                                "-fx-background-color: #ECEAE9;" +
-                                                "-fx-background-radius: 18;" +
-                                                "-fx-border-color: rgba(255,255,255,0.35);" +
-                                                "-fx-border-radius: 18;" +
-                                                "-fx-border-width: 1;");
-                notification.setEffect(cardShadow);
-
-                Label aiCircle = new Label("✦");
-                aiCircle.setPrefSize(38, 38);
-                aiCircle.setAlignment(Pos.CENTER);
-                aiCircle.setStyle(
-                                "-fx-background-color: #FF6900;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 14px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 50%;");
-
-                VBox aiHeading = new VBox(2);
-                Label aiTitle = new Label("AI Recommendation");
-                aiTitle.setStyle(
-                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #333333;");
-
-                Label aiStatus = new Label("PERSONALIZED FOR YOU");
-                aiStatus.setStyle(
-                                "-fx-font-size: 7px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #FF6900;");
-
-                aiHeading.getChildren().addAll(aiTitle, aiStatus);
-
-                HBox aiHeader = new HBox(10, aiCircle, aiHeading);
-                aiHeader.setAlignment(Pos.CENTER_LEFT);
-
-                Text notificationText = new Text(
-                                "You usually order coffee beans on Tuesdays.\n\n" +
-                                                "Artisan Pantry has your favorite\n" +
-                                                "brand in stock today.");
-                notificationText.setStyle(
-                                "-fx-fill: #444444;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;");
-
-                Region notificationSpacer = new Region();
-                VBox.setVgrow(notificationSpacer, Priority.ALWAYS);
-
-                Button dismiss = new Button("Dismiss");
-                dismiss.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #777777;" +
-                                                "-fx-font-size: 9px;" +
-                                                "-fx-cursor: hand;");
-
-                Button checkStock = new Button("Check Stock");
-                checkStock.setStyle(
-                                "-fx-background-color: #FF6900;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 9px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 10;" +
-                                                "-fx-padding: 8 13 8 13;" +
-                                                "-fx-cursor: hand;");
-
-                HBox notificationButtons = new HBox(8, dismiss, checkStock);
-                notificationButtons.setAlignment(Pos.CENTER_RIGHT);
-
-                notification.getChildren().addAll(
-                                aiHeader,
-                                notificationText,
-                                notificationSpacer,
-                                notificationButtons);
-
-                hbright.getChildren().addAll(leftContent, notification);
+                HBox hbright = CustomerAIHeroBanner.createHeroBanner(
+                                userId,
+                                () -> CustomerNavigation.navigateToGroceries(userId),
+                                () -> CustomerNavigation.navigateToDeals(userId)
+                );
 
                 HBox categoryHeader = new HBox();
                 categoryHeader.setAlignment(Pos.CENTER_LEFT);
@@ -1379,22 +1181,47 @@ public class Grocries {
                 categoryHeader.getChildren().addAll(categoryTitle, categorySpacer, viewAll);
 
                 Button grocerie = new Button("🛒\nGroceries");
+                grocerie.setOnAction(e -> backtogrosary());
                 Button electronics = new Button("▣\nElectronics");
                 electronics.setOnAction(event -> {
                         Electronics gs = new Electronics(
                                         userId);
-                        Homepage.HomepageStage.setScene(gs.getElectrScene());
+                        Runnable rn=new Runnable() {
+                                public void run(){
+                                        backtogrosary();
+                                }
+                        };
+                        Homepage.HomepageStage.setScene(gs.getElectrScene(rn));
                 });
                 Button fashion = new Button("♧\nFashion");
+                fashion.setOnAction(e -> openCategoryView("Fashion"));
+
                 Button health = new Button("✚\nHealth");
+                health.setOnAction(e -> openCategoryView("Health"));
+
                 Button home = new Button("⌂\nHome");
+                home.setOnAction(e -> openCategoryView("Home"));
+
                 Button gifts = new Button("♧\nGifts");
+                gifts.setOnAction(e -> openCategoryView("Gifts"));
+
                 Button beauty = new Button("✦\nBeauty");
+                beauty.setOnAction(e -> openCategoryView("Beauty"));
+
                 Button pharmacy = new Button("✚\nPharmacy");
+                pharmacy.setOnAction(e -> openCategoryView("Pharmacy"));
+
                 Button sports = new Button("⚽\nSports");
+                sports.setOnAction(e -> openCategoryView("Sports"));
+
                 Button furniture = new Button("⌂\nFurniture");
+                furniture.setOnAction(e -> openCategoryView("Furniture"));
+
                 Button toys = new Button("♟\nToys");
+                toys.setOnAction(e -> openCategoryView("Toys"));
+
                 Button stationery = new Button("✎\nStationery");
+                stationery.setOnAction(e -> openCategoryView("Stationery"));
 
                 String categoryStyle = "-fx-background-color: white;" +
                                 "-fx-text-fill: #D94F0B;" +
@@ -1499,10 +1326,6 @@ public class Grocries {
                 VBox content = new VBox(12);
                 content.setPadding(new Insets(0, 20, 20, 20));
 
-                // ============================================================
-                // DYNAMIC PRODUCT LIST / GRID
-                // Products are already fetched through ProductController.
-                // ============================================================
                 FlowPane productsGrid = new FlowPane(15, 15);
                 productsGrid.setAlignment(Pos.TOP_LEFT);
                 productsGrid.setPadding(new Insets(10, 0, 10, 0));
@@ -1535,9 +1358,6 @@ public class Grocries {
                         }
                 }
 
-                // ============================================================
-                // DELIVERY BANNER
-                // ============================================================
                 HBox deliveryBanner = new HBox(15);
                 deliveryBanner.setAlignment(Pos.CENTER_LEFT);
                 deliveryBanner.setPadding(new Insets(18, 20, 18, 20));
@@ -1699,6 +1519,12 @@ public class Grocries {
 
         public void backtogrosary() {
                 Homepage.HomepageStage.setScene(GrocriesScene);
+        }
+
+        private void openCategoryView(String catName) {
+                Electronics catView = new Electronics(userId, catName);
+                Runnable rn = this::backtogrosary;
+                Homepage.HomepageStage.setScene(catView.getElectrScene(rn));
         }
 
 }

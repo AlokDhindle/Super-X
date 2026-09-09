@@ -23,10 +23,17 @@ public class ProductModel {
     String manufacturingDate;
     String expiryDate;
     String imageUrl;
-
-
+    String shopkeeperUid;
 
     public ProductModel() {
+    }
+
+    public String getShopkeeperUid() {
+        return shopkeeperUid;
+    }
+
+    public void setShopkeeperUid(String shopkeeperUid) {
+        this.shopkeeperUid = shopkeeperUid;
     }
 
     public ProductModel(String productId, String productName, String category, String brand, String descriptionValue, String sku, String barcode, Double mrp, Double costPrice, Double sellingPrice, Double discount, Double tax, int stockQuantity, int lowStockLimit, String unit, String status, String batchNumber, String expiryTracking, String manufacturingDate, String expiryDate,String imageUrl) {

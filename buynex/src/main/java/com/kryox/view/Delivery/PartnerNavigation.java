@@ -17,10 +17,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -28,13 +31,24 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Text;
 
 import java.awt.Desktop;
+import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PartnerNavigation {
 
@@ -42,9 +56,9 @@ public class PartnerNavigation {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String SIDEBAR_BG = "#ffffff";
+    private static final String SIDEBAR_BG = "#EBCCB7";
     private static final String BORDER_COLOR = "#f0edf2";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EEE5DE";
 
     private static ListenerRegistration navOrderListener;
 
@@ -105,11 +119,21 @@ public class PartnerNavigation {
             this.trafficDescription = "Smooth route ahead.";
             this.orderEarnings = 145.50;
         }
+
+        public double getPickupLatVal() {
+            try { return Double.parseDouble(pickupLat); } catch (Exception e) { return 18.5204; }
+        }
+        public double getPickupLngVal() {
+            try { return Double.parseDouble(pickupLng); } catch (Exception e) { return 73.8567; }
+        }
+        public double getDropoffLatVal() {
+            try { return Double.parseDouble(dropoffLat); } catch (Exception e) { return 18.5074; }
+        }
+        public double getDropoffLngVal() {
+            try { return Double.parseDouble(dropoffLng); } catch (Exception e) { return 73.8077; }
+        }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS
-    // =========================================================================
     public static Scene partnerNavigationScene() {
         TripData data = new TripData();
         Scene scene = partnerNavigationScene(data);
@@ -126,7 +150,7 @@ public class PartnerNavigation {
         root.setCenter(createMapArea(tripData));
         root.setRight(createTripDetailsPanel(tripData));
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
@@ -138,7 +162,7 @@ public class PartnerNavigation {
             }
 
             Firestore db = DelivrayFirebaseConfig.getFireStore();
-            navOrderListener = db.collection("orders").addSnapshotListener((snapshots, error) -> {
+            navOrderListener = db.collection("Orders").addSnapshotListener((snapshots, error) -> {
                 if (error != null) {
                     System.err.println("Navigation Listener Error: " + error.getMessage());
                     return;
@@ -149,23 +173,29 @@ public class PartnerNavigation {
 
                     if (snapshots != null && !snapshots.isEmpty()) {
                         for (DocumentSnapshot doc : snapshots.getDocuments()) {
-                            String status = doc.getString("status");
+                            String status = doc.getString("orderStatus");
+                            if (status == null) status = doc.getString("status");
                             if (status == null) status = "PLACED";
 
                             String partnerId = doc.getString("deliveryPartnerId");
                             boolean isForMe = partnerId == null || partnerId.isEmpty()
                                     || (PartnerConstants.UID != null && partnerId.equals(PartnerConstants.UID));
 
-                            if (("ACCEPTED".equalsIgnoreCase(status) || "ASSIGNED".equalsIgnoreCase(status) || "PLACED".equalsIgnoreCase(status)) && isForMe) {
+                            if (("ACCEPTED".equalsIgnoreCase(status) || "ASSIGNED".equalsIgnoreCase(status) || "PLACED".equalsIgnoreCase(status) || "OUT_FOR_DELIVERY".equalsIgnoreCase(status) || "REQUESTING_DELIVERY".equalsIgnoreCase(status)) && isForMe) {
                                 String orderId = doc.getId();
                                 data.orderNumber = "Order #" + (orderId.length() > 6 ? orderId.substring(0, 6).toUpperCase() : orderId);
                                 data.pickupName = doc.getString("shopName") != null ? doc.getString("shopName") : "Local Store";
                                 data.pickupAddress = doc.getString("shopAddress") != null ? doc.getString("shopAddress") : "FC Road, Pune";
                                 data.dropoffName = doc.getString("customerName") != null ? doc.getString("customerName") : "Customer";
                                 data.dropoffAddress = doc.getString("customerAddress") != null ? doc.getString("customerAddress") : "Kothrud, Pune";
-                                data.distanceMiles = doc.getString("distance") != null ? doc.getString("distance") : "2.4 mi";
+                                data.distanceMiles = doc.getString("distance") != null ? doc.getString("distance") : (doc.getString("riderDistance") != null ? doc.getString("riderDistance") : "2.4 mi");
                                 data.estArrivalMin = "12";
-                                data.pickupStatus = "ACCEPTED".equalsIgnoreCase(status) ? "Accepted" : "Assigned";
+                                data.pickupStatus = "ACCEPTED".equalsIgnoreCase(status) ? "Accepted" : ("OUT_FOR_DELIVERY".equalsIgnoreCase(status) ? "Out for Delivery" : "Assigned");
+
+                                if (doc.get("shopLat") != null) data.pickupLat = String.valueOf(doc.get("shopLat"));
+                                if (doc.get("shopLng") != null) data.pickupLng = String.valueOf(doc.get("shopLng"));
+                                if (doc.get("customerLat") != null) data.dropoffLat = String.valueOf(doc.get("customerLat"));
+                                if (doc.get("customerLng") != null) data.dropoffLng = String.valueOf(doc.get("customerLng"));
 
                                 if (doc.get("totalAmount") != null) {
                                     try {
@@ -197,7 +227,7 @@ public class PartnerNavigation {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                         "-fx-border-color: #f0edf2;" +
                         "-fx-border-width: 0 0 1 0;" +
                         "-fx-padding: 0 35 0 30;");
@@ -206,6 +236,7 @@ public class PartnerNavigation {
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #a94717;");
         topBar.setLeft(new HBox(title));
         ((HBox) topBar.getLeft()).setAlignment(Pos.CENTER_LEFT);
+        ((HBox) topBar.getLeft()).setStyle("-fx-background-color: #EBCCB7;");
 
         HBox rightControls = new HBox(16);
         rightControls.setAlignment(Pos.CENTER_RIGHT);
@@ -425,16 +456,10 @@ public class PartnerNavigation {
         StackPane mapStack = new StackPane();
         mapStack.setStyle("-fx-background-color: #dce3e8;");
 
-        ImageView mapView = new ImageView();
-        mapView.fitWidthProperty().bind(mapStack.widthProperty());
-        mapView.fitHeightProperty().bind(mapStack.heightProperty());
-        mapView.setPreserveRatio(false);
-        mapView.setSmooth(true);
-
-        String dynamicMapUrl = generateDynamicMapUrl(tripData);
-        Image mapImage = new Image(dynamicMapUrl, true);
-        mapView.setImage(mapImage);
-        mapStack.getChildren().add(mapView);
+        PartnerOsmMapView osmMapView = new PartnerOsmMapView(tripData);
+        osmMapView.prefWidthProperty().bind(mapStack.widthProperty());
+        osmMapView.prefHeightProperty().bind(mapStack.heightProperty());
+        mapStack.getChildren().add(osmMapView);
 
         HBox topHud = new HBox(14);
         topHud.setAlignment(Pos.CENTER_LEFT);
@@ -514,27 +539,491 @@ public class PartnerNavigation {
         return mapStack;
     }
 
-    private static String generateDynamicMapUrl(TripData data) {
-        if (GOOGLE_MAPS_API_KEY != null && !GOOGLE_MAPS_API_KEY.contains("YOUR_API_KEY")) {
-            return "https://maps.googleapis.com/maps/api/staticmap?" +
-                    "size=1000x900" +
-                    "&scale=2" +
-                    "&maptype=roadmap" +
-                    "&language=en" +
-                    "&markers=color:brown%7Clabel:P%7C" + data.pickupLat + "," + data.pickupLng +
-                    "&markers=color:orange%7Clabel:D%7C" + data.dropoffLat + "," + data.dropoffLng +
-                    "&path=color:0xf46a06ff%7Cweight:5%7C" + data.pickupLat + "," + data.pickupLng + "%7C"
-                    + data.dropoffLat + "," + data.dropoffLng +
-                    "&key=" + GOOGLE_MAPS_API_KEY;
+    private static class PartnerOsmMapView extends StackPane {
+        private static final int TILE_SIZE = 256;
+        private static final int MAX_ZOOM = 18;
+        private static final int MIN_ZOOM = 3;
+
+        private final Pane tilePane = new Pane();
+        private final Pane routePane = new Pane();
+        private final Pane markerPane = new Pane();
+
+        private final HttpClient httpClient = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.NORMAL)
+                .build();
+
+        private final Map<String, Image> imageCache = new ConcurrentHashMap<>();
+
+        private double centerLatitude = 18.5139;
+        private double centerLongitude = 73.8322;
+        private int zoom = 13;
+
+        private List<double[]> routePoints = new ArrayList<>();
+        private double pickupLat = 18.5204;
+        private double pickupLng = 73.8567;
+        private String pickupName = "Artisan Bakery";
+        private String pickupAddress = "FC Road, Pune";
+
+        private double dropoffLat = 18.5074;
+        private double dropoffLng = 73.8077;
+        private String dropoffName = "Sarah J.";
+        private String dropoffAddress = "Kothrud, Pune";
+
+        private double mousePressedX;
+        private double mousePressedY;
+        private double pressedCenterX;
+        private double pressedCenterY;
+        private long renderNumber = 0;
+
+        public PartnerOsmMapView(TripData tripData) {
+            setStyle("-fx-background-color: #E8ECEF;");
+
+            tilePane.setMouseTransparent(true);
+            routePane.setMouseTransparent(true);
+            markerPane.setMouseTransparent(false);
+
+            getChildren().addAll(tilePane, routePane, markerPane);
+
+            Rectangle clip = new Rectangle();
+            clip.widthProperty().bind(widthProperty());
+            clip.heightProperty().bind(heightProperty());
+            setClip(clip);
+
+            createControls();
+            createAttribution();
+
+            setOnMousePressed(this::handleMousePressed);
+            setOnMouseDragged(this::handleMouseDragged);
+            setOnMouseReleased(e -> scheduleRender());
+
+            setOnScroll(e -> {
+                if (e.getDeltaY() > 0) {
+                    zoomIn();
+                } else if (e.getDeltaY() < 0) {
+                    zoomOut();
+                }
+                e.consume();
+            });
+
+            widthProperty().addListener((obs, oldVal, newVal) -> scheduleRender());
+            heightProperty().addListener((obs, oldVal, newVal) -> scheduleRender());
+
+            this.pickupLat = tripData.getPickupLatVal();
+            this.pickupLng = tripData.getPickupLngVal();
+            this.pickupName = tripData.pickupName != null ? tripData.pickupName : "Store";
+            this.pickupAddress = tripData.pickupAddress != null ? tripData.pickupAddress : "FC Road, Pune";
+
+            this.dropoffLat = tripData.getDropoffLatVal();
+            this.dropoffLng = tripData.getDropoffLngVal();
+            this.dropoffName = tripData.dropoffName != null ? tripData.dropoffName : "Customer";
+            this.dropoffAddress = tripData.dropoffAddress != null ? tripData.dropoffAddress : "Kothrud, Pune";
+
+            this.centerLatitude = (this.pickupLat + this.dropoffLat) / 2.0;
+            this.centerLongitude = (this.pickupLng + this.dropoffLng) / 2.0;
+
+            Platform.runLater(this::fetchAndDrawRoute);
         }
 
-        return "https://staticmap.openstreetmap.de/staticmap.php?" +
-                "center=" + data.pickupLat + "," + data.pickupLng +
-                "&zoom=13" +
-                "&size=1000x900" +
-                "&maptype=mapnik" +
-                "&markers=" + data.pickupLat + "," + data.pickupLng + ",ol-marker|" + data.dropoffLat + ","
-                + data.dropoffLng + ",or-marker";
+        private void createControls() {
+            VBox controlBox = new VBox(6);
+            controlBox.setAlignment(Pos.CENTER);
+            controlBox.setPadding(new Insets(10));
+
+            Button btnZoomIn = new Button("+");
+            Button btnZoomOut = new Button("−");
+            Button btnRecenter = new Button("🎯");
+
+            String buttonStyle =
+                    "-fx-background-color: white;" +
+                    "-fx-text-fill: #1f2937;" +
+                    "-fx-font-size: 16px;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-background-radius: 8;" +
+                    "-fx-border-radius: 8;" +
+                    "-fx-border-color: #e5e7eb;" +
+                    "-fx-border-width: 1;" +
+                    "-fx-pref-width: 36px;" +
+                    "-fx-pref-height: 36px;" +
+                    "-fx-cursor: hand;" +
+                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 6, 0, 0, 2);";
+
+            btnZoomIn.setStyle(buttonStyle);
+            btnZoomOut.setStyle(buttonStyle);
+            btnRecenter.setStyle(buttonStyle);
+
+            btnZoomIn.setOnAction(e -> zoomIn());
+            btnZoomOut.setOnAction(e -> zoomOut());
+            btnRecenter.setOnAction(e -> recenterRoute());
+
+            controlBox.getChildren().addAll(btnZoomIn, btnZoomOut, btnRecenter);
+            StackPane.setAlignment(controlBox, Pos.TOP_RIGHT);
+            StackPane.setMargin(controlBox, new Insets(20, 20, 0, 0));
+            getChildren().add(controlBox);
+        }
+
+        private void createAttribution() {
+            Label attribution = new Label("© OpenStreetMap contributors");
+            attribution.setStyle(
+                    "-fx-background-color: rgba(255,255,255,0.92);" +
+                    "-fx-text-fill: #4b5563;" +
+                    "-fx-font-size: 9px;" +
+                    "-fx-padding: 3 8 3 8;" +
+                    "-fx-background-radius: 4;" +
+                    "-fx-border-color: rgba(0,0,0,0.06);" +
+                    "-fx-border-radius: 4;");
+            StackPane.setAlignment(attribution, Pos.BOTTOM_RIGHT);
+            StackPane.setMargin(attribution, new Insets(0, 16, 12, 0));
+            getChildren().add(attribution);
+        }
+
+        private void recenterRoute() {
+            if (routePoints != null && !routePoints.isEmpty()) {
+                applyRoute(routePoints);
+            } else {
+                fetchAndDrawRoute();
+            }
+        }
+
+        private void handleMousePressed(MouseEvent event) {
+            mousePressedX = event.getX();
+            mousePressedY = event.getY();
+            pressedCenterX = longitudeToWorldX(centerLongitude, zoom);
+            pressedCenterY = latitudeToWorldY(centerLatitude, zoom);
+        }
+
+        private void handleMouseDragged(MouseEvent event) {
+            double deltaX = mousePressedX - event.getX();
+            double deltaY = mousePressedY - event.getY();
+
+            double worldX = pressedCenterX + deltaX;
+            double worldY = pressedCenterY + deltaY;
+
+            centerLongitude = worldXToLongitude(worldX, zoom);
+            centerLatitude = worldYToLatitude(worldY, zoom);
+            centerLatitude = Math.max(-85.05112878, Math.min(85.05112878, centerLatitude));
+
+            renderMap();
+        }
+
+        private void zoomIn() {
+            if (zoom >= MAX_ZOOM) return;
+            zoom++;
+            renderMap();
+        }
+
+        private void zoomOut() {
+            if (zoom <= MIN_ZOOM) return;
+            zoom--;
+            renderMap();
+        }
+
+        private void scheduleRender() {
+            Platform.runLater(this::renderMap);
+        }
+
+        private void fetchAndDrawRoute() {
+            String osrmUrl = "https://router.project-osrm.org/route/v1/driving/" +
+                    pickupLng + "," + pickupLat + ";" +
+                    dropoffLng + "," + dropoffLat +
+                    "?overview=full&geometries=geojson";
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(osrmUrl))
+                    .header("User-Agent", "BuyNeX-JavaFX/1.0")
+                    .GET()
+                    .build();
+
+            httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(response -> {
+                        if (response.statusCode() != 200) {
+                            throw new RuntimeException("OSRM HTTP " + response.statusCode());
+                        }
+                        return parseRouteCoordinates(response.body());
+                    })
+                    .thenAccept(points -> {
+                        Platform.runLater(() -> {
+                            List<double[]> finalPoints = (points != null && points.size() >= 2)
+                                    ? points
+                                    : straightLine(pickupLat, pickupLng, dropoffLat, dropoffLng);
+                            applyRoute(finalPoints);
+                        });
+                    })
+                    .exceptionally(err -> {
+                        System.err.println("Route fetch failed, fallback to straight line: " + err.getMessage());
+                        Platform.runLater(() -> applyRoute(straightLine(pickupLat, pickupLng, dropoffLat, dropoffLng)));
+                        return null;
+                    });
+        }
+
+        private void applyRoute(List<double[]> points) {
+            this.routePoints = points;
+            double minLat = Math.min(pickupLat, dropoffLat);
+            double maxLat = Math.max(pickupLat, dropoffLat);
+            double minLon = Math.min(pickupLng, dropoffLng);
+            double maxLon = Math.max(pickupLng, dropoffLng);
+
+            for (double[] pt : points) {
+                minLat = Math.min(minLat, pt[0]);
+                maxLat = Math.max(maxLat, pt[0]);
+                minLon = Math.min(minLon, pt[1]);
+                maxLon = Math.max(maxLon, pt[1]);
+            }
+
+            fitToBounds(minLat, maxLat, minLon, maxLon);
+            renderMap();
+        }
+
+        private void fitToBounds(double minLat, double maxLat, double minLon, double maxLon) {
+            double viewW = Math.max(getWidth(), 300);
+            double viewH = Math.max(getHeight(), 300);
+
+            int bestZoom = MIN_ZOOM;
+            for (int candidateZoom = MAX_ZOOM; candidateZoom >= MIN_ZOOM; candidateZoom--) {
+                double x1 = longitudeToWorldX(minLon, candidateZoom);
+                double x2 = longitudeToWorldX(maxLon, candidateZoom);
+                double y1 = latitudeToWorldY(minLat, candidateZoom);
+                double y2 = latitudeToWorldY(maxLat, candidateZoom);
+
+                double spanX = Math.abs(x2 - x1);
+                double spanY = Math.abs(y2 - y1);
+
+                if (spanX <= viewW * 0.70 && spanY <= viewH * 0.70) {
+                    bestZoom = candidateZoom;
+                    break;
+                }
+            }
+
+            this.centerLatitude = (minLat + maxLat) / 2.0;
+            this.centerLongitude = (minLon + maxLon) / 2.0;
+            this.zoom = bestZoom;
+        }
+
+        private void renderMap() {
+            if (getWidth() < 10 || getHeight() < 10) {
+                return;
+            }
+
+            final long currentRender = ++renderNumber;
+
+            double centerWorldX = longitudeToWorldX(centerLongitude, zoom);
+            double centerWorldY = latitudeToWorldY(centerLatitude, zoom);
+
+            double leftWorld = centerWorldX - getWidth() / 2.0;
+            double topWorld = centerWorldY - getHeight() / 2.0;
+
+            tilePane.getChildren().clear();
+            routePane.getChildren().clear();
+            markerPane.getChildren().clear();
+
+            int firstTileX = (int) Math.floor(leftWorld / TILE_SIZE) - 1;
+            int lastTileX = (int) Math.floor((leftWorld + getWidth()) / TILE_SIZE) + 1;
+            int firstTileY = (int) Math.floor(topWorld / TILE_SIZE) - 1;
+            int lastTileY = (int) Math.floor((topWorld + getHeight()) / TILE_SIZE) + 1;
+
+            int maxTile = (1 << zoom) - 1;
+
+            for (int tileX = firstTileX; tileX <= lastTileX; tileX++) {
+                int wrappedX = ((tileX % (maxTile + 1)) + (maxTile + 1)) % (maxTile + 1);
+
+                for (int tileY = firstTileY; tileY <= lastTileY; tileY++) {
+                    if (tileY < 0 || tileY > maxTile) {
+                        continue;
+                    }
+
+                    double imgX = tileX * TILE_SIZE - leftWorld;
+                    double imgY = tileY * TILE_SIZE - topWorld;
+
+                    loadTile(zoom, wrappedX, tileY, imgX, imgY, currentRender);
+                }
+            }
+
+            drawRoute(leftWorld, topWorld);
+            drawMarkers(leftWorld, topWorld);
+        }
+
+        private void loadTile(int tileZoom, int tileX, int tileY, double imgX, double imgY, long currentRender) {
+            String key = tileZoom + "/" + tileX + "/" + tileY;
+            Image cached = imageCache.get(key);
+
+            if (cached != null && !cached.isError()) {
+                addTileImage(cached, imgX, imgY);
+                return;
+            }
+
+            String tileUrl = "https://tile.openstreetmap.org/" + tileZoom + "/" + tileX + "/" + tileY + ".png";
+            HttpRequest req = HttpRequest.newBuilder()
+                    .uri(URI.create(tileUrl))
+                    .header("User-Agent", "BuyNeX-JavaFX/1.0")
+                    .GET()
+                    .build();
+
+            httpClient.sendAsync(req, HttpResponse.BodyHandlers.ofByteArray())
+                    .thenApply(resp -> {
+                        if (resp.statusCode() != 200) {
+                            throw new RuntimeException("OSM tile HTTP " + resp.statusCode());
+                        }
+                        return new Image(new ByteArrayInputStream(resp.body()));
+                    })
+                    .thenAccept(img -> {
+                        imageCache.put(key, img);
+                        Platform.runLater(() -> {
+                            if (currentRender != renderNumber) return;
+                            addTileImage(img, imgX, imgY);
+                        });
+                    })
+                    .exceptionally(err -> null);
+        }
+
+        private void addTileImage(Image image, double x, double y) {
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(TILE_SIZE);
+            imageView.setFitHeight(TILE_SIZE);
+            imageView.setPreserveRatio(false);
+            imageView.setSmooth(true);
+            imageView.setLayoutX(x);
+            imageView.setLayoutY(y);
+            tilePane.getChildren().add(imageView);
+        }
+
+        private void drawRoute(double leftWorld, double topWorld) {
+            if (routePoints == null || routePoints.size() < 2) {
+                return;
+            }
+
+            Polyline outline = new Polyline();
+            Polyline line = new Polyline();
+
+            for (double[] pt : routePoints) {
+                double worldX = longitudeToWorldX(pt[1], zoom) - leftWorld;
+                double worldY = latitudeToWorldY(pt[0], zoom) - topWorld;
+                outline.getPoints().addAll(worldX, worldY);
+                line.getPoints().addAll(worldX, worldY);
+            }
+
+            outline.setStroke(Color.web("#9a3412", 0.45));
+            outline.setStrokeWidth(9);
+            outline.setStrokeLineCap(StrokeLineCap.ROUND);
+            outline.setStrokeLineJoin(StrokeLineJoin.ROUND);
+
+            line.setStroke(Color.web("#f46a06"));
+            line.setStrokeWidth(5);
+            line.setStrokeLineCap(StrokeLineCap.ROUND);
+            line.setStrokeLineJoin(StrokeLineJoin.ROUND);
+
+            routePane.getChildren().addAll(outline, line);
+        }
+
+        private void drawMarkers(double leftWorld, double topWorld) {
+            addLocationPin(pickupLat, pickupLng, leftWorld, topWorld,
+                    "#93380b", "🏪", "PICKUP", pickupName, pickupAddress);
+
+            addLocationPin(dropoffLat, dropoffLng, leftWorld, topWorld,
+                    "#ea580c", "📍", "DROPOFF", dropoffName, dropoffAddress);
+        }
+
+        private void addLocationPin(double lat, double lon, double leftWorld, double topWorld,
+                                    String pinColor, String icon, String tag, String name, String addr) {
+            double worldX = longitudeToWorldX(lon, zoom) - leftWorld;
+            double worldY = latitudeToWorldY(lat, zoom) - topWorld;
+
+            VBox pinContainer = new VBox(2);
+            pinContainer.setAlignment(Pos.CENTER);
+
+            StackPane pinHead = new StackPane();
+            Circle circle = new Circle(14, Color.web(pinColor));
+            circle.setStroke(Color.WHITE);
+            circle.setStrokeWidth(2.5);
+
+            Label iconLabel = new Label(icon);
+            iconLabel.setStyle("-fx-text-fill: white; -fx-font-size: 11px;");
+            pinHead.getChildren().addAll(circle, iconLabel);
+
+            HBox badge = new HBox(4);
+            badge.setAlignment(Pos.CENTER);
+            badge.setStyle(
+                    "-fx-background-color: white;" +
+                    "-fx-padding: 3 8 3 8;" +
+                    "-fx-background-radius: 12;" +
+                    "-fx-border-color: " + pinColor + ";" +
+                    "-fx-border-width: 1.5;" +
+                    "-fx-border-radius: 12;" +
+                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 8, 0, 0, 2);");
+
+            Label tagLbl = new Label(tag);
+            tagLbl.setStyle("-fx-font-size: 8px; -fx-font-weight: bold; -fx-text-fill: " + pinColor + ";");
+            String displayStr = (name != null && name.length() > 18) ? name.substring(0, 16) + "…" : (name != null ? name : "");
+            Label nameLbl = new Label(displayStr);
+            nameLbl.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #111827;");
+            badge.getChildren().addAll(tagLbl, nameLbl);
+
+            Tooltip tip = new Tooltip(tag + ": " + name + "\n" + addr);
+            Tooltip.install(pinContainer, tip);
+
+            pinContainer.getChildren().addAll(pinHead, badge);
+
+            pinContainer.setLayoutX(worldX - 60);
+            pinContainer.setLayoutY(worldY - 14);
+            pinContainer.setPrefWidth(120);
+
+            markerPane.getChildren().add(pinContainer);
+        }
+
+        private static double longitudeToWorldX(double longitude, int zoomLevel) {
+            double mapSize = TILE_SIZE * Math.pow(2, zoomLevel);
+            return (longitude + 180.0) / 360.0 * mapSize;
+        }
+
+        private static double latitudeToWorldY(double latitude, int zoomLevel) {
+            double mapSize = TILE_SIZE * Math.pow(2, zoomLevel);
+            double latitudeRadians = Math.toRadians(latitude);
+            double y = (1.0 - Math.log(Math.tan(latitudeRadians) + (1.0 / Math.cos(latitudeRadians))) / Math.PI) / 2.0;
+            return y * mapSize;
+        }
+
+        private static double worldXToLongitude(double worldX, int zoomLevel) {
+            double mapSize = TILE_SIZE * Math.pow(2, zoomLevel);
+            return worldX / mapSize * 360.0 - 180.0;
+        }
+
+        private static double worldYToLatitude(double worldY, int zoomLevel) {
+            double mapSize = TILE_SIZE * Math.pow(2, zoomLevel);
+            double y = 1.0 - (2.0 * worldY / mapSize);
+            return Math.toDegrees(Math.atan(Math.sinh(y * Math.PI)));
+        }
+
+        private static List<double[]> parseRouteCoordinates(String json) {
+            List<double[]> points = new ArrayList<>();
+            try {
+                int geometryIndex = json.indexOf("\"geometry\"");
+                int coordinatesIndex = json.indexOf("\"coordinates\"", Math.max(geometryIndex, 0));
+                if (coordinatesIndex < 0) return points;
+
+                int start = json.indexOf("[[", coordinatesIndex);
+                int end = json.indexOf("]]", start);
+                if (start < 0 || end < 0) return points;
+
+                String coordsBlock = json.substring(start + 2, end);
+                String[] pairs = coordsBlock.split("\\],\\s*\\[");
+                for (String pair : pairs) {
+                    String[] parts = pair.split(",");
+                    if (parts.length < 2) continue;
+                    double lon = Double.parseDouble(parts[0].trim());
+                    double lat = Double.parseDouble(parts[1].trim());
+                    points.add(new double[]{lat, lon});
+                }
+            } catch (Exception ex) {
+                System.err.println("OSRM parse error: " + ex.getMessage());
+                points.clear();
+            }
+            return points;
+        }
+
+        private static List<double[]> straightLine(double sLat, double sLon, double eLat, double eLon) {
+            List<double[]> list = new ArrayList<>();
+            list.add(new double[]{sLat, sLon});
+            list.add(new double[]{eLat, eLon});
+            return list;
+        }
     }
 
     private static void launchExternalNavigation(TripData data) {

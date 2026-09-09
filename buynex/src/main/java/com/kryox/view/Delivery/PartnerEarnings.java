@@ -1,8 +1,6 @@
 package com.kryox.view.Delivery;
 
-
-
-import com.kryox.config.DelivrayFirebaseConfig;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.model.Delivery.PartnerConstants;
 import com.kryox.view.Customer.Homepage;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -19,7 +17,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -46,15 +43,12 @@ public class PartnerEarnings {
 
     private static final String ORANGE_PRIMARY = "#f46a06";
     private static final String ORANGE_GRADIENT = "linear-gradient(to right, #B84208, #F36A00)";
-    private static final String BG_COLOR = "#fbfbfe";
+    private static final String BG_COLOR = "#EEE5DE";
     private static final String BORDER_COLOR = "#f0edf2";
-    private static final String SIDEBAR_BG = "#ffffff";
+    private static final String SIDEBAR_BG = "#EBCCB7";
 
     private static ListenerRegistration earningsListener;
 
-    // =========================================================================
-    // FIRESTORE-READY DYNAMIC EARNINGS DATA MODEL
-    // =========================================================================
     public static class EarningsData {
         public String partnerName;
         public String partnerTier;
@@ -70,6 +64,7 @@ public class PartnerEarnings {
 
         public boolean isWeeklyChart = false;
 
+        public List<TransactionRecord> allTransactions = new ArrayList<>();
         public List<TransactionRecord> transactions = new ArrayList<>();
 
         public EarningsData() {
@@ -78,8 +73,46 @@ public class PartnerEarnings {
             loadMonthData("August 2026 (This Month)");
         }
 
+        public void filterTransactionsForPeriod(String period) {
+            this.selectedPeriod = period;
+            if (allTransactions.isEmpty()) {
+                return;
+            }
+            this.transactions.clear();
+            double totalComm = 0.0;
+
+            String monthPrefix = period.split(" ")[0].toLowerCase();
+            if (monthPrefix.length() > 3) {
+                monthPrefix = monthPrefix.substring(0, 3);
+            }
+
+            for (TransactionRecord tx : allTransactions) {
+                if (period.contains("This Month") || tx.date.toLowerCase().contains(monthPrefix)) {
+                    this.transactions.add(tx);
+                    totalComm += tx.commission;
+                }
+            }
+
+            if (this.transactions.isEmpty()) {
+                this.transactions.addAll(allTransactions);
+                totalComm = allTransactions.stream().mapToDouble(t -> t.commission).sum();
+            }
+
+            this.monthlyTotal = totalComm;
+            this.weeklyEarnings = totalComm * 0.35;
+            this.dailyAverage = totalComm / Math.max(1, transactions.size());
+            this.avgDeliveriesPerDay = transactions.size();
+            this.avgPerOrder = totalComm / Math.max(1, transactions.size());
+        }
+
         public void loadMonthData(String period) {
             this.selectedPeriod = period;
+
+            if (!allTransactions.isEmpty()) {
+                filterTransactionsForPeriod(period);
+                return;
+            }
+
             this.transactions.clear();
 
             if (period.contains("August 2026")) {
@@ -168,9 +201,6 @@ public class PartnerEarnings {
         }
     }
 
-    // =========================================================================
-    // STATIC SCENE FACTORY METHODS
-    // =========================================================================
     public static Scene partnerEarningsScene() {
         EarningsData data = new EarningsData();
         Scene scene = partnerEarningsScene(data);
@@ -199,7 +229,7 @@ public class PartnerEarnings {
 
         root.setCenter(scrollPane);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 1550, 850);
         scene.setFill(Color.web(BG_COLOR));
         return scene;
     }
@@ -210,50 +240,66 @@ public class PartnerEarnings {
                 earningsListener.remove();
             }
 
-            Firestore db = DelivrayFirebaseConfig.getFireStore();
-            earningsListener = db.collection("orders").addSnapshotListener((snapshots, error) -> {
+            Firestore db = Firebaseconfig.gFirestore();
+            earningsListener = db.collection("Orders").addSnapshotListener((snapshots, error) -> {
                 if (error != null || snapshots == null) {
                     return;
                 }
 
                 Platform.runLater(() -> {
                     List<TransactionRecord> realTxList = new ArrayList<>();
-                    double totalEarned = 0.0;
 
                     for (DocumentSnapshot doc : snapshots.getDocuments()) {
-                        String status = doc.getString("status");
+                        String status = doc.getString("orderStatus");
+                        if (status == null) status = doc.getString("status");
+
                         String partnerId = doc.getString("deliveryPartnerId");
 
-                        boolean isMine = (PartnerConstants.UID != null && !PartnerConstants.UID.isEmpty())
-                                ? PartnerConstants.UID.equals(partnerId)
-                                : true;
+                        boolean isMine = true;
+                        if (PartnerConstants.UID != null && !PartnerConstants.UID.isEmpty()) {
+                            if (partnerId != null && !partnerId.isEmpty() && !PartnerConstants.UID.equals(partnerId)) {
+                                isMine = false;
+                            }
+                        }
 
-                        if ("DELIVERED".equalsIgnoreCase(status) && isMine) {
-                            String orderId = doc.getId();
-                            String displayId = "ORD-" + (orderId.length() > 5 ? orderId.substring(0, 5).toUpperCase() : orderId);
-                            String dateStr = doc.getString("deliveredAt") != null ? doc.getString("deliveredAt") : "Today";
+                        if (isMine) {
+                            String rawId = doc.getString("orderId");
+                            if (rawId == null || rawId.isEmpty()) rawId = doc.getId();
+                            String displayId = rawId.startsWith("ORD-") ? rawId : "ORD-" + (rawId.length() > 5 ? rawId.substring(0, 5).toUpperCase() : rawId.toUpperCase());
 
-                            double orderAmount = 50.00;
-                            if (doc.get("totalAmount") != null) {
+                            String dateStr = doc.getString("orderDate");
+                            if (dateStr == null) dateStr = doc.getString("deliveredAt");
+                            if (dateStr == null) dateStr = doc.getString("date");
+                            if (dateStr == null) dateStr = "Today";
+
+                            double orderAmount = 0.0;
+                            Object amtObj = doc.get("totalAmount");
+                            if (amtObj == null) amtObj = doc.get("amount");
+                            if (amtObj != null) {
                                 try {
-                                    orderAmount = Double.parseDouble(doc.get("totalAmount").toString());
+                                    orderAmount = Double.parseDouble(amtObj.toString());
                                 } catch (Exception ignored) {}
                             }
+                            if (orderAmount <= 0) orderAmount = 150.0;
 
-                            double comm = orderAmount * 0.10;
-                            realTxList.add(new TransactionRecord(displayId, dateStr, orderAmount, comm, "Paid"));
-                            totalEarned += orderAmount;
+                            // Calculate 10% commission percentage from order price
+                            double comm = Math.round(orderAmount * 0.10 * 100.0) / 100.0;
+
+                            String txStatus = "Paid";
+                            if (status != null && ("OUT_FOR_DELIVERY".equalsIgnoreCase(status) || "ACCEPTED".equalsIgnoreCase(status) || "Order is out for Delivery".equalsIgnoreCase(status))) {
+                                txStatus = "Pending";
+                            } else if (status != null && ("CANCELLED".equalsIgnoreCase(status) || "REJECTED".equalsIgnoreCase(status))) {
+                                txStatus = "Failed";
+                            }
+
+                            realTxList.add(new TransactionRecord(displayId, dateStr, orderAmount, comm, txStatus));
                         }
                     }
 
                     if (!realTxList.isEmpty()) {
-                        data.transactions = realTxList;
-                        data.monthlyTotal = totalEarned;
-                        data.weeklyEarnings = totalEarned * 0.40;
-                        data.dailyAverage = totalEarned / Math.max(1, realTxList.size());
-                        data.avgDeliveriesPerDay = realTxList.size();
-                        data.avgPerOrder = totalEarned / Math.max(1, realTxList.size());
-                        if (Homepage.HomepageStage != null) {
+                        data.allTransactions = realTxList;
+                        data.filterTransactionsForPeriod(data.selectedPeriod);
+                        if (Homepage.HomepageStage != null && Homepage.HomepageStage.getScene() != null) {
                             Homepage.HomepageStage.setScene(partnerEarningsScene(data));
                         }
                     }
@@ -268,32 +314,17 @@ public class PartnerEarnings {
         BorderPane topBar = new BorderPane();
         topBar.setPrefHeight(60);
         topBar.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #EBCCB7;" +
                         "-fx-border-color: " + BORDER_COLOR + ";" +
                         "-fx-border-width: 0 0 1 0;" +
                         "-fx-padding: 0 35 0 30;");
 
-        HBox searchContainer = new HBox(8);
-        searchContainer.setAlignment(Pos.CENTER_LEFT);
-        searchContainer.setMaxWidth(360);
-        searchContainer.setPrefHeight(34);
-        searchContainer.setPadding(new Insets(0, 12, 0, 12));
-        searchContainer.setStyle(
-                "-fx-background-color: #f8f8fb;" +
-                        "-fx-border-color: #e5e7eb;" +
-                        "-fx-border-radius: 18;" +
-                        "-fx-background-radius: 18;");
-
-        Label searchIcon = new Label("🔍");
-        searchIcon.setStyle("-fx-font-size: 11px; -fx-text-fill: #9ca3af;");
-
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search orders...");
-        searchField.setStyle(
-                "-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 12px; -fx-prompt-text-fill: #9ca3af;");
-        HBox.setHgrow(searchField, Priority.ALWAYS);
-        searchContainer.getChildren().addAll(searchIcon, searchField);
-        topBar.setCenter(searchContainer);
+        Text title = new Text("Earnings & Payouts");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #a94717;");
+        HBox leftGroup = new HBox(title);
+        leftGroup.setAlignment(Pos.CENTER_LEFT);
+        leftGroup.setStyle("-fx-background-color: #EBCCB7;");
+        topBar.setLeft(leftGroup);
 
         HBox rightIcons = new HBox(16);
         rightIcons.setAlignment(Pos.CENTER_RIGHT);
