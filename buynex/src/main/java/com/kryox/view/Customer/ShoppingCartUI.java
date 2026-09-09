@@ -1,7 +1,20 @@
 package com.kryox.view.Customer;
 
 import com.kryox.controller.Customer.PaymentController;
-import javafx.application.Application;
+import com.kryox.config.Firebaseconfig;
+
+import com.google.cloud.firestore.Firestore;
+import com.kryox.model.Shopkeeper.OfferModel;
+import javafx.scene.layout.FlowPane;
+
+import javafx.application.Platform;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,742 +40,124 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
-import javafx.stage.Stage;
-import java.util.List;
+
 import com.kryox.controller.Customer.CARTcontroller;
 import com.kryox.model.Customer.Productcart;
 
 public class ShoppingCartUI {
 
-        private VBox products;
-
-        private Scene addcartScene;
-        private String userId;
-
-        public ShoppingCartUI(String userId) {
-                this.userId = userId;
-        }
-
-        public Scene getaddcartScene(){
-                 // =====================================================
-        // SHADOWS
-        // =====================================================
-
-        DropShadow shadow =
-                new DropShadow();
-
-        shadow.setRadius(18);
-        shadow.setSpread(0.05);
-        shadow.setOffsetX(5);
-        shadow.setOffsetY(0);
-        shadow.setColor(
-                Color.rgb(0, 0, 0, 0.14)
-        );
-
-        DropShadow cardShadow =
-                new DropShadow();
-
-        cardShadow.setRadius(14);
-        cardShadow.setOffsetY(5);
-        cardShadow.setSpread(0.02);
-        cardShadow.setColor(
-                Color.rgb(0, 0, 0, 0.10)
-        );
-
-        // =====================================================
-        // LOGO
-        // =====================================================
-
-        Label name =
-                new Label("BuyNeX");
-
-        name.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 28px;" +
-                "-fx-font-weight: 900;" +
-                "-fx-text-fill: #E87500;"
-        );
-
-        HBox premiumBox =
-                new HBox(9);
-
-        premiumBox.setPrefSize(
-                205,
-                58
-        );
-
-        premiumBox.setMinSize(
-                205,
-                58
-        );
-
-        premiumBox.setMaxSize(
-                205,
-                58
-        );
-
-        premiumBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        premiumBox.setPadding(
-                new Insets(8, 13, 8, 13)
-        );
-
-        premiumBox.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #E9E2EA;" +
-                "-fx-border-width: 1;" +
-                "-fx-border-radius: 15;"
-        );
-
-        premiumBox.setEffect(cardShadow);
-
-        VBox textBox =
-                new VBox(3);
-
-        Label premiumTitle =
-                new Label("Premium Shopper");
-
-        premiumTitle.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 12px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #222222;"
-        );
-
-        Label premiumSubtitle =
-                new Label("● AI Assistant Active");
-
-        premiumSubtitle.setStyle(
-                "-fx-font-family: 'Montserrat';" +
-                "-fx-font-size: 9px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #FF6900;"
-        );
-
-        textBox.getChildren().addAll(
-                premiumTitle,
-                premiumSubtitle
-        );
-
-        premiumBox.getChildren().add(
-                textBox
-        );
-
-        // =====================================================
-        // SIDEBAR BUTTONS
-        // =====================================================
-
-        Button dashboard =
-                new Button("Dashboard");
-
-        dashboard.setOnAction(event->{
-                Dashbord ds=new Dashbord(userId);
-                Homepage.HomepageStage.setScene(ds.getDashbordScene());
-        });
-
-        Button nearby =
-                new Button("Nearby Shops");
-                neaby_shope ns=new neaby_shope(userId);
-                Runnable rn=new Runnable() {
-                        public void run(){
-                                backTodashboard();
-                                
-                                
-
-                        }
-                };
-                Homepage.HomepageStage.setScene(ns.getNearby_shopes(rn));
-
-        Button deals =
-                new Button("Deals");
-        deals.setOnAction(event->{
-                DealsDB db=new DealsDB(userId);
-                Homepage.HomepageStage.setScene(db.getDealScene(null));
-        });
-
-        Button orders =
-                new Button("My Orders");
-        orders.setOnAction(event->{
-                My_orderAllorder my=new My_orderAllorder(userId);
-                Homepage.HomepageStage.setScene(my.getAllorderScene());
-        });
-
-        Button analytics =
-                new Button("Analytics");
-
-        Button settings =
-                new Button("Settings");
-
-        Button help =
-                new Button("Help & Support");
-
-        Button[] sidebarButtons = {
-                dashboard,
-                nearby,
-                deals,
-                orders,
-                analytics
-        };
-
-        for (Button button : sidebarButtons) {
-
-            button.setPrefWidth(205);
-            button.setPrefHeight(42);
-
-            button.setStyle(
-                    "-fx-background-color: transparent;" +
-                    "-fx-text-fill: #333333;" +
-                    "-fx-font-size: 12px;" +
-                    "-fx-font-family: 'Montserrat';" +
-                    "-fx-font-weight: 500;" +
-                    "-fx-background-radius: 12;" +
-                    "-fx-alignment: CENTER_LEFT;" +
-                    "-fx-padding: 0 0 0 20;" +
-                    "-fx-cursor: hand;"
-            );
-
-            button.setOnMouseEntered(e ->
-                    button.setStyle(
-                            "-fx-background-color: #FF6900;" +
-                            "-fx-text-fill: white;" +
-                            "-fx-font-size: 12px;" +
-                            "-fx-font-family: 'Montserrat';" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-background-radius: 12;" +
-                            "-fx-alignment: CENTER_LEFT;" +
-                            "-fx-padding: 0 0 0 20;" +
-                            "-fx-cursor: hand;"
-                    )
-            );
-
-            button.setOnMouseExited(e ->
-                    button.setStyle(
-                            "-fx-background-color: transparent;" +
-                            "-fx-text-fill: #333333;" +
-                            "-fx-font-size: 12px;" +
-                            "-fx-font-family: 'Montserrat';" +
-                            "-fx-font-weight: 500;" +
-                            "-fx-background-radius: 12;" +
-                            "-fx-alignment: CENTER_LEFT;" +
-                            "-fx-padding: 0 0 0 20;" +
-                            "-fx-cursor: hand;"
-                    )
-            );
-        }
-
-        settings.setPrefHeight(34);
-        help.setPrefHeight(34);
-
-        // =====================================================
-        // UPGRADE CARD
-        // =====================================================
-
-        VBox upgradeCard =
-                new VBox(7);
-
-        upgradeCard.setPrefWidth(205);
-        upgradeCard.setPrefHeight(112);
-        upgradeCard.setPadding(
-                new Insets(15)
-        );
-
-        upgradeCard.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        LinearGradient upgradeGradient =
-                new LinearGradient(
-                        0,
-                        0,
-                        1,
-                        1,
-                        true,
-                        CycleMethod.NO_CYCLE,
-                        new Stop(
-                                0,
-                                Color.web("#25262A")
-                        ),
-                        new Stop(
-                                1,
-                                Color.web("#45474D")
-                        )
-                );
-
-        upgradeCard.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                upgradeGradient,
-                                new CornerRadii(17),
-                                Insets.EMPTY
-                        )
-                )
-        );
-
-        Label upgradeTitle =
-                new Label("Unlock Gold");
-
-        upgradeTitle.setStyle(
-                "-fx-font-size: 12px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;"
-        );
-
-        Label upgradeText =
-                new Label(
-                        "Smarter deals & exclusive rewards"
-                );
-
-        upgradeText.setStyle(
-                "-fx-font-size: 8px;" +
-                "-fx-text-fill: #BEBFC3;"
-        );
-
-        Button upgradeGold =
-                new Button("Upgrade to Gold");
-
-        upgradeGold.setPrefWidth(175);
-        upgradeGold.setPrefHeight(30);
-
-        upgradeGold.setStyle(
-                "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 10;" +
-                "-fx-cursor: hand;"
-        );
-
-        upgradeCard.getChildren().addAll(
-                upgradeTitle,
-                upgradeText,
-                upgradeGold
-        );
-
-        // =====================================================
-        // LEFT BOX
-        // =====================================================
-
-        VBox leftBox =
-                new VBox(14);
-
-        leftBox.setPrefWidth(245);
-        leftBox.setMinWidth(245);
-        leftBox.setMaxWidth(245);
-
-        leftBox.setPrefHeight(800);
-
-        leftBox.setAlignment(
-                Pos.TOP_CENTER
-        );
-
-        leftBox.setPadding(
-                new Insets(27, 20, 20, 20)
-        );
-
-        leftBox.setStyle(
-                "-fx-background-color: #ebccb7"
-        );
-
-        leftBox.setEffect(shadow);
-
-        Region sidebarSpacer =
-                new Region();
-
-        VBox.setVgrow(
-                sidebarSpacer,
-                Priority.ALWAYS
-        );
-
-        leftBox.getChildren().addAll(
-                name,
-                premiumBox,
-                dashboard,
-                nearby,
-                deals,
-                orders,
-                analytics,
-                sidebarSpacer,
-                upgradeCard,
-                settings,
-                help
-        );
-
-        // =====================================================
-        // TOP NAVIGATION
-        // =====================================================
-
-        Button t1 =
-                new Button("Offers");
-
-        Button t2 =
-                new Button("Shops");
-
-        Button t3 =
-                new Button("Support");
-
-        String topButtonStyle =
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #666666;" +
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-padding: 6 8 6 8;" +
-                "-fx-border-width: 0;" +
-                "-fx-cursor: hand;";
-
-        t1.setStyle(topButtonStyle);
-        t2.setStyle(topButtonStyle);
-        t3.setStyle(topButtonStyle);
-
-        HBox topLinks =
-                new HBox(
-                        6,
-                        t1,
-                        t2,
-                        t3
-                );
-
-        topLinks.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        // =====================================================
-        // SEARCH
-        // =====================================================
-
-        TextField searchBox =
-                new TextField();
-
-        searchBox.setPromptText(
-                "Search products, shops or deals with AI..."
-        );
-
-        searchBox.setPrefWidth(310);
-        searchBox.setPrefHeight(39);
-
-        searchBox.setStyle(
-                "-fx-background-color: #F8F7FA;" +
-                "-fx-background-radius: 20;" +
-                "-fx-border-color: #E5E1E8;" +
-                "-fx-border-radius: 20;" +
-                "-fx-border-width: 1;" +
-                "-fx-padding: 0 16 0 16;" +
-                "-fx-font-size: 10px;" +
-                "-fx-text-fill: #444444;" +
-                "-fx-prompt-text-fill: #999999;"
-        );
-
-        // =====================================================
-        // LOCATION
-        // =====================================================
-
-        Label locationIcon =
-                new Label("📍");
-
-        Label locationText =
-                new Label("Downtown Manhattan⌄");
-
-        locationText.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #555555;"
-        );
-
-        HBox locationBox =
-                new HBox(
-                        4,
-                        locationIcon,
-                        locationText
-                );
-
-        locationBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        // =====================================================
-        // ACTION BUTTONS
-        // =====================================================
-
-        Button notification =
-                new Button("🔔");
-
-        Button cart =
-                new Button("🛒");
-
-        Button profile =
-                new Button("●");
-
-        String actionStyle =
-                "-fx-background-color: white;" +
-                "-fx-text-fill: #555555;" +
-                "-fx-font-size: 13px;" +
-                "-fx-background-radius: 11;" +
-                "-fx-border-color: #E7E2E9;" +
-                "-fx-border-radius: 11;" +
-                "-fx-padding: 0;" +
-                "-fx-cursor: hand;";
-
-        notification.setPrefSize(37, 37);
-        cart.setPrefSize(37, 37);
-        profile.setPrefSize(37, 37);
-
-        notification.setStyle(actionStyle);
-        cart.setStyle(actionStyle);
-        profile.setStyle(actionStyle);
-
-        HBox actionBox =
-                new HBox(
-                        7,
-                        notification,
-                        cart,
-                        profile
-                );
-
-        actionBox.setAlignment(
-                Pos.CENTER_RIGHT
-        );
-
-        // =====================================================
-        // NAVIGATION SPACERS
-        // =====================================================
-
-        Region navSpacer1 =
-                new Region();
-
-        Region navSpacer2 =
-                new Region();
-
-        HBox.setHgrow(
-                navSpacer1,
-                Priority.ALWAYS
-        );
-
-        HBox.setHgrow(
-                navSpacer2,
-                Priority.ALWAYS
-        );
-
-        // =====================================================
-        // NAV BOX
-        // =====================================================
-
-        HBox navBox =
-                new HBox(
-                        12,
-                        topLinks,
-                        navSpacer1,
-                        searchBox,
-                        navSpacer2,
-                        locationBox,
-                        actionBox
-                );
-
-        navBox.setPrefHeight(68);
-
-        navBox.setPadding(
-                new Insets(
-                        12,
-                        24,
-                        12,
-                        24
-                )
-        );
-
-        navBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        navBox.setStyle(
-                "-fx-background-color: #ebccb7;" +
-                "-fx-border-width: 0 0 1 0;"
-        );
-
-        // =====================================================
-        // CART PAGE
-        // =====================================================
-
-        VBox cartPage =
-                createCartPage();
-
-        ScrollPane scrollPane =
-                new ScrollPane(cartPage);
-
+    private VBox products;
+    private Scene addcartScene;
+    private String userId;
+
+    private static final double FREE_DELIVERY_THRESHOLD = 99.0;
+    private Label freeDeliveryMoreLabel;
+    private Label deliveryFeeValueLabel;
+    private Region freeDeliveryProgress;
+    private Label visibleTotalValueLabel;
+
+    private Label discountRowAmountLabel;
+    private Label discountRowTitleLabel;
+    private HBox discountRow;
+    private double currentDiscountAmount = 0.0;
+    private double[] currentSubtotalRef;
+    private Label currentSubtotalAmountLabel;
+    private Label currentTotalAmountLabel;
+    private Label promoMessageLabel;
+    private TextField promoInputField;
+
+    private final List<Productcart> activeCartProducts = new ArrayList<>();
+
+    public ShoppingCartUI(String userId) {
+        this.userId = userId;
+    }
+
+    public Scene getaddcartScene() {
+        VBox leftBox = CustomerSidebar.createSidebar(userId, "Cart");
+        HBox navBox = CustomerSidebar.createTopNav(userId, "CART", null, () -> CustomerNavigation.navigateToCart(userId));
+
+        VBox cartPage = createCartPage();
+
+        ScrollPane scrollPane = new ScrollPane(cartPage);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 
-        scrollPane.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER
+        VBox rightBox = new VBox(0, navBox, scrollPane);
+        rightBox.setStyle("-fx-background-color: #F8F6FA;");
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
+        RadialGradient orangeGlow = new RadialGradient(
+                0, 0, 0.84, 0.16, 0.42, true, CycleMethod.NO_CYCLE,
+                new Stop(0.0, Color.web("#FF9148", 0.18)),
+                new Stop(0.40, Color.web("#FFD1B4", 0.08)),
+                new Stop(1.0, Color.TRANSPARENT)
         );
 
-        scrollPane.setVbarPolicy(
-                ScrollPane.ScrollBarPolicy.AS_NEEDED
-        );
+        rightBox.setBackground(new Background(new BackgroundFill(orangeGlow, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        scrollPane.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-background: transparent;"
-        );
+        BorderPane mainBox = new BorderPane();
+        mainBox.setLeft(leftBox);
+        mainBox.setCenter(rightBox);
+        mainBox.setStyle("-fx-background-color: #F8F6FA;");
 
-        // =====================================================
-        // RIGHT CONTENT
-        // =====================================================
+        Scene scene = new Scene(mainBox, 1530, 850);
+        addcartScene = scene;
 
-        VBox rightBox =
-                new VBox(
-                        0,
-                        navBox,
-                        scrollPane
-                );
-
-        rightBox.setStyle(
-                "-fx-background-color: #F8F6FA;"
-        );
-
-        VBox.setVgrow(
-                scrollPane,
-                Priority.ALWAYS
-        );
-
-        // =====================================================
-        // ORANGE GLOW
-        // =====================================================
-
-        RadialGradient orangeGlow =
-                new RadialGradient(
-                        0,
-                        0,
-                        0.84,
-                        0.16,
-                        0.42,
-                        true,
-                        CycleMethod.NO_CYCLE,
-                        new Stop(
-                                0.0,
-                                Color.web("#FF9148", 0.18)
-                        ),
-                        new Stop(
-                                0.40,
-                                Color.web("#FFD1B4", 0.08)
-                        ),
-                        new Stop(
-                                1.0,
-                                Color.TRANSPARENT
-                        )
-                );
-
-        rightBox.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                orangeGlow,
-                                CornerRadii.EMPTY,
-                                Insets.EMPTY
-                        )
-                )
-        );
-
-        // =====================================================
-        // BORDER PANE
-        // =====================================================
-
-        BorderPane mainBox =
-                new BorderPane();
-
-        mainBox.setLeft(
-                leftBox
-        );
-
-        // CART PAGE IS IN CENTER
-        mainBox.setCenter(
-                rightBox
-        );
-
-        mainBox.setStyle(
-                "-fx-background-color: #F8F6FA;"
-        );
-
-        // =====================================================
-        // SCENE
-        // =====================================================
-
-        Scene scene =
-                new Scene(
-                        mainBox,
-                        1530,
-                        850
-                );
-                addcartScene=scene;
-
-                return addcartScene;
-        }
-
-    // =========================================================
-    // CLEAR CART
-    // =========================================================
+        return addcartScene;
+    }
 
     private void clearCart11() {
-
         if (products != null) {
             products.getChildren().clear();
         }
-
         System.out.println("Cart cleared successfully.");
     }
 
-
-    // =========================================================
-    // PRODUCT IMAGE HELPER
-    // =========================================================
-
     private StackPane createProductImage(String imagePath) {
-
         StackPane imageBox = new StackPane();
-
         imageBox.setPrefSize(80, 70);
         imageBox.setMinSize(80, 70);
         imageBox.setMaxSize(80, 70);
-
         imageBox.setStyle(
                 "-fx-background-color: #F3F3F3;" +
                 "-fx-background-radius: 6;"
         );
 
         try {
-
-            Image image = new Image(
-                    getClass().getResourceAsStream(imagePath)
-            );
+            Image image;
+            if (imagePath != null && (imagePath.startsWith("http://") || imagePath.startsWith("https://"))) {
+                image = new Image(imagePath, true);
+            } else {
+                java.io.InputStream is = getClass().getResourceAsStream(imagePath);
+                if (is != null) {
+                    image = new Image(is);
+                } else {
+                    image = new Image(imagePath);
+                }
+            }
 
             ImageView imageView = new ImageView(image);
-
             imageView.setFitWidth(70);
             imageView.setFitHeight(65);
             imageView.setPreserveRatio(true);
-
             imageBox.getChildren().add(imageView);
-
         } catch (Exception e) {
-
             Label noImage = new Label("Product");
             noImage.setStyle(
                     "-fx-font-size: 10px;" +
                     "-fx-text-fill: #999999;"
             );
-
             imageBox.getChildren().add(noImage);
         }
 
         return imageBox;
     }
 
-    // =========================================================
-    // QUANTITY BUTTON
-    // =========================================================
-
     private HBox createQuantityBox(
-            String quantity,
-            double unitPrice,
+            Productcart product,
             Label priceLabel,
             Label eachLabel,
             Label subtotalLabel,
@@ -771,16 +166,16 @@ public class ShoppingCartUI {
             int[] itemCount,
             double[] subtotal,
             VBox card,
-            VBox products
-    ) {
+            VBox products) {
 
         Button minus = new Button("−");
         Button plus = new Button("+");
 
-        Label qty = new Label(quantity);
+        int initialQty = product.getQuantity() > 0 ? product.getQuantity() : 1;
+        product.setQuantity(initialQty);
+        Label qty = new Label(String.valueOf(initialQty));
 
-        String buttonStyle =
-                "-fx-background-color: transparent;" +
+        String buttonStyle = "-fx-background-color: transparent;" +
                 "-fx-text-fill: #555555;" +
                 "-fx-font-size: 15px;" +
                 "-fx-font-weight: bold;" +
@@ -797,173 +192,117 @@ public class ShoppingCartUI {
         );
 
         HBox quantityBox = new HBox(8, minus, qty, plus);
-
         quantityBox.setAlignment(Pos.CENTER);
         quantityBox.setPrefHeight(32);
         quantityBox.setPrefWidth(82);
-
         quantityBox.setStyle(
                 "-fx-background-color: #F1EDF3;" +
                 "-fx-background-radius: 18;"
         );
 
         minus.setOnAction(e -> {
-
             int value = Integer.parseInt(qty.getText());
 
-            // =====================================================
-            // IF QUANTITY IS 1, REMOVE THE COMPLETE PRODUCT
-            // =====================================================
-
-            if (value == 1) {
-
+            if (value <= 1) {
                 card.setVisible(false);
                 card.setManaged(false);
 
-                subtotal[0] -= unitPrice;
-
+                subtotal[0] -= product.getPrice();
                 if (subtotal[0] < 0) {
                     subtotal[0] = 0;
                 }
 
                 itemCount[0]--;
-
                 if (itemCount[0] < 0) {
                     itemCount[0] = 0;
                 }
 
-                subtotalLabel.setText(
-                        String.format(
-                                "Subtotal (%d items)",
-                                itemCount[0]
-                        )
-                );
+                activeCartProducts.remove(product);
 
-                updateSummaryAmounts(
-                        subtotal,
-                        subtotalAmountLabel,
-                        totalAmountLabel
-                );
+                subtotalLabel.setText(String.format("Subtotal (%d items)", itemCount[0]));
+                updateSummaryAmounts(subtotal, subtotalAmountLabel, totalAmountLabel, deliveryFeeValueLabel);
 
-                // Show empty-cart message if last product was removed.
+                new Thread(() -> new CARTcontroller().deleteFromCart(userId, product.getName())).start();
+
                 if (itemCount[0] == 0) {
-
-                    Label emptyLabel =
-                            new Label("Your cart is empty.");
-
+                    Label emptyLabel = new Label("Your cart is empty.");
                     emptyLabel.setStyle(
                             "-fx-font-size: 14px;" +
                             "-fx-text-fill: #777777;" +
                             "-fx-font-weight: bold;"
                     );
-
                     products.getChildren().clear();
                     products.getChildren().add(emptyLabel);
                 }
-
                 return;
             }
 
-            // =====================================================
-            // IF QUANTITY IS GREATER THAN 1, DECREASE IT
-            // =====================================================
-
             value--;
-
             qty.setText(String.valueOf(value));
+            product.setQuantity(value);
 
-            priceLabel.setText(
-                    String.format(
-                            "₹%.2f",
-                            unitPrice * value
-                    )
-            );
+            priceLabel.setText(String.format("₹%.2f", product.getPrice() * value));
+            eachLabel.setText(String.format("₹%.2f / ea", product.getPrice()));
 
-            eachLabel.setText(
-                    String.format(
-                            "₹%.2f / ea",
-                            unitPrice
-                    )
-            );
-
-            subtotal[0] -= unitPrice;
-
+            subtotal[0] -= product.getPrice();
             if (subtotal[0] < 0) {
                 subtotal[0] = 0;
             }
 
             itemCount[0]--;
-
             if (itemCount[0] < 0) {
                 itemCount[0] = 0;
             }
 
-            subtotalLabel.setText(
-                    String.format(
-                            "Subtotal (%d items)",
-                            itemCount[0]
-                    )
-            );
+            subtotalLabel.setText(String.format("Subtotal (%d items)", itemCount[0]));
+            updateSummaryAmounts(subtotal, subtotalAmountLabel, totalAmountLabel, deliveryFeeValueLabel);
 
-            updateSummaryAmounts(
-                    subtotal,
-                    subtotalAmountLabel,
-                    totalAmountLabel
-            );
+            final int updatedVal = value;
+            new Thread(() -> new CARTcontroller().updateQuantity(userId, product.getName(), updatedVal)).start();
         });
 
         plus.setOnAction(e -> {
-
             int value = Integer.parseInt(qty.getText());
-
             value++;
 
             qty.setText(String.valueOf(value));
-            priceLabel.setText(String.format("₹%.2f", unitPrice * value));
-            eachLabel.setText(String.format("₹%.2f / ea", unitPrice));
+            product.setQuantity(value);
+            priceLabel.setText(String.format("₹%.2f", product.getPrice() * value));
+            eachLabel.setText(String.format("₹%.2f / ea", product.getPrice()));
 
-            subtotal[0] += unitPrice;
+            subtotal[0] += product.getPrice();
             itemCount[0]++;
 
-            subtotalLabel.setText(
-                    String.format("Subtotal (%d items)", itemCount[0])
-            );
+            subtotalLabel.setText(String.format("Subtotal (%d items)", itemCount[0]));
+            updateSummaryAmounts(subtotal, subtotalAmountLabel, totalAmountLabel, deliveryFeeValueLabel);
 
-            updateSummaryAmounts(
-                    subtotal,
-                    subtotalAmountLabel,
-                    totalAmountLabel
-            );
+            final int updatedVal = value;
+            new Thread(() -> new CARTcontroller().updateQuantity(userId, product.getName(), updatedVal)).start();
         });
 
         return quantityBox;
     }
 
-    // =========================================================
-    // CART PRODUCT CARD
-    // =========================================================
-
     private VBox createCartProduct(
-            String productName,
-            String shopName,
-            double unitPrice,
+            Productcart product,
             String oldPrice,
-            String quantity,
             String imagePath,
             Label subtotalLabel,
             Label subtotalAmountLabel,
             Label totalAmountLabel,
             int[] itemCount,
             double[] subtotal,
-            VBox products
-    ) {
+            VBox products) {
+
+        String productName = product.getName();
+        String shopName = product.getName1() != null && !product.getName1().isBlank() ? product.getName1() : "BuyNex Store";
+        double unitPrice = product.getPrice();
+        int initialQuantity = product.getQuantity() > 0 ? product.getQuantity() : 1;
+        product.setQuantity(initialQuantity);
 
         VBox card = new VBox(8);
-
         card.setPadding(new Insets(18));
-
         card.setPrefWidth(700);
-
         card.setStyle(
                 "-fx-background-color: white;" +
                 "-fx-background-radius: 7;" +
@@ -972,29 +311,18 @@ public class ShoppingCartUI {
         );
 
         DropShadow cardShadow = new DropShadow();
-
         cardShadow.setRadius(10);
         cardShadow.setOffsetY(3);
         cardShadow.setColor(Color.rgb(0, 0, 0, 0.07));
-
         card.setEffect(cardShadow);
 
-        // -----------------------------------------------------
-        // PRODUCT TOP
-        // -----------------------------------------------------
-
         HBox productTop = new HBox(17);
-
         productTop.setAlignment(Pos.CENTER_LEFT);
 
-        StackPane productImage =
-                createProductImage(imagePath);
+        StackPane productImage = createProductImage(imagePath);
 
         VBox productInfo = new VBox(4);
-
-        Label productTitle =
-                new Label(productName);
-
+        Label productTitle = new Label(productName);
         productTitle.setStyle(
                 "-fx-font-family: 'Montserrat';" +
                 "-fx-font-size: 14px;" +
@@ -1002,30 +330,24 @@ public class ShoppingCartUI {
                 "-fx-text-fill: #222222;"
         );
 
-        Label shop =
-                new Label("From " + shopName);
-
+        Label shop = new Label();
         shop.setStyle(
                 "-fx-font-size: 9px;" +
                 "-fx-text-fill: #B44E00;" +
                 "-fx-font-weight: bold;"
         );
+        if (product.getName1() != null && !product.getName1().isBlank() && !product.getName1().equalsIgnoreCase("BuyNex Store")) {
+            shop.setText("From " + product.getName1());
+        } else {
+            CustomerShopResolver.bindShopName(shop, product.getShopkeeperUid(), "From ");
+        }
 
-        productInfo.getChildren().addAll(
-                productTitle,
-                shop
-        );
+        productInfo.getChildren().addAll(productTitle, shop);
 
         Region productSpacer = new Region();
+        HBox.setHgrow(productSpacer, Priority.ALWAYS);
 
-        HBox.setHgrow(
-                productSpacer,
-                Priority.ALWAYS
-        );
-
-        Button deleteButton =
-                new Button("▣");
-
+        Button deleteButton = new Button("▣");
         deleteButton.setStyle(
                 "-fx-background-color: transparent;" +
                 "-fx-text-fill: #A74716;" +
@@ -1035,142 +357,87 @@ public class ShoppingCartUI {
         );
 
         deleteButton.setOnAction(e -> {
-
-            int currentQuantity =
-                    Integer.parseInt(quantity);
+            int currentQuantity = product.getQuantity() > 0 ? product.getQuantity() : 1;
 
             card.setVisible(false);
             card.setManaged(false);
 
             subtotal[0] -= unitPrice * currentQuantity;
-
             if (subtotal[0] < 0) {
                 subtotal[0] = 0;
             }
 
             itemCount[0] -= currentQuantity;
-
             if (itemCount[0] < 0) {
                 itemCount[0] = 0;
             }
 
-            subtotalLabel.setText(
-                    String.format(
-                            "Subtotal (%d items)",
-                            itemCount[0]
-                    )
-            );
+            activeCartProducts.remove(product);
 
-            updateSummaryAmounts(
-                    subtotal,
-                    subtotalAmountLabel,
-                    totalAmountLabel
-            );
+            subtotalLabel.setText(String.format("Subtotal (%d items)", itemCount[0]));
+            updateSummaryAmounts(subtotal, subtotalAmountLabel, totalAmountLabel, deliveryFeeValueLabel);
+
+            new Thread(() -> new CARTcontroller().deleteFromCart(userId, product.getName())).start();
 
             if (itemCount[0] == 0) {
-
-                Label emptyLabel =
-                        new Label("Your cart is empty.");
-
+                Label emptyLabel = new Label("Your cart is empty.");
                 emptyLabel.setStyle(
                         "-fx-font-size: 14px;" +
                         "-fx-text-fill: #777777;" +
                         "-fx-font-weight: bold;"
                 );
-
                 products.getChildren().clear();
                 products.getChildren().add(emptyLabel);
             }
         });
 
-        productTop.getChildren().addAll(
-                productImage,
-                productInfo,
-                productSpacer,
-                deleteButton
-        );
-
-        // -----------------------------------------------------
-        // BOTTOM ROW
-        // -----------------------------------------------------
+        productTop.getChildren().addAll(productImage, productInfo, productSpacer, deleteButton);
 
         HBox bottomRow = new HBox(15);
-
         bottomRow.setAlignment(Pos.CENTER_LEFT);
 
-        Label priceLabel =
-                new Label(String.format("₹%.2f", unitPrice));
-
+        Label priceLabel = new Label(String.format("₹%.2f", unitPrice * initialQuantity));
         priceLabel.setStyle(
                 "-fx-font-size: 17px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #151515;"
         );
 
-        Label each =
-                new Label(String.format("₹%.2f / ea", unitPrice));
-
+        Label each = new Label(String.format("₹%.2f / ea", unitPrice));
         each.setStyle(
                 "-fx-font-size: 9px;" +
                 "-fx-text-fill: #555555;"
         );
 
-        HBox quantity1 =
-                createQuantityBox(
-                        quantity,
-                        unitPrice,
-                        priceLabel,
-                        each,
-                        subtotalLabel,
-                        subtotalAmountLabel,
-                        totalAmountLabel,
-                        itemCount,
-                        subtotal,
-                        card,
-                        products
-                );
-
-        Region bottomSpacer =
-                new Region();
-
-        HBox.setHgrow(
-                bottomSpacer,
-                Priority.ALWAYS
+        HBox quantity1 = createQuantityBox(
+                product,
+                priceLabel,
+                each,
+                subtotalLabel,
+                subtotalAmountLabel,
+                totalAmountLabel,
+                itemCount,
+                subtotal,
+                card,
+                products
         );
+
+        Region bottomSpacer = new Region();
+        HBox.setHgrow(bottomSpacer, Priority.ALWAYS);
 
         VBox priceBox = new VBox(1);
-
         priceBox.setAlignment(Pos.CENTER_RIGHT);
+        priceBox.getChildren().addAll(priceLabel, each);
 
-        priceBox.getChildren().addAll(
-                priceLabel,
-                each
-        );
+        bottomRow.getChildren().addAll(quantity1, bottomSpacer, priceBox);
 
-        bottomRow.getChildren().addAll(
-                quantity1,
-                bottomSpacer,
-                priceBox
-        );
-
-        Separator separator =
-                new Separator();
-
-        separator.setStyle(
-                "-fx-background-color: #ECE8EC;"
-        );
-
-        // -----------------------------------------------------
-        // ACTION BUTTONS
-        // -----------------------------------------------------
+        Separator separator = new Separator();
+        separator.setStyle("-fx-background-color: #ECE8EC;");
 
         HBox actions = new HBox(9);
-
         actions.setAlignment(Pos.CENTER_LEFT);
 
-        Button buyNow =
-                new Button("Buy Now");
-
+        Button buyNow = new Button("Buy Now");
         buyNow.setStyle(
                 "-fx-background-color: #B94D00;" +
                 "-fx-text-fill: white;" +
@@ -1181,9 +448,31 @@ public class ShoppingCartUI {
                 "-fx-cursor: hand;"
         );
 
-        Button book =
-                new Button("Book Product");
+        buyNow.setOnAction(event -> {
+            final int currentQuantity = product.getQuantity() > 0 ? product.getQuantity() : 1;
+            final double bSubtotal = unitPrice * currentQuantity;
+            final double bPlatformFee = 10.0;
+            final double bTax = bSubtotal * 0.05;
+            final double bDeliveryFee = bSubtotal >= FREE_DELIVERY_THRESHOLD ? 0.0 : 30.0;
 
+            double bDiscount = 0.0;
+            String bPromo = "";
+            if (CartOfferManager.getAppliedOffer() != null) {
+                bDiscount = CartOfferManager.calculateDiscount(CartOfferManager.getAppliedOffer(), bSubtotal, List.of(product));
+                bPromo = CartOfferManager.getAppliedOffer().getPromoCode();
+            }
+
+            final double bTotal = Math.max(0, bSubtotal - bDiscount) + bPlatformFee + bTax + bDeliveryFee;
+            final double finalBDiscount = bDiscount;
+            final String finalBPromo = bPromo;
+
+            PaymentController paymentController = new PaymentController();
+            paymentController.startPayment(bTotal, () -> {
+                handleSingleProductPaymentSuccess(product, currentQuantity, bTotal, bSubtotal, bPlatformFee, bTax, bDeliveryFee, finalBDiscount, finalBPromo);
+            });
+        });
+
+        Button book = new Button("Book Product");
         book.setStyle(
                 "-fx-background-color: #F0EDF2;" +
                 "-fx-text-fill: #222222;" +
@@ -1192,14 +481,34 @@ public class ShoppingCartUI {
                 "-fx-padding: 7 14 7 14;" +
                 "-fx-cursor: hand;"
         );
-        book.setOnAction(event->{
-                BookingSuccess bs=new BookingSuccess();
-                Homepage.HomepageStage.setScene(bs.getBookingscene());
+        book.setOnAction(event -> {
+            final int currentQuantity = product.getQuantity() > 0 ? product.getQuantity() : 1;
+            final double currentTotal = unitPrice * currentQuantity;
+            PaymentController paymentController = new PaymentController();
+            paymentController.startPayment(currentTotal, () -> {
+                javafx.application.Platform.runLater(() -> {
+                    System.out.println("Booking Success for " + productName);
+                    try {
+                        java.util.Map<String, Object> bookingData = new java.util.HashMap<>();
+                        bookingData.put("productName", productName);
+                        bookingData.put("quantity", currentQuantity);
+                        bookingData.put("totalAmount", currentTotal);
+                        bookingData.put("customerId", userId);
+                        bookingData.put("status", "BOOKED");
+                        bookingData.put("date", java.time.LocalDate.now().toString());
+
+                        com.google.cloud.firestore.Firestore db = com.kryox.config.Firebaseconfig.gFirestore();
+                        db.collection("Bookings").add(bookingData);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    BookingSuccess bs = new BookingSuccess();
+                    Homepage.HomepageStage.setScene(bs.getBookingscene());
+                });
+            });
         });
 
-        Button visit =
-                new Button("Visit Shop");
-
+        Button visit = new Button("Visit Shop");
         visit.setStyle(
                 "-fx-background-color: white;" +
                 "-fx-text-fill: #333333;" +
@@ -1210,256 +519,354 @@ public class ShoppingCartUI {
                 "-fx-padding: 7 14 7 14;" +
                 "-fx-cursor: hand;"
         );
+        visit.setOnAction(event -> {
+            neaby_shope ns = new neaby_shope(userId);
+            Homepage.HomepageStage.setScene(ns.getNearby_shopes(() -> {
+                Dashbord ds = new Dashbord(userId);
+                Homepage.HomepageStage.setScene(ds.getDashbordScene());
+            }));
+        });
 
-        actions.getChildren().addAll(
-                buyNow,
-                book,
-                visit
-        );
+        actions.getChildren().addAll(buyNow, book, visit);
 
-        card.getChildren().addAll(
-                productTop,
-                bottomRow,
-                separator,
-                actions
-        );
-
+        card.getChildren().addAll(productTop, bottomRow, separator, actions);
         return card;
     }
 
     private void updateSummaryAmounts(
             double[] subtotal,
             Label subtotalAmountLabel,
-            Label totalAmountLabel
-    ) {
+            Label totalAmountLabel,
+            Label deliveryFeeLabel) {
 
-        double subtotalAmount = subtotal[0];
-
+        double subtotalAmount = subtotal != null && subtotal.length > 0 ? subtotal[0] : 0.0;
         double platformFee = 10.0;
         double tax = subtotalAmount * 0.05;
-        double deliveryFee = subtotalAmount >= 500 ? 0 : 30.0;
+        double deliveryFee = subtotalAmount >= FREE_DELIVERY_THRESHOLD ? 0 : 30.0;
 
-        double total =
-                subtotalAmount
-                + platformFee
-                + tax
-                + deliveryFee;
+        if (CartOfferManager.getAppliedOffer() != null && subtotalAmount > 0) {
+            currentDiscountAmount = CartOfferManager.calculateDiscount(CartOfferManager.getAppliedOffer(), subtotalAmount, activeCartProducts);
+        } else {
+            currentDiscountAmount = 0.0;
+        }
 
-        subtotalAmountLabel.setText(
-                String.format("₹%.2f", subtotalAmount)
-        );
+        if (discountRow != null && discountRowAmountLabel != null) {
+            if (currentDiscountAmount > 0) {
+                discountRow.setVisible(true);
+                discountRow.setManaged(true);
+                discountRowAmountLabel.setText(String.format("-₹%.2f", currentDiscountAmount));
+            } else {
+                discountRow.setVisible(false);
+                discountRow.setManaged(false);
+            }
+        }
 
-        totalAmountLabel.setText(
-                String.format("₹%.2f", total)
-        );
+        double total = Math.max(0, subtotalAmount - currentDiscountAmount) + platformFee + tax + deliveryFee;
+
+        if (subtotalAmountLabel != null) {
+            subtotalAmountLabel.setText(String.format("₹%.2f", subtotalAmount));
+        }
+
+        Label totalLabelToUpdate = visibleTotalValueLabel != null ? visibleTotalValueLabel : totalAmountLabel;
+        if (totalLabelToUpdate != null) {
+            totalLabelToUpdate.setText(String.format("₹%.2f", total));
+            totalLabelToUpdate.applyCss();
+            totalLabelToUpdate.layout();
+        }
+
+        if (deliveryFeeLabel != null) {
+            deliveryFeeLabel.setText(deliveryFee == 0 ? "FREE" : String.format("₹%.2f", deliveryFee));
+        }
+
+        if (freeDeliveryMoreLabel != null) {
+            if (subtotalAmount >= FREE_DELIVERY_THRESHOLD) {
+                freeDeliveryMoreLabel.setText("Free Delivery Unlocked");
+            } else {
+                double remaining = FREE_DELIVERY_THRESHOLD - subtotalAmount;
+                freeDeliveryMoreLabel.setText(String.format("₹%.2f more", remaining));
+            }
+        }
+
+        if (freeDeliveryProgress != null) {
+            double progressRatio = Math.min(subtotalAmount / FREE_DELIVERY_THRESHOLD, 1.0);
+            double progressWidth = 264.0 * progressRatio;
+            freeDeliveryProgress.setPrefWidth(progressWidth);
+            freeDeliveryProgress.setMaxWidth(progressWidth);
+        }
     }
 
-    // =========================================================
-    // ORDER SUMMARY
-    // =========================================================
-
     private VBox createOrderSummary(
-            double subtotalAmount,
+            double[] subtotal,
             int itemCount,
             Label subtotalLabel,
             Label subtotalAmountLabel,
-            Label totalAmountLabel
-    ) {
+            Label totalAmountLabel) {
 
+        this.currentSubtotalRef = subtotal;
+        this.currentSubtotalAmountLabel = subtotalAmountLabel;
+        this.currentTotalAmountLabel = totalAmountLabel;
+
+        double subtotalAmount = subtotal != null && subtotal.length > 0 ? subtotal[0] : 0.0;
         double platformFee = 10.0;
         double tax = subtotalAmount * 0.05;
-        double deliveryFee = subtotalAmount >= 500 ? 0 : 30.0;
-        double totalAmount =
-                subtotalAmount + platformFee + tax + deliveryFee;
+        double deliveryFee = subtotalAmount >= FREE_DELIVERY_THRESHOLD ? 0 : 30.0;
 
-        VBox summary =
-                new VBox(13);
+        if (CartOfferManager.getAppliedOffer() != null && subtotalAmount > 0) {
+            currentDiscountAmount = CartOfferManager.calculateDiscount(CartOfferManager.getAppliedOffer(), subtotalAmount, activeCartProducts);
+        } else {
+            currentDiscountAmount = 0.0;
+        }
 
-        summary.setPadding(
-                new Insets(22, 18, 18, 18)
-        );
+        double totalAmount = Math.max(0, subtotalAmount - currentDiscountAmount) + platformFee + tax + deliveryFee;
 
-        summary.setPrefWidth(300);
-        summary.setMinWidth(300);
-
+        VBox summary = new VBox(12);
+        summary.setPadding(new Insets(20, 18, 18, 18));
+        summary.setPrefWidth(310);
+        summary.setMinWidth(310);
         summary.setStyle(
                 "-fx-background-color: #eee5df;" +
-                "-fx-background-radius: 7;" +
+                "-fx-background-radius: 12;" +
                 "-fx-border-color: #E8E3E8;" +
-                "-fx-border-radius: 7;"
+                "-fx-border-radius: 12;"
         );
 
-        DropShadow shadow =
-                new DropShadow();
-
+        DropShadow shadow = new DropShadow();
         shadow.setRadius(10);
         shadow.setOffsetY(3);
-        shadow.setColor(
-                Color.rgb(0, 0, 0, 0.06)
-        );
-
+        shadow.setColor(Color.rgb(0, 0, 0, 0.06));
         summary.setEffect(shadow);
 
-        // -----------------------------------------------------
-        // TITLE
-        // -----------------------------------------------------
-
-        Label title =
-                new Label("Order Summary");
-
+        Label title = new Label("Order Summary");
         title.setStyle(
                 "-fx-font-size: 18px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #171717;"
         );
 
-        // -----------------------------------------------------
-        // SUBTOTAL
-        // -----------------------------------------------------
+        subtotalLabel.setText(String.format("Subtotal (%d items)", itemCount));
+        subtotalAmountLabel.setText(String.format("₹%.2f", subtotalAmount));
 
-        subtotalLabel.setText(
-                String.format("Subtotal (%d items)", itemCount)
+        HBox subtotalRow = summaryRowWithLabel(subtotalLabel, subtotalAmountLabel);
+        HBox platform = summaryRow("Platform Fee", String.format("₹%.2f", platformFee));
+        HBox tax1 = summaryRow("Estimated Tax", String.format("₹%.2f", tax));
+
+        deliveryFeeValueLabel = new Label(deliveryFee == 0 ? "FREE" : String.format("₹%.2f", deliveryFee));
+        HBox delivery = summaryRowWithLabel(new Label("Delivery Fee"), deliveryFeeValueLabel);
+
+        // DISCOUNT ROW
+        discountRowTitleLabel = new Label(CartOfferManager.getAppliedOffer() != null ? "Offer (" + CartOfferManager.getAppliedOffer().getPromoCode() + ")" : "Discount Offer");
+        discountRowTitleLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #2E7D32; -fx-font-weight: bold;");
+
+        discountRowAmountLabel = new Label(String.format("-₹%.2f", currentDiscountAmount));
+        discountRowAmountLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #2E7D32; -fx-font-weight: bold;");
+
+        Button removeDiscountBtn = new Button("✕");
+        removeDiscountBtn.setStyle(
+                "-fx-background-color: transparent;" +
+                "-fx-text-fill: #999999;" +
+                "-fx-font-size: 9px;" +
+                "-fx-cursor: hand;" +
+                "-fx-padding: 0 4 0 4;"
         );
 
-        HBox subtotal =
-                summaryRowWithLabel(
-                        subtotalLabel,
-                        subtotalAmountLabel
-                );
+        Region discSpacer = new Region();
+        HBox.setHgrow(discSpacer, Priority.ALWAYS);
+        discountRow = new HBox(4, discountRowTitleLabel, discSpacer, discountRowAmountLabel, removeDiscountBtn);
+        discountRow.setAlignment(Pos.CENTER_LEFT);
+        boolean hasActiveDiscount = currentDiscountAmount > 0;
+        discountRow.setVisible(hasActiveDiscount);
+        discountRow.setManaged(hasActiveDiscount);
 
-        HBox platform =
-                summaryRow(
-                        "Platform Fee",
-                        String.format("₹%.2f", platformFee)
-                );
+        // OFFERS & PROMO CODE INPUT BOX
+        VBox promoCard = new VBox(7);
+        promoCard.setPadding(new Insets(10, 10, 10, 10));
+        promoCard.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-background-radius: 8;" +
+                "-fx-border-color: #E6E0D8;" +
+                "-fx-border-radius: 8;"
+        );
 
-        HBox tax1 =
-                summaryRow(
-                        "Estimated Tax",
-                        String.format("₹%.2f", tax)
-                );
+        HBox promoHeader = new HBox(5);
+        promoHeader.setAlignment(Pos.CENTER_LEFT);
+        Label promoBadge = new Label("🏷️ Have a Promo Code?");
+        promoBadge.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+        promoHeader.getChildren().add(promoBadge);
 
-        HBox delivery =
-                summaryRow(
-                        "Delivery Fee",
-                        deliveryFee == 0
-                                ? "FREE"
-                                : String.format("₹%.2f", deliveryFee)
-                );
+        TextField promoInput = new TextField();
+        promoInputField = promoInput;
+        promoInput.setPromptText("Enter code (e.g. GROCERY20)");
+        promoInput.setStyle(
+                "-fx-background-color: #F8F6F9;" +
+                "-fx-background-radius: 6;" +
+                "-fx-border-color: #D8D2DC;" +
+                "-fx-border-radius: 6;" +
+                "-fx-font-size: 10px;" +
+                "-fx-padding: 5 8 5 8;"
+        );
+        HBox.setHgrow(promoInput, Priority.ALWAYS);
 
-        // -----------------------------------------------------
-        // FREE DELIVERY
-        // -----------------------------------------------------
+        Button applyPromoBtn = new Button("Apply");
+        applyPromoBtn.setStyle(
+                "-fx-background-color: #FF6900;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 10px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 6;" +
+                "-fx-padding: 5 12 5 12;" +
+                "-fx-cursor: hand;"
+        );
 
-        Label progressText =
-                new Label("Progress to Free Delivery");
+        HBox promoInputRow = new HBox(6, promoInput, applyPromoBtn);
+        promoInputRow.setAlignment(Pos.CENTER_LEFT);
 
+        promoMessageLabel = new Label("");
+        promoMessageLabel.setStyle("-fx-font-size: 9px; -fx-font-weight: bold;");
+        promoMessageLabel.setWrapText(true);
+
+        // Quick offers clickable chips
+        Label availableLabel = new Label("Tap to apply offer:");
+        availableLabel.setStyle("-fx-font-size: 8.5px; -fx-text-fill: #777777; -fx-font-weight: bold;");
+
+        FlowPane quickOffersPane = new FlowPane();
+        quickOffersPane.setHgap(5);
+        quickOffersPane.setVgap(4);
+
+        List<OfferModel> availList = CartOfferManager.getAvailableOffers();
+        for (OfferModel om : availList) {
+            if (om == null || om.getPromoCode() == null) continue;
+            String code = om.getPromoCode();
+            String discStr = (om.getDiscountType() != null && om.getDiscountType().toLowerCase().contains("percent"))
+                    ? String.format("%.0f%%", om.getDiscountValue())
+                    : String.format("₹%.0f", om.getDiscountValue());
+
+            Button chip = new Button(code + " (" + discStr + ")");
+            chip.setStyle(
+                    "-fx-background-color: #FFF2E8;" +
+                    "-fx-text-fill: #FF6900;" +
+                    "-fx-font-size: 8px;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-background-radius: 8;" +
+                    "-fx-border-color: #FFC5A3;" +
+                    "-fx-border-radius: 8;" +
+                    "-fx-padding: 2 5 2 5;" +
+                    "-fx-cursor: hand;"
+            );
+            chip.setOnAction(e -> {
+                promoInput.setText(code);
+                applyPromoBtn.fire();
+            });
+            quickOffersPane.getChildren().add(chip);
+        }
+
+        promoCard.getChildren().addAll(promoHeader, promoInputRow, promoMessageLabel, availableLabel, quickOffersPane);
+
+        applyPromoBtn.setOnAction(e -> {
+            String code = promoInput.getText();
+            double curSub = (currentSubtotalRef != null && currentSubtotalRef.length > 0) ? currentSubtotalRef[0] : 0.0;
+            CartOfferManager.OfferResult res = CartOfferManager.applyOffer(code, curSub, activeCartProducts);
+            if (res.success) {
+                currentDiscountAmount = res.discountAmount;
+                promoMessageLabel.setText("✓ " + res.message);
+                promoMessageLabel.setStyle("-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
+                discountRowTitleLabel.setText("Discount (" + res.offer.getPromoCode() + ")");
+                discountRowAmountLabel.setText(String.format("-₹%.2f", currentDiscountAmount));
+                discountRow.setVisible(true);
+                discountRow.setManaged(true);
+                updateSummaryAmounts(currentSubtotalRef, currentSubtotalAmountLabel, currentTotalAmountLabel, deliveryFeeValueLabel);
+            } else {
+                promoMessageLabel.setText("⚠ " + res.message);
+                promoMessageLabel.setStyle("-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: #D32F2F;");
+            }
+        });
+
+        removeDiscountBtn.setOnAction(e -> {
+            CartOfferManager.clearAppliedOffer();
+            CartOfferManager.clearPreappliedCode();
+            currentDiscountAmount = 0.0;
+            discountRow.setVisible(false);
+            discountRow.setManaged(false);
+            promoInput.setText("");
+            promoMessageLabel.setText("");
+            updateSummaryAmounts(currentSubtotalRef, currentSubtotalAmountLabel, currentTotalAmountLabel, deliveryFeeValueLabel);
+        });
+
+        // Check if offer was pre-applied from Deals
+        String preapplied = CartOfferManager.getPreappliedCode();
+        if (preapplied != null && !preapplied.isBlank()) {
+            promoInput.setText(preapplied);
+            Platform.runLater(applyPromoBtn::fire);
+        } else if (CartOfferManager.getAppliedOffer() != null) {
+            promoInput.setText(CartOfferManager.getAppliedOffer().getPromoCode());
+            Platform.runLater(applyPromoBtn::fire);
+        }
+
+        Label progressText = new Label("Progress to Free Delivery");
         progressText.setStyle(
                 "-fx-font-size: 9px;" +
                 "-fx-text-fill: #555555;"
         );
 
-        HBox freeText =
-                new HBox();
+        HBox freeText = new HBox();
+        freeDeliveryMoreLabel = new Label(
+                subtotalAmount >= FREE_DELIVERY_THRESHOLD
+                        ? "Free Delivery Unlocked"
+                        : String.format("₹%.2f more", FREE_DELIVERY_THRESHOLD - subtotalAmount)
+        );
 
-        Label more =
-                new Label(
-                        subtotalAmount >= 500
-                                ? "Free Delivery Unlocked"
-                                : String.format(
-                                        "₹%.2f more",
-                                        500 - subtotalAmount
-                                )
-                );
-
+        Label more = freeDeliveryMoreLabel;
         more.setStyle(
                 "-fx-font-size: 9px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #B44D00;"
         );
 
-        Region spacer =
-                new Region();
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        freeText.getChildren().addAll(spacer, more);
 
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
+        freeDeliveryProgress = new Region();
+        freeDeliveryProgress.setPrefHeight(6);
 
-        freeText.getChildren().addAll(
-                spacer,
-                more
-        );
-
-        Region progress =
-                new Region();
-
-        progress.setPrefHeight(6);
-
-        progress.setStyle(
+        double initialProgressRatio = Math.min(subtotalAmount / FREE_DELIVERY_THRESHOLD, 1.0);
+        double initialProgressWidth = 264.0 * initialProgressRatio;
+        freeDeliveryProgress.setPrefWidth(initialProgressWidth);
+        freeDeliveryProgress.setMaxWidth(initialProgressWidth);
+        freeDeliveryProgress.setStyle(
                 "-fx-background-color: #B94D00;" +
                 "-fx-background-radius: 10;"
         );
 
-        // -----------------------------------------------------
-        // TOTAL
-        // -----------------------------------------------------
+        Region progress = freeDeliveryProgress;
 
-        Separator separator =
-                new Separator();
+        Separator separator = new Separator();
 
-        HBox totalRow =
-                new HBox();
+        HBox totalRow = new HBox();
+        totalRow.setAlignment(Pos.CENTER_LEFT);
 
-        totalRow.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        Label total =
-                new Label("Total");
-
+        Label total = new Label("Total");
         total.setStyle(
                 "-fx-font-size: 15px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #222222;"
         );
 
-        Region totalSpacer =
-                new Region();
+        Region totalSpacer = new Region();
+        HBox.setHgrow(totalSpacer, Priority.ALWAYS);
 
-        HBox.setHgrow(
-                totalSpacer,
-                Priority.ALWAYS
-        );
-
-        Label totalValue =
-                new Label(String.format("₹%.2f", totalAmount));
-
+        Label totalValue = new Label(String.format("₹%.2f", totalAmount));
+        visibleTotalValueLabel = totalValue;
         totalValue.setStyle(
                 "-fx-font-size: 22px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #171717;"
         );
 
-        totalRow.getChildren().addAll(
-                total,
-                totalSpacer,
-                totalValue
-        );
+        totalRow.getChildren().addAll(total, totalSpacer, totalValue);
 
-        // -----------------------------------------------------
-        // CHECKOUT
-        // -----------------------------------------------------
-
-        Button checkout =
-                new Button("Proceed to Checkout  →");
-
-        checkout.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
+        Button checkout = new Button("Proceed to Checkout  →");
+        checkout.setMaxWidth(Double.MAX_VALUE);
         checkout.setPrefHeight(39);
-
         checkout.setStyle(
                 "-fx-background-color: linear-gradient(to right, #FF6900, #FFA276);" +
                 "-fx-text-fill: white;" +
@@ -1468,40 +875,60 @@ public class ShoppingCartUI {
                 "-fx-background-radius: 6;" +
                 "-fx-cursor: hand;"
         );
-        checkout.setOnAction(event -> {
-
-    PaymentController paymentController =
-            new PaymentController();
-
-    paymentController.startPayment(
-            23.40,
-            () -> handlePaymentSuccess()
-    );
-
-});
 
         checkout.setOnAction(event -> {
+            if (activeCartProducts.isEmpty()) {
+                System.out.println("Cart is empty.");
+                return;
+            }
 
-                PaymentController paymentController =
-                        new PaymentController();
+            double currentSubtotal = 0.0;
+            try {
+                String text = subtotalAmountLabel.getText().replace("₹", "").trim();
+                if (!text.isEmpty()) {
+                    currentSubtotal = Double.parseDouble(text);
+                }
+            } catch (Exception ex) {
+                currentSubtotal = 0.0;
+            }
 
-                paymentController.startPayment(
-                        totalAmount,
-                        () -> handlePaymentSuccess()
-                );
+            if (currentSubtotal <= 0) {
+                for (Productcart p : activeCartProducts) {
+                    int q = p.getQuantity() > 0 ? p.getQuantity() : 1;
+                    currentSubtotal += p.getPrice() * q;
+                }
+            }
+
+            if (currentSubtotal <= 0) {
+                System.out.println("Cart subtotal is 0.");
+                return;
+            }
+
+            double currentPlatformFee = 10.0;
+            double currentTax = currentSubtotal * 0.05;
+            double currentDeliveryFee = currentSubtotal >= FREE_DELIVERY_THRESHOLD ? 0.0 : 30.0;
+            double currentDiscount = currentDiscountAmount;
+
+            double currentTotal = Math.max(0, currentSubtotal - currentDiscount) + currentPlatformFee + currentTax + currentDeliveryFee;
+
+            final double finalTotal = currentTotal;
+            final double finalSubtotal = currentSubtotal;
+            final double finalPlatformFee = currentPlatformFee;
+            final double finalTax = currentTax;
+            final double finalDeliveryFee = currentDeliveryFee;
+            final double finalDiscount = currentDiscount;
+            final String finalPromoCode = (CartOfferManager.getAppliedOffer() != null) ? CartOfferManager.getAppliedOffer().getPromoCode() : "";
+            final List<Productcart> purchasedItems = new ArrayList<>(activeCartProducts);
+
+            PaymentController paymentController = new PaymentController();
+            paymentController.startPayment(
+                    finalTotal,
+                    () -> handlePaymentSuccess(finalTotal, finalSubtotal, finalPlatformFee, finalTax, finalDeliveryFee, finalDiscount, finalPromoCode, purchasedItems)
+            );
         });
 
-        // -----------------------------------------------------
-        // AI TIP
-        // -----------------------------------------------------
-
-        VBox aiTip =
-                new VBox(5);
-
-        aiTip.setPadding(
-                new Insets(12)
-        );
-
+        VBox aiTip = new VBox(5);
+        aiTip.setPadding(new Insets(12));
         aiTip.setStyle(
                 "-fx-background-color: #FFF5F0;" +
                 "-fx-border-color: #F1D8CA;" +
@@ -1509,40 +936,34 @@ public class ShoppingCartUI {
                 "-fx-background-radius: 6;"
         );
 
-        Label aiTitle =
-                new Label("💡  AI Delivery Tip");
-
+        Label aiTitle = new Label("💡  AI Delivery Tip");
         aiTitle.setStyle(
                 "-fx-font-size: 11px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #222222;"
         );
 
-        Label aiText =
-                new Label(
-                        "Add more to your cart to unlock Free\n" +
-                        "Delivery! Try adding the suggested Farm\n" +
-                        "Fresh Milk." 
-                );
-
+        Label aiText = new Label(
+                "Add more to your cart to unlock Free\n" +
+                "Delivery at ₹99! Try adding the suggested Farm\n" +
+                "Fresh Milk."
+        );
         aiText.setWrapText(true);
-
         aiText.setStyle(
                 "-fx-font-size: 9px;" +
                 "-fx-text-fill: #555555;"
         );
 
-        aiTip.getChildren().addAll(
-                aiTitle,
-                aiText
-        );
+        aiTip.getChildren().addAll(aiTitle, aiText);
 
         summary.getChildren().addAll(
                 title,
-                subtotal,
+                subtotalRow,
                 platform,
                 tax1,
                 delivery,
+                discountRow,
+                promoCard,
                 progressText,
                 freeText,
                 progress,
@@ -1555,118 +976,43 @@ public class ShoppingCartUI {
         return summary;
     }
 
-    // =========================================================
-    // SUMMARY ROW
-    // =========================================================
-
-    private HBox summaryRow(
-            String left,
-            String right
-    ) {
-
-        HBox row =
-                new HBox();
-
-        row.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        Label leftLabel =
-                new Label(left);
-
-        leftLabel.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-text-fill: #555555;"
-        );
-
-        Region spacer =
-                new Region();
-
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
-
-        Label rightLabel =
-                new Label(right);
-
-        rightLabel.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #222222;"
-        );
-
-        row.getChildren().addAll(
-                leftLabel,
-                spacer,
-                rightLabel
-        );
-
-        return row;
-    }
-
-    private HBox summaryRowWithLabel(
-            Label leftLabel,
-            Label rightLabel
-    ) {
-
+    private HBox summaryRow(String left, String right) {
         HBox row = new HBox();
-
         row.setAlignment(Pos.CENTER_LEFT);
 
-        leftLabel.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-text-fill: #555555;"
-        );
+        Label leftLabel = new Label(left);
+        leftLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #555555;");
 
         Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
+        Label rightLabel = new Label(right);
+        rightLabel.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #222222;");
 
-        rightLabel.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #222222;"
-        );
-
-        row.getChildren().addAll(
-                leftLabel,
-                spacer,
-                rightLabel
-        );
-
+        row.getChildren().addAll(leftLabel, spacer, rightLabel);
         return row;
     }
 
-    // =========================================================
-    // FREQUENTLY BOUGHT TOGETHER
-    // =========================================================
+    private HBox summaryRowWithLabel(Label leftLabel, Label rightLabel) {
+        HBox row = new HBox();
+        row.setAlignment(Pos.CENTER_LEFT);
 
-    private HBox createSuggestion(
-            String name,
-            String price,
-            String imagePath
-    ) {
+        leftLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #555555;");
 
-        HBox box =
-                new HBox(8);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        box.setAlignment(
-                Pos.CENTER_LEFT
-        );
+        rightLabel.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #222222;");
 
-        box.setPadding(
-                new Insets(10)
-        );
+        row.getChildren().addAll(leftLabel, spacer, rightLabel);
+        return row;
+    }
 
-        box.setPrefSize(
-                195,
-                74
-        );
-
+    private HBox createSuggestion(String name, String price, String imagePath) {
+        HBox box = new HBox(8);
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.setPadding(new Insets(10));
+        box.setPrefSize(195, 74);
         box.setStyle(
                 "-fx-background-color: white;" +
                 "-fx-border-color: #FF6900;" +
@@ -1674,56 +1020,26 @@ public class ShoppingCartUI {
                 "-fx-background-radius: 5;"
         );
 
-        StackPane image =
-                createProductImage(imagePath);
-
+        StackPane image = createProductImage(imagePath);
         image.setPrefSize(48, 48);
         image.setMinSize(48, 48);
         image.setMaxSize(48, 48);
 
-        VBox info =
-                new VBox(2);
-
-        Label product =
-                new Label(name);
-
+        VBox info = new VBox(2);
+        Label product = new Label(name);
         product.setMaxWidth(95);
+        product.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-        product.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #333333;"
-        );
+        Label productPrice = new Label(price);
+        productPrice.setStyle("-fx-font-size: 9px; -fx-text-fill: #555555;");
 
-        Label productPrice =
-                new Label(price);
+        info.getChildren().addAll(product, productPrice);
 
-        productPrice.setStyle(
-                "-fx-font-size: 9px;" +
-                "-fx-text-fill: #555555;"
-        );
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        info.getChildren().addAll(
-                product,
-                productPrice
-        );
-
-        Region spacer =
-                new Region();
-
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
-
-        Button add =
-                new Button("+");
-
-        add.setPrefSize(
-                27,
-                27
-        );
-
+        Button add = new Button("+");
+        add.setPrefSize(27, 27);
         add.setStyle(
                 "-fx-background-color: #F4F0F4;" +
                 "-fx-text-fill: #B94D00;" +
@@ -1732,43 +1048,17 @@ public class ShoppingCartUI {
                 "-fx-cursor: hand;"
         );
 
-        box.getChildren().addAll(
-                image,
-                info,
-                spacer,
-                add
-        );
-
+        box.getChildren().addAll(image, info, spacer, add);
         return box;
     }
 
-    // =========================================================
-    // SHOPPING CART PAGE
-    // =========================================================
-
     private VBox createCartPage() {
+        VBox page = new VBox(16);
+        page.setPadding(new Insets(25, 30, 25, 30));
+        page.setStyle("-fx-background-color: #F8F6FA;");
 
-        VBox page =
-                new VBox(16);
-
-        page.setPadding(
-                new Insets(25, 30, 25, 30)
-        );
-
-        page.setStyle(
-                "-fx-background-color: #F8F6FA;"
-        );
-
-        // -----------------------------------------------------
-        // HEADER
-        // -----------------------------------------------------
-
-        VBox heading =
-                new VBox(4);
-
-        Label title =
-                new Label("Your Shopping Cart");
-
+        VBox heading = new VBox(4);
+        Label title = new Label("Your Shopping Cart");
         title.setStyle(
                 "-fx-font-family: 'Montserrat';" +
                 "-fx-font-size: 25px;" +
@@ -1776,253 +1066,319 @@ public class ShoppingCartUI {
                 "-fx-text-fill: #151515;"
         );
 
-        Label subtitle =
-                new Label("3 items from local sellers");
+        Label subtitle = new Label("0 items from local sellers");
+        subtitle.setStyle("-fx-font-size: 11px; -fx-text-fill: #A44D20;");
 
-        subtitle.setStyle(
-                "-fx-font-size: 11px;" +
-                "-fx-text-fill: #A44D20;"
-        );
+        heading.getChildren().addAll(title, subtitle);
 
-        heading.getChildren().addAll(
-                title,
-                subtitle
-        );
-
-        // -----------------------------------------------------
-        // CART + SUMMARY
-        // -----------------------------------------------------
-
-        products =
-                new VBox(12);
-
+        products = new VBox(12);
         products.setPrefWidth(700);
-        
 
-        // Dynamic cart totals
-        double[] subtotal = {0.0};
-        int[] itemCount = {0};
+        double[] subtotal = { 0.0 };
+        int[] itemCount = { 0 };
 
-        Label subtotalLabel =
-                new Label("Subtotal (0 items)");
-
-        Label subtotalAmountLabel =
-                new Label("₹0.00");
-
-        Label totalAmountLabel =
-                new Label("₹0.00");
-
-        // -----------------------------------------------------
-        // FETCH CART PRODUCTS FROM FIRESTORE
-        // -----------------------------------------------------
+        Label subtotalLabel = new Label("Subtotal (0 items)");
+        Label subtotalAmountLabel = new Label("₹0.00");
+        Label totalAmountLabel = new Label("₹0.00");
 
         if (userId == null || userId.isBlank()) {
-
-                Label errorLabel =
-                        new Label("User not logged in.");
-
-                errorLabel.setStyle(
-                        "-fx-font-size: 14px;" +
-                        "-fx-text-fill: #B44D00;" +
-                        "-fx-font-weight: bold;"
-                );
-
-                products.getChildren().add(errorLabel);
-
+            Label errorLabel = new Label("User not logged in.");
+            errorLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #B44D00; -fx-font-weight: bold;");
+            products.getChildren().add(errorLabel);
         } else {
+            CARTcontroller cartController = new CARTcontroller();
+            List<Productcart> cartList = cartController.getCart(userId);
 
-                CARTcontroller cartController =
-                        new CARTcontroller();
+            activeCartProducts.clear();
 
-                List<Productcart> cartList =
-                        cartController.getCart(userId);
+            if (cartList.isEmpty()) {
+                Label emptyLabel = new Label("Your cart is empty.");
+                emptyLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #777777; -fx-font-weight: bold;");
+                products.getChildren().add(emptyLabel);
+            } else {
+                for (Productcart product : cartList) {
+                    if (product == null) continue;
 
-                if (cartList.isEmpty()) {
+                    int cartQuantity = product.getQuantity() > 0 ? product.getQuantity() : 1;
+                    product.setQuantity(cartQuantity);
+                    activeCartProducts.add(product);
 
-                        Label emptyLabel =
-                                new Label("Your cart is empty.");
+                    subtotal[0] += product.getPrice() * cartQuantity;
+                    itemCount[0] += cartQuantity;
 
-                        emptyLabel.setStyle(
-                                "-fx-font-size: 14px;" +
-                                "-fx-text-fill: #777777;" +
-                                "-fx-font-weight: bold;"
-                        );
-
-                        products.getChildren().add(emptyLabel);
-
-                } else {
-
-                        for (Productcart product : cartList) {
-
-                                String productName =
-                                        product.getName();
-
-                                String shopName =
-                                        product.getName1();
-
-                                double unitPrice =
-                                        product.getPrice();
-
-                                subtotal[0] += unitPrice;
-                                itemCount[0]++;
-
-                                VBox productCard =
-                                        createCartProduct(
-                                                productName,
-                                                shopName,
-                                                unitPrice,
-                                                "",
-                                                "1",
-                                                "/assects/images/products/avocado.png",
-                                                subtotalLabel,
-                                                subtotalAmountLabel,
-                                                totalAmountLabel,
-                                                itemCount,
-                                                subtotal,
-                                                products
-                                        );
-
-                                products.getChildren().add(productCard);
-                        }
+                    VBox productCard = createCartProduct(
+                            product,
+                            "",
+                            "/assects/images/products/avocado.png",
+                            subtotalLabel,
+                            subtotalAmountLabel,
+                            totalAmountLabel,
+                            itemCount,
+                            subtotal,
+                            products
+                    );
+                    products.getChildren().add(productCard);
                 }
+            }
         }
 
-        VBox summary =
-                createOrderSummary(
-                        subtotal[0],
-                        itemCount[0],
-                        subtotalLabel,
-                        subtotalAmountLabel,
-                        totalAmountLabel
-                );
+        subtitle.setText(itemCount[0] + " items from local sellers");
+        subtotalLabel.setText(String.format("Subtotal (%d items)", itemCount[0]));
+        subtotalAmountLabel.setText(String.format("₹%.2f", subtotal[0]));
 
-        HBox cartContent =
-                new HBox(18);
-
-        cartContent.setAlignment(
-                Pos.TOP_LEFT
+        VBox summary = createOrderSummary(
+                subtotal,
+                itemCount[0],
+                subtotalLabel,
+                subtotalAmountLabel,
+                totalAmountLabel
         );
 
-        cartContent.getChildren().addAll(
-                products,
-                summary
-        );
+        HBox cartContent = new HBox(18);
+        cartContent.setAlignment(Pos.TOP_LEFT);
+        cartContent.getChildren().addAll(products, summary);
 
-        // -----------------------------------------------------
-        // FREQUENTLY BOUGHT
-        // -----------------------------------------------------
+        VBox frequently = new VBox(10);
+        Label frequentlyTitle = new Label("✦  Frequently Bought Together");
+        frequentlyTitle.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #222222;");
 
-        VBox frequently =
-                new VBox(10);
-
-        Label frequentlyTitle =
-                new Label("✦  Frequently Bought Together");
-
-        frequentlyTitle.setStyle(
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #222222;"
-        );
-
-        HBox suggestions =
-                new HBox(12);
-
+        HBox suggestions = new HBox(12);
         suggestions.getChildren().addAll(
-
-                createSuggestion(
-                        "Farm Fresh...",
-                        "$4.20",
-                        "/assects/images/products/milk.png"
-                ),
-
-                createSuggestion(
-                        "Artisanal...",
-                        "$6.50",
-                        "/assects/images/products/bread.png"
-                )
+                createSuggestion("Farm Fresh...", "₹4.20", "/assects/images/products/milk.png"),
+                createSuggestion("Artisanal...", "₹6.50", "/assects/images/products/bread.png")
         );
 
-        frequently.getChildren().addAll(
-                frequentlyTitle,
-                suggestions
-        );
+        frequently.getChildren().addAll(frequentlyTitle, suggestions);
 
-        page.getChildren().addAll(
-                heading,
-                cartContent,
-                frequently
-        );
-
-        VBox.setVgrow(
-                cartContent,
-                Priority.ALWAYS
-        );
+        page.getChildren().addAll(heading, cartContent, frequently);
+        VBox.setVgrow(cartContent, Priority.ALWAYS);
 
         return page;
     }
-    
-        
-    private void handlePaymentSuccess() {
 
-    System.out.println("================================");
-    System.out.println("ORDER PROCESSING");
-    System.out.println("================================");
+    private void handlePaymentSuccess(
+            double paidTotalAmount,
+            double paidSubtotal,
+            double paidPlatformFee,
+            double paidTax,
+            double paidDeliveryFee,
+            double paidDiscount,
+            String paidPromoCode,
+            List<Productcart> purchasedItems) {
 
-    // 1. Order Firestore मध्ये save करणार
-    // 2. Cart clear करणार
-    // 3. My Orders उघडणार
+        System.out.println("PAYMENT SUCCESSFUL - CREATING ORDER");
+        System.out.println("Paid Total: ₹" + paidTotalAmount + " (Discount: ₹" + paidDiscount + ", Promo: " + paidPromoCode + ")");
 
-    clearCart11();
+        Platform.runLater(() -> {
+            try {
+                if (userId == null || userId.trim().isEmpty()) {
+                    System.out.println("ERROR: User ID is missing.");
+                    return;
+                }
 
-    My_orderAllorder myOrders =
-            new My_orderAllorder(userId);
+                if (purchasedItems == null || purchasedItems.isEmpty()) {
+                    System.out.println("ERROR: Cart is empty. Order was not created.");
+                    return;
+                }
 
-    Homepage.HomepageStage.setScene(
-            myOrders.getAllorderScene()
-    );
-}
+                Firestore db = Firebaseconfig.gFirestore();
+                String today = LocalDate.now().toString();
 
-    
+                List<Map<String, Object>> orderProducts = new ArrayList<>();
+                String primaryShopkeeperUid = null;
+                String primaryShopName = null;
 
+                for (Productcart cartProduct : purchasedItems) {
+                    if (cartProduct == null) continue;
 
+                    String productName = cartProduct.getName();
+                    if (productName == null || productName.trim().isEmpty()) continue;
 
+                    int quantity = cartProduct.getQuantity() > 0 ? cartProduct.getQuantity() : 1;
+                    double unitPrice = cartProduct.getPrice();
+                    double itemTotal = unitPrice * quantity;
 
-    // =========================================================
-    // CLEAR CART
-    // =========================================================
+                    Map<String, Object> item = new HashMap<>();
+                    String pId = (cartProduct.getProductId() != null && !cartProduct.getProductId().isBlank())
+                            ? cartProduct.getProductId()
+                            : productName;
+                    item.put("productName", productName);
+                    item.put("productId", pId);
+                    item.put("quantity", quantity);
+                    item.put("price", unitPrice);
+                    item.put("unitPrice", unitPrice);
+                    item.put("totalPrice", itemTotal);
+                    item.put("shopName", cartProduct.getName1() != null ? cartProduct.getName1() : "BuyNex Store");
+                    orderProducts.add(item);
+
+                    String shopUid = cartProduct.getShopkeeperUid();
+                    if (shopUid != null && !shopUid.isBlank() && !"default_shopkeeper".equalsIgnoreCase(shopUid) && !shopUid.equalsIgnoreCase(userId)) {
+                        if (primaryShopkeeperUid == null) {
+                            primaryShopkeeperUid = shopUid.trim();
+                        }
+                    }
+                    if (primaryShopName == null && cartProduct.getName1() != null && !cartProduct.getName1().isBlank()) {
+                        primaryShopName = cartProduct.getName1();
+                    }
+                }
+
+                if (primaryShopkeeperUid == null) {
+                    primaryShopkeeperUid = "default_shopkeeper";
+                }
+                if (primaryShopName == null) {
+                    primaryShopName = "BuyNex Store";
+                }
+
+                var orderReference = db.collection("Orders").document();
+
+                Map<String, Object> order = new HashMap<>();
+                order.put("orderId", orderReference.getId());
+                order.put("customerId", userId);
+                order.put("customerName", userId);
+                order.put("shopkeeperUid", primaryShopkeeperUid);
+                order.put("shopName", primaryShopName);
+                order.put("orderDate", today);
+                order.put("orderStatus", "NEW");
+                order.put("products", orderProducts);
+                order.put("totalAmount", paidTotalAmount);
+                order.put("subtotal", paidSubtotal);
+                order.put("platformFee", paidPlatformFee);
+                order.put("tax", paidTax);
+                order.put("deliveryFee", paidDeliveryFee);
+                order.put("discount", paidDiscount);
+                order.put("promoCode", paidPromoCode != null ? paidPromoCode : "");
+                order.put("paymentStatus", "PAID");
+
+                orderReference.set(order).get();
+
+                System.out.println("NEW ORDER CREATED SUCCESSFULLY");
+                System.out.println("Order ID: " + orderReference.getId());
+
+                CartOfferManager.clearAppliedOffer();
+                CartOfferManager.clearPreappliedCode();
+                currentDiscountAmount = 0.0;
+
+                clearCart();
+                new Thread(() -> new CARTcontroller().clearCart(userId)).start();
+
+                My_orderAllorder myOrders = new My_orderAllorder(userId);
+                Homepage.HomepageStage.setScene(myOrders.getAllorderScene());
+                System.out.println("ORDER FLOW COMPLETED SUCCESSFULLY.");
+            } catch (Exception e) {
+                System.out.println("ERROR CREATING ORDER AFTER PAYMENT");
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void handleSingleProductPaymentSuccess(
+            Productcart product,
+            int quantity,
+            double paidTotalAmount,
+            double paidSubtotal,
+            double paidPlatformFee,
+            double paidTax,
+            double paidDeliveryFee,
+            double paidDiscount,
+            String paidPromoCode) {
+
+        System.out.println("BUY NOW PAYMENT SUCCESSFUL");
+        System.out.println("Paid Total: ₹" + paidTotalAmount + " (Discount: ₹" + paidDiscount + ")");
+
+        Platform.runLater(() -> {
+            try {
+                if (userId == null || userId.trim().isEmpty()) {
+                    System.out.println("ERROR: User ID is missing.");
+                    return;
+                }
+
+                Firestore db = Firebaseconfig.gFirestore();
+                String today = LocalDate.now().toString();
+
+                List<Map<String, Object>> orderProducts = new ArrayList<>();
+                double unitPrice = product.getPrice();
+                double itemTotal = unitPrice * quantity;
+
+                Map<String, Object> item = new HashMap<>();
+                String pId = (product.getProductId() != null && !product.getProductId().isBlank())
+                        ? product.getProductId()
+                        : product.getName();
+                item.put("productName", product.getName());
+                item.put("productId", pId);
+                item.put("quantity", quantity);
+                item.put("price", unitPrice);
+                item.put("unitPrice", unitPrice);
+                item.put("totalPrice", itemTotal);
+                item.put("shopName", product.getName1() != null && !product.getName1().isBlank() ? product.getName1() : "BuyNex Store");
+                orderProducts.add(item);
+
+                String shopUid = product.getShopkeeperUid();
+                if (shopUid == null || shopUid.isBlank() || "default_shopkeeper".equalsIgnoreCase(shopUid) || shopUid.equalsIgnoreCase(userId)) {
+                    shopUid = "default_shopkeeper";
+                }
+
+                var orderReference = db.collection("Orders").document();
+
+                Map<String, Object> order = new HashMap<>();
+                order.put("orderId", orderReference.getId());
+                order.put("customerId", userId);
+                order.put("customerName", userId);
+                order.put("shopkeeperUid", shopUid);
+                order.put("shopName", product.getName1() != null && !product.getName1().isBlank() ? product.getName1() : "BuyNex Store");
+                order.put("orderDate", today);
+                order.put("orderStatus", "NEW");
+                order.put("products", orderProducts);
+                order.put("totalAmount", paidTotalAmount);
+                order.put("subtotal", paidSubtotal);
+                order.put("platformFee", paidPlatformFee);
+                order.put("tax", paidTax);
+                order.put("deliveryFee", paidDeliveryFee);
+                order.put("discount", paidDiscount);
+                order.put("promoCode", paidPromoCode != null ? paidPromoCode : "");
+                order.put("paymentStatus", "PAID");
+
+                orderReference.set(order).get();
+
+                System.out.println("BUY NOW ORDER CREATED SUCCESSFULLY");
+                System.out.println("Order ID: " + orderReference.getId());
+
+                CartOfferManager.clearAppliedOffer();
+                CartOfferManager.clearPreappliedCode();
+                currentDiscountAmount = 0.0;
+
+                activeCartProducts.remove(product);
+                new Thread(() -> new CARTcontroller().deleteFromCart(userId, product.getName())).start();
+
+                My_orderAllorder myOrders = new My_orderAllorder(userId);
+                Homepage.HomepageStage.setScene(myOrders.getAllorderScene());
+            } catch (Exception e) {
+                System.out.println("ERROR CREATING BUY NOW ORDER");
+                e.printStackTrace();
+            }
+        });
+    }
 
     private void clearCart() {
+        activeCartProducts.clear();
 
         if (products != null) {
             products.getChildren().clear();
+            Label emptyLabel = new Label("Your cart is empty.");
+            emptyLabel.setStyle(
+                    "-fx-font-size: 14px;" +
+                    "-fx-text-fill: #777777;" +
+                    "-fx-font-weight: bold;"
+            );
+            products.getChildren().add(emptyLabel);
         }
 
+        if (visibleTotalValueLabel != null) {
+            visibleTotalValueLabel.setText("₹0.00");
+        }
         System.out.println("Cart cleared successfully.");
     }
 
-    // =========================================================
-    // PAYMENT SUCCESS
-    // =========================================================
-
-    private void handlePaymentSuccess1(){
-
-        System.out.println("================================");
-        System.out.println("ORDER PROCESSING");
-        System.out.println("================================");
-
-        // 1. Order Firestore mein save karna
-        // 2. Cart clear karna
-        // 3. My Orders open karna
-
-
-        My_orderAllorder myOrders =
-                new My_orderAllorder(userId);
-
-        Homepage.HomepageStage.setScene(
-                myOrders.getAllorderScene()
-        );
-    }
-    public void backTodashboard(){
+    public void backTodashboard() {
         Homepage.HomepageStage.setScene(addcartScene);
     }
 }

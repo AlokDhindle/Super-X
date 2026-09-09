@@ -3,10 +3,12 @@ package com.kryox.model.Customer;
 public class Productcart {
 
     private String UserId;
+    private String productId;
     private String name;
     private double price;
     private String name1;
     private int quantity;
+    private String shopkeeperUid;
 
     // IMPORTANT:
     // Firestore fetch ke liye required
@@ -18,12 +20,34 @@ public class Productcart {
             String UserId,
             String name,
             double price,
-            String name1, int quantity) {
+            String name1,
+            int quantity,
+            String shopkeeperUid) {
 
         this.UserId = UserId;
+        this.productId = name;
         this.name = name;
         this.price = price;
         this.name1 = name1;
+        this.shopkeeperUid = shopkeeperUid;
+        this.quantity = quantity;
+    }
+
+    public Productcart(
+            String UserId,
+            String productId,
+            String name,
+            double price,
+            String name1,
+            int quantity,
+            String shopkeeperUid) {
+
+        this.UserId = UserId;
+        this.productId = productId != null && !productId.isBlank() ? productId : name;
+        this.name = name;
+        this.price = price;
+        this.name1 = name1;
+        this.shopkeeperUid = shopkeeperUid;
         this.quantity = quantity;
     }
 
@@ -65,5 +89,24 @@ public class Productcart {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getShopkeeperUid() {
+        return shopkeeperUid;
+    }
+
+    public void setShopkeeperUid(String shopkeeperUid) {
+        this.shopkeeperUid = shopkeeperUid;
+    }
+
+    public String getProductId() {
+        if (productId != null && !productId.isBlank()) {
+            return productId;
+        }
+        return name;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }

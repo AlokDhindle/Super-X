@@ -4,10 +4,20 @@ import com.kryox.Main;
 import com.kryox.controller.Shopkeeper.OrderController;
 import com.kryox.model.Shopkeeper.OrderItemModel;
 import com.kryox.model.Shopkeeper.OrderModel;
+import com.kryox.controller.Shopkeeper.ShopkeeperLogController;
+import com.kryox.config.Firebaseconfig;
 import com.kryox.view.Customer.Homepage;
+
+import com.google.cloud.firestore.DocumentChange;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.ListenerRegistration;
+
+import java.time.LocalDate;
 
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,49 +35,62 @@ import javafx.scene.text.Text;
 
 public class ShopkeeperOrderNew {
 
+    /*
+     * REAL-TIME LISTENER FOR THIS SHOPKEEPER ONLY
+     *
+     * Firestore structure:
+     *
+     * Shopkeepers/{shopkeeperUid}/Orders/{date}/OrderList/{orderId}
+     *
+     * We intentionally listen directly to this shopkeeper's path.
+     * This avoids collectionGroup("OrderList").whereEqualTo("shopkeeperUid", ...)
+     * which requires a Firestore COLLECTION_GROUP index.
+     */
+    private static ListenerRegistration newOrderListener;
+
+    // Empty-state label used by the New Orders screen.
+    // This was referenced in ordersScene() but was never declared.
+    private static final Label noOrdersLabel =
+            new Label("No new orders available.");
+
+    static {
+        noOrdersLabel.setStyle(
+                "-fx-font-size: 17px;" +
+                "-fx-text-fill: #777777;"
+        );
+        noOrdersLabel.setPadding(
+                new Insets(50, 0, 0, 0)
+        );
+    }
+
     public static Scene ordersScene() {
 
-        // ============================================================
-        // BORDER PANE
-        // ============================================================
+        // Border Pane
 
         BorderPane borderPane = new BorderPane();
 
         borderPane.setStyle(
-<<<<<<< HEAD
-                "-fx-background-color: #F8F7FC;"
-=======
                 "-fx-background-color: #EEE5DF;"
->>>>>>> Sayali
         );
 
 
-        // ============================================================
-        // HEADER
-        // ============================================================
+        // Header
 
         HBox headerMainBox = ViewConstants.header();
 
-<<<<<<< HEAD
-=======
         // Header background
         headerMainBox.setStyle(
                 "-fx-background-color: #EBCCB7;"
         );
 
->>>>>>> Sayali
         borderPane.setTop(headerMainBox);
 
 
-        // ============================================================
-        // SIDEBAR
-        // ============================================================
+        // Sidebar
 
         VBox sidebar = createSidebar();
         borderPane.setLeft(sidebar);
-        // ============================================================
-        // CENTER
-        // ============================================================
+        // Center
 
         VBox centerMain = new VBox();
 
@@ -78,17 +101,11 @@ public class ShopkeeperOrderNew {
         centerMain.setSpacing(15);
 
         centerMain.setStyle(
-<<<<<<< HEAD
-                "-fx-background-color: #F8F7FC;"
-=======
                 "-fx-background-color: #EEE5DF;"
->>>>>>> Sayali
         );
 
 
-        // ============================================================
-        // TITLE
-        // ============================================================
+        // Title
 
         Text pageTitle =
                 new Text("Orders Management");
@@ -131,9 +148,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // STATUS BUTTONS
-        // ============================================================
+        // Status Buttons
 
         HBox statusBar = new HBox();
 
@@ -211,57 +226,66 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // SELECT NEW ORDER BUTTON
-        // ============================================================
+        // Select New Order Button
 
         ViewConstants.setSelectedStatusButton(
                 newOrderButton
         );
 
 
-        // ============================================================
-        // STATUS BUTTON ACTIONS
-        // ============================================================
+        // Status Button Actions
 
-        newOrderButton.setOnAction(e ->
-                Homepage.HomepageStage.setScene(
-                        ShopkeeperOrderNew.ordersScene()
-                )
-        );
+        newOrderButton.setOnAction(e -> {
+            stopNewOrderListener();
+            OrderController.stopOrderListener();
 
-
-        preparingButton.setOnAction(e ->
-                Homepage.HomepageStage.setScene(
-                        ShopkeeperOrderPreparing.ordersScene()
-                )
-        );
+            Homepage.HomepageStage.setScene(
+                    ShopkeeperOrderNew.ordersScene()
+            );
+        });
 
 
-        readyButton.setOnAction(e ->
-                Homepage.HomepageStage.setScene(
-                        ShopkeeperOrderReady.ordersScene()
-                )
-        );
+        preparingButton.setOnAction(e -> {
+            stopNewOrderListener();
+            OrderController.stopOrderListener();
+
+            Homepage.HomepageStage.setScene(
+                    ShopkeeperOrderPreparing.ordersScene()
+            );
+        });
 
 
-        deliveryButton.setOnAction(e ->
-                Homepage.HomepageStage.setScene(
-                        ShopkeeperOrderOut.ordersScene()
-                )
-        );
+        readyButton.setOnAction(e -> {
+            stopNewOrderListener();
+            OrderController.stopOrderListener();
+
+            Homepage.HomepageStage.setScene(
+                    ShopkeeperOrderReady.ordersScene()
+            );
+        });
 
 
-        completedButton.setOnAction(e ->
-                Homepage.HomepageStage.setScene(
-                        ShopkeeperOrderCompleted.ordersScene()
-                )
-        );
+        deliveryButton.setOnAction(e -> {
+            stopNewOrderListener();
+            OrderController.stopOrderListener();
+
+            Homepage.HomepageStage.setScene(
+                    ShopkeeperOrderOut.ordersScene()
+            );
+        });
 
 
-        // ============================================================
-        // ORDER LIST
-        // ============================================================
+        completedButton.setOnAction(e -> {
+            stopNewOrderListener();
+            OrderController.stopOrderListener();
+
+            Homepage.HomepageStage.setScene(
+                    ShopkeeperOrderCompleted.ordersScene()
+            );
+        });
+
+
+        // Order List
 
         VBox orderList =
                 new VBox(20);
@@ -271,54 +295,68 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // FETCH NEW ORDERS FROM FIRESTORE
-        // ============================================================
+        // Real-Time New Order Listener
 
-        ArrayList<OrderModel> orders =
-                OrderController.getNewOrders();
+        /*
+         * IMPORTANT FIX:
+         *
+         * Do NOT use:
+         *
+         * collectionGroup("OrderList")
+         *     .whereEqualTo("shopkeeperUid", uid)
+         *
+         * because that query requires a COLLECTION_GROUP index.
+         *
+         * Instead, directly listen to:
+         *
+         * Shopkeepers/{currentUid}/Orders/{today}/OrderList
+         *
+         * and filter only orderStatus == NEW.
+         */
+        stopNewOrderListener();
 
-
-        if (orders != null && !orders.isEmpty()) {
-
-            for (OrderModel order : orders) {
-
-                VBox orderCard =
-                        createNewOrderCard(
-                                order,
-                                orderList
-                        );
-
-                orderList.getChildren().add(
-                        orderCard
-                );
+        String currentShopkeeperUid = ShopkeeperLogController.getShopkeeperUid();
+        if (currentShopkeeperUid == null || currentShopkeeperUid.trim().isEmpty()) {
+            if (ViewConstants.shopkeeperModel != null && ViewConstants.shopkeeperModel.getShopkeeperUid() != null) {
+                currentShopkeeperUid = ViewConstants.shopkeeperModel.getShopkeeperUid();
             }
+        }
+
+        if (currentShopkeeperUid == null ||
+                currentShopkeeperUid.trim().isEmpty()) {
+
+            System.out.println(
+                    "ERROR: Shopkeeper UID is missing. Cannot load new orders."
+            );
+
+            orderList.getChildren().clear();
+            orderList.getChildren().add(noOrdersLabel);
 
         } else {
 
-            Label noOrdersLabel =
-                    new Label(
-                            "No new orders available."
-                    );
-
-            noOrdersLabel.setStyle(
-                    "-fx-font-size: 17px;" +
-                    "-fx-text-fill: #777777;"
+            System.out.println(
+                    "============================================"
+            );
+            System.out.println(
+                    "LOADING NEW ORDERS FOR SHOPKEEPER: " + currentShopkeeperUid
+            );
+            System.out.println(
+                    "============================================"
             );
 
-            noOrdersLabel.setPadding(
-                    new Insets(50, 0, 0, 0)
-            );
+            // Load initial NEW orders from all date subcollections
+            loadNewOrders(orderList);
 
-            orderList.getChildren().add(
-                    noOrdersLabel
-            );
+            // Listen for real-time order updates
+            OrderController.listenForNewOrders(newOrder -> {
+                Platform.runLater(() -> {
+                    System.out.println("Real-time new order received: " + newOrder.getOrderId());
+                    loadNewOrders(orderList);
+                });
+            });
         }
 
-
-        // ============================================================
-        // SCROLL PANE
-        // ============================================================
+        // Scroll Pane
 
         ScrollPane orderScrollPane =
                 new ScrollPane(
@@ -348,9 +386,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // ADD CENTER CONTENT
-        // ============================================================
+        // Add Center Content
 
         centerMain.getChildren().addAll(
                 titleRow,
@@ -363,9 +399,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // FOOTER
-        // ============================================================
+        // Footer
 
         VBox footerBox =
                 ViewConstants.footer();
@@ -375,32 +409,207 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // SCENE
-        // ============================================================
+        // Scene
 
         Scene ordersScene =
                 new Scene(
                         borderPane,
-                        1280,
-                        650
+                        1550,
+                        850
                 );
 
         ordersScene.setFill(
-<<<<<<< HEAD
-                Color.web("#F8F7FC")
-=======
                 Color.web("#EEE5DF")
->>>>>>> Sayali
         );
 
         return ordersScene;
     }
 
 
-    // ================================================================
-    // CREATE DYNAMIC ORDER CARD
-    // ================================================================
+    // Load New Orders from All Date Subcollections
+
+    private static void loadNewOrders(VBox orderList) {
+
+        for (int i = orderList.getChildren().size() - 1; i >= 0; i--) {
+            javafx.scene.Node node = orderList.getChildren().get(i);
+            if (node.getUserData() != null) {
+                orderList.getChildren().remove(i);
+            }
+        }
+
+        ArrayList<OrderModel> newOrders = OrderController.getNewOrders();
+
+        if (newOrders == null || newOrders.isEmpty()) {
+            if (!orderList.getChildren().contains(noOrdersLabel)) {
+                orderList.getChildren().add(noOrdersLabel);
+            }
+            System.out.println("No NEW orders found.");
+            return;
+        }
+
+        orderList.getChildren().remove(noOrdersLabel);
+
+        int displayedOrders = 0;
+        for (OrderModel order : newOrders) {
+            if (order == null) continue;
+            if (!"NEW".equalsIgnoreCase(safe(order.getOrderStatus()))) continue;
+
+            if (containsOrder(orderList, order.getOrderId())) {
+                continue;
+            }
+
+            try {
+                VBox orderCardWrapper = createNewOrderCard(order, orderList);
+                orderCardWrapper.setUserData(order.getOrderId());
+                orderList.getChildren().add(orderCardWrapper);
+                displayedOrders++;
+                System.out.println("NEW ORDER DISPLAYED: " + order.getOrderId());
+            } catch (Exception ex) {
+                System.out.println("ERROR DISPLAYING ORDER: " + order.getOrderId());
+                ex.printStackTrace();
+            }
+        }
+
+        if (displayedOrders == 0) {
+            if (!orderList.getChildren().contains(noOrdersLabel)) {
+                orderList.getChildren().add(noOrdersLabel);
+            }
+        } else {
+            orderList.getChildren().remove(noOrdersLabel);
+        }
+
+        updateEmptyOrderMessage(orderList, noOrdersLabel);
+    }
+
+
+    // Stop Local New Order Listener
+
+    private static void stopNewOrderListener() {
+
+        if (newOrderListener != null) {
+
+            try {
+                newOrderListener.remove();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            newOrderListener = null;
+        }
+    }
+
+
+    // Check Whether Order Card Already Exists
+
+    private static boolean containsOrder(
+            VBox orderList,
+            String orderId) {
+
+        for (javafx.scene.Node node :
+                orderList.getChildren()) {
+
+            Object data =
+                    node.getUserData();
+
+            if (data != null &&
+                    orderId.equals(
+                            String.valueOf(data)
+                    )) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    // Remove Order Card by Order ID
+
+    private static void removeOrderCard(
+            VBox orderList,
+            String orderId) {
+
+        javafx.scene.Node nodeToRemove = null;
+
+        for (javafx.scene.Node node :
+                orderList.getChildren()) {
+
+            Object data =
+                    node.getUserData();
+
+            if (data != null &&
+                    orderId.equals(
+                            String.valueOf(data)
+                    )) {
+
+                nodeToRemove = node;
+                break;
+            }
+        }
+
+        if (nodeToRemove != null) {
+            orderList.getChildren().remove(
+                    nodeToRemove
+            );
+        }
+    }
+
+
+    // Empty Order Message
+
+    private static void updateEmptyOrderMessage(
+            VBox orderList,
+            Label noOrdersLabel) {
+
+        boolean hasOrderCard = false;
+
+        for (javafx.scene.Node node :
+                orderList.getChildren()) {
+
+            if (node.getUserData() != null) {
+                hasOrderCard = true;
+                break;
+            }
+        }
+
+        if (hasOrderCard) {
+
+            orderList.getChildren().remove(
+                    noOrdersLabel
+            );
+
+        } else if (!orderList.getChildren().contains(
+                noOrdersLabel
+        )) {
+
+            orderList.getChildren().add(
+                    noOrdersLabel
+            );
+        }
+    }
+
+
+    // Show Empty Message after Accept / Decline
+
+    private static void showEmptyMessageIfNeeded(
+            VBox orderList) {
+
+        for (javafx.scene.Node node :
+                orderList.getChildren()) {
+
+            if (node.getUserData() != null) {
+                return;
+            }
+        }
+
+        if (!orderList.getChildren().contains(noOrdersLabel)) {
+            orderList.getChildren().add(noOrdersLabel);
+        }
+    }
+
+
+    // Create Dynamic Order Card
 
     private static VBox createNewOrderCard(
             OrderModel order,
@@ -443,9 +652,7 @@ public class ShopkeeperOrderNew {
         card.setEffect(shadow);
 
 
-        // ============================================================
-        // ORANGE LEFT BORDER
-        // ============================================================
+        // Orange Left Border
 
         VBox orangeBorder =
                 new VBox();
@@ -458,9 +665,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // LEFT CONTENT
-        // ============================================================
+        // Left Content
 
         VBox leftContent =
                 new VBox(12);
@@ -475,9 +680,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // ORDER ID + STATUS
-        // ============================================================
+        // Order ID + Status
 
         Text orderText =
                 new Text(
@@ -522,9 +725,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // CUSTOMER INFORMATION
-        // ============================================================
+        // Customer Information
 
         Text customerIcon =
                 new Text("♙");
@@ -594,9 +795,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // PRODUCTS BOX
-        // ============================================================
+        // Products Box
 
         VBox productsBox =
                 new VBox(8);
@@ -616,9 +815,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // DYNAMIC PRODUCT ROWS
-        // ============================================================
+        // Dynamic Product Rows
 
         if (order.getProducts() != null) {
 
@@ -650,9 +847,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // RIGHT CONTENT
-        // ============================================================
+        // Right Content
 
         VBox rightContent =
                 new VBox(10);
@@ -680,9 +875,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // TOTAL AMOUNT
-        // ============================================================
+        // Total Amount
 
         Text totalLabel =
                 new Text(
@@ -722,9 +915,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // ACCEPT BUTTON
-        // ============================================================
+        // Accept Button
 
         Button acceptButton =
                 new Button(
@@ -770,33 +961,36 @@ public class ShopkeeperOrderNew {
 
 
         acceptButton.setOnAction(e -> {
+            acceptButton.setDisable(true);
 
             boolean updated =
                     OrderController.acceptOrder(
                             order
                     );
 
-
             if (updated) {
-
                 VBox wrapper =
                         (VBox) card.getParent();
 
-                orderList.getChildren().remove(
-                        wrapper
-                );
+                if (wrapper != null) {
+                    orderList.getChildren().remove(
+                            wrapper
+                    );
+                }
+
+                updateEmptyOrderMessage(orderList, noOrdersLabel);
 
                 System.out.println(
                         "Order accepted: "
                         + order.getOrderId()
                 );
+            } else {
+                acceptButton.setDisable(false);
             }
         });
 
 
-        // ============================================================
-        // DECLINE BUTTON
-        // ============================================================
+        // Decline Button
 
         Button declineButton =
                 new Button(
@@ -893,9 +1087,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // ADD EVERYTHING TO CARD
-        // ============================================================
+        // Add Everything to Card
 
         card.getChildren().addAll(
                 orangeBorder,
@@ -904,9 +1096,7 @@ public class ShopkeeperOrderNew {
         );
 
 
-        // ============================================================
-        // WRAPPER
-        // ============================================================
+        // Wrapper
 
         VBox wrapper =
                 new VBox(
@@ -917,9 +1107,7 @@ public class ShopkeeperOrderNew {
     }
 
 
-    // ================================================================
-    // CREATE DYNAMIC PRODUCT ROW
-    // ================================================================
+    // Create Dynamic Product Row
 
     private static HBox createProductRow(
             OrderItemModel item) {
@@ -991,9 +1179,7 @@ public class ShopkeeperOrderNew {
     }
 
 
-    // ================================================================
-    // NULL SAFE STRING
-    // ================================================================
+    // Null Safe String
 
     private static String safe(
             String value) {
@@ -1014,11 +1200,7 @@ public class ShopkeeperOrderNew {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F5F4F9;" +
-=======
                                 "-fx-background-color: #EBCCB7;" +
->>>>>>> Sayali
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 
@@ -1043,6 +1225,11 @@ public class ShopkeeperOrderNew {
                                 "🛒",
                                 "Orders",
                                 true);
+
+                Button bookingsButton = ViewConstants.createDashboardButton(
+                                "📅",
+                                "Bookings",
+                                false);
 
                 Button inventoryButton = ViewConstants.createDashboardButton(
                                 "📋",
@@ -1073,6 +1260,7 @@ public class ShopkeeperOrderNew {
                                 5,
                                 dashboardButton,
                                 ordersButton,
+                                bookingsButton,
                                 inventoryButton,
                                 offersButton,
                                 analyticsButton,
@@ -1103,6 +1291,10 @@ public class ShopkeeperOrderNew {
                                 event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperDashboard
                                                                 .dashboardScene()));
+                bookingsButton.setOnAction(
+                                event -> Homepage.HomepageStage.setScene(
+                                                ShopkeeperBookedProducts
+                                                                .bookedProductsScene()));
                 inventoryButton.setOnAction(
                                 event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory

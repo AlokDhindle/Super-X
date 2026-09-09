@@ -3,6 +3,7 @@ package com.kryox.controller.Shopkeeper;
 import java.util.ArrayList;
 
 import com.kryox.dao.Shopkeeper.ProductDAO;
+import com.kryox.model.Shopkeeper.OrderModel;
 import com.kryox.model.Shopkeeper.ProductModel;
 
 public class ProductController {
@@ -11,9 +12,7 @@ public class ProductController {
 
     
 
-    // ============================================================
     // FETCH PRODUCTS
-    // ============================================================
 
     public static ArrayList<ProductModel> fetchProducts() {
 
@@ -65,9 +64,7 @@ public class ProductController {
         return products;
     }
 
-    // ============================================================
     // ADD PRODUCT
-    // ============================================================
 
     public static void addProduct(
             ProductModel productModel) {
@@ -101,9 +98,7 @@ public class ProductController {
         }
     }
 
-    // ============================================================
     // UPDATE PRODUCT
-    // ============================================================
 
     public static void updateProduct(
             ProductModel productModel) {
@@ -137,9 +132,7 @@ public class ProductController {
         }
     }
 
-    // ============================================================
     // DELETE PRODUCT
-    // ============================================================
 
     public static void deleteProduct(
             String productId) {
@@ -171,6 +164,25 @@ public class ProductController {
             );
 
             e.printStackTrace();
+        }
+    }
+
+    // DEDUCT STOCK FOR ORDER
+
+    public static boolean deductStockForOrder(
+            OrderModel order) {
+
+        if (order == null) {
+            System.out.println("ProductController deduct stock error: order is null");
+            return false;
+        }
+
+        try {
+            return productDAO.deductStockForOrder(order);
+        } catch (Exception e) {
+            System.out.println("ProductController deduct stock error: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 }

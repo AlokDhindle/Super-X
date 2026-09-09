@@ -4,12 +4,11 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.kryox.Main;
 import com.kryox.controller.Shopkeeper.ProductController;
 import com.kryox.model.Shopkeeper.ProductModel;
 import com.kryox.view.Customer.Homepage;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -47,9 +46,7 @@ public class ShopkeeperInventory {
     private static Label outOfStockValue;
 
 
-    // ================================================================
-    // INVENTORY PAGE
-    // ================================================================
+    // Inventory Page
 
     public static Scene inventoryScene() {
 
@@ -61,14 +58,8 @@ public class ShopkeeperInventory {
         BorderPane borderPane = new BorderPane();
 
 
-        // ============================================================
-        // HEADER
-        // ============================================================
+        // Header
 
-<<<<<<< HEAD
-        borderPane.setTop(
-                ViewConstants.header()
-=======
         HBox headerMainBox =
                 ViewConstants.header();
 
@@ -79,31 +70,24 @@ public class ShopkeeperInventory {
 
         borderPane.setTop(
                 headerMainBox
->>>>>>> Sayali
         );
 
 
-        // ============================================================
-        // SIDEBAR
-        // ============================================================
+        // Sidebar
 
         borderPane.setLeft(
                 createSidebar()
         );
 
 
-        // ============================================================
-        // FOOTER
-        // ============================================================
+        // Footer
 
         borderPane.setBottom(
                 ViewConstants.footer()
         );
 
 
-        // ============================================================
-        // MAIN CONTENT
-        // ============================================================
+        // Main Content
 
         VBox centerContent = new VBox();
 
@@ -114,17 +98,11 @@ public class ShopkeeperInventory {
         centerContent.setSpacing(14);
 
         centerContent.setStyle(
-<<<<<<< HEAD
-                "-fx-background-color: #F8F7FC;"
-=======
                 "-fx-background-color: #EEE5DF;"
->>>>>>> Sayali
         );
 
 
-        // ============================================================
-        // TITLE
-        // ============================================================
+        // Title
 
         Text title = new Text(
                 "Inventory & Stock"
@@ -186,9 +164,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // SUMMARY
-        // ============================================================
+        // Summary
 
         totalProductsValue = new Label("0");
         totalStockValue = new Label("0");
@@ -221,9 +197,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // SEARCH
-        // ============================================================
+        // Search
 
         TextField searchField =
                 new TextField();
@@ -245,9 +219,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // CATEGORY FILTER
-        // ============================================================
+        // Category Filter
 
         ComboBox<String> categoryFilter =
                 new ComboBox<>();
@@ -280,9 +252,7 @@ public class ShopkeeperInventory {
         categoryFilter.setPrefHeight(38);
 
 
-        // ============================================================
-        // STATUS FILTER
-        // ============================================================
+        // Status Filter
 
         ComboBox<String> statusFilter =
                 new ComboBox<>();
@@ -302,9 +272,7 @@ public class ShopkeeperInventory {
         statusFilter.setPrefHeight(38);
 
 
-        // ============================================================
-        // CHECKBOXES
-        // ============================================================
+        // Checkboxes
 
         CheckBox lowStockFilter =
                 new CheckBox("Low Stock");
@@ -342,17 +310,13 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // TABLE HEADER
-        // ============================================================
+        // Table Header
 
         HBox tableHeader =
                 createTableHeader();
 
 
-        // ============================================================
-        // INVENTORY LIST
-        // ============================================================
+        // Inventory List
 
         inventoryList = new VBox();
 
@@ -378,9 +342,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // FILTER EVENTS
-        // ============================================================
+        // Filter Events
 
         searchField.textProperty().addListener(
                 (observable, oldValue, newValue) ->
@@ -456,9 +418,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // ADD PRODUCT BUTTON
-        // ============================================================
+        // Add Product Button
 
         addProductButton.setOnAction(
                 event -> Homepage.HomepageStage.setScene(
@@ -492,11 +452,7 @@ public class ShopkeeperInventory {
         );
 
         scrollPane.setStyle(
-<<<<<<< HEAD
-                "-fx-background-color: #F8F7FC;" +
-=======
                 "-fx-background-color: #EEE5DF;" +
->>>>>>> Sayali
                 "-fx-border-color: transparent;"
         );
 
@@ -506,15 +462,12 @@ public class ShopkeeperInventory {
 
         return new Scene(
                 borderPane,
-                ViewConstants.STAGE_WIDTH,
-                ViewConstants.STAGE_HEIGHT
+                1550,850
         );
     }
 
 
-    // ================================================================
-    // PRODUCT ROW
-    // ================================================================
+    // Product Row
 
     private static HBox createProductRow(
             ProductModel product) {
@@ -529,9 +482,7 @@ public class ShopkeeperInventory {
         final double ACTION_WIDTH = 50;
 
 
-        // ============================================================
-        // PRODUCT IMAGE
-        // ============================================================
+        // Product Image
 
         StackPane imageBox =
                 createProductImage(
@@ -539,9 +490,7 @@ public class ShopkeeperInventory {
                 );
 
 
-        // ============================================================
-        // PRODUCT NAME
-        // ============================================================
+        // Product Name
 
         Text productName =
                 new Text(
@@ -555,9 +504,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // BRAND
-        // ============================================================
+        // Brand
 
         Text brand =
                 new Text(
@@ -570,9 +517,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
         // SKU
-        // ============================================================
 
         Text sku =
                 new Text(
@@ -616,9 +561,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // CATEGORY
-        // ============================================================
+        // Category
 
         Text category =
                 new Text(
@@ -640,9 +583,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // STOCK
-        // ============================================================
+        // Stock
 
         Text stockText =
                 new Text(
@@ -669,9 +610,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // PRICE
-        // ============================================================
+        // Price
 
         double sellingPrice =
                 product.getSellingPrice() == null
@@ -704,9 +643,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // EXPIRY
-        // ============================================================
+        // Expiry
 
         Text expiry =
                 new Text(
@@ -731,9 +668,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // STATUS
-        // ============================================================
+        // Status
 
         Text statusText =
                 new Text(
@@ -741,7 +676,7 @@ public class ShopkeeperInventory {
                 );
 
         statusText.setStyle(
-                "-fx-font-size: 12px;" +
+                "-fx-font-size: 11px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-fill: "
                                 + getStatusTextColor(product)
@@ -749,34 +684,43 @@ public class ShopkeeperInventory {
         );
 
 
-        StackPane statusBox =
+        StackPane statusPill =
                 new StackPane(statusText);
+
+        statusPill.setMaxWidth(
+                Region.USE_PREF_SIZE
+        );
+
+        statusPill.setMaxHeight(
+                Region.USE_PREF_SIZE
+        );
+
+        statusPill.setPadding(
+                new Insets(
+                        4,
+                        10,
+                        4,
+                        10
+                )
+        );
+
+        statusPill.setStyle(
+                "-fx-background-color: "
+                                + getStatusBackground(product)
+                                + ";" +
+                "-fx-background-radius: 12px;"
+        );
+
+        StackPane statusBox =
+                new StackPane(statusPill);
 
         setFixedWidth(
                 statusBox,
                 STATUS_WIDTH
         );
 
-        statusBox.setPadding(
-                new Insets(
-                        8,
-                        12,
-                        8,
-                        12
-                )
-        );
 
-        statusBox.setStyle(
-                "-fx-background-color: "
-                                + getStatusBackground(product)
-                                + ";" +
-                "-fx-background-radius: 18px;"
-        );
-
-
-        // ============================================================
-        // ACTION BUTTON
-        // ============================================================
+        // Action Button
 
         Button actionButton =
                 new Button("⋮");
@@ -798,9 +742,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // ROW
-        // ============================================================
+        // Row
 
         HBox row =
                 new HBox(
@@ -843,9 +785,7 @@ public class ShopkeeperInventory {
     }
 
 
-    // ================================================================
-    // PRODUCT IMAGE
-    // ================================================================
+    // Product Image
 
     private static StackPane createProductImage(
             String imageUrl) {
@@ -884,9 +824,7 @@ public class ShopkeeperInventory {
         );
 
 
-        // ============================================================
-        // PRODUCT IMAGE
-        // ============================================================
+        // Product Image
 
         if (imageUrl != null
                 && !imageUrl.isBlank()) {
@@ -947,9 +885,7 @@ public class ShopkeeperInventory {
         }
 
 
-        // ============================================================
-        // PLACEHOLDER
-        // ============================================================
+        // Placeholder
 
         Text placeholder =
                 new Text("IMG");
@@ -971,9 +907,7 @@ public class ShopkeeperInventory {
     }
 
 
-    // ================================================================
-    // EXPIRY CHECK
-    // ================================================================
+    // Expiry Check
 
     private static boolean hasExpiry(
             ProductModel product) {
@@ -1091,9 +1025,7 @@ public class ShopkeeperInventory {
     }
 
 
-    // ================================================================
-    // STOCK
-    // ================================================================
+    // Stock
 
     private static boolean isLowStock(
             ProductModel product) {
@@ -1125,9 +1057,7 @@ public class ShopkeeperInventory {
     }
 
 
-    // ================================================================
-    // STATUS
-    // ================================================================
+    // Status
 
     private static String getDisplayStatus(
             ProductModel product) {
@@ -1228,9 +1158,7 @@ public class ShopkeeperInventory {
     }
 
 
-    // ================================================================
-    // REFRESH INVENTORY
-    // ================================================================
+    // Refresh Inventory
 
     private static void refreshInventory(
             String search,
@@ -1345,9 +1273,7 @@ public class ShopkeeperInventory {
     }
 
 
-    // ================================================================
-    // REBUILD INVENTORY
-    // ================================================================
+    // Rebuild Inventory
 
     private static void rebuildInventory() {
 
@@ -1373,9 +1299,7 @@ public class ShopkeeperInventory {
     }
 
 
-    // ================================================================
-    // UPDATE SUMMARY
-    // ================================================================
+    // Update Summary
 
     private static void updateSummary() {
 
@@ -1432,11 +1356,53 @@ public class ShopkeeperInventory {
         );
     }
 
+    // Refresh Data from Database
+    public static void refreshData() {
+        Platform.runLater(() -> {
+            try {
+                allProducts = new ArrayList<>(ProductController.fetchProducts());
+                if (inventoryList != null) {
+                    rebuildInventory();
+                }
+            } catch (Exception e) {
+                System.out.println("Error refreshing inventory data: " + e.getMessage());
+            }
+        });
+    }
+
+    // Update product stock directly in memory
+    public static void updateProductStockInMemory(String docId, String productId, String productName, int newStock) {
+        Platform.runLater(() -> {
+            try {
+                if (allProducts != null) {
+                    for (ProductModel p : allProducts) {
+                        if (p == null) continue;
+                        boolean match = false;
+                        if (docId != null && !docId.isBlank() && docId.equalsIgnoreCase(p.getProductId())) match = true;
+                        if (productId != null && !productId.isBlank() && productId.equalsIgnoreCase(p.getProductId())) match = true;
+                        if (productName != null && !productName.isBlank() && productName.equalsIgnoreCase(p.getProductName())) match = true;
+
+                        if (match) {
+                            p.setStockQuantity(newStock);
+                            if (newStock <= 0) {
+                                p.setStatus("OUT_OF_STOCK");
+                            }
+                            break;
+                        }
+                    }
+                    if (inventoryList != null) {
+                        rebuildInventory();
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error updating inventory in memory: " + e.getMessage());
+            }
+        });
+    }
 
 
-    // ================================================================
-    // TABLE HEADER
-    // ================================================================
+
+    // Table Header
 
     private static HBox createTableHeader() {
 
@@ -1535,9 +1501,7 @@ public class ShopkeeperInventory {
     }
 
 
-    // ================================================================
-    // SUMMARY CARD
-    // ================================================================
+    // Summary Card
 
     private static VBox createSummaryCard(
             String title,
@@ -1594,9 +1558,7 @@ public class ShopkeeperInventory {
     }
 
 
-    // ================================================================
-    // SIDEBAR
-    // ================================================================
+    // Sidebar
 
     private static VBox createSidebar() {
 
@@ -1614,11 +1576,7 @@ public class ShopkeeperInventory {
         );
 
         sidebar.setStyle(
-<<<<<<< HEAD
-                "-fx-background-color: #F5F4F9;" +
-=======
                 "-fx-background-color: #EBCCB7;" +
->>>>>>> Sayali
                 "-fx-border-color: #E3C7BA;" +
                 "-fx-border-width: 0 1px 0 0;"
         );
@@ -1654,6 +1612,14 @@ public class ShopkeeperInventory {
                 ViewConstants.createDashboardButton(
                         "🛒",
                         "Orders",
+                        false
+                );
+
+
+        Button bookingsButton =
+                ViewConstants.createDashboardButton(
+                        "📅",
+                        "Bookings",
                         false
                 );
 
@@ -1703,6 +1669,7 @@ public class ShopkeeperInventory {
                         5,
                         dashboardButton,
                         ordersButton,
+                        bookingsButton,
                         inventoryButton,
                         offersButton,
                         analyticsButton,
@@ -1742,6 +1709,14 @@ public class ShopkeeperInventory {
                 event -> Homepage.HomepageStage.setScene(
                         ShopkeeperDashboard
                                 .dashboardScene()
+                )
+        );
+
+
+        bookingsButton.setOnAction(
+                event -> Homepage.HomepageStage.setScene(
+                        ShopkeeperBookedProducts
+                                .bookedProductsScene()
                 )
         );
 
@@ -1798,9 +1773,7 @@ public class ShopkeeperInventory {
 
 
     
-    // ================================================================
-    // UTILITY
-    // ================================================================
+    // Utility
 
     private static void setFixedWidth(
             Region region,

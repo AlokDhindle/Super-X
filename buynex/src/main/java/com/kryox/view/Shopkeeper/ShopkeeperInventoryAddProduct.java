@@ -40,6 +40,10 @@ public class ShopkeeperInventoryAddProduct {
         static File selectedFile;
 
         public static Scene addProductScene() {
+                return addProductScene(null);
+        }
+
+        public static Scene addProductScene(ProductModel prefill) {
 
                 final double STAGE_WIDTH = 1280;
                 final double STAGE_HEIGHT = 650;
@@ -51,41 +55,30 @@ public class ShopkeeperInventoryAddProduct {
 
                 BorderPane borderPane = new BorderPane();
 
-                // ================================================================
-                // HEADER
-                // ================================================================
+                // Header
 
                 HBox headerMainBox = ViewConstants.header();
 
-<<<<<<< HEAD
-=======
                 // Header background
                 headerMainBox.setStyle(
                                 "-fx-background-color: #EBCCB7;");
 
->>>>>>> Sayali
                 borderPane.setTop(
                                 headerMainBox);
 
-                // ================================================================
-                // SIDEBAR
-                // ================================================================
+                // Sidebar
                 VBox sidebar = createSidebar();
                 borderPane.setLeft(
                                 sidebar);
 
-                // ================================================================
-                // FOOTER
-                // ================================================================
+                // Footer
 
                 VBox footerBox = ViewConstants.footer();
 
                 borderPane.setBottom(
                                 footerBox);
 
-                // ================================================================
-                // CENTER
-                // ================================================================
+                // Center
 
                 VBox centerContent = new VBox();
 
@@ -104,15 +97,9 @@ public class ShopkeeperInventoryAddProduct {
                 centerContent.setSpacing(14);
 
                 centerContent.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F8F7FC;");
-=======
                                 "-fx-background-color: #EEE5DF;");
->>>>>>> Sayali
 
-                // ================================================================
-                // BREADCRUMB
-                // ================================================================
+                // Breadcrumb
 
                 Text inventoryBreadcrumb = new Text("INVENTORY");
 
@@ -143,9 +130,7 @@ public class ShopkeeperInventoryAddProduct {
                 breadcrumb.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                // ================================================================
-                // TITLE
-                // ================================================================
+                // Title
 
                 Text pageTitle = new Text("Add New Product");
 
@@ -154,9 +139,7 @@ public class ShopkeeperInventoryAddProduct {
                                                 "-fx-font-weight: bold;" +
                                                 "-fx-fill: #202020;");
 
-                // ================================================================
-                // SCAN
-                // ================================================================
+                // Scan
 
                 Text scanIcon = new Text("▥");
 
@@ -196,6 +179,10 @@ public class ShopkeeperInventoryAddProduct {
                                                 "-fx-border-radius: 7px;" +
                                                 "-fx-background-radius: 7px;" +
                                                 "-fx-cursor: hand;");
+                scanProductButton.setOnAction(event->{
+                        ProductScannerController pr=new ProductScannerController();
+                        Homepage.HomepageStage.setScene(pr.openScanner());
+                });
 
                 Text aiIcon = new Text("✦");
 
@@ -237,9 +224,7 @@ public class ShopkeeperInventoryAddProduct {
                 scanRow.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                // ================================================================
-                // DESCRIPTION
-                // ================================================================
+                // Description
 
                 Text description = new Text(
                                 "Enter the details of your new product below. Ensure high-quality images and accurate\n"
@@ -249,9 +234,7 @@ public class ShopkeeperInventoryAddProduct {
                                 "-fx-font-size: 12px;" +
                                                 "-fx-fill: #6B5B53;");
 
-                // ================================================================
-                // BASIC DETAILS
-                // ================================================================
+                // Basic Details
 
                 VBox basicCard = new VBox();
 
@@ -327,6 +310,8 @@ public class ShopkeeperInventoryAddProduct {
                 ComboBox<String> categoryCombo = new ComboBox<>();
 
                 categoryCombo.getItems().addAll(
+                                "Electronics",
+                                "Fashion",
                                 "Grocery",
                                 "Dairy",
                                 "Bakery",
@@ -334,10 +319,25 @@ public class ShopkeeperInventoryAddProduct {
                                 "Beverages",
                                 "Snacks",
                                 "Personal Care",
-                                "Household");
+                                "Beauty & Cosmetics",
+                                "Home & Kitchen",
+                                "Household",
+                                "Health & Pharmacy",
+                                "Books & Stationery",
+                                "Sports & Fitness",
+                                "Toys & Baby",
+                                "Footwear & Accessories",
+                                "Furniture",
+                                "Hardware & Electrical",
+                                "Automotive",
+                                "Pet Supplies",
+                                "Gifts & Lifestyle",
+                                "Other");
 
                 categoryCombo.setPromptText(
                                 "Select Category");
+
+                categoryCombo.setVisibleRowCount(10);
 
                 categoryCombo.setPrefHeight(38);
                 categoryCombo.setMaxWidth(
@@ -492,9 +492,7 @@ public class ShopkeeperInventoryAddProduct {
                                 brandBarcodeRow,
                                 descriptionBox);
 
-                // ================================================================
-                // PRICING
-                // ================================================================
+                // Pricing
 
                 VBox pricingCard = new VBox();
 
@@ -575,9 +573,7 @@ public class ShopkeeperInventoryAddProduct {
                                 discountContainer,
                                 taxContainer);
 
-                // ================================================================
-                // INVENTORY
-                // ================================================================
+                // Inventory
 
                 VBox stockCard = new VBox();
 
@@ -670,7 +666,7 @@ public class ShopkeeperInventoryAddProduct {
                 statusCombo.setValue(
                                 "ACTIVE");
 
-                statusCombo.setPrefHeight(38);
+                statusCombo.setPrefHeight(32);
                 statusCombo.setMaxWidth(
                                 Double.MAX_VALUE);
 
@@ -678,7 +674,7 @@ public class ShopkeeperInventoryAddProduct {
                                 "-fx-background-color: #F4F3F7;" +
                                                 "-fx-background-radius: 7px;" +
                                                 "-fx-border-color: transparent;" +
-                                                "-fx-font-size: 12px;");
+                                                "-fx-font-size: 11px;");
 
                 VBox statusBox = new VBox(
                                 4,
@@ -698,9 +694,7 @@ public class ShopkeeperInventoryAddProduct {
                                 statusBox,
                                 Priority.ALWAYS);
 
-                // ================================================================
-                // BATCH NUMBER
-                // ================================================================
+                // Batch Number
 
                 Label batchLabel = new Label("BATCH NUMBER");
 
@@ -727,9 +721,7 @@ public class ShopkeeperInventoryAddProduct {
                                 batchLabel,
                                 batchNumberField);
 
-                // ================================================================
-                // EXPIRY TRACKING
-                // ================================================================
+                // Expiry Tracking
 
                 Label expiryTrackingLabel = new Label("EXPIRY TRACKING");
 
@@ -774,9 +766,7 @@ public class ShopkeeperInventoryAddProduct {
                                 expiryTrackingBox,
                                 Priority.ALWAYS);
 
-                // ================================================================
-                // MANUFACTURING DATE
-                // ================================================================
+                // Manufacturing Date
 
                 Label manufacturingLabel = new Label("MANUFACTURING DATE");
 
@@ -804,9 +794,7 @@ public class ShopkeeperInventoryAddProduct {
                                 manufacturingLabel,
                                 manufacturingDatePicker);
 
-                // ================================================================
-                // EXPIRY DATE
-                // ================================================================
+                // Expiry Date
 
                 Label expiryLabel = new Label("EXPIRY DATE");
 
@@ -903,9 +891,7 @@ public class ShopkeeperInventoryAddProduct {
                                 batchExpiryRow,
                                 datesRow);
 
-                // ================================================================
-                // MEDIA
-                // ================================================================
+                // Media
 
                 VBox mediaCard = new VBox();
 
@@ -982,34 +968,42 @@ public class ShopkeeperInventoryAddProduct {
 
                 uploadContent.setAlignment(
                                 Pos.CENTER);
+                uploadContent.managedProperty().bind(uploadContent.visibleProperty());
 
                 ImageView productImagePreview = new ImageView();
-
-                productImagePreview.setFitWidth(100);
-                productImagePreview.setFitHeight(100);
+                productImagePreview.setFitWidth(130);
+                productImagePreview.setFitHeight(90);
                 productImagePreview.setPreserveRatio(true);
-                productImagePreview.setVisible(false);
+                productImagePreview.setSmooth(true);
 
-                Text selectedImageText = new Text("No image selected");
-
+                Text selectedImageText = new Text();
                 selectedImageText.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-fill: #777777;");
+                                "-fx-font-size: 11px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-fill: #4A3B32;");
 
-                VBox uploadStack = new VBox(
-                                8,
-                                uploadContent,
+                Text changePromptText = new Text("(Click anywhere to change image)");
+                changePromptText.setStyle(
+                                "-fx-font-size: 9px;" +
+                                                "-fx-fill: #888888;");
+
+                VBox previewBox = new VBox(
+                                4,
                                 productImagePreview,
-                                selectedImageText);
-
-                uploadStack.setAlignment(
-                                Pos.CENTER);
+                                selectedImageText,
+                                changePromptText);
+                previewBox.setAlignment(Pos.CENTER);
+                previewBox.setVisible(false);
+                previewBox.managedProperty().bind(previewBox.visibleProperty());
 
                 StackPane uploadArea = new StackPane(
-                                uploadStack);
+                                uploadContent,
+                                previewBox);
 
                 uploadArea.setPrefHeight(155);
                 uploadArea.setMinHeight(155);
+                uploadArea.setMaxHeight(155);
+                uploadArea.setAlignment(Pos.CENTER);
 
                 uploadArea.setStyle(
                                 "-fx-background-color: #F7F6FA;" +
@@ -1024,15 +1018,11 @@ public class ShopkeeperInventoryAddProduct {
                                 mediaTitleRow,
                                 uploadArea);
 
-                // ================================================================
-                // SELECTED IMAGE
-                // ================================================================
+                // Selected Image
 
                 final File[] selectedProductImage = new File[1];
 
-                // ================================================================
-                // COLUMNS
-                // ================================================================
+                // Columns
 
                 VBox leftColumn = new VBox(
                                 14,
@@ -1060,9 +1050,86 @@ public class ShopkeeperInventoryAddProduct {
                 formRow.setAlignment(
                                 Pos.TOP_LEFT);
 
-                // ================================================================
-                // BUTTONS
-                // ================================================================
+                // Pre-fill fields if loaded from scanner
+                if (prefill != null) {
+                        if (prefill.getProductName() != null && !prefill.getProductName().isEmpty()) {
+                                productNameField.setText(prefill.getProductName());
+                        }
+                        if (prefill.getCategory() != null && !prefill.getCategory().isEmpty()) {
+                                if (!categoryCombo.getItems().contains(prefill.getCategory())) {
+                                        categoryCombo.getItems().add(prefill.getCategory());
+                                }
+                                categoryCombo.setValue(prefill.getCategory());
+                        }
+                        if (prefill.getBrand() != null && !prefill.getBrand().isEmpty()) {
+                                brandField.setText(prefill.getBrand());
+                        }
+                        if (prefill.getSku() != null && !prefill.getSku().isEmpty()) {
+                                skuField.setText(prefill.getSku());
+                        }
+                        if (prefill.getBarcode() != null && !prefill.getBarcode().isEmpty()) {
+                                barcodeField.setText(prefill.getBarcode());
+                        }
+                        if (prefill.getDescriptionValue() != null && !prefill.getDescriptionValue().isEmpty()) {
+                                descriptionArea.setText(prefill.getDescriptionValue());
+                        }
+                        if (prefill.getMrp() != null && prefill.getMrp() > 0) {
+                                mrpField.setText(String.format("%.2f", prefill.getMrp()));
+                        }
+                        if (prefill.getCostPrice() != null && prefill.getCostPrice() > 0) {
+                                costPriceField.setText(String.format("%.2f", prefill.getCostPrice()));
+                        }
+                        if (prefill.getSellingPrice() != null && prefill.getSellingPrice() > 0) {
+                                sellingPriceField.setText(String.format("%.2f", prefill.getSellingPrice()));
+                        }
+                        if (prefill.getDiscount() != null && prefill.getDiscount() > 0) {
+                                discountField.setText(String.valueOf(prefill.getDiscount().intValue()));
+                        }
+                        if (prefill.getTax() != null && prefill.getTax() > 0) {
+                                taxField.setText(String.valueOf(prefill.getTax().intValue()));
+                        }
+                        if (prefill.getStockQuantity() > 0) {
+                                quantityField.setText(String.valueOf(prefill.getStockQuantity()));
+                        }
+                        if (prefill.getLowStockLimit() > 0) {
+                                thresholdField.setText(String.valueOf(prefill.getLowStockLimit()));
+                        }
+                        if (prefill.getUnit() != null && !prefill.getUnit().isEmpty()) {
+                                unitCombo.setValue(prefill.getUnit());
+                        }
+                        if (prefill.getStatus() != null && !prefill.getStatus().isEmpty()) {
+                                statusCombo.setValue(prefill.getStatus());
+                        }
+                        if (prefill.getBatchNumber() != null && !prefill.getBatchNumber().isEmpty()) {
+                                batchNumberField.setText(prefill.getBatchNumber());
+                        }
+                        if (prefill.getExpiryTracking() != null && !prefill.getExpiryTracking().isEmpty()) {
+                                expiryTrackingCombo.setValue(prefill.getExpiryTracking());
+                                if ("Has Expiry".equals(prefill.getExpiryTracking())) {
+                                        manufacturingDatePicker.setDisable(false);
+                                        expiryDatePicker.setDisable(false);
+                                        try {
+                                                if (prefill.getManufacturingDate() != null) {
+                                                        manufacturingDatePicker.setValue(LocalDate.parse(prefill.getManufacturingDate()));
+                                                }
+                                                if (prefill.getExpiryDate() != null) {
+                                                        expiryDatePicker.setValue(LocalDate.parse(prefill.getExpiryDate()));
+                                                }
+                                        } catch (Exception ignored) {}
+                                }
+                        }
+                        if (prefill.getImageUrl() != null && !prefill.getImageUrl().trim().isEmpty()) {
+                                try {
+                                        Image preloadedImage = new Image(prefill.getImageUrl(), 260, 180, true, true, true);
+                                        productImagePreview.setImage(preloadedImage);
+                                        selectedImageText.setText("Existing Product Image");
+                                        uploadContent.setVisible(false);
+                                        previewBox.setVisible(true);
+                                } catch (Exception ignored) {}
+                        }
+                }
+
+                // Buttons
 
                 Region buttonSpace = new Region();
 
@@ -1133,9 +1200,7 @@ public class ShopkeeperInventoryAddProduct {
                 bottomButtons.setAlignment(
                                 Pos.CENTER_RIGHT);
 
-                // ================================================================
-                // CENTER CONTENT
-                // ================================================================
+                // Center Content
 
                 centerContent.getChildren().addAll(
                                 breadcrumb,
@@ -1145,9 +1210,7 @@ public class ShopkeeperInventoryAddProduct {
                                 formRow,
                                 bottomButtons);
 
-                // ================================================================
-                // SCROLL
-                // ================================================================
+                // Scroll
 
                 ScrollPane centerScroll = new ScrollPane(
                                 centerContent);
@@ -1173,26 +1236,17 @@ public class ShopkeeperInventoryAddProduct {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 centerScroll.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F8F7FC;" +
-=======
                                 "-fx-background-color: #EEE5DF;" +
->>>>>>> Sayali
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(
                                 centerScroll);
 
-                // ================================================================
-                // SCAN
-                // ================================================================
+                // Scan
 
-                scanProductButton.setOnAction(e -> System.out.println(
-                                "Scan Product clicked"));
+                
 
-                // ================================================================
-                // IMAGE UPLOAD
-                // ================================================================
+                // Image Upload
 
                 uploadArea.setOnMouseClicked(e -> {
 
@@ -1219,35 +1273,31 @@ public class ShopkeeperInventoryAddProduct {
                                 Image image = new Image(
                                                 selectedFile.toURI()
                                                                 .toString(),
-                                                100,
-                                                100,
+                                                260,
+                                                180,
                                                 true,
                                                 true);
 
                                 productImagePreview.setImage(
                                                 image);
 
-                                productImagePreview.setVisible(
-                                                true);
+                                String fileName = selectedFile.getName();
+                                if (fileName.length() > 32) {
+                                        fileName = fileName.substring(0, 29) + "...";
+                                }
+                                selectedImageText.setText(fileName);
 
-                                uploadContent.setVisible(
-                                                false);
-
-                                selectedImageText.setText(
-                                                selectedFile.getName());
+                                uploadContent.setVisible(false);
+                                previewBox.setVisible(true);
                         }
                 });
 
-                // ================================================================
-                // DISCARD
-                // ================================================================
+                // Discard
 
                 discardButton.setOnAction(e -> Homepage.HomepageStage.setScene(
                                 ShopkeeperInventory.inventoryScene()));
 
-                // ================================================================
-                // PUBLISH PRODUCT
-                // ================================================================
+                // Publish Product
 
                 publishButton.setOnAction(e -> {
 
@@ -1285,11 +1335,6 @@ public class ShopkeeperInventoryAddProduct {
 
                         String expiryTracking = expiryTrackingCombo.getValue();
 
-<<<<<<< HEAD
-                        String manufacturingDate = manufacturingDatePicker.getValue().toString();
-
-                        String expiryDate = expiryDatePicker.getValue().toString();
-=======
                         String manufacturingDate = null;
                         String expiryDate = null;
 
@@ -1302,7 +1347,6 @@ public class ShopkeeperInventoryAddProduct {
                                 expiryDate = expiryDatePicker.getValue().toString();
                         }
                         }
->>>>>>> Sayali
 
                         if (productName.isEmpty() ||
                                         category == null ||
@@ -1330,13 +1374,8 @@ public class ShopkeeperInventoryAddProduct {
                                         return;
                                 }
 
-<<<<<<< HEAD
-                                if (LocalDate.parse(manufacturingDate).isBefore(
-                                                LocalDate.parse(manufacturingDate))) {
-=======
                                 if (LocalDate.parse(expiryDate).isBefore(
         LocalDate.parse(manufacturingDate))){
->>>>>>> Sayali
 
                                         System.out.println(
                                                         "Expiry date cannot be before manufacturing date.");
@@ -1375,14 +1414,18 @@ public class ShopkeeperInventoryAddProduct {
                                                 .toUpperCase();
                                 String productId = "PRODUCT-" + id;
 
-                                if (selectedFile == null) {
+                                String imageUrl = null;
+                                if (selectedFile != null) {
+                                        ImageUploadController imageUploadController = new ImageUploadController();
+                                        imageUrl = imageUploadController.imageUpload(selectedFile);
+                                } else if (prefill != null && prefill.getImageUrl() != null && !prefill.getImageUrl().trim().isEmpty()) {
+                                        imageUrl = prefill.getImageUrl();
+                                } else {
                                         System.out.println("Please select an image.");
                                         ConstantsMethods.showAlert(Alert.AlertType.ERROR, "Error",
                                                         "Please select an image.");
                                         return;
                                 }
-                                ImageUploadController imageUploadController = new ImageUploadController();
-                                String imageUrl = imageUploadController.imageUpload(selectedFile);
 
                                 ProductModel productModel = new ProductModel(productId, productName, category, brand,
                                                 descriptionValue, sku, barcode, mrp, costPrice, sellingPrice, discount,
@@ -1407,9 +1450,7 @@ public class ShopkeeperInventoryAddProduct {
                         }
                 });
 
-                // ================================================================
-                // SCENE
-                // ================================================================
+                // Scene
 
                 Scene addProductScene = new Scene(
                                 borderPane,
@@ -1417,18 +1458,12 @@ public class ShopkeeperInventoryAddProduct {
                                 850);
 
                 addProductScene.setFill(
-<<<<<<< HEAD
-                                Color.web("#F8F7FC"));
-=======
                                 Color.web("#EEE5DF"));
->>>>>>> Sayali
 
                 return addProductScene;
         }
 
-        // ================================================================
-        // HELPER METHODS
-        // ================================================================
+        // Helper Methods
 
         private static TextField createMoneyField(
                         String value) {
@@ -1573,9 +1608,7 @@ public class ShopkeeperInventoryAddProduct {
                                 field);
         }
 
-        // ================================================================
-        // SIDEBAR
-        // ================================================================
+        // Sidebar
 
         private static VBox createSidebar() {
 
@@ -1588,11 +1621,7 @@ public class ShopkeeperInventoryAddProduct {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F5F4F9;" +
-=======
                                 "-fx-background-color: #EBCCB7;" +
->>>>>>> Sayali
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 
@@ -1616,6 +1645,11 @@ public class ShopkeeperInventoryAddProduct {
                 Button ordersButton = ViewConstants.createDashboardButton(
                                 "🛒",
                                 "Orders",
+                                false);
+
+                Button bookingsButton = ViewConstants.createDashboardButton(
+                                "📅",
+                                "Bookings",
                                 false);
 
                 Button inventoryButton = ViewConstants.createDashboardButton(
@@ -1647,6 +1681,7 @@ public class ShopkeeperInventoryAddProduct {
                                 5,
                                 dashboardButton,
                                 ordersButton,
+                                bookingsButton,
                                 inventoryButton,
                                 offersButton,
                                 analyticsButton,
@@ -1673,10 +1708,45 @@ public class ShopkeeperInventoryAddProduct {
                 // logout
                 );
 
+                dashboardButton.setOnAction(
+                                event -> Homepage.HomepageStage.setScene(
+                                                ShopkeeperDashboard
+                                                                .dashboardScene()));
+
+                ordersButton.setOnAction(
+                                event -> Homepage.HomepageStage.setScene(
+                                                ShopkeeperOrderReady
+                                                                .ordersScene()));
+
+                bookingsButton.setOnAction(
+                                event -> Homepage.HomepageStage.setScene(
+                                                ShopkeeperBookedProducts
+                                                                .bookedProductsScene()));
+
                 inventoryButton.setOnAction(
                                 event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory
                                                                 .inventoryScene()));
+
+                offersButton.setOnAction(
+                                event -> Homepage.HomepageStage.setScene(
+                                                ShopkeeperOffers
+                                                                .offersScene()));
+
+                analyticsButton.setOnAction(
+                                event -> Homepage.HomepageStage.setScene(
+                                                ShopkeeperAnalytics
+                                                                .analyticsScene()));
+
+                settingsButton.setOnAction(
+                                event -> Homepage.HomepageStage.setScene(
+                                                ShopkeeperSettings
+                                                                .settingsScene()));
+
+                supportButton.setOnAction(
+                                event -> Homepage.HomepageStage.setScene(
+                                                ShopkeeperSupport
+                                                                .supportScene()));
 
                 return sidebar;
         }

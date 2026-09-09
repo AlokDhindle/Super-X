@@ -30,33 +30,23 @@ public class MainPage {
 
     public static Scene mainPageScene() {
 
-        // =========================================================
-        // MAIN BORDERPANE
-        // =========================================================
+        // Main BorderPane
 
         BorderPane borderPane = new BorderPane();
 
         borderPane.setStyle(
-<<<<<<< HEAD
-                "-fx-background-color: #FAF8FC;"
-=======
                 "-fx-background-color: #EEE5DF;"
->>>>>>> Sayali
         );
 
 
-        // =========================================================
-        // HEADER
-        // =========================================================
+        // Header
 
         HBox header = createHeader();
 
         borderPane.setTop(header);
 
 
-        // =========================================================
-        // CENTER CONTENT
-        // =========================================================
+        // Center Content
 
         VBox centerContent = new VBox();
 
@@ -76,9 +66,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // WELCOME TITLE
-        // =========================================================
+        // Welcome Title
 
         HBox welcomeTitle = new HBox();
 
@@ -125,9 +113,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // DESCRIPTION
-        // =========================================================
+        // Description
 
         Label description =
                 new Label(
@@ -164,9 +150,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // ROLE GRID
-        // =========================================================
+        // Role Grid
 
         GridPane roleGrid =
                 new GridPane();
@@ -180,9 +164,7 @@ public class MainPage {
         roleGrid.setVgap(18);
 
 
-        // =========================================================
-        // SHOPKEEPER CARD
-        // =========================================================
+        // Shopkeeper Card
 
         VBox shopkeeperCard =
                 createRoleCard(
@@ -195,9 +177,7 @@ public class MainPage {
                 );
 
 
-        // =========================================================
-        // CUSTOMER CARD
-        // =========================================================
+        // Customer Card
 
         VBox customerCard =
                 createRoleCard(
@@ -210,9 +190,7 @@ public class MainPage {
                 );
 
 
-        // =========================================================
-        // ADMIN CARD
-        // =========================================================
+        // Admin Card
 
         VBox adminCard =
                 createRoleCard(
@@ -225,9 +203,7 @@ public class MainPage {
                 );
 
 
-        // =========================================================
-        // DELIVERY CARD
-        // =========================================================
+        // Delivery Card
 
         VBox deliveryCard =
                 createRoleCard(
@@ -240,9 +216,7 @@ public class MainPage {
                 );
 
 
-        // =========================================================
-        // ADD CARDS TO GRID
-        // =========================================================
+        // Add Cards To Grid
 
         roleGrid.add(
                 shopkeeperCard,
@@ -281,9 +255,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // FEATURE STRIP
-        // =========================================================
+        // Feature Strip
 
         HBox featureStrip =
                 createFeatureStrip();
@@ -299,9 +271,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // ADD CENTER CONTENT
-        // =========================================================
+        // Add Center Content
 
         centerContent.getChildren().addAll(
                 welcomeTitle,
@@ -311,25 +281,17 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // CENTER BACKGROUND
-        // =========================================================
+        // Center Background
 
         StackPane centerWrapper =
                 new StackPane();
 
         centerWrapper.setStyle(
-<<<<<<< HEAD
-                "-fx-background-color: #FAF8FC;"
-=======
                 "-fx-background-color: #EEE5DF;"
->>>>>>> Sayali
         );
 
 
-        // =========================================================
-        // RIGHT PEACH GLOW
-        // =========================================================
+        // Right Peach Glow
 
         Circle peachGlow =
                 new Circle(210);
@@ -380,9 +342,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // BOTTOM LEFT GLOW
-        // =========================================================
+        // Bottom Left Glow
 
         Circle bottomGlow =
                 new Circle(170);
@@ -445,9 +405,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // FOOTER
-        // =========================================================
+        // Footer
 
         VBox footer =
                 createFooter();
@@ -457,32 +415,24 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // SCENE
-        // =========================================================
+        // Scene
 
         mainPageScene =
                 new Scene(
                         borderPane,
-                        1280,
-                        650
+                        1550,
+                        850
                 );
 
         mainPageScene.setFill(
-<<<<<<< HEAD
-                Color.web("#FAF8FC")
-=======
                 Color.web("#EEE5DF")
->>>>>>> Sayali
         );
 
         return mainPageScene;
     }
 
 
-    // =============================================================
-    // HEADER
-    // =============================================================
+    // Header
 
     private static HBox createHeader() {
 
@@ -509,19 +459,13 @@ public class MainPage {
         );
 
         header.setStyle(
-<<<<<<< HEAD
-                "-fx-background-color: rgba(250,248,252,0.97);" +
-=======
                 "-fx-background-color: #EBCCB7;" +
->>>>>>> Sayali
                 "-fx-border-color: #E9E2E1;" +
                 "-fx-border-width: 0 0 1 0;"
         );
 
 
-        // =========================================================
-        // LOGO
-        // =========================================================
+        // Logo
 
         Label buy =
                 new Label("Buy");
@@ -568,9 +512,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // SPACER
-        // =========================================================
+        // Spacer
 
         Region spacer =
                 new Region();
@@ -581,9 +523,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // HELP TEXT
-        // =========================================================
+        // Help Text
 
         Label help =
                 new Label("Need Help?");
@@ -600,9 +540,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // HELP BUTTON
-        // =========================================================
+        // Help Button
 
         Button helpButton =
                 new Button("?");
@@ -685,9 +623,7 @@ public class MainPage {
     }
 
 
-    // =============================================================
-    // ROLE CARD
-    // =============================================================
+    // Role Card
 
     private static VBox createRoleCard(
             String iconText,
@@ -697,9 +633,7 @@ public class MainPage {
             String iconColor) {
 
 
-        // =========================================================
-        // CARD
-        // =========================================================
+        // Card
 
         VBox card =
                 new VBox();
@@ -730,9 +664,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // NORMAL STYLE
-        // =========================================================
+        // Normal Style
 
         String normalStyle =
                 "-fx-background-color: rgba(255,255,255,0.96);" +
@@ -742,9 +674,7 @@ public class MainPage {
                 "-fx-border-radius: 17;";
 
 
-        // =========================================================
-        // HOVER STYLE
-        // =========================================================
+        // Hover Style
 
         String hoverStyle =
                 "-fx-background-color: #FFFFFF;" +
@@ -759,9 +689,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // NORMAL SHADOW
-        // =========================================================
+        // Normal Shadow
 
         DropShadow normalShadow =
                 new DropShadow();
@@ -782,9 +710,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // HOVER SHADOW
-        // =========================================================
+        // Hover Shadow
 
         DropShadow hoverShadow =
                 new DropShadow();
@@ -810,9 +736,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // ICON BOX
-        // =========================================================
+        // Icon Box
 
         StackPane iconBox =
                 new StackPane();
@@ -861,9 +785,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // TITLE
-        // =========================================================
+        // Title
 
         Label titleLabel =
                 new Label(title);
@@ -890,9 +812,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // DESCRIPTION
-        // =========================================================
+        // Description
 
         Label descriptionLabel =
                 new Label(description);
@@ -919,9 +839,7 @@ public class MainPage {
         descriptionLabel.setWrapText(true);
 
 
-        // =========================================================
-        // ARROW BUTTON
-        // =========================================================
+        // Arrow Button
 
         Button arrowButton = new Button("GO");
 
@@ -952,9 +870,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // ARROW STYLES
-        // =========================================================
+        // Arrow Styles
 
         String arrowNormalStyle =
                 "-fx-background-color: white;" +
@@ -990,9 +906,7 @@ public class MainPage {
         );
 
 
-        // =========================================================
-        // ARROW ACTION
-        // =========================================================
+        // Arrow Action
 
         arrowButton.setOnAction(e -> {
 
@@ -1005,9 +919,7 @@ public class MainPage {
         });
 
 
-        // =========================================================
-        // WHOLE CARD HOVER
-        // =========================================================
+        // Whole Card Hover
 
         card.setOnMouseEntered(e -> {
 
@@ -1039,9 +951,7 @@ public class MainPage {
         });
 
 
-        // =========================================================
-        // WHOLE CARD EXIT
-        // =========================================================
+        // Whole Card Exit
 
         card.setOnMouseExited(e -> {
 
@@ -1073,9 +983,7 @@ public class MainPage {
         });
 
 
-        // =========================================================
-        // ARROW HOVER
-        // =========================================================
+        // Arrow Hover
 
         arrowButton.setOnMouseEntered(e -> {
 
@@ -1114,9 +1022,7 @@ public class MainPage {
         });
 
 
-        // =========================================================
-        // ADD CARD CONTENT
-        // =========================================================
+        // Add Card Content
 
         card.getChildren().addAll(
                 iconBox,
@@ -1130,9 +1036,7 @@ public class MainPage {
     }
 
 
-    // =============================================================
-    // FEATURE STRIP
-    // =============================================================
+    // Feature Strip
 
     private static HBox createFeatureStrip() {
 
@@ -1180,9 +1084,7 @@ public class MainPage {
     }
 
 
-    // =============================================================
-    // FEATURE
-    // =============================================================
+    // Feature
 
     private static HBox createFeature(
             String iconText,
@@ -1236,9 +1138,7 @@ public class MainPage {
     }
 
 
-    // =============================================================
-    // FOOTER
-    // =============================================================
+    // Footer
 
     private static VBox createFooter() {
 
@@ -1331,9 +1231,7 @@ public class MainPage {
     }
 
 
-    // =============================================================
-    // FOOTER BUTTON
-    // =============================================================
+    // Footer Button
 
     private static Button createFooterButton(
             String text) {

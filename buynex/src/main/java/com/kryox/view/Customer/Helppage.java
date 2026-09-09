@@ -1,878 +1,475 @@
 package com.kryox.view.Customer;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 
 import java.awt.Desktop;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
-<<<<<<< HEAD
-public class Helppage  {
-        public String userId;
+public class Helppage {
+    public String userId;
 
-
-        public Helppage(String userId) {
+    public Helppage(String userId) {
         this.userId = userId;
     }
+
     private Scene HelpScene;
-
-    private TextField searchField;
-    Scene getHelpScene(Runnable callbacktosetion){
-         // =====================================================
-=======
-public class HelpPage extends Application {
-
     private TextField searchField;
 
-    @Override
-    public void start(Stage stage) {
+    public Scene getHelpScene() {
+        return getHelpScene(null);
+    }
 
-        // =====================================================
->>>>>>> Sayali
-        // MAIN BORDERPANE
-        // =====================================================
-
+    public Scene getHelpScene(Runnable callbacktosetion) {
         BorderPane root = new BorderPane();
-
-        root.setStyle(
-<<<<<<< HEAD
-        "-fx-background-color: #eee5df;"
-=======
-        "-fx-background-color: #EEE5DF;"
->>>>>>> Sayali
-        );
-
+        root.setStyle("-fx-background-color: #EEE5DF;");
 
         // =====================================================
-        // HEADER
+        // HEADER (Clean, properly spaced, responsive)
         // =====================================================
-
         HBox header = new HBox();
-
         header.setAlignment(Pos.CENTER);
-        header.setPadding(new Insets(0, 48, 0, 48));
-        header.setPrefHeight(65);
-
+        header.setPadding(new Insets(0, 40, 0, 40));
+        header.setPrefHeight(64);
         header.setStyle(
                 "-fx-background-color: #EBCDB9;" +
-                "-fx-border-color: #eeeeee;" +
+                "-fx-border-color: #ded1c7;" +
                 "-fx-border-width: 0 0 1 0;"
         );
 
-
-        // ---------------- LOGO ----------------
-
+        // Logo
         Label logo = new Label("EliteMarket");
-
         logo.setStyle(
-                "-fx-font-size: 17px;" +
+                "-fx-font-size: 19px;" +
                 "-fx-font-weight: bold;" +
-                "-fx-text-fill: #a93b0b;"
+                "-fx-text-fill: #a93b0b;" +
+                "-fx-cursor: hand;"
         );
+        logo.setOnMouseClicked(e -> CustomerNavigation.navigateToDashboard(userId));
 
-
-        // ---------------- NAV BUTTONS ----------------
-
+        // Nav Buttons
         Button shopBtn = createNavButton("Shop");
-
         Button ordersBtn = createNavButton("Orders");
-
         Button helpBtn = createNavButton("Help");
-
         Button accountBtn = createNavButton("Account");
 
-
-        // Active Help button
-
+        // Active Help button style
         helpBtn.setStyle(
-                "-fx-background-color: transparent;" +
+                "-fx-background-color: rgba(169, 59, 11, 0.12);" +
                 "-fx-text-fill: #a93b0b;" +
-                "-fx-font-size: 11px;" +
-                "-fx-border-color: transparent transparent #a93b0b transparent;" +
-                "-fx-border-width: 0 0 2 0;"
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 6;" +
+                "-fx-padding: 6 12;" +
+                "-fx-cursor: hand;"
         );
 
+        shopBtn.setOnAction(e -> CustomerNavigation.navigateToDashboard(userId));
+        ordersBtn.setOnAction(e -> CustomerNavigation.navigateToOrders(userId));
+        helpBtn.setOnAction(e -> showMessage("Help Center", "You are already on the Help Center."));
+        accountBtn.setOnAction(e -> CustomerNavigation.navigateToSettings(userId));
 
-        // ---------------- RIGHT SIDE ----------------
-
-        Label cart = new Label("🛒");
-
-        Label notification = new Label("♧");
-
-        Label profile = new Label("👤");
-
-
-        cart.setStyle("-fx-font-size: 16px;");
-
-        notification.setStyle("-fx-font-size: 16px;");
-
-        profile.setStyle("-fx-font-size: 18px;");
-
-
-        // ---------------- LEFT NAV ----------------
-
-        HBox leftNav = new HBox(35);
-
+        HBox leftNav = new HBox(22, logo, shopBtn, ordersBtn, helpBtn, accountBtn);
         leftNav.setAlignment(Pos.CENTER_LEFT);
 
-        leftNav.getChildren().addAll(
-                logo,
-                shopBtn,
-                ordersBtn,
-                helpBtn,
-                accountBtn
-        );
+        Region headerSpacer = new Region();
+        HBox.setHgrow(headerSpacer, Priority.ALWAYS);
 
+        // Right Nav Icons
+        Label cart = createHeaderIcon("🛒", "Cart");
+        Label notification = createHeaderIcon("🔔", "Notifications");
+        Label profile = createHeaderIcon("👤", "Profile");
 
-        // ---------------- RIGHT NAV ----------------
+        cart.setOnMouseClicked(e -> CustomerNavigation.navigateToCart(userId));
+        notification.setOnMouseClicked(e -> CustomerNavigation.navigateToNotifications(userId));
+        profile.setOnMouseClicked(e -> CustomerNavigation.navigateToSettings(userId));
 
-        HBox rightNav = new HBox(20);
-
+        HBox rightNav = new HBox(12, cart, notification, profile);
         rightNav.setAlignment(Pos.CENTER_RIGHT);
 
-        rightNav.getChildren().addAll(
-                cart,
-                notification,
-                profile
-        );
-
-
-        // ---------------- HEADER CONTENT ----------------
-
-        HBox headerContent = new HBox();
-
-        headerContent.setAlignment(Pos.CENTER);
-
-        headerContent.getChildren().addAll(
-                leftNav,
-                rightNav
-        );
-
-
-        // Keep right side towards right
-
-        rightNav.setTranslateX(250);
-
-
-        header.getChildren().add(headerContent);
-
+        header.getChildren().addAll(leftNav, headerSpacer, rightNav);
         root.setTop(header);
 
-
         // =====================================================
-        // MAIN CONTENT
+        // CENTER CONTENT CONTAINER (Constrained width for elegance)
         // =====================================================
+        VBox centerContainer = new VBox(28);
+        centerContainer.setMaxWidth(1040);
+        centerContainer.setPrefWidth(1040);
+        centerContainer.setAlignment(Pos.TOP_CENTER);
 
-        VBox contentBox = new VBox(25);
-
-        contentBox.setAlignment(Pos.TOP_CENTER);
-
-        contentBox.setPadding(
-                new Insets(40, 48, 35, 48)
-        );
-
-
-        // =====================================================
-        // TITLE
-        // =====================================================
-
-        Label title = new Label(
-                "How can we help you today?"
-        );
-
+        // ---------------- TITLE & SEARCH ----------------
+        Label title = new Label("How can we help you today?");
         title.setStyle(
-                "-fx-font-size: 26px;" +
+                "-fx-font-size: 28px;" +
                 "-fx-font-weight: bold;" +
-                "-fx-text-fill: #171717;"
+                "-fx-text-fill: #1a1715;"
         );
 
-
-        // =====================================================
-        // SEARCH FIELD
-        // =====================================================
+        Label subTitle = new Label("Search our knowledge base or browse frequently asked questions below.");
+        subTitle.setStyle("-fx-font-size: 13px; -fx-text-fill: #6d645e;");
 
         searchField = new TextField();
-
-        searchField.setPromptText(
-                "⌕  Search for articles, questions, or topics..."
-        );
-
-        searchField.setPrefWidth(330);
-
-        searchField.setPrefHeight(42);
-
+        searchField.setPromptText("🔍  Search for articles, questions, or topics...");
+        searchField.setPrefWidth(540);
+        searchField.setMaxWidth(540);
+        searchField.setPrefHeight(44);
         searchField.setStyle(
                 "-fx-background-color: white;" +
-                "-fx-background-radius: 7;" +
-                "-fx-border-radius: 7;" +
-                "-fx-border-color: #eeeeee;" +
-                "-fx-padding: 0 12;" +
-                "-fx-font-size: 11px;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);"
+                "-fx-background-radius: 22;" +
+                "-fx-border-radius: 22;" +
+                "-fx-border-color: #d9cec4;" +
+                "-fx-border-width: 1.2;" +
+                "-fx-padding: 0 18;" +
+                "-fx-font-size: 12px;"
         );
 
+        DropShadow searchShadow = new DropShadow();
+        searchShadow.setRadius(10);
+        searchShadow.setOffsetY(3);
+        searchShadow.setColor(Color.rgb(0, 0, 0, 0.08));
+        searchField.setEffect(searchShadow);
 
-        // =====================================================
-        // TITLE BOX
-        // =====================================================
+        HBox searchWrap = new HBox(searchField);
+        searchWrap.setAlignment(Pos.CENTER);
 
-        VBox titleBox = new VBox(12);
-
+        VBox titleBox = new VBox(10, title, subTitle, searchWrap);
         titleBox.setAlignment(Pos.CENTER);
+        titleBox.setPadding(new Insets(10, 0, 10, 0));
 
-        titleBox.getChildren().addAll(
-                title,
-                searchField
-        );
-
-
-        contentBox.getChildren().add(titleBox);
-
-
-        // =====================================================
-        // CATEGORY SECTION
-        // =====================================================
-
-        Label categoryTitle = new Label(
-                "Browse by Category"
-        );
-
-        categoryTitle.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: bold;"
-        );
-
-
-        // =====================================================
-        // CATEGORY ROW 1
-        // =====================================================
-
-        HBox categoryRow1 = new HBox(12);
-
-        categoryRow1.setAlignment(Pos.CENTER);
-
+        // ---------------- CATEGORY SECTION ----------------
+        Label categoryTitle = new Label("Browse by Category");
+        categoryTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #221d19;");
 
         VBox ordersCard = createCategoryCard(
-                "▣",
+                "📦",
                 "My Orders",
-                "Tracking, returns, cancellations,\n"
-                        + "and delivery issues.",
+                "Tracking, delivery status, returns, and order cancellations.",
                 "My Orders"
         );
 
-
         VBox paymentCard = createCategoryCard(
-                "▤",
+                "💳",
                 "Payments & Billing",
-                "Invoices, payment methods,\n"
-                        + "refunds, and pricing.",
+                "Payment options, UPI, invoices, refunds, and pricing policies.",
                 "Payments & Billing"
         );
 
-
         VBox accountCard = createCategoryCard(
-                "♙",
+                "👤",
                 "Account Settings",
-                "Password reset, profile\n"
-                        + "updates, and email preferences.",
+                "Password change, profile updates, and address preferences.",
                 "Account Settings"
         );
 
-
-        categoryRow1.getChildren().addAll(
-                ordersCard,
-                paymentCard,
-                accountCard
-        );
-
-
-        // =====================================================
-        // CATEGORY ROW 2
-        // =====================================================
-
-        HBox categoryRow2 = new HBox(12);
-
-        categoryRow2.setAlignment(Pos.CENTER);
-
-
         VBox aiCard = createCategoryCard(
-                "♟",
+                "✨",
                 "AI Assistant Help",
-                "Using smart features,\n"
-                        + "recommendations, and AI tools.",
+                "Smart product advice, deals finder, and recommendation tools.",
                 "AI Assistant Help"
         );
 
-
         VBox securityCard = createCategoryCard(
-                "♢",
+                "🛡️",
                 "Safety & Privacy",
-                "Data protection, reporting\n"
-                        + "issues, and security settings.",
+                "Data security, reporting store issues, and account safety.",
                 "Safety & Privacy"
         );
 
+        HBox categoryRow1 = new HBox(16, ordersCard, paymentCard, accountCard);
+        categoryRow1.setAlignment(Pos.CENTER);
 
-        categoryRow2.getChildren().addAll(
-                aiCard,
-                securityCard
-        );
+        HBox categoryRow2 = new HBox(16, aiCard, securityCard);
+        categoryRow2.setAlignment(Pos.CENTER);
 
+        VBox categoryCardsBox = new VBox(14, categoryRow1, categoryRow2);
+        categoryCardsBox.setAlignment(Pos.CENTER);
 
-        // =====================================================
-        // CATEGORY SECTION BOX
-        // =====================================================
+        VBox categorySection = new VBox(14, categoryTitle, categoryCardsBox);
+        categorySection.setAlignment(Pos.TOP_LEFT);
 
-        VBox categorySection = new VBox(12);
+        // ---------------- FREQUENTLY ASKED QUESTIONS SECTION ----------------
+        Label faqSectionTitle = new Label("Frequently Asked Questions");
+        faqSectionTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #221d19;");
 
-        categorySection.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        categorySection.getChildren().addAll(
-                categoryTitle,
-                categoryRow1,
-                categoryRow2
-        );
-
-
-        contentBox.getChildren().add(
-                categorySection
-        );
-
-
-        // =====================================================
-        // FAQ BOX
-        // =====================================================
-
-        VBox faqBox = new VBox();
-
-        faqBox.setPadding(
-                new Insets(18, 20, 15, 20)
-        );
-
-        faqBox.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 7;" +
-                "-fx-border-color: #e7e3e8;" +
-                "-fx-border-radius: 7;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 6, 0, 0, 1);"
-        );
-
-
-        Label faqTitle = new Label(
-                "Frequently Asked Questions"
-        );
-
-        faqTitle.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: bold;"
-        );
-
-
-        faqBox.getChildren().add(
-                faqTitle
-        );
-
-
-        // =====================================================
-        // FAQ 1
-        // =====================================================
+        Label faqSectionSub = new Label("Quick answers to commonly asked questions. Tap any question to reveal the details.");
+        faqSectionSub.setStyle("-fx-font-size: 12px; -fx-text-fill: #736962;");
 
         VBox faq1 = createFAQ(
                 "How do I track my order?",
-                "You can track your order from the My Orders section "
-                        + "using your order ID."
+                "You can track your order in real time from the 'My Orders' section using your Order ID. Once shipped, live status and delivery updates appear automatically."
         );
-
-
-        // =====================================================
-        // FAQ 2
-        // =====================================================
 
         VBox faq2 = createFAQ(
-                "What is your return policy?",
-                "You can return eligible products within 7 days "
-                        + "of delivery."
+                "What is your return and refund policy?",
+                "Eligible items can be returned within 7 days of delivery. Once the merchant verifies the return, refunds are credited to your original payment method within 3 to 5 business days."
         );
-
-
-        // =====================================================
-        // FAQ 3
-        // =====================================================
 
         VBox faq3 = createFAQ(
                 "How can I contact a seller directly?",
-                "Open your order details and select the Contact Seller "
-                        + "option."
+                "Open your order details or the shop's page and choose 'Contact Seller' or 'Visit Shop'. You can message or call local merchants directly regarding your items."
         );
 
-
-        faqBox.getChildren().addAll(
-                faq1,
-                faq2,
-                faq3
+        VBox faq4 = createFAQ(
+                "How does the AI Shopping Assistant work?",
+                "Our AI Assistant analyzes popular local deals, verifies seller ratings, and suggests the highest value options tailored to your shopping preferences."
         );
 
+        List<VBox> allFaqs = List.of(faq1, faq2, faq3, faq4);
 
-        contentBox.getChildren().add(
-                faqBox
+        VBox faqList = new VBox(10, faq1, faq2, faq3, faq4);
+
+        VBox faqContainer = new VBox(12, faqSectionTitle, faqSectionSub, faqList);
+        faqContainer.setPadding(new Insets(20));
+        faqContainer.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-background-radius: 12;" +
+                "-fx-border-color: #e5ded7;" +
+                "-fx-border-radius: 12;"
         );
 
+        DropShadow cardShadow = new DropShadow();
+        cardShadow.setRadius(8);
+        cardShadow.setOffsetY(3);
+        cardShadow.setColor(Color.rgb(0, 0, 0, 0.05));
+        faqContainer.setEffect(cardShadow);
 
-        // =====================================================
-        // STILL NEED HELP
-        // =====================================================
-
+        // ---------------- STILL NEED HELP BOX ----------------
         VBox supportBox = new VBox(12);
-
-        supportBox.setAlignment(
-                Pos.CENTER
-        );
-
-        supportBox.setPadding(
-                new Insets(20)
-        );
-
+        supportBox.setAlignment(Pos.CENTER);
+        supportBox.setPadding(new Insets(24, 20, 24, 20));
         supportBox.setStyle(
-                "-fx-background-color: #f7f4f8;" +
-                "-fx-background-radius: 7;" +
-                "-fx-border-color: #e8e3e9;" +
-                "-fx-border-radius: 7;"
+                "-fx-background-color: white;" +
+                "-fx-background-radius: 12;" +
+                "-fx-border-color: #e5ded7;" +
+                "-fx-border-radius: 12;"
         );
+        supportBox.setEffect(cardShadow);
 
+        Label supportTitle = new Label("Still need help?");
+        supportTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1f1a17;");
 
-        // =====================================================
-        // SUPPORT TITLE
-        // =====================================================
+        Label supportText = new Label("Our dedicated customer support team is available 24/7 to assist you with any questions or concerns.");
+        supportText.setStyle("-fx-font-size: 12px; -fx-text-fill: #6e655f;");
 
-        Label supportTitle = new Label(
-                "Still need help?"
-        );
-
-        supportTitle.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: bold;"
-        );
-
-
-        // =====================================================
-        // SUPPORT DESCRIPTION
-        // =====================================================
-
-        Label supportText = new Label(
-                "Our support team is available 24/7 to assist you with any questions or concerns you may\n"
-                        + "have."
-        );
-
-        supportText.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-text-fill: #777777;"
-        );
-
-        supportText.setAlignment(
-                Pos.CENTER
-        );
-
-
-        // =====================================================
-        // LIVE CHAT BUTTON
-        // =====================================================
-
-        Button liveChat = new Button(
-                "▣  Live Chat"
-        );
-
+        Button liveChat = new Button("💬  Live Chat");
         liveChat.setStyle(
                 "-fx-background-color: #a93b0b;" +
                 "-fx-text-fill: white;" +
-                "-fx-background-radius: 5;" +
-                "-fx-padding: 8 15;" +
-                "-fx-font-size: 10px;"
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 6;" +
+                "-fx-padding: 9 18;" +
+                "-fx-font-size: 11px;" +
+                "-fx-cursor: hand;"
         );
 
-
-        // =====================================================
-        // EMAIL BUTTON
-        // =====================================================
-
-        Button email = new Button(
-                "✉  Email Us"
-        );
-
+        Button email = new Button("✉  Email Us");
         email.setStyle(
                 "-fx-background-color: white;" +
                 "-fx-text-fill: #333333;" +
-                "-fx-border-color: #555555;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-radius: 5;" +
-                "-fx-padding: 8 15;" +
-                "-fx-font-size: 10px;"
+                "-fx-border-color: #b0a69d;" +
+                "-fx-border-radius: 6;" +
+                "-fx-background-radius: 6;" +
+                "-fx-padding: 9 18;" +
+                "-fx-font-size: 11px;" +
+                "-fx-cursor: hand;"
         );
 
-
-        // =====================================================
-        // CALL SUPPORT BUTTON
-        // =====================================================
-
-        Button call = new Button(
-                "☏  Call Support"
-        );
-
+        Button call = new Button("☏  Call Support");
         call.setStyle(
-                "-fx-background-color: transparent;" +
+                "-fx-background-color: #fff0e7;" +
                 "-fx-text-fill: #a93b0b;" +
-                "-fx-padding: 8 15;" +
-                "-fx-font-size: 10px;"
+                "-fx-font-weight: bold;" +
+                "-fx-border-color: #f7cfb8;" +
+                "-fx-border-radius: 6;" +
+                "-fx-background-radius: 6;" +
+                "-fx-padding: 9 18;" +
+                "-fx-font-size: 11px;" +
+                "-fx-cursor: hand;"
         );
 
-
-        // =====================================================
-        // BACK BUTTON
-        // =====================================================
-
-        Button backBtn = new Button(
-                "←  Back"
-        );
-
+        Button backBtn = new Button("←  Back");
         backBtn.setStyle(
                 "-fx-background-color: white;" +
                 "-fx-text-fill: #a93b0b;" +
                 "-fx-border-color: #a93b0b;" +
-                "-fx-border-radius: 5;" +
-                "-fx-background-radius: 5;" +
-                "-fx-padding: 8 18;" +
-                "-fx-font-size: 10px;"
+                "-fx-border-radius: 6;" +
+                "-fx-background-radius: 6;" +
+                "-fx-padding: 9 20;" +
+                "-fx-font-size: 11px;" +
+                "-fx-cursor: hand;"
         );
-<<<<<<< HEAD
-        backBtn.setOnAction(event->{
-           callbacktosetion.run();
+
+        liveChat.setOnAction(e -> showMessage("Live Chat", "Connecting you with our support team..."));
+
+        email.setOnAction(e -> {
+            try {
+                String emailAddress = "sayalirepale2006@gmail.com";
+                String subject = "EliteMarket Support";
+                String body = "Hello EliteMarket Support,\n\nI need help regarding my order.";
+
+                String encodedSubject = URLEncoder.encode(subject, StandardCharsets.UTF_8);
+                String encodedBody = URLEncoder.encode(body, StandardCharsets.UTF_8);
+
+                String url = "https://mail.google.com/mail/?view=cm&fs=1&to=" + emailAddress + "&su=" + encodedSubject + "&body=" + encodedBody;
+                Desktop.getDesktop().browse(URI.create(url));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showMessage("Error", "Unable to open Gmail.");
+            }
         });
-=======
->>>>>>> Sayali
 
+        call.setOnAction(e -> showMessage("Call Support", "Call us at +91 7709701201"));
 
-        // =====================================================
-        // SUPPORT BUTTON HBOX
-        // =====================================================
+        backBtn.setOnAction(event -> {
+            if (callbacktosetion != null) {
+                callbacktosetion.run();
+            } else {
+                Seting se = new Seting(userId);
+                Homepage.HomepageStage.setScene(se.getSetingscene(this::backtoDashboard));
+            }
+        });
 
-        HBox supportButtons = new HBox(10);
+        HBox supportButtons = new HBox(12, liveChat, email, call, backBtn);
+        supportButtons.setAlignment(Pos.CENTER);
 
-        supportButtons.setAlignment(
-                Pos.CENTER
-        );
+        supportBox.getChildren().addAll(supportTitle, supportText, supportButtons);
 
-        supportButtons.getChildren().addAll(
-                liveChat,
-                email,
-                call,
-                backBtn
-        );
+        // ---------------- DYNAMIC SEARCH FILTERING ----------------
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String search = newValue == null ? "" : newValue.toLowerCase().trim();
 
+            boolean showOrders = search.isEmpty() || "my orders tracking return cancellation".contains(search);
+            boolean showPayment = search.isEmpty() || "payments billing invoices upi refund".contains(search);
+            boolean showAccount = search.isEmpty() || "account settings password profile".contains(search);
+            boolean showAi = search.isEmpty() || "ai assistant help smart recommendations".contains(search);
+            boolean showSecurity = search.isEmpty() || "safety privacy data protection security".contains(search);
 
-        supportBox.getChildren().addAll(
-                supportTitle,
-                supportText,
-                supportButtons
-        );
+            ordersCard.setVisible(showOrders);
+            ordersCard.setManaged(showOrders);
 
+            paymentCard.setVisible(showPayment);
+            paymentCard.setManaged(showPayment);
 
-        contentBox.getChildren().add(
+            accountCard.setVisible(showAccount);
+            accountCard.setManaged(showAccount);
+
+            aiCard.setVisible(showAi);
+            aiCard.setManaged(showAi);
+
+            securityCard.setVisible(showSecurity);
+            securityCard.setManaged(showSecurity);
+
+            // Also filter FAQ items
+            for (VBox faq : allFaqs) {
+                Label qLbl = (Label) ((HBox) faq.getChildren().get(0)).getChildren().get(0);
+                Label aLbl = (Label) faq.getChildren().get(1);
+                String qText = qLbl.getText().toLowerCase();
+                String aText = aLbl.getText().toLowerCase();
+
+                boolean match = search.isEmpty() || qText.contains(search) || aText.contains(search);
+                faq.setVisible(match);
+                faq.setManaged(match);
+            }
+        });
+
+        // Assemble All in Center Container
+        centerContainer.getChildren().addAll(
+                titleBox,
+                categorySection,
+                faqContainer,
                 supportBox
         );
 
+        VBox outerWrapper = new VBox(centerContainer);
+        outerWrapper.setAlignment(Pos.TOP_CENTER);
+        outerWrapper.setPadding(new Insets(30, 40, 40, 40));
+        outerWrapper.setStyle("-fx-background-color: #EEE5DF;");
 
-        // =====================================================
-        // SEARCH FUNCTIONALITY
-        // =====================================================
+        ScrollPane scrollPane = new ScrollPane(outerWrapper);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 
-        searchField.textProperty().addListener(
-                (observable, oldValue, newValue) -> {
+        root.setCenter(scrollPane);
 
-                    String search =
-                            newValue.toLowerCase().trim();
-
-
-                    ordersCard.setVisible(
-                            search.isEmpty()
-                                    || "my orders".contains(search)
-                    );
-
-                    ordersCard.setManaged(
-                            search.isEmpty()
-                                    || "my orders".contains(search)
-                    );
-
-
-                    paymentCard.setVisible(
-                            search.isEmpty()
-                                    || "payments billing".contains(search)
-                    );
-
-                    paymentCard.setManaged(
-                            search.isEmpty()
-                                    || "payments billing".contains(search)
-                    );
-
-
-                    accountCard.setVisible(
-                            search.isEmpty()
-                                    || "account settings".contains(search)
-                    );
-
-                    accountCard.setManaged(
-                            search.isEmpty()
-                                    || "account settings".contains(search)
-                    );
-
-
-                    aiCard.setVisible(
-                            search.isEmpty()
-                                    || "ai assistant help".contains(search)
-                    );
-
-                    aiCard.setManaged(
-                            search.isEmpty()
-                                    || "ai assistant help".contains(search)
-                    );
-
-
-                    securityCard.setVisible(
-                            search.isEmpty()
-                                    || "safety privacy".contains(search)
-                    );
-
-                    securityCard.setManaged(
-                            search.isEmpty()
-                                    || "safety privacy".contains(search)
-                    );
-                }
-        );
-
-
-        // =====================================================
-        // HEADER BUTTON FUNCTIONALITY
-        // =====================================================
-
-        shopBtn.setOnAction(e ->
-                showMessage(
-                        "Shop",
-                        "Shop section opened."
-                )
-        );
-
-
-        ordersBtn.setOnAction(e ->
-                showMessage(
-                        "Orders",
-                        "Your orders will appear here."
-                )
-        );
-
-
-        helpBtn.setOnAction(e ->
-                showMessage(
-                        "Help",
-                        "You are already on the Help Center."
-                )
-        );
-
-
-        accountBtn.setOnAction(e ->
-                showMessage(
-                        "Account",
-                        "Account settings opened."
-                )
-        );
-
-
-        // =====================================================
-        // LIVE CHAT FUNCTIONALITY
-        // =====================================================
-
-        liveChat.setOnAction(e ->
-                showMessage(
-                        "Live Chat",
-                        "Connecting you with our support team..."
-                )
-        );
-
-
-        // =====================================================
-        // EMAIL FUNCTIONALITY
-        // =====================================================
-
-    email.setOnAction(e -> {
-
-    try {
-
-        String emailAddress =
-                "sayalirepale2006@gmail.com";
-
-        String subject =
-                "EliteMarket Support";
-
-        String body =
-                "Hello EliteMarket Support,\n\n"
-                        + "I need help regarding my order.";
-
-
-        // Encode subject and body properly
-        String encodedSubject =
-                URLEncoder.encode(
-                        subject,
-                        StandardCharsets.UTF_8
-                );
-
-        String encodedBody =
-                URLEncoder.encode(
-                        body,
-                        StandardCharsets.UTF_8
-                );
-
-
-        String url =
-                "https://mail.google.com/mail/?view=cm&fs=1"
-                        + "&to=" + emailAddress
-                        + "&su=" + encodedSubject
-                        + "&body=" + encodedBody;
-
-
-        Desktop.getDesktop().browse(
-                URI.create(url)
-        );
-
-
-    } catch (Exception ex) {
-
-        ex.printStackTrace();
-
-        showMessage(
-                "Error",
-                "Unable to open Gmail."
-        );
-    }
-});
-               
-             
-
-        // =====================================================
-        // CALL SUPPORT FUNCTIONALITY
-        // =====================================================
-
-        call.setOnAction(e ->
-                showMessage(
-                        "Call Support",
-                        "Call us at +91 7709701201"
-                )
-        );
-
-
-        // =====================================================
-        // BACK BUTTON FUNCTIONALITY
-        // =====================================================
-
-<<<<<<< HEAD
-      
-=======
-        backBtn.setOnAction(e -> {
-
-            Stage currentStage =
-                    (Stage) backBtn.getScene().getWindow();
-
-            currentStage.close();
-        });
-
->>>>>>> Sayali
-
-        // =====================================================
-        // ROOT CENTER
-        // =====================================================
-
-        root.setCenter(
-                contentBox
-        );
-<<<<<<< HEAD
-        root.setStyle("-fx-background-color: #eee5df;");
-=======
->>>>>>> Sayali
-
-
-        // =====================================================
-        // SCENE
-        // =====================================================
-
-        Scene scene = new Scene(
-                root,
-<<<<<<< HEAD
-                1530,
-                850
-        );
-        HelpScene=scene;
-
-
+        Scene scene = new Scene(root, 1530, 850);
+        HelpScene = scene;
 
         return HelpScene;
     }
 
-    
-
-=======
-                1550,
-                850
-        );
-
-
-        stage.setTitle(
-                "EliteMarket - Help Center"
-        );
-
-
-        stage.setScene(scene);
-
-        stage.show();
-    }
-
->>>>>>> Sayali
-
-    // =========================================================
-    // CREATE NAV BUTTON
-    // =========================================================
-
-    private Button createNavButton(
-            String text) {
-
-        Button button =
-                new Button(text);
-
-
+    private Button createNavButton(String text) {
+        Button button = new Button(text);
         button.setStyle(
                 "-fx-background-color: transparent;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-size: 11px;" +
-                "-fx-padding: 8 3;"
+                "-fx-text-fill: #443e39;" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-padding: 6 10;" +
+                "-fx-cursor: hand;"
         );
-
-
+        button.setOnMouseEntered(e -> button.setStyle(
+                "-fx-background-color: rgba(169, 59, 11, 0.08);" +
+                "-fx-text-fill: #a93b0b;" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 6;" +
+                "-fx-padding: 6 10;" +
+                "-fx-cursor: hand;"
+        ));
+        button.setOnMouseExited(e -> button.setStyle(
+                "-fx-background-color: transparent;" +
+                "-fx-text-fill: #443e39;" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-padding: 6 10;" +
+                "-fx-cursor: hand;"
+        ));
         return button;
     }
 
-
-    // =========================================================
-    // CREATE CATEGORY CARD
-    // =========================================================
+    private Label createHeaderIcon(String icon, String tooltip) {
+        Label label = new Label(icon);
+        label.setPrefSize(34, 34);
+        label.setAlignment(Pos.CENTER);
+        label.setStyle(
+                "-fx-font-size: 15px;" +
+                "-fx-background-color: rgba(255, 255, 255, 0.45);" +
+                "-fx-background-radius: 50%;" +
+                "-fx-cursor: hand;"
+        );
+        label.setOnMouseEntered(e -> label.setStyle(
+                "-fx-font-size: 15px;" +
+                "-fx-background-color: rgba(255, 255, 255, 0.9);" +
+                "-fx-background-radius: 50%;" +
+                "-fx-cursor: hand;"
+        ));
+        label.setOnMouseExited(e -> label.setStyle(
+                "-fx-font-size: 15px;" +
+                "-fx-background-color: rgba(255, 255, 255, 0.45);" +
+                "-fx-background-radius: 50%;" +
+                "-fx-cursor: hand;"
+        ));
+        return label;
+    }
 
     private VBox createCategoryCard(
             String icon,
@@ -880,270 +477,183 @@ public class HelpPage extends Application {
             String description,
             String popupTitle) {
 
-
-        // ---------------- ICON ----------------
-
-        Label iconLabel =
-                new Label(icon);
-
-
-        iconLabel.setMinWidth(28);
-
-        iconLabel.setMinHeight(28);
-
-        iconLabel.setAlignment(
-                Pos.CENTER
-        );
-
-
+        Label iconLabel = new Label(icon);
+        iconLabel.setMinWidth(36);
+        iconLabel.setMinHeight(36);
+        iconLabel.setAlignment(Pos.CENTER);
         iconLabel.setStyle(
                 "-fx-background-color: #fff0e7;" +
-                "-fx-background-radius: 5;" +
+                "-fx-background-radius: 8;" +
                 "-fx-text-fill: #a93b0b;" +
-                "-fx-font-size: 14px;"
+                "-fx-font-size: 17px;"
         );
 
-
-        // ---------------- TITLE ----------------
-
-        Label titleLabel =
-                new Label(title);
-
-
+        Label titleLabel = new Label(title);
         titleLabel.setStyle(
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: bold;"
+                "-fx-font-size: 13.5px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #221d19;"
         );
 
-
-        // ---------------- DESCRIPTION ----------------
-
-        Label descriptionLabel =
-                new Label(description);
-
-
+        Label descriptionLabel = new Label(description);
+        descriptionLabel.setWrapText(true);
         descriptionLabel.setStyle(
-                "-fx-font-size: 9px;" +
-                "-fx-text-fill: #777777;"
+                "-fx-font-size: 10.5px;" +
+                "-fx-text-fill: #6d655f;" +
+                "-fx-line-spacing: 1px;"
         );
 
+        VBox textBox = new VBox(3, titleLabel, descriptionLabel);
+        textBox.setAlignment(Pos.CENTER_LEFT);
 
-        // ---------------- TEXT BOX ----------------
+        HBox cardContent = new HBox(12, iconLabel, textBox);
+        cardContent.setAlignment(Pos.CENTER_LEFT);
 
-        VBox textBox =
-                new VBox(4);
-
-
-        textBox.getChildren().addAll(
-                titleLabel,
-                descriptionLabel
-        );
-
-
-        // ---------------- CARD CONTENT ----------------
-
-        HBox cardContent =
-                new HBox(10);
-
-
-        cardContent.setAlignment(
-                Pos.TOP_LEFT
-        );
-
-
-        cardContent.getChildren().addAll(
-                iconLabel,
-                textBox
-        );
-
-
-        // ---------------- CARD ----------------
-
-        VBox card =
-                new VBox();
-
-
-        card.setPrefWidth(245);
-
-        card.setPrefHeight(65);
-
-        card.setPadding(
-                new Insets(12)
-        );
-
-
+        VBox card = new VBox(cardContent);
+        card.setPrefWidth(330);
+        card.setMinWidth(330);
+        card.setMaxWidth(330);
+        card.setPrefHeight(80);
+        card.setMinHeight(80);
+        card.setPadding(new Insets(12, 14, 12, 14));
+        card.setAlignment(Pos.CENTER_LEFT);
         card.setStyle(
                 "-fx-background-color: white;" +
-                "-fx-background-radius: 7;" +
-                "-fx-border-color: #e5e2e5;" +
-                "-fx-border-radius: 7;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 7, 0, 0, 2);"
+                "-fx-background-radius: 10;" +
+                "-fx-border-color: #e5ded7;" +
+                "-fx-border-radius: 10;" +
+                "-fx-cursor: hand;"
         );
 
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(7);
+        shadow.setOffsetY(2);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.05));
+        card.setEffect(shadow);
 
-        card.getChildren().add(
-                cardContent
-        );
+        card.setOnMouseClicked(e -> showMessage(popupTitle, "You selected " + popupTitle + "."));
 
+        card.setOnMouseEntered(e -> card.setStyle(
+                "-fx-background-color: #fffaf7;" +
+                "-fx-background-radius: 10;" +
+                "-fx-border-color: #a93b0b;" +
+                "-fx-border-radius: 10;" +
+                "-fx-cursor: hand;"
+        ));
 
-        // =====================================================
-        // CARD CLICK
-        // =====================================================
-
-        card.setOnMouseClicked(e ->
-                showMessage(
-                        popupTitle,
-                        "You selected "
-                                + popupTitle
-                                + "."
-                )
-        );
-
-
-        // =====================================================
-        // CARD HOVER
-        // =====================================================
-
-        card.setOnMouseEntered(e ->
-                card.setStyle(
-                        "-fx-background-color: #fffaf7;" +
-                        "-fx-background-radius: 7;" +
-                        "-fx-border-color: #a93b0b;" +
-                        "-fx-border-radius: 7;" +
-                        "-fx-cursor: hand;"
-                )
-        );
-
-
-        card.setOnMouseExited(e ->
-                card.setStyle(
-                        "-fx-background-color: white;" +
-                        "-fx-background-radius: 7;" +
-                        "-fx-border-color: #e5e2e5;" +
-                        "-fx-border-radius: 7;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 7, 0, 0, 2);"
-                )
-        );
-
+        card.setOnMouseExited(e -> card.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-background-radius: 10;" +
+                "-fx-border-color: #e5ded7;" +
+                "-fx-border-radius: 10;" +
+                "-fx-cursor: hand;"
+        ));
 
         return card;
     }
 
-
-    // =========================================================
-    // CREATE FAQ
-    // =========================================================
-
-    private VBox createFAQ(
-            String question,
-            String answer) {
-
-
-        // ---------------- QUESTION ----------------
-
-        Label questionLabel =
-                new Label(
-                        question + "                                      ˅"
-                );
-
-
+    private VBox createFAQ(String question, String answer) {
+        Label questionLabel = new Label(question);
         questionLabel.setStyle(
-                "-fx-font-size: 12px;" +
+                "-fx-font-size: 13px;" +
                 "-fx-font-weight: bold;" +
-                "-fx-padding: 13 0;"
+                "-fx-text-fill: #221d19;"
         );
 
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // ---------------- ANSWER ----------------
+        Label arrow = new Label("▾");
+        arrow.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #a93b0b;");
 
-        Label answerLabel =
-                new Label(answer);
+        HBox questionRow = new HBox(questionLabel, spacer, arrow);
+        questionRow.setAlignment(Pos.CENTER_LEFT);
+        questionRow.setPadding(new Insets(12, 16, 12, 16));
+        questionRow.setCursor(Cursor.HAND);
+        questionRow.setStyle(
+                "-fx-background-color: #fcfbfa;" +
+                "-fx-background-radius: 8;" +
+                "-fx-border-color: #ebe4dd;" +
+                "-fx-border-radius: 8;"
+        );
 
-
+        Label answerLabel = new Label(answer);
         answerLabel.setWrapText(true);
-
-
         answerLabel.setStyle(
-                "-fx-font-size: 10px;" +
-                "-fx-text-fill: #777777;" +
-                "-fx-padding: 0 0 12 0;"
+                "-fx-font-size: 11.5px;" +
+                "-fx-text-fill: #5b534d;" +
+                "-fx-padding: 10 16 12 16;" +
+                "-fx-line-spacing: 2px;"
         );
-
-
         answerLabel.setVisible(false);
-
         answerLabel.setManaged(false);
 
+        VBox faqCard = new VBox(questionRow, answerLabel);
+        faqCard.setStyle("-fx-background-color: transparent;");
 
-        // ---------------- FAQ BOX ----------------
+        questionRow.setOnMouseEntered(e -> questionRow.setStyle(
+                "-fx-background-color: #fff4ec;" +
+                "-fx-background-radius: 8;" +
+                "-fx-border-color: #f0cfbc;" +
+                "-fx-border-radius: 8;"
+        ));
 
-        VBox faq =
-                new VBox();
-
-
-        faq.getChildren().addAll(
-                questionLabel,
-                answerLabel
-        );
-
-
-        // =====================================================
-        // FAQ CLICK FUNCTIONALITY
-        // =====================================================
-
-        questionLabel.setOnMouseClicked(e -> {
-
-            boolean visible =
-                    answerLabel.isVisible();
-
-
-            answerLabel.setVisible(
-                    !visible
-            );
-
-
-            answerLabel.setManaged(
-                    !visible
-            );
+        questionRow.setOnMouseExited(e -> {
+            if (!answerLabel.isVisible()) {
+                questionRow.setStyle(
+                        "-fx-background-color: #fcfbfa;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-border-color: #ebe4dd;" +
+                        "-fx-border-radius: 8;"
+                );
+            }
         });
 
+        questionRow.setOnMouseClicked(e -> {
+            boolean visible = !answerLabel.isVisible();
+            answerLabel.setVisible(visible);
+            answerLabel.setManaged(visible);
+            arrow.setText(visible ? "▴" : "▾");
 
-        return faq;
+            if (visible) {
+                questionRow.setStyle(
+                        "-fx-background-color: #fff0e6;" +
+                        "-fx-background-radius: 8 8 0 0;" +
+                        "-fx-border-color: #e8caa9;" +
+                        "-fx-border-radius: 8 8 0 0;"
+                );
+                answerLabel.setStyle(
+                        "-fx-background-color: #fffdfb;" +
+                        "-fx-background-radius: 0 0 8 8;" +
+                        "-fx-border-color: transparent #e8caa9 #e8caa9 #e8caa9;" +
+                        "-fx-border-radius: 0 0 8 8;" +
+                        "-fx-font-size: 11.5px;" +
+                        "-fx-text-fill: #4d443e;" +
+                        "-fx-padding: 12 16 14 16;" +
+                        "-fx-line-spacing: 2px;"
+                );
+            } else {
+                questionRow.setStyle(
+                        "-fx-background-color: #fcfbfa;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-border-color: #ebe4dd;" +
+                        "-fx-border-radius: 8;"
+                );
+            }
+        });
+
+        return faqCard;
     }
 
-
-    // =========================================================
-    // SHOW MESSAGE
-    // =========================================================
-
-    private void showMessage(
-            String title,
-            String message) {
-
-
-        Alert alert =
-                new Alert(
-                        Alert.AlertType.INFORMATION
-                );
-
-
+    private void showMessage(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
-
         alert.setHeaderText(null);
-
         alert.setContentText(message);
-
         alert.showAndWait();
     }
-<<<<<<< HEAD
-    public void backtoDashboard() {
-    Seting seting = new Seting(userId);
-    Homepage.HomepageStage.setScene(
-        HelpScene
-        
-    );
-}
-=======
->>>>>>> Sayali
 
+    public void backtoDashboard() {
+        Homepage.HomepageStage.setScene(HelpScene);
+    }
 }

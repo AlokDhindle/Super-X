@@ -1,6 +1,8 @@
 package com.kryox.view.Customer;
 
-import javafx.application.Application;
+import java.util.List;
+
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,8 +26,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
+
 
 public class My_orderAllorder  {
         public String userId;
@@ -36,12 +37,20 @@ public class My_orderAllorder  {
         private Scene orderAllScene;
 
         
-        Scene getAllorderScene(){
-                
+        public Scene getMy_OrderAllScene() {
+                return getMy_OrderAllScene(() -> CustomerNavigation.navigateToDashboard(userId));
+        }
 
-                // =====================================================
-                // SHADOWS
-                // =====================================================
+        public Scene getAllorderScene() {
+                return getMy_OrderAllScene();
+        }
+
+        public Scene getAllorderScene(Runnable callback) {
+                return getMy_OrderAllScene(callback);
+        }
+
+        public Scene getMy_OrderAllScene(Runnable callback) {
+                
 
                 DropShadow shadow = new DropShadow();
                 shadow.setRadius(18);
@@ -62,20 +71,12 @@ public class My_orderAllorder  {
                 smallShadow.setSpread(0.02);
                 smallShadow.setColor(Color.rgb(0, 0, 0, 0.08));
 
-                // =====================================================
-                // LOGO
-                // =====================================================
-
                 Label name = new Label("BuyNeX");
                 name.setStyle(
                                 "-fx-font-family: 'Montserrat';" +
                                                 "-fx-font-size: 28px;" +
                                                 "-fx-font-weight: 900;" +
                                                 "-fx-text-fill: #E87500;");
-
-                // =====================================================
-                // PREMIUM SHOPPER
-                // =====================================================
 
                 HBox premiumBox = new HBox(9);
                 premiumBox.setPrefSize(205, 58);
@@ -109,10 +110,6 @@ public class My_orderAllorder  {
                 textBox.getChildren().addAll(title, subtitle);
                 premiumBox.getChildren().add(textBox);
 
-                // =====================================================
-                // DASHBOARD
-                // =====================================================
-
                 Image di = new Image("/assets/images/Dashbord/dashboard.png");
                 ImageView div = new ImageView(di);
                 div.setFitHeight(21);
@@ -132,6 +129,8 @@ public class My_orderAllorder  {
                                                 "-fx-padding: 0;" +
                                                 "-fx-alignment: CENTER_LEFT;" +
                                                 "-fx-cursor: hand;");
+
+                lefButton1.setOnAction(e -> CustomerNavigation.navigateToDashboard(userId));
 
                 HBox hbInDashboard = new HBox(17, div, lefButton1);
                 hbInDashboard.setPrefWidth(205);
@@ -172,10 +171,6 @@ public class My_orderAllorder  {
                                                         "-fx-cursor: hand;");
                 });
 
-                // =====================================================
-                // NEARBY SHOPS
-                // =====================================================
-
                 Image di2 = new Image("/assets/images/store.png");
                 ImageView div2 = new ImageView(di2);
                 div2.setFitHeight(23);
@@ -195,6 +190,8 @@ public class My_orderAllorder  {
                                                 "-fx-padding: 0;" +
                                                 "-fx-alignment: CENTER_LEFT;" +
                                                 "-fx-cursor: hand;");
+
+                lefButton2.setOnAction(e -> CustomerNavigation.navigateToNearbyShops(userId));
 
                 HBox hbInDashboard2 = new HBox(17, div2, lefButton2);
                 hbInDashboard2.setPrefWidth(205);
@@ -235,10 +232,6 @@ public class My_orderAllorder  {
                                                         "-fx-cursor: hand;");
                 });
 
-                // =====================================================
-                // DEALS
-                // =====================================================
-
                 Image di3 = new Image("/assets/images/Dashbord/hot-sale.png");
                 ImageView div3 = new ImageView(di3);
                 div3.setFitHeight(23);
@@ -258,6 +251,8 @@ public class My_orderAllorder  {
                                                 "-fx-padding: 0;" +
                                                 "-fx-alignment: CENTER_LEFT;" +
                                                 "-fx-cursor: hand;");
+
+                lefButton3.setOnAction(e -> CustomerNavigation.navigateToDeals(userId));
 
                 HBox hbInDashboard3 = new HBox(17, div3, lefButton3);
                 hbInDashboard3.setPrefWidth(205);
@@ -298,10 +293,6 @@ public class My_orderAllorder  {
                                                         "-fx-cursor: hand;");
                 });
 
-                // =====================================================
-                // MY ORDERS
-                // =====================================================
-
                 Image di4 = new Image("/assets/images/Dashbord/package.png");
                 ImageView div4 = new ImageView(di4);
                 div4.setFitHeight(23);
@@ -321,6 +312,8 @@ public class My_orderAllorder  {
                                                 "-fx-padding: 0;" +
                                                 "-fx-alignment: CENTER_LEFT;" +
                                                 "-fx-cursor: hand;");
+
+                lefButton4.setOnAction(e -> CustomerNavigation.navigateToOrders(userId));
 
                 HBox hbInDashboard4 = new HBox(17, div4, lefButton4);
                 hbInDashboard4.setPrefWidth(205);
@@ -360,10 +353,6 @@ public class My_orderAllorder  {
                                                         "-fx-alignment: CENTER_LEFT;" +
                                                         "-fx-cursor: hand;");
                 });
-
-                // =====================================================
-                // ANALYTICS
-                // =====================================================
 
                 Image di5 = new Image("/assets/images/Dashbord/line-chart.png");
                 ImageView div5 = new ImageView(di5);
@@ -428,58 +417,7 @@ public class My_orderAllorder  {
                                                         "-fx-cursor: hand;");
                 });
 
-                // =====================================================
-                // UPGRADE CARD
-                // =====================================================
-
-                VBox upgradeCard = new VBox(7);
-                upgradeCard.setPrefWidth(205);
-                upgradeCard.setMinWidth(205);
-                upgradeCard.setMaxWidth(205);
-                upgradeCard.setPrefHeight(112);
-                upgradeCard.setPadding(new Insets(15));
-                upgradeCard.setAlignment(Pos.CENTER_LEFT);
-
-                LinearGradient upgradeGradient = new LinearGradient(
-                                0, 0, 1, 1, true,
-                                CycleMethod.NO_CYCLE,
-                                new Stop(0, Color.web("#25262A")),
-                                new Stop(1, Color.web("#45474D")));
-
-                upgradeCard.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                upgradeGradient,
-                                                                new CornerRadii(17),
-                                                                Insets.EMPTY)));
-
-                Label upgradeTitle = new Label("Unlock Gold");
-                upgradeTitle.setStyle(
-                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: white;");
-
-                Label upgradeText = new Label("Smarter deals & exclusive rewards");
-                upgradeText.setStyle(
-                                "-fx-font-size: 8px;" +
-                                                "-fx-text-fill: #BEBFC3;");
-
-                Button upgradeGold = new Button("Upgrade to Gold");
-                upgradeGold.setPrefWidth(175);
-                upgradeGold.setPrefHeight(30);
-                upgradeGold.setStyle(
-                                "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 10;" +
-                                                "-fx-cursor: hand;");
-
-                upgradeCard.getChildren().addAll(upgradeTitle, upgradeText, upgradeGold);
-
-                // =====================================================
-                // SETTINGS
-                // =====================================================
+                VBox upgradeCard = CustomerPlanUpgradeCard.createUpgradeCard(userId);
 
                 Image di6 = new Image("/assets/images/Dashbord/category.png");
                 ImageView div6 = new ImageView(di6);
@@ -500,6 +438,8 @@ public class My_orderAllorder  {
                                                 "-fx-alignment: CENTER_LEFT;" +
                                                 "-fx-cursor: hand;");
 
+                lefButton6.setOnAction(e -> CustomerNavigation.navigateToSettings(userId));
+
                 HBox hbInDashboard6 = new HBox(10, div6, lefButton6);
                 hbInDashboard6.setPrefWidth(205);
                 hbInDashboard6.setMinWidth(205);
@@ -507,10 +447,6 @@ public class My_orderAllorder  {
                 hbInDashboard6.setPrefHeight(34);
                 hbInDashboard6.setAlignment(Pos.CENTER_LEFT);
                 hbInDashboard6.setPadding(new Insets(0, 8, 0, 18));
-
-                // =====================================================
-                // HELP
-                // =====================================================
 
                 Image di7 = new Image("/assets/images/Dashbord/question.png");
                 ImageView div7 = new ImageView(di7);
@@ -531,6 +467,8 @@ public class My_orderAllorder  {
                                                 "-fx-alignment: CENTER_LEFT;" +
                                                 "-fx-cursor: hand;");
 
+                lefButton7.setOnAction(e -> CustomerNavigation.navigateToHelp(userId));
+
                 HBox hbInDashboard7 = new HBox(10, div7, lefButton7);
                 hbInDashboard7.setPrefWidth(205);
                 hbInDashboard7.setMinWidth(205);
@@ -539,10 +477,6 @@ public class My_orderAllorder  {
                 hbInDashboard7.setAlignment(Pos.CENTER_LEFT);
                 hbInDashboard7.setPadding(new Insets(0, 8, 0, 18));
 
-                // =====================================================
-                // LEFT BOX
-                // =====================================================
-
                 VBox leftBox = new VBox(14);
                 leftBox.setPrefWidth(245);
                 leftBox.setMinWidth(245);
@@ -550,7 +484,7 @@ public class My_orderAllorder  {
                 leftBox.setPrefHeight(800);
                 leftBox.setAlignment(Pos.TOP_CENTER);
                 leftBox.setPadding(new Insets(27, 20, 20, 20));
-                leftBox.setStyle("-fx-background-color: #ebccb7");
+                leftBox.setStyle("-fx-background-color: #EBCCB7");
                 leftBox.setEffect(shadow);
 
                 Region sidebarSpacer = new Region();
@@ -569,13 +503,13 @@ public class My_orderAllorder  {
                                 hbInDashboard6,
                                 hbInDashboard7);
 
-                // =====================================================
-                // TOP NAVIGATION
-                // =====================================================
-
                 Button t1 = new Button("Offers");
                 Button t2 = new Button("Shops");
                 Button t3 = new Button("Support");
+
+                t1.setOnAction(e -> CustomerNavigation.navigateToDeals(userId));
+                t2.setOnAction(e -> CustomerNavigation.navigateToNearbyShops(userId));
+                t3.setOnAction(e -> CustomerNavigation.navigateToHelp(userId));
 
                 String topButtonStyle = "-fx-background-color: transparent;" +
                                 "-fx-text-fill: #666666;" +
@@ -622,12 +556,12 @@ public class My_orderAllorder  {
 
                 t3.setOnMouseExited(e -> t3.setStyle(topButtonStyle));
 
+                t1.setOnAction(e -> CustomerNavigation.navigateToDeals(userId));
+                t2.setOnAction(e -> CustomerNavigation.navigateToNearbyShops(userId));
+                t3.setOnAction(e -> CustomerNavigation.navigateToHelp(userId));
+
                 HBox topLinks = new HBox(6, t1, t2, t3);
                 topLinks.setAlignment(Pos.CENTER_LEFT);
-
-                // =====================================================
-                // SEARCH
-                // =====================================================
 
                 TextField searchBox = new TextField();
                 searchBox.setPromptText("Search products, shops or deals with AI...");
@@ -644,9 +578,9 @@ public class My_orderAllorder  {
                                                 "-fx-text-fill: #444444;" +
                                                 "-fx-prompt-text-fill: #999999;");
 
-                // =====================================================
-                // LOCATION
-                // =====================================================
+                searchBox.setOnAction(e -> {
+                    CustomerNavigation.performSearch(userId, searchBox.getText(), () -> CustomerNavigation.navigateToOrders(userId));
+                });
 
                 Label locationIcon = new Label("📍");
                 Label locationText = new Label("Downtown Manhattan⌄");
@@ -657,14 +591,16 @@ public class My_orderAllorder  {
 
                 HBox locationBox = new HBox(4, locationIcon, locationText);
                 locationBox.setAlignment(Pos.CENTER_LEFT);
-
-                // =====================================================
-                // ACTIONS
-                // =====================================================
+                locationBox.setStyle("-fx-cursor: hand;");
+                locationBox.setOnMouseClicked(e -> CustomerNavigation.navigateToNearbyShops(userId));
 
                 Button b1 = new Button("🔔");
                 Button b2 = new Button("🛒");
                 Button b3 = new Button("●");
+
+                b1.setOnAction(e -> CustomerNavigation.navigateToNotifications(userId));
+                b2.setOnAction(e -> CustomerNavigation.navigateToCart(userId));
+                b3.setOnAction(e -> CustomerNavigation.navigateToSettings(userId));
 
                 String actionStyle = "-fx-background-color: white;" +
                                 "-fx-text-fill: #555555;" +
@@ -699,6 +635,10 @@ public class My_orderAllorder  {
 
                 b2.setOnMouseEntered(e -> b2.setStyle(actionHoverStyle));
                 b2.setOnMouseExited(e -> b2.setStyle(actionStyle));
+                b2.setOnAction(event->{
+                        ShoppingCartUI sc=new ShoppingCartUI(userId);
+                        Homepage.HomepageStage.setScene(sc.getaddcartScene());
+                });
 
                 b3.setOnMouseEntered(e -> b3.setStyle(actionHoverStyle));
                 b3.setOnMouseExited(e -> b3.setStyle(actionStyle));
@@ -706,39 +646,23 @@ public class My_orderAllorder  {
                 HBox actionBox = new HBox(7, b1, b2, b3);
                 actionBox.setAlignment(Pos.CENTER_RIGHT);
 
-                // =====================================================
-                // NAVIGATION SPACERS
-                // =====================================================
-
                 Region navSpacer1 = new Region();
                 HBox.setHgrow(navSpacer1, Priority.ALWAYS);
                 Region navSpacer2 = new Region();
                 HBox.setHgrow(navSpacer2, Priority.ALWAYS);
-
-                // =====================================================
-                // NAV BOX
-                // =====================================================
 
                 HBox navBox = new HBox(12, topLinks, navSpacer1, searchBox, navSpacer2, locationBox, actionBox);
                 navBox.setPrefHeight(68);
                 navBox.setPadding(new Insets(12, 24, 12, 24));
                 navBox.setAlignment(Pos.CENTER_LEFT);
                 navBox.setStyle(
-                                "-fx-background-color: #ebccb7;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-width: 0 0 1 0;");
                 navBox.setTranslateX(-28);
 
-                // =====================================================
-                // ORDERS MAIN CONTENT
-                // =====================================================
-
                 VBox mainContent = new VBox(20);
                 mainContent.setPadding(new Insets(20, 25, 30, 25));
-                mainContent.setStyle("-fx-background-color: #eee5df");
-
-                // =====================================================
-                // PAGE TITLE
-                // =====================================================
+                mainContent.setStyle("-fx-background-color: #EEE5DE");
 
                 Label pageTitle = new Label("# My Orders");
                 pageTitle.setStyle(
@@ -747,15 +671,10 @@ public class My_orderAllorder  {
                                                 "-fx-font-weight: 800;" +
                                                 "-fx-text-fill: #222222;");
 
-                // =====================================================
-                // ORDER TABS
-                // =====================================================
-
                 HBox tabsBox = new HBox(15);
                 tabsBox.setAlignment(Pos.CENTER_LEFT);
                 tabsBox.setPadding(new Insets(10, 0, 15, 0));
 
-                // All Orders
                 Button allOrders = new Button("All Orders");
                 allOrders.setStyle(
                                 "-fx-background-color: transparent;" +
@@ -767,7 +686,6 @@ public class My_orderAllorder  {
                                                 "-fx-border-color: #FF6900;" +
                                                 "-fx-cursor: hand;");
 
-                // Ongoing
                 Button ongoing = new Button("Ongoing");
                 ongoing.setStyle(
                                 "-fx-background-color: transparent;" +
@@ -781,7 +699,7 @@ public class My_orderAllorder  {
                         My_orderOngoing mo=new My_orderOngoing(userId);
                         Runnable callbacktoallorder=new Runnable() {
                                 public void run(){
-                                        backtoallorder();
+                                        callback.run();
 
                                 }
                         };
@@ -793,7 +711,6 @@ public class My_orderAllorder  {
 
                 });
 
-                // Shipped
                 Button shipped = new Button("Shipped");
                 shipped.setStyle(
                                 "-fx-background-color: transparent;" +
@@ -804,7 +721,6 @@ public class My_orderAllorder  {
                                                 "-fx-border-width: 0;" +
                                                 "-fx-cursor: hand;");
 
-                // Delivered
                 Button delivered = new Button("Delivered");
                 delivered.setStyle(
                                 "-fx-background-color: transparent;" +
@@ -815,7 +731,6 @@ public class My_orderAllorder  {
                                                 "-fx-border-width: 0;" +
                                                 "-fx-cursor: hand;");
 
-                // Cancelled
                 Button cancelled = new Button("Cancelled");
                 cancelled.setStyle(
                                 "-fx-background-color: transparent;" +
@@ -832,70 +747,15 @@ public class My_orderAllorder  {
                 tabsBox.getChildren().add(delivered);
                 tabsBox.getChildren().add(cancelled);
 
-                // =====================================================
-                // ORDERS LIST
-                // =====================================================
-
                 VBox ordersList = new VBox(15);
                 ordersList.setPadding(new Insets(5, 0, 0, 0));
 
-                // =====================================================
-                // ORDER 1 - ELECTRONICS
-                // =====================================================
-
-                VBox order1 = createOrderCard(
-                                "ELECTRONICS",
-                                "BNX-99821",
-                                "Sony WH-1000XM5 Wireless Headphones",
-                                "Ordered on Oct 12, 2023 • Qty: 1",
-                                "$348.00",
-                                new String[] { "View Details", "Download Invoice", "Buy Again" },
-                                "Delivered",
-                                "🎧");
-                ordersList.getChildren().add(order1);
-
-                // =====================================================
-                // ORDER 2 - GROCERIES
-                // =====================================================
-
-                VBox order2 = createOrderCard(
-                                "GROCERIES",
-                                "BNX-99825",
-                                "Artisanal Weekend Brunch Bundle",
-                                "Ordered on Oct 24, 2023 • Qty: 1 bundle",
-                                "$64.50",
-                                new String[] { "View Details", "Track Order" },
-                                "Dispatched",
-                                "🛒");
-                ordersList.getChildren().add(order2);
-
-                // =====================================================
-                // ORDER 3 - FASHION
-                // =====================================================
-
-                VBox order3 = createOrderCard(
-                                "FASHION",
-                                "BNX-99828",
-                                "Minimalist Urban Commuter Backpack",
-                                "Ordered on Oct 25, 2023 • Qty: 1",
-                                "$129.00",
-                                new String[] { "Cancel Order", "View Details" },
-                                "Processing",
-                                "👕");
-                ordersList.getChildren().add(order3);
-
-                // =====================================================
-                // ADD ALL TO MAIN CONTENT
-                // =====================================================
+                loadCartProducts(ordersList);
 
                 mainContent.getChildren().addAll(
                                 pageTitle,
                                 tabsBox,
                                 ordersList);
-
-                // =====================================================
-                // SCROLL PANE
-                // =====================================================
 
                 ScrollPane scrollPane = new ScrollPane();
                 scrollPane.setContent(mainContent);
@@ -907,19 +767,11 @@ public class My_orderAllorder  {
                 scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
                 scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-                // =====================================================
-                // RIGHT VBOX
-                // =====================================================
-
                 VBox Rightvbox = new VBox(0);
                 Rightvbox.setPadding(new Insets(0, 0, 0, 0));
-                Rightvbox.setStyle("-fx-background-color: #eee5df");
+                Rightvbox.setStyle("-fx-background-color: #EEE5DE");
                 Rightvbox.getChildren().addAll(navBox, scrollPane);
                 VBox.setVgrow(scrollPane, Priority.ALWAYS);
-
-                // =====================================================
-                // SUBTLE ORANGE BACKGROUND GLOW
-                // =====================================================
 
                 RadialGradient orangeGlow1 = new RadialGradient(
                                 0, 0, 0.84, 0.16, 0.42, true,
@@ -935,28 +787,169 @@ public class My_orderAllorder  {
                                                                 CornerRadii.EMPTY,
                                                                 Insets.EMPTY)));
 
-                // =====================================================
-                // BORDER PANE
-                // =====================================================
-
                 BorderPane mainBox = new BorderPane();
                 mainBox.setLeft(leftBox);
                 mainBox.setCenter(Rightvbox);
-                mainBox.setStyle("-fx-background-color: #eee5df");
+                mainBox.setStyle("-fx-background-color:#EEE5DE");
 
-                // =====================================================
-                // SCENE
-                // =====================================================
-
-                Scene sc = new Scene(mainBox, 1530, 850);
+                Scene sc = new Scene(mainBox, 1550, 850);
                 orderAllScene=sc;
                 return orderAllScene;
         }
         
 
-        // =====================================================
-        // HELPER METHOD: Create Order Card
-        // =====================================================
+        private void loadCartProducts(VBox ordersList) {
+
+                com.kryox.dao.Customer.OrderDAO customerOrderDAO = new com.kryox.dao.Customer.OrderDAO();
+
+                try {
+
+                        if (userId == null || userId.trim().isEmpty()) {
+
+                                ordersList.getChildren().clear();
+
+                                Label errorLabel = new Label("User not logged in.");
+                                errorLabel.setStyle(
+                                                "-fx-font-family: 'Montserrat';" +
+                                                                "-fx-font-size: 15px;" +
+                                                                "-fx-font-weight: 600;" +
+                                                                "-fx-text-fill: #C62828;");
+
+                                errorLabel.setPadding(new Insets(30, 0, 30, 0));
+                                ordersList.getChildren().add(errorLabel);
+                                return;
+                        }
+
+                        System.out.println("MY ORDERS USER ID = [" + userId + "]");
+
+                        List<com.kryox.model.Shopkeeper.OrderModel> placedOrders =
+                                        customerOrderDAO.getCustomerOrders(userId);
+
+                        ordersList.getChildren().clear();
+
+                        if (placedOrders == null || placedOrders.isEmpty()) {
+
+                                Label noOrders = new Label("No orders placed yet.");
+                                noOrders.setStyle(
+                                                "-fx-font-family: 'Montserrat';" +
+                                                                "-fx-font-size: 16px;" +
+                                                                "-fx-font-weight: 600;" +
+                                                                "-fx-text-fill: #777777;");
+
+                                noOrders.setPadding(new Insets(30, 0, 30, 0));
+                                ordersList.getChildren().add(noOrders);
+                                return;
+                        }
+
+                        for (com.kryox.model.Shopkeeper.OrderModel order : placedOrders) {
+
+                                if (order == null) {
+                                        continue;
+                                }
+
+                                String orderId = safeValue(order.getOrderId(), "N/A");
+                                String orderDate = safeValue(order.getOrderDate(), "Today");
+                                String status = safeValue(order.getOrderStatus(), "NEW");
+
+                                String productName = "Items (" + (order.getProducts() != null ? order.getProducts().size() : 0) + ")";
+                                if (order.getProducts() != null && !order.getProducts().isEmpty()) {
+                                        var p1 = order.getProducts().get(0);
+                                        productName = safeValue(p1.getProductName(), "Product");
+                                        if (order.getProducts().size() > 1) {
+                                                productName += " + " + (order.getProducts().size() - 1) + " more";
+                                        }
+                                }
+
+                                String orderDetails = "Date: " + orderDate + " • Status: " + status;
+                                String price = String.format("₹%.2f", order.getTotalAmount());
+
+                                String[] actions = getActionsForStatus(status);
+
+                                VBox orderCard = createOrderCard(
+                                                "ORDER",
+                                                orderId,
+                                                productName,
+                                                orderDetails,
+                                                price,
+                                                actions,
+                                                status,
+                                                "📦");
+
+                                ordersList.getChildren().add(orderCard);
+                        }
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        ordersList.getChildren().clear();
+
+                        Label errorLabel =
+                                        new Label("Unable to load orders.");
+
+                        errorLabel.setStyle(
+                                        "-fx-font-family: 'Montserrat';" +
+                                                        "-fx-font-size: 15px;" +
+                                                        "-fx-font-weight: 600;" +
+                                                        "-fx-text-fill: #C62828;");
+
+                        errorLabel.setPadding(new Insets(30, 0, 30, 0));
+
+                        ordersList.getChildren().add(errorLabel);
+                }
+        }
+
+        private String[] getActionsForStatus(String status) {
+
+                if (status == null) {
+                        return new String[] { "View Details" };
+                }
+
+                switch (status.trim().toLowerCase()) {
+
+                        case "delivered":
+                                return new String[] {
+                                                "View Details",
+                                                "Download Invoice",
+                                                "Buy Again"
+                                };
+
+                        case "dispatched":
+                        case "shipped":
+                        case "out for delivery":
+                                return new String[] {
+                                                "View Details",
+                                                "Track Order"
+                                };
+
+                        case "processing":
+                        case "ongoing":
+                                return new String[] {
+                                                "Cancel Order",
+                                                "View Details"
+                                };
+
+                        case "cancelled":
+                                return new String[] {
+                                                "View Details",
+                                                "Buy Again"
+                                };
+
+                        default:
+                                return new String[] {
+                                                "View Details"
+                                };
+                }
+        }
+
+        private String safeValue(String value, String defaultValue) {
+
+                if (value == null || value.trim().isEmpty()) {
+                        return defaultValue;
+                }
+
+                return value;
+        }
 
         private VBox createOrderCard(String category, String orderId, String productName,
                         String orderDetails, String price, String[] actions, String status, String icon) {

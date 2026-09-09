@@ -1,6 +1,5 @@
 package com.kryox.view.Shopkeeper;
 
-import com.kryox.Main;
 import com.kryox.view.Customer.Homepage;
 
 import javafx.geometry.Insets;
@@ -18,46 +17,33 @@ import javafx.scene.text.Text;
 
 public class ShopkeeperSupport {
 
-
         public static Scene supportScene() {
-
 
                 BorderPane borderPane = new BorderPane();
 
-                // ================================================================
                 // HEADER
-                // ================================================================
 
                 HBox headerMainBox = ViewConstants.header();
 
-<<<<<<< HEAD
-=======
                 // Header background
                 headerMainBox.setStyle(
                                 "-fx-background-color: #EBCCB7;");
 
->>>>>>> Sayali
                 borderPane.setTop(headerMainBox);
 
-                // ================================================================
                 // LEFT SIDEBAR
-                // ================================================================
 
                 VBox sidebar = createSidebar();
+                borderPane.setLeft(sidebar);
 
-
-                // ================================================================
                 // FOOTER
-                // ================================================================
 
                 VBox footerBox = ViewConstants.footer();
 
                 borderPane.setBottom(
                                 footerBox);
 
-                // ================================================================
                 // CENTER CONTENT
-                // ================================================================
 
                 VBox centerContent = new VBox();
 
@@ -72,15 +58,9 @@ public class ShopkeeperSupport {
                                 20);
 
                 centerContent.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F8F7FC;");
-=======
                                 "-fx-background-color: #EEE5DF;");
->>>>>>> Sayali
 
-                // ================================================================
                 // PAGE TITLE
-                // ================================================================
 
                 Text supportTitle = new Text(
                                 "Support Center");
@@ -102,9 +82,7 @@ public class ShopkeeperSupport {
                                 supportTitle,
                                 supportSubtitle);
 
-                // ================================================================
                 // WELCOME INFORMATION
-                // ================================================================
 
                 VBox welcomeCard = new VBox();
 
@@ -147,9 +125,7 @@ public class ShopkeeperSupport {
                                 welcomeTitle,
                                 welcomeText);
 
-                // ================================================================
                 // SHOP MANAGEMENT
-                // ================================================================
 
                 Text shopManagementTitle = createSectionTitle(
                                 "Shop Management");
@@ -192,9 +168,7 @@ public class ShopkeeperSupport {
                                                                 +
                                                                 "information about your shop."));
 
-                // ================================================================
                 // PRODUCT & INVENTORY
-                // ================================================================
 
                 Text inventoryTitle = createSectionTitle(
                                 "Products & Inventory");
@@ -249,9 +223,7 @@ public class ShopkeeperSupport {
                                                                 "that require attention because of stock or expiry-related "
                                                                 + "conditions."));
 
-                // ================================================================
                 // ORDERS
-                // ================================================================
 
                 Text ordersTitle = createSectionTitle(
                                 "Orders & Reservations");
@@ -300,9 +272,7 @@ public class ShopkeeperSupport {
                                                 "Completed order information provides a useful record " +
                                                                 "of previously fulfilled customer purchases."));
 
-                // ================================================================
                 // OFFERS
-                // ================================================================
 
                 Text offersTitle = createSectionTitle(
                                 "Offers & Promotions");
@@ -351,9 +321,7 @@ public class ShopkeeperSupport {
                                                 "Digital loyalty and reward capabilities can support " +
                                                                 "long-term customer engagement."));
 
-                // ================================================================
                 // CUSTOMER MANAGEMENT
-                // ================================================================
 
                 Text customerTitle = createSectionTitle(
                                 "Customers & Communication");
@@ -396,9 +364,7 @@ public class ShopkeeperSupport {
                                                 "Customer reach information helps shopkeepers understand " +
                                                                 "how effectively their business is reaching customers."));
 
-                // ================================================================
                 // ANALYTICS
-                // ================================================================
 
                 Text analyticsTitle = createSectionTitle(
                                 "Analytics & Business Performance");
@@ -441,9 +407,7 @@ public class ShopkeeperSupport {
                                                 "Business growth information can help shopkeepers " +
                                                                 "identify areas where their store can improve."));
 
-                // ================================================================
                 // AI SUPPORT
-                // ================================================================
 
                 Text aiTitle = createSectionTitle(
                                 "AI & Smart Assistance");
@@ -507,9 +471,7 @@ public class ShopkeeperSupport {
                                                 "Seasonal demand prediction can help merchants understand " +
                                                                 "changes in expected product demand."));
 
-                // ================================================================
                 // BUSINESS LEARNING
-                // ================================================================
 
                 Text learningTitle = createSectionTitle(
                                 "Business Learning & Growth");
@@ -549,9 +511,7 @@ public class ShopkeeperSupport {
                                                                 +
                                                                 "reach together in one ecosystem."));
 
-                // ================================================================
                 // GENERAL GUIDANCE
-                // ================================================================
 
                 Text guidanceTitle = createSectionTitle(
                                 "Good Practices for Shopkeepers");
@@ -602,9 +562,7 @@ public class ShopkeeperSupport {
                                                                 +
                                                                 "your business knowledge."));
 
-                // ================================================================
                 // SUPPORT OVERVIEW
-                // ================================================================
 
                 VBox overviewCard = new VBox();
 
@@ -651,9 +609,7 @@ public class ShopkeeperSupport {
                                 overviewText,
                                 overviewBottom);
 
-                // ================================================================
                 // CENTER CONTENT
-                // ================================================================
 
                 centerContent.getChildren().addAll(
 
@@ -690,9 +646,7 @@ public class ShopkeeperSupport {
 
                                 overviewCard);
 
-                // ================================================================
                 // CENTER SCROLL
-                // ================================================================
 
                 ScrollPane centerScroll = new ScrollPane(
                                 centerContent);
@@ -707,40 +661,26 @@ public class ShopkeeperSupport {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 centerScroll.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F8F7FC;" +
-=======
                                 "-fx-background-color: #EEE5DF;" +
->>>>>>> Sayali
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(
                                 centerScroll);
 
-                // ================================================================
                 // SCENE
-                // ================================================================
 
                 Scene scene = new Scene(
                                 borderPane,
-                                1280,
-                                650);
+                                1550,
+                                850);
 
                 scene.setFill(
-<<<<<<< HEAD
-                                Color.web("#F8F7FC"));
-=======
                                 Color.web("#EEE5DF"));
->>>>>>> Sayali
 
                 return scene;
         }
 
-
-
-        // ====================================================================
         // SECTION TITLE
-        // ====================================================================
 
         private static Text createSectionTitle(
                         String title) {
@@ -755,9 +695,7 @@ public class ShopkeeperSupport {
                 return text;
         }
 
-        // ====================================================================
         // INFORMATION ROW
-        // ====================================================================
 
         private static HBox createInformationRow(
                         String number,
@@ -824,9 +762,7 @@ public class ShopkeeperSupport {
                 return row;
         }
 
-        // ====================================================================
         // GOOD PRACTICE ROW
-        // ====================================================================
 
         private static HBox createGuidance(
                         String title,
@@ -868,9 +804,7 @@ public class ShopkeeperSupport {
                 return row;
         }
 
-        // ====================================================================
         // SIDEBAR
-        // ====================================================================
 
         private static VBox createSidebar() {
 
@@ -883,7 +817,7 @@ public class ShopkeeperSupport {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-                                "-fx-background-color: #F5F4F9;" +
+                                "-fx-background-color: #EBCCB7;" +
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 
@@ -907,6 +841,11 @@ public class ShopkeeperSupport {
                 Button ordersButton = ViewConstants.createDashboardButton(
                                 "🛒",
                                 "Orders",
+                                false);
+
+                Button bookingsButton = ViewConstants.createDashboardButton(
+                                "📅",
+                                "Bookings",
                                 false);
 
                 Button inventoryButton = ViewConstants.createDashboardButton(
@@ -938,6 +877,7 @@ public class ShopkeeperSupport {
                                 5,
                                 dashboardButton,
                                 ordersButton,
+                                bookingsButton,
                                 inventoryButton,
                                 offersButton,
                                 analyticsButton,
@@ -968,6 +908,12 @@ public class ShopkeeperSupport {
                                 event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperDashboard
                                                                 .dashboardScene()));
+
+                bookingsButton.setOnAction(
+                                event -> Homepage.HomepageStage.setScene(
+                                                ShopkeeperBookedProducts
+                                                                .bookedProductsScene()));
+
                 inventoryButton.setOnAction(
                                 event -> Homepage.HomepageStage.setScene(
                                                 ShopkeeperInventory

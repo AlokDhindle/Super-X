@@ -116,8 +116,7 @@ public class Customer_Registration {
                 detectBtn.setStyle("-fx-background-color:#F3F3F3;-fx-background-radius:10;");
 
                 CheckBox terms = new CheckBox("I agree to the Terms & Conditions and Privacy Policy.");
-                TextField role=new TextField("shopkeeper");
-                
+                TextField role = new TextField("Customer");
 
                 Button createBtn = new Button("Create Account");
                 createBtn.setPrefWidth(480);
@@ -134,18 +133,15 @@ public class Customer_Registration {
                                                 "-fx-cursor: hand;" +
                                                 "-fx-padding: 5px;");
                 String userName = nameField.getText();
-                        String mobile = mobileLbl.getText();
+                        String mobile = mobileField.getText();
                         String email = emailField.getText();
-                        String role1=role.getText();
-                        String password=passField.getText();
-
-                        
+                        String role1 = "Customer";
+                        String password = passField.getText();
 
                         System.out.println("Name   : " + userName);
                         System.out.println("Mobile : " + mobile);
                         System.out.println("Email  : " + email);
-                        System.out.println("password : "+passField);
-                        
+                        System.out.println("password : " + passField);
 
                         Userstorecontroller c = new Userstorecontroller();
 
@@ -153,11 +149,10 @@ public class Customer_Registration {
                                         userName,
                                         email,
                                         mobile,
-                                        role1,password
+                                        role1, password
                                 );
 
-                
-                controler controlers=new controler();
+                controler controlers = new controler();
 
                 
                 boolean flag = controler.singUp(emailField.getText(), passField.getText());

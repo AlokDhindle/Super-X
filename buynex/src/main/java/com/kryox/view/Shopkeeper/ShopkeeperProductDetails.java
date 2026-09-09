@@ -54,36 +54,28 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // HEADER
-        // ========================================================
 
         root.setTop(
                 ViewConstants.header()
         );
 
 
-        // ========================================================
         // SIDEBAR
-        // ========================================================
 
         root.setLeft(
                 createSidebar()
         );
 
 
-        // ========================================================
         // FOOTER
-        // ========================================================
 
         root.setBottom(
                 ViewConstants.footer()
         );
 
 
-        // ========================================================
         // MAIN CONTENT
-        // ========================================================
 
         VBox mainContent =
                 new VBox(20);
@@ -98,9 +90,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // PAGE HEADER
-        // ========================================================
 
         Text title =
                 new Text(
@@ -133,9 +123,7 @@ public class ShopkeeperProductDetails {
                 );
 
 
-        // ========================================================
         // BACK BUTTON
-        // ========================================================
 
         Button backButton =
                 new Button(
@@ -188,9 +176,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // PRODUCT IMAGE CARD
-        // ========================================================
 
         VBox productImageCard =
                 createProductImageCard(
@@ -198,9 +184,7 @@ public class ShopkeeperProductDetails {
                 );
 
 
-        // ========================================================
         // PRODUCT INFORMATION CARD
-        // ========================================================
 
         VBox productInformationCard =
                 createCard();
@@ -374,9 +358,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // PRICING CARD
-        // ========================================================
 
         VBox pricingCard =
                 createCard();
@@ -501,9 +483,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // INVENTORY CARD
-        // ========================================================
 
         VBox inventoryCard =
                 createCard();
@@ -628,9 +608,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // EXPIRY CARD
-        // ========================================================
 
         VBox expiryCard =
                 createCard();
@@ -787,9 +765,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // IMAGE URL CARD
-        // ========================================================
 
         VBox imageUrlCard =
                 createCard();
@@ -818,9 +794,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // DELETE BUTTON
-        // ========================================================
 
         Button deleteButton =
                 new Button(
@@ -842,9 +816,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // SAVE BUTTON
-        // ========================================================
 
         Button saveButton =
                 new Button(
@@ -886,9 +858,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // SAVE ACTION
-        // ========================================================
 
         saveButton.setOnAction(
                 event -> {
@@ -1134,9 +1104,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // DELETE ACTION
-        // ========================================================
 
         deleteButton.setOnAction(
                 event -> {
@@ -1195,9 +1163,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // ADD TO MAIN CONTENT
-        // ========================================================
 
         mainContent.getChildren().addAll(
 
@@ -1219,9 +1185,7 @@ public class ShopkeeperProductDetails {
         );
 
 
-        // ========================================================
         // SCROLL PANE
-        // ========================================================
 
         ScrollPane scrollPane =
                 new ScrollPane(
@@ -1256,9 +1220,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // PRODUCT IMAGE CARD
-    // ============================================================
 
     private static VBox createProductImageCard(
             ProductModel product
@@ -1408,9 +1370,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // CARD
-    // ============================================================
 
     private static VBox createCard() {
 
@@ -1436,9 +1396,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // SECTION TITLE
-    // ============================================================
 
     private static Text createSectionTitle(
             String title
@@ -1462,9 +1420,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // FIELD BOX
-    // ============================================================
 
     private static VBox createFieldBox(
             String labelText,
@@ -1503,9 +1459,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // TEXT FIELD
-    // ============================================================
 
     private static TextField createTextField(
             String value
@@ -1541,9 +1495,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // COMBO BOX STYLE
-    // ============================================================
 
     private static void styleComboBox(
             ComboBox<String> comboBox
@@ -1561,9 +1513,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // DATE PICKER STYLE
-    // ============================================================
 
     private static void styleDatePicker(
             DatePicker datePicker
@@ -1581,9 +1531,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // TWO COLUMNS
-    // ============================================================
 
     private static void addTwoColumns(
             GridPane grid
@@ -1613,9 +1561,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // THREE COLUMNS
-    // ============================================================
 
     private static void addThreeColumns(
             GridPane grid
@@ -1641,9 +1587,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // PARSE DATE
-    // ============================================================
 
     private static LocalDate parseDate(
             String date
@@ -1670,9 +1614,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // DOUBLE VALUE
-    // ============================================================
 
     private static String doubleValue(
             Double value
@@ -1691,9 +1633,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // SAFE STRING
-    // ============================================================
 
     private static String safe(
             String value
@@ -1710,9 +1650,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // ALERT
-    // ============================================================
 
     private static void showAlert(
             Alert.AlertType type,
@@ -1746,9 +1684,7 @@ public class ShopkeeperProductDetails {
     }
 
 
-    // ============================================================
     // SIDEBAR
-    // ============================================================
 
     private static VBox createSidebar() {
 

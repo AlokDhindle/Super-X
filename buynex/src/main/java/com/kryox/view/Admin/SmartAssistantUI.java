@@ -51,6 +51,8 @@ public class SmartAssistantUI {
         HBox headerHBox = new HBox();
         headerHBox.setPrefHeight(86);
         headerHBox.setMinHeight(86);
+        headerHBox.setMaxHeight(86);
+        VBox.setVgrow(headerHBox, Priority.NEVER);
         headerHBox.setAlignment(Pos.CENTER_LEFT);
         headerHBox.setPadding(new Insets(12, 20, 12, 18));
         headerHBox.setSpacing(14);
@@ -148,10 +150,14 @@ public class SmartAssistantUI {
                 "-fx-background-color: transparent;" +
                 "-fx-background: transparent;" +
                 "-fx-border-color: transparent;");
+        chatScrollPane.setMinHeight(0);
         VBox.setVgrow(chatScrollPane, Priority.ALWAYS);
 
         HBox inputOuterHBox = new HBox();
+        inputOuterHBox.setMinHeight(88);
         inputOuterHBox.setPrefHeight(88);
+        inputOuterHBox.setMaxHeight(88);
+        VBox.setVgrow(inputOuterHBox, Priority.NEVER);
         inputOuterHBox.setAlignment(Pos.CENTER);
         inputOuterHBox.setPadding(new Insets(12, 24, 14, 24));
         inputOuterHBox.setStyle(
@@ -159,7 +165,9 @@ public class SmartAssistantUI {
                 "-fx-border-width: 1 0 0 0;");
 
         HBox inputHBox = new HBox();
+        inputHBox.setMinHeight(58);
         inputHBox.setPrefHeight(58);
+        inputHBox.setMaxHeight(58);
         inputHBox.setAlignment(Pos.CENTER_LEFT);
         inputHBox.setSpacing(8);
         inputHBox.setMaxWidth(Double.MAX_VALUE);
@@ -180,14 +188,14 @@ public class SmartAssistantUI {
         inputField.setFont(Font.font("Arial", 22));
         inputField.setWrapText(true);
         inputField.setPrefRowCount(1);
+        inputField.setMinHeight(46);
         inputField.setPrefHeight(46);
-        inputField.setMinHeight(38);
-        inputField.setMaxHeight(64);
+        inputField.setMaxHeight(46);
         inputField.setStyle(
                 "-fx-background-color: transparent;" +
                 "-fx-border-color: transparent;" +
                 "-fx-background-insets: 0;" +
-                "-fx-padding: 8 2 8 2;");
+                "-fx-padding: 4 2 4 2;");
         HBox.setHgrow(inputField, Priority.ALWAYS);
 
         Text micIcon = new Text("♩");

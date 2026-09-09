@@ -21,9 +21,7 @@ public class BusinessImprovementController {
     private BusinessImprovementController() {
     }
 
-    // ============================================================
     // START COMPLETE IMPROVEMENT PROCESS
-    // ============================================================
 
     public static void startGeneration(
             ArrayList<ProductModel> products) {
@@ -34,9 +32,7 @@ public class BusinessImprovementController {
                         : new ArrayList<>(products);
 
 
-        // --------------------------------------------------------
         // SHOW GENERATION SCREEN
-        // --------------------------------------------------------
 
         Platform.runLater(() -> {
 
@@ -54,14 +50,15 @@ public class BusinessImprovementController {
                     BusinessImprovementVideoView
                             .createGenerationScene()
             );
+            stage.setWidth(1550);
+            stage.setHeight(840);
+            stage.centerOnScreen();
 
             stage.show();
         });
 
 
-        // ========================================================
         // BACKGROUND TASK
-        // ========================================================
 
         Task<String> task =
                 new Task<String>() {
@@ -70,9 +67,7 @@ public class BusinessImprovementController {
             protected String call()
                     throws Exception {
 
-                // =================================================
                 // 1. SHOPKEEPER DATA
-                // =================================================
 
                 updateMessage(
                         "Reading your shop information..."
@@ -90,9 +85,7 @@ public class BusinessImprovementController {
                 }
 
 
-                // =================================================
                 // 2. PRODUCT DATA
-                // =================================================
 
                 updateMessage(
                         "Reading your product information..."
@@ -105,9 +98,7 @@ public class BusinessImprovementController {
                 );
 
 
-                // =================================================
                 // 3. ONLINE BUSINESS RESEARCH
-                // =================================================
 
                 updateMessage(
                         "Researching online business knowledge..."
@@ -135,9 +126,7 @@ public class BusinessImprovementController {
                 }
 
 
-                // =================================================
                 // 4. BUSINESS ANALYSIS
-                // =================================================
 
                 updateMessage(
                         "Comparing your shop with "
@@ -166,9 +155,7 @@ public class BusinessImprovementController {
                 }
 
 
-                // =================================================
                 // 5. CREATE VIDEO
-                // =================================================
 
                 updateMessage(
                         "Creating your personalized improvement video..."
@@ -198,9 +185,7 @@ public class BusinessImprovementController {
                 }
 
 
-                // =================================================
                 // 6. RETURN VIDEO URL
-                // =================================================
 
                 updateMessage(
                         "Your improvement video is ready."
@@ -212,9 +197,7 @@ public class BusinessImprovementController {
         };
 
 
-        // ========================================================
         // STATUS LISTENER
-        // ========================================================
 
         task.messageProperty()
                 .addListener(
@@ -236,9 +219,7 @@ public class BusinessImprovementController {
                 );
 
 
-        // ========================================================
         // SUCCESS
-        // ========================================================
 
         task.setOnSucceeded(
                 event -> {
@@ -269,7 +250,9 @@ public class BusinessImprovementController {
                                                 videoUrl
                                         )
                         );
-
+                        stage.setWidth(1550);
+                        stage.setHeight(840);
+                        stage.centerOnScreen();
 
                         stage.show();
                     });
@@ -277,9 +260,7 @@ public class BusinessImprovementController {
         );
 
 
-        // ========================================================
         // FAILURE
-        // ========================================================
 
         task.setOnFailed(
                 event -> {
@@ -315,9 +296,7 @@ public class BusinessImprovementController {
         );
 
 
-        // ========================================================
         // START BACKGROUND THREAD
-        // ========================================================
 
         Thread thread =
                 new Thread(
@@ -334,9 +313,7 @@ public class BusinessImprovementController {
     }
 
 
-    // ============================================================
     // GET CURRENT APPLICATION STAGE
-    // ============================================================
 
     private static Stage getCurrentStage() {
 
@@ -357,9 +334,7 @@ public class BusinessImprovementController {
     }
 
 
-    // ============================================================
     // ERROR
-    // ============================================================
 
     private static void showError(
             String message) {

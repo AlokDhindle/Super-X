@@ -14,9 +14,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
@@ -26,31 +23,22 @@ public class ShopkeeperProfile {
 
                 BorderPane borderPane = new BorderPane();
 
-                // ============================================================
                 // HEADER
-                // ============================================================
 
                 HBox headerMainBox = ViewConstants.header();
 
-<<<<<<< HEAD
-=======
                 // Header background
                 headerMainBox.setStyle(
                                 "-fx-background-color: #EBCCB7;");
 
->>>>>>> Sayali
                 borderPane.setTop(headerMainBox);
 
-                // ============================================================
                 // SIDEBAR
-                // ============================================================
 
                 VBox sidebar = createSidebar();
                 borderPane.setLeft(sidebar);
 
-                // ================================================================
                 // CENTER - SHOPKEEPER PROFILE PAGE
-                // ================================================================
 
                 VBox centerMain = new VBox();
                 centerMain.setSpacing(14);
@@ -58,15 +46,9 @@ public class ShopkeeperProfile {
                                 new Insets(20, 24, 18, 24));
 
                 centerMain.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F8F7FC;");
-=======
                                 "-fx-background-color: #EEE5DF;");
->>>>>>> Sayali
 
-                // ============================================================
                 // PROFILE PAGE HEADING
-                // ============================================================
 
                 HBox headingBox = new HBox();
                 headingBox.setAlignment(Pos.CENTER_LEFT);
@@ -95,26 +77,20 @@ public class ShopkeeperProfile {
                 headingBox.getChildren().add(
                                 headingTextBox);
 
-                // ============================================================
                 // MAIN CONTENT AREA
-                // ============================================================
 
                 HBox contentArea = new HBox();
                 contentArea.setSpacing(18);
                 HBox.setHgrow(contentArea, Priority.ALWAYS);
 
-                // ============================================================
                 // LEFT PROFILE + SECURITY COLUMN
-                // ============================================================
 
                 VBox leftColumn = new VBox();
                 leftColumn.setSpacing(14);
                 leftColumn.setPrefWidth(665);
                 leftColumn.setMaxWidth(665);
 
-                // ============================================================
                 // MERCHANT PROFILE CARD
-                // ============================================================
 
                 HBox merchantCard = new HBox();
                 merchantCard.setSpacing(28);
@@ -191,9 +167,7 @@ public class ShopkeeperProfile {
                                 avatarPane,
                                 merchantInfo);
 
-                // ============================================================
                 // STORE DETAILS
-                // ============================================================
 
                 HBox storeDetails = new HBox();
                 storeDetails.setSpacing(12);
@@ -305,9 +279,7 @@ public class ShopkeeperProfile {
                                 storeIdCard,
                                 categoryCard);
 
-                // ============================================================
                 // SECURITY SETTINGS CARD
-                // ============================================================
 
                 VBox securityCard = new VBox();
                 securityCard.setSpacing(13);
@@ -341,9 +313,7 @@ public class ShopkeeperProfile {
                                 shieldIcon,
                                 securityTitle);
 
-                // ============================================================
                 // PASSWORD ROW
-                // ============================================================
 
                 HBox passwordRow = new HBox();
 
@@ -412,9 +382,7 @@ public class ShopkeeperProfile {
                                 passwordTextBox,
                                 changePasswordButton);
 
-                // ============================================================
                 // DELETE ACCOUNT
-                // ============================================================
 
                 HBox deleteRow = new HBox();
 
@@ -501,9 +469,7 @@ public class ShopkeeperProfile {
                                 storeDetails,
                                 securityCard);
 
-                // ============================================================
                 // RIGHT COLUMN
-                // ============================================================
 
                 VBox rightColumn = new VBox();
 
@@ -511,9 +477,7 @@ public class ShopkeeperProfile {
                 rightColumn.setPrefWidth(285);
                 rightColumn.setMaxWidth(285);
 
-                // ============================================================
                 // ACCOUNT VERIFIED CARD
-                // ============================================================
 
                 HBox verifiedCard = new HBox();
 
@@ -575,9 +539,7 @@ public class ShopkeeperProfile {
                                 verifiedIconPane,
                                 verifiedTextBox);
 
-                // ============================================================
                 // CURRENT PLAN CARD
-                // ============================================================
 
                 VBox planCard = new VBox();
 
@@ -617,7 +579,18 @@ public class ShopkeeperProfile {
                                 currentPlan,
                                 planIcon);
 
-                Text proText = new Text("Pro");
+                String dynPlanName = (ViewConstants.shopkeeperModel != null && ViewConstants.shopkeeperModel.getPlanName() != null)
+                                ? ViewConstants.shopkeeperModel.getPlanName()
+                                : "Pro";
+                String dynPlanAmount = (ViewConstants.shopkeeperModel != null && ViewConstants.shopkeeperModel.getPlanAmount() != null)
+                                ? ViewConstants.shopkeeperModel.getPlanAmount()
+                                : "₹49/mo";
+                String dynPlanRenewal = (ViewConstants.shopkeeperModel != null && ViewConstants.shopkeeperModel.getPlanRenewalDate() != null)
+                                ? ViewConstants.shopkeeperModel.getPlanRenewalDate()
+                                : "Nov 15, 2026";
+                String dynPlanDesc = "Merchant " + dynPlanName + " Subscription";
+
+                Text proText = new Text(dynPlanName);
 
                 proText.setStyle(
                                 "-fx-font-size: 38px;" +
@@ -625,7 +598,7 @@ public class ShopkeeperProfile {
                                                 "-fx-fill: #171717;");
 
                 Text subscriptionText = new Text(
-                                "Merchant Pro Subscription");
+                                dynPlanDesc);
 
                 subscriptionText.setStyle(
                                 "-fx-font-size: 12px;" +
@@ -653,7 +626,7 @@ public class ShopkeeperProfile {
                                                 "-fx-fill: #694B3D;");
 
                 Text renewalDate = new Text(
-                                "Nov 15, 2024");
+                                dynPlanRenewal);
 
                 renewalDate.setStyle(
                                 "-fx-font-size: 12px;" +
@@ -675,7 +648,7 @@ public class ShopkeeperProfile {
                                                 "-fx-font-weight: bold;" +
                                                 "-fx-fill: #694B3D;");
 
-                Text amountValue = new Text("$49/mo");
+                Text amountValue = new Text(dynPlanAmount);
 
                 amountValue.setStyle(
                                 "-fx-font-size: 12px;" +
@@ -702,12 +675,28 @@ public class ShopkeeperProfile {
                                 "-fx-background-color: #FCFAFD;" +
                                                 "-fx-text-fill: #B84200;" +
                                                 "-fx-font-size: 12px;" +
+                                                "-fx-font-weight: bold;" +
                                                 "-fx-background-radius: 8px;" +
                                                 "-fx-cursor: hand;");
 
+                managePlanButton.setOnMouseEntered(e -> managePlanButton.setStyle(
+                                "-fx-background-color: #B84200;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-font-size: 12px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 8px;" +
+                                                "-fx-cursor: hand;"));
+
+                managePlanButton.setOnMouseExited(e -> managePlanButton.setStyle(
+                                "-fx-background-color: #FCFAFD;" +
+                                                "-fx-text-fill: #B84200;" +
+                                                "-fx-font-size: 12px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 8px;" +
+                                                "-fx-cursor: hand;"));
+
                 managePlanButton.setOnAction(e -> {
-                        System.out.println(
-                                        "Manage Plan clicked");
+                        Homepage.HomepageStage.setScene(ShopkeeperManagePlan.managePlanScene());
                 });
 
                 planCard.getChildren().addAll(
@@ -717,9 +706,7 @@ public class ShopkeeperProfile {
                                 renewalBox,
                                 managePlanButton);
 
-                // ============================================================
                 // SECURE LOGOUT BUTTON
-                // ============================================================
 
                 Button secureLogoutButton = new Button("⇥    Secure Log Out");
 
@@ -748,17 +735,13 @@ public class ShopkeeperProfile {
                                 planCard,
                                 secureLogoutButton);
 
-                // ============================================================
                 // ADD COLUMNS
-                // ============================================================
 
                 contentArea.getChildren().addAll(
                                 leftColumn,
                                 rightColumn);
 
-                // ============================================================
                 // CENTER MAIN CONTENT
-                // ============================================================
 
                 centerMain.getChildren().addAll(
                                 headingBox,
@@ -766,9 +749,7 @@ public class ShopkeeperProfile {
 
                 VBox.setVgrow(contentArea, Priority.ALWAYS);
 
-                // ============================================================
                 // SCROLL PANE
-                // ============================================================
 
                 ScrollPane centerScroll = new ScrollPane(
                                 centerMain);
@@ -783,47 +764,33 @@ public class ShopkeeperProfile {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 centerScroll.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F8F7FC;" +
-=======
                                 "-fx-background-color: #EEE5DF;" +
->>>>>>> Sayali
                                                 "-fx-border-color: transparent;");
 
                 borderPane.setCenter(centerScroll);
 
-                // ================================================================
                 // FOOTER
-                // ================================================================
 
                 VBox footerBox = ViewConstants.footer();
 
                 borderPane.setBottom(footerBox);
 
-                // ============================================================
                 // SCENE
-                // ============================================================
 
                 Scene profileScene = new Scene(
                                 borderPane,
-                                ViewConstants.STAGE_WIDTH,
-                                ViewConstants.STAGE_HEIGHT);
+                                        +                                1550,
+                                        +                                850);
 
                 profileScene.setFill(
-<<<<<<< HEAD
-                                Color.web("#F8F7FC"));
-=======
                                 Color.web("#EEE5DF"));
->>>>>>> Sayali
 
                 return profileScene;
         }
 
-        // ====================================================================
         // SIDEBAR
-        // ====================================================================
 
-        private static VBox createSidebar() {
+        public static VBox createSidebar() {
 
                 VBox sidebar = new VBox();
 
@@ -834,11 +801,7 @@ public class ShopkeeperProfile {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F5F4F9;" +
-=======
                                 "-fx-background-color: #EBCCB7;" +
->>>>>>> Sayali
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 

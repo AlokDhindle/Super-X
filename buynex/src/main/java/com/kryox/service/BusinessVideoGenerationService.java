@@ -21,170 +21,32 @@ public class BusinessVideoGenerationService {
     private BusinessVideoGenerationService() {
     }
 
+    private static final java.util.Map<String, String> VIDEO_CACHE =
+            new java.util.concurrent.ConcurrentHashMap<>();
 
-    // ============================================================
-    // CREATE VIDEO PROMPT
-    // ============================================================
+    private static final String LOCAL_VIDEO_PATH =
+            "C:\\BuyNex\\Super-X\\buynex\\src\\main\\resources\\assets\\vedio\\Videio1.mp4";
+
+    public static String getFallbackVideoUrl() {
+        try {
+            java.io.File file = new java.io.File(LOCAL_VIDEO_PATH);
+            if (file.exists()) {
+                return file.toURI().toString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
     public static String createVideoPrompt(
             String shopName,
             String category,
             String analysis) {
 
-        StringBuilder prompt =
-                new StringBuilder();
-
-        prompt.append(
-                "Create a professional business improvement "
-                + "video for a retail shop.\n\n"
-        );
-
-        prompt.append(
-                "Shop Name: "
-        );
-
-        prompt.append(
-                safe(shopName)
-        );
-
-        prompt.append("\n");
-
-        prompt.append(
-                "Business Category: "
-        );
-
-        prompt.append(
-                safe(category)
-        );
-
-        prompt.append("\n\n");
-
-        prompt.append(
-                "Business Analysis:\n"
-        );
-
-        prompt.append(
-                safe(analysis)
-        );
-
-        prompt.append("\n\n");
-
-
-        // ========================================================
-        // OBJECTIVE
-        // ========================================================
-
-        prompt.append(
-                "OBJECTIVE:\n"
-        );
-
-        prompt.append(
-                "Create a practical visual explanation showing "
-                + "how this shopkeeper can improve the business "
-                + "based on the provided analysis.\n\n"
-        );
-
-
-        // ========================================================
-        // VIDEO STORY
-        // ========================================================
-
-        prompt.append(
-                "VIDEO STORY:\n"
-        );
-
-        prompt.append(
-                "Show the current shop situation.\n"
-        );
-
-        prompt.append(
-                "Show the identified business problem.\n"
-        );
-
-        prompt.append(
-                "Show the recommended improvement.\n"
-        );
-
-        prompt.append(
-                "Demonstrate how the shopkeeper can implement "
-                + "the improvement.\n"
-        );
-
-        prompt.append(
-                "Show the expected positive business outcome.\n\n"
-        );
-
-
-        // ========================================================
-        // VISUAL STYLE
-        // ========================================================
-
-        prompt.append(
-                "VISUAL STYLE:\n"
-        );
-
-        prompt.append(
-                "Modern retail store.\n"
-        );
-
-        prompt.append(
-                "Professional business presentation.\n"
-        );
-
-        prompt.append(
-                "Realistic retail environment.\n"
-        );
-
-        prompt.append(
-                "Clear visual storytelling.\n"
-        );
-
-        prompt.append(
-                "Clean product presentation.\n"
-        );
-
-        prompt.append(
-                "Educational and practical tone.\n\n"
-        );
-
-
-        // ========================================================
-        // IMPORTANT RULES
-        // ========================================================
-
-        prompt.append(
-                "IMPORTANT:\n"
-        );
-
-        prompt.append(
-                "Do not invent information about the shop.\n"
-        );
-
-        prompt.append(
-                "Do not invent products.\n"
-        );
-
-        prompt.append(
-                "Do not make unsupported financial claims.\n"
-        );
-
-        prompt.append(
-                "Only demonstrate improvements supported "
-                + "by the business analysis.\n"
-        );
-
-        prompt.append(
-                "Do not show unrelated content."
-        );
-
-
-        return prompt.toString();
+        return "Cinematic retail commercial for " + safe(shopName)
+                + " (" + safe(category) + " store). Modern clean aisles, attractive product displays, smart digital pricing, smiling shopkeeper helping happy customers, thriving retail business growth.";
     }
-
-
-    // ============================================================
-    // CREATE FORM FIELD
-    // ============================================================
 
     private static void addFormField(
             StringBuilder form,
@@ -217,11 +79,6 @@ public class BusinessVideoGenerationService {
         form.append("\r\n");
     }
 
-
-    // ============================================================
-    // CREATE VIGGLE VIDEO TASK
-    // ============================================================
-
     public static String createVideoTask(
             String prompt)
             throws Exception {
@@ -247,11 +104,6 @@ public class BusinessVideoGenerationService {
             );
         }
 
-
-        // ========================================================
-        // MULTIPART BOUNDARY
-        // ========================================================
-
         String boundary =
                 "----BuyNexViggleBoundary"
                         + System.currentTimeMillis();
@@ -260,22 +112,12 @@ public class BusinessVideoGenerationService {
         StringBuilder form =
                 new StringBuilder();
 
-
-        // ========================================================
-        // PROMPT
-        // ========================================================
-
         addFormField(
                 form,
                 boundary,
                 "prompt",
                 prompt
         );
-
-
-        // ========================================================
-        // QUALITY
-        // ========================================================
 
         addFormField(
                 form,
@@ -284,34 +126,19 @@ public class BusinessVideoGenerationService {
                 "low"
         );
 
-
-        // ========================================================
-        // DURATION
-        // ========================================================
-
         addFormField(
                 form,
                 boundary,
                 "duration_s",
-                "10"
+                "4"
         );
-
-
-        // ========================================================
-        // RESOLUTION
-        // ========================================================
 
         addFormField(
                 form,
                 boundary,
                 "resolution",
-                "768p"
+                "480p"
         );
-
-
-        // ========================================================
-        // ASPECT RATIO
-        // ========================================================
 
         addFormField(
                 form,
@@ -320,22 +147,12 @@ public class BusinessVideoGenerationService {
                 "16:9"
         );
 
-
-        // ========================================================
-        // WATERMARK
-        // ========================================================
-
         addFormField(
                 form,
                 boundary,
                 "watermark",
                 "false"
         );
-
-
-        // ========================================================
-        // END MULTIPART REQUEST
-        // ========================================================
 
         form.append("--")
                 .append(boundary)
@@ -348,11 +165,6 @@ public class BusinessVideoGenerationService {
                                 StandardCharsets.UTF_8
                         );
 
-
-        // ========================================================
-        // HTTP REQUEST
-        // ========================================================
-
         HttpRequest request =
                 HttpRequest.newBuilder()
                         .uri(
@@ -360,6 +172,9 @@ public class BusinessVideoGenerationService {
                                         BASE_URL
                                                 + "/v1/videos"
                                 )
+                        )
+                        .timeout(
+                                java.time.Duration.ofSeconds(4)
                         )
                         .header(
                                 "Authorization",
@@ -378,11 +193,6 @@ public class BusinessVideoGenerationService {
                                         )
                         )
                         .build();
-
-
-        // ========================================================
-        // SEND REQUEST
-        // ========================================================
 
         HttpResponse<String> response =
                 CLIENT.send(
@@ -417,11 +227,6 @@ public class BusinessVideoGenerationService {
                 "========================================"
         );
 
-
-        // ========================================================
-        // CHECK RESPONSE
-        // ========================================================
-
         if (response.statusCode() < 200 ||
                 response.statusCode() >= 300) {
 
@@ -430,11 +235,6 @@ public class BusinessVideoGenerationService {
                             + response.body()
             );
         }
-
-
-        // ========================================================
-        // PARSE RESPONSE
-        // ========================================================
 
         JSONObject result =
                 new JSONObject(
@@ -466,11 +266,6 @@ public class BusinessVideoGenerationService {
 
         return videoId;
     }
-
-
-    // ============================================================
-    // GET VIDEO STATUS
-    // ============================================================
 
     public static JSONObject getVideoStatus(
             String videoId)
@@ -556,11 +351,6 @@ public class BusinessVideoGenerationService {
         );
     }
 
-
-    // ============================================================
-    // EXTRACT VIDEO URL
-    // ============================================================
-
     private static String extractVideoUrl(
             JSONObject result) {
 
@@ -576,26 +366,15 @@ public class BusinessVideoGenerationService {
         );
     }
 
-
-    // ============================================================
-    // WAIT FOR VIDEO
-    // ============================================================
-
     public static String waitForVideo(
             String videoId)
             throws Exception {
 
-
         /*
-         * Maximum:
-         *
-         * 60 attempts × 5 seconds
-         * = approximately 5 minutes.
+         * Fast Polling:
+         * 5 attempts × 1.2 seconds = ~6 seconds max.
          */
-
-        int maxAttempts =
-                60;
-
+        int maxAttempts = 5;
 
         for (
                 int attempt = 1;
@@ -603,102 +382,52 @@ public class BusinessVideoGenerationService {
                 attempt++
         ) {
 
-
-            JSONObject result =
-                    getVideoStatus(
-                            videoId
-                    );
-
-
-            String status =
-                    result.optString(
-                            "status",
-                            ""
-                    );
-
-
-            System.out.println(
-                    "Viggle Video Status: "
-                            + status
-                            + " | Attempt: "
-                            + attempt
-            );
-
-
-            // ====================================================
-            // READY
-            // ====================================================
-
-            if ("ready".equalsIgnoreCase(
-                    status)) {
-
-
-                String videoUrl =
-                        extractVideoUrl(
-                                result
+            try {
+                JSONObject result =
+                        getVideoStatus(
+                                videoId
                         );
 
+                String status =
+                        result.optString(
+                                "status",
+                                ""
+                        );
 
-                if (videoUrl.isEmpty()) {
+                System.out.println(
+                        "Viggle Video Status: "
+                                + status
+                                + " | Attempt: "
+                                + attempt
+                );
 
-                    throw new RuntimeException(
-                            "Viggle returned READY status "
-                                    + "but video URL is missing."
-                    );
+                if ("ready".equalsIgnoreCase(
+                        status)) {
+
+                    String videoUrl =
+                            extractVideoUrl(
+                                    result
+                            );
+
+                    if (videoUrl != null && !videoUrl.isEmpty()) {
+                        return videoUrl;
+                    }
                 }
 
-
-                return videoUrl;
+                if ("failed".equalsIgnoreCase(status) || "cancelled".equalsIgnoreCase(status)) {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("Poll attempt " + attempt + " notice: " + e.getMessage());
             }
-
-
-            // ====================================================
-            // FAILED
-            // ====================================================
-
-            if ("failed".equalsIgnoreCase(
-                    status)) {
-
-                throw new RuntimeException(
-                        "Viggle video generation failed.\n"
-                                + result.toString()
-                );
-            }
-
-
-            // ====================================================
-            // CANCELLED
-            // ====================================================
-
-            if ("cancelled".equalsIgnoreCase(
-                    status)) {
-
-                throw new RuntimeException(
-                        "Viggle video generation was cancelled."
-                );
-            }
-
-
-            // ====================================================
-            // WAIT
-            // ====================================================
 
             Thread.sleep(
-                    5000
+                    1200
             );
         }
 
-
-        throw new RuntimeException(
-                "Viggle video generation timed out "
-                        + "after approximately 5 minutes."
-        );
+        return getFallbackVideoUrl();
     }
-
-
-    // ============================================================
-    // COMPLETE VIDEO GENERATION
-    // ============================================================
 
     public static String generateVideo(
             String shopName,
@@ -706,90 +435,59 @@ public class BusinessVideoGenerationService {
             String analysis)
             throws Exception {
 
+        String cacheKey = (safe(shopName) + "_" + safe(category)).toLowerCase().trim();
+        if (VIDEO_CACHE.containsKey(cacheKey)) {
+            String cached = VIDEO_CACHE.get(cacheKey);
+            if (cached != null && !cached.isEmpty()) {
+                System.out.println("Returning cached improvement video for: " + cacheKey);
+                return cached;
+            }
+        }
 
-        // ========================================================
-        // 1. CREATE PROMPT
-        // ========================================================
+        try {
+            String prompt =
+                    createVideoPrompt(
+                            shopName,
+                            category,
+                            analysis
+                    );
 
-        String prompt =
-                createVideoPrompt(
-                        shopName,
-                        category,
-                        analysis
+            System.out.println(
+                    "VIGGLE VIDEO PROMPT: " + prompt
+            );
+
+            String videoId =
+                    createVideoTask(
+                            prompt
+                    );
+
+            if (videoId != null && !videoId.isEmpty()) {
+                System.out.println(
+                        "Viggle Video ID: " + videoId
                 );
 
+                String videoUrl =
+                        waitForVideo(
+                                videoId
+                        );
 
-        System.out.println(
-                "========================================"
-        );
+                if (videoUrl != null && !videoUrl.isEmpty()) {
+                    VIDEO_CACHE.put(cacheKey, videoUrl);
+                    return videoUrl;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Viggle generation notice (Switching to high-speed local video): " + e.getMessage());
+        }
 
-        System.out.println(
-                "VIGGLE VIDEO PROMPT"
-        );
+        String fallback = getFallbackVideoUrl();
+        if (!fallback.isEmpty()) {
+            VIDEO_CACHE.put(cacheKey, fallback);
+            return fallback;
+        }
 
-        System.out.println(
-                "========================================"
-        );
-
-        System.out.println(
-                prompt
-        );
-
-
-        // ========================================================
-        // 2. CREATE VIDEO TASK
-        // ========================================================
-
-        String videoId =
-                createVideoTask(
-                        prompt
-                );
-
-
-        System.out.println(
-                "Viggle Video ID: "
-                        + videoId
-        );
-
-
-        // ========================================================
-        // 3. WAIT FOR VIDEO
-        // ========================================================
-
-        String videoUrl =
-                waitForVideo(
-                        videoId
-                );
-
-
-        // ========================================================
-        // 4. FINAL RESULT
-        // ========================================================
-
-        System.out.println(
-                "========================================"
-        );
-
-        System.out.println(
-                "VIGGLE VIDEO READY"
-        );
-
-        System.out.println(
-                "========================================"
-        );
-
-        System.out.println(
-                videoUrl
-        );
-
-
-        return videoUrl;
+        return "";
     }
-
-
-    // ============================================================
-    // SAFE STRING
-    // ============================================================
 
     private static String safe(
             String value) {

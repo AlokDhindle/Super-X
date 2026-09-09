@@ -20,11 +20,19 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class SmartAssistantUI {
-        private String userId;
+    private String userId;
 
-        public String userId(){
-                return userId;
-        }
+    public SmartAssistantUI() {
+        this(CustomerLogin.loggedInUserId);
+    }
+
+    public SmartAssistantUI(String userId) {
+        this.userId = (userId != null && !userId.isBlank()) ? userId : CustomerLogin.loggedInUserId;
+    }
+
+    public String userId() {
+        return userId;
+    }
 
     private Scene SmartAssistantUi;
 
@@ -38,18 +46,12 @@ public class SmartAssistantUI {
 
     public Scene getSmartAssisstantui() {
 
-        // =========================================================
-        // ROOT
-        // =========================================================
         HBox root = new HBox();
         root.setSpacing(0);
         root.setAlignment(Pos.TOP_LEFT);
         root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         root.setStyle("-fx-background-color: #FFFFFF;");
 
-        // =========================================================
-        // 2. CENTER AI CHAT
-        // =========================================================
         VBox centerVBox = new VBox();
         centerVBox.setPrefWidth(700);
         centerVBox.setMinWidth(560);
@@ -60,9 +62,6 @@ public class SmartAssistantUI {
                 "-fx-background-color: linear-gradient(to bottom, #FFF9F5, #F4ECE7);"
         );
 
-        // =========================================================
-        // AI HEADER - STYLISH + BACK BUTTON
-        // =========================================================
         HBox headerHBox = new HBox();
         headerHBox.setPrefHeight(76);
         headerHBox.setMinHeight(76);
@@ -169,17 +168,21 @@ public class SmartAssistantUI {
                 menuIcon
         );
 
-        // =========================================================
-        // LIVE CHAT FEED
-        // =========================================================
         chatVBox = new VBox(16);
         chatVBox.setPadding(new Insets(22, 28, 18, 28));
         chatVBox.setFillWidth(true);
 
-        // Initial message only. Static demo conversation is removed.
+        // Initial welcome message reflecting Rule 2
         addAiMessage(
-                "Hello! I'm your BuyNeX AI. How can I help you source, " +
-                "compare, or track your local purchases today?"
+                "Welcome to BuyNex! 👋\n\n" +
+                "Here’s what's currently available:\n\n" +
+                "🛍 Products & Groceries\n" +
+                "🎁 Active Daily Offers & Coupons\n" +
+                "📦 Available Local Stock\n" +
+                "💰 Verified Selling Prices\n" +
+                "🚚 15-Min Express Delivery\n" +
+                "🔎 Product Search\n\n" +
+                "What would you like to explore?"
         );
 
         chatScrollPane = new ScrollPane(chatVBox);
@@ -193,9 +196,6 @@ public class SmartAssistantUI {
         );
         VBox.setVgrow(chatScrollPane, Priority.ALWAYS);
 
-        // =========================================================
-        // BOTTOM INPUT AREA
-        // =========================================================
         HBox inputOuterHBox = new HBox();
         inputOuterHBox.setPrefHeight(78);
         inputOuterHBox.setAlignment(Pos.CENTER);
@@ -224,9 +224,6 @@ public class SmartAssistantUI {
         attachIcon.setFont(Font.font("Arial", 18));
         attachIcon.setFill(Color.web("#5B5552"));
 
-        // =========================================================
-        // TEXTAREA - replaces TextField
-        // =========================================================
         inputField = new TextArea();
         inputField.setPromptText("Ask BuyNeX AI...");
         inputField.setFont(Font.font("Arial", 11));
@@ -260,9 +257,6 @@ public class SmartAssistantUI {
                 "-fx-cursor: hand;"
         );
 
-        // =========================================================
-        // SEND BUTTON
-        // =========================================================
         sendButton.setOnAction(event -> sendMessage());
 
         // Enter = send.
@@ -291,9 +285,6 @@ public class SmartAssistantUI {
                 inputOuterHBox
         );
 
-        // =========================================================
-        // 3. RIGHT AI CAPABILITIES
-        // =========================================================
         VBox rightVBox = new VBox();
         rightVBox.setPrefWidth(285);
         rightVBox.setMinWidth(285);
@@ -382,9 +373,6 @@ public class SmartAssistantUI {
                 infoBox
         );
 
-        // =========================================================
-        // ROOT
-        // =========================================================
         root.getChildren().addAll(
                 centerVBox,
                 rightVBox
@@ -395,61 +383,84 @@ public class SmartAssistantUI {
         return SmartAssistantUi;
     }
 
-    // =============================================================
-    // SEND MESSAGE
-    // =============================================================
-   private void sendMessage() {
+    private void sendMessage() {
 
-    String userText = inputField.getText();
+        String userText = inputField.getText();
 
-    if (userText == null || userText.trim().isEmpty()) {
-        return;
-    }
-
-    userText = userText.trim();
-
-    // User ka message show karo
-    addUserMessage(userText);
-
-    // Input clear karo
-    inputField.clear();
-
-    // Gemini API call background thread mein
-    String finalUserText = userText;
-
-    new Thread(() -> {
-
-        try {
-
-            // YAHAN controller ki Gemini method call hogi
-            Chatbot chatbot=new Chatbot();
-            String response = chatbot.getGeminiResponse(finalUserText);
-
-            // JavaFX UI ko main thread par update karo
-            javafx.application.Platform.runLater(() -> {
-
-                if (response != null && !response.isEmpty()) {
-                    addAiMessage(response);
-                } else {
-                    addAiMessage("Sorry, response nahi mila.");
-                }
-
-            });
-
-        } catch (Exception ex) {
-
-            ex.printStackTrace();
-
-            javafx.application.Platform.runLater(() ->
-                addAiMessage("Gemini API se response lene mein error aa gaya.")
-            );
+        if (userText == null || userText.trim().isEmpty()) {
+            return;
         }
 
-    }).start();
-}
-    // =============================================================
-    // ADD USER MESSAGE TO FEED
-    // =============================================================
+        userText = userText.trim();
+
+        // User message display immediately
+        addUserMessage(userText);
+        inputField.clear();
+
+        // ⚡ INSTANT FEEDBACK: Show typing indicator immediately
+        HBox typingIndicator = createTypingIndicator();
+        chatVBox.getChildren().add(typingIndicator);
+        scrollToBottom();
+
+        String finalUserText = userText;
+
+        new Thread(() -> {
+            try {
+                String response = Chatbot.getGeminiResponse(finalUserText, userId);
+
+                javafx.application.Platform.runLater(() -> {
+                    chatVBox.getChildren().remove(typingIndicator);
+                    if (response != null && !response.isEmpty()) {
+                        addAiMessage(response);
+                    } else {
+                        addAiMessage("I'm here to help! Please ask about products, deals, or order tracking.");
+                    }
+                });
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                javafx.application.Platform.runLater(() -> {
+                    chatVBox.getChildren().remove(typingIndicator);
+                    addAiMessage("Network issue. Please check your connection or ask again.");
+                });
+            }
+        }).start();
+    }
+
+    private HBox createTypingIndicator() {
+        HBox aiMessageHBox = new HBox();
+        aiMessageHBox.setAlignment(Pos.TOP_LEFT);
+        aiMessageHBox.setSpacing(9);
+
+        VBox smallAiCircle = new VBox();
+        smallAiCircle.setPrefSize(23, 23);
+        smallAiCircle.setMinSize(23, 23);
+        smallAiCircle.setMaxSize(23, 23);
+        smallAiCircle.setAlignment(Pos.CENTER);
+        smallAiCircle.setStyle(
+                "-fx-background-color: #FF7109;" +
+                "-fx-background-radius: 20;"
+        );
+
+        Text smallAiIcon = new Text("♙");
+        smallAiIcon.setFont(Font.font("Arial", 12));
+        smallAiCircle.getChildren().add(smallAiIcon);
+
+        Text aiMessage = new Text("BuyNeX AI is typing...");
+        aiMessage.setFont(Font.font("Arial", 11));
+        aiMessage.setFill(Color.web("#888888"));
+
+        VBox aiMessageBox = new VBox();
+        aiMessageBox.setPadding(new Insets(9, 11, 9, 11));
+        aiMessageBox.setStyle(
+                "-fx-background-color: #F4F1F8;" +
+                "-fx-background-radius: 9;"
+        );
+        aiMessageBox.getChildren().add(aiMessage);
+
+        aiMessageHBox.getChildren().addAll(smallAiCircle, aiMessageBox);
+        return aiMessageHBox;
+    }
     private void addUserMessage(String message) {
 
         HBox userMessageHBox = new HBox();
@@ -476,9 +487,6 @@ public class SmartAssistantUI {
         scrollToBottom();
     }
 
-    // =============================================================
-    // ADD AI MESSAGE TO FEED
-    // =============================================================
     private void addAiMessage(String message) {
 
         HBox aiMessageHBox = new HBox();
@@ -524,9 +532,6 @@ public class SmartAssistantUI {
         scrollToBottom();
     }
 
-    // =============================================================
-    // ADD PRODUCT RESULT CARD TO CHAT
-    // =============================================================
     private void addProductResult(
             String productName,
             String productDescription,
@@ -553,9 +558,6 @@ public class SmartAssistantUI {
         smallAiIcon.setFont(Font.font("Arial", 12));
         smallAiCircle.getChildren().add(smallAiIcon);
 
-        // =========================================================
-        // PRODUCT CARD
-        // =========================================================
         VBox productCard = new VBox();
         productCard.setSpacing(8);
         productCard.setPadding(new Insets(9));
@@ -572,9 +574,6 @@ public class SmartAssistantUI {
         productRow.setSpacing(10);
         productRow.setAlignment(Pos.CENTER_LEFT);
 
-        // =========================================================
-        // PRODUCT IMAGE
-        // =========================================================
         VBox imageBox = new VBox();
         imageBox.setPrefSize(82, 76);
         imageBox.setMinSize(82, 76);
@@ -620,9 +619,6 @@ public class SmartAssistantUI {
             imageBox.getChildren().add(noImage);
         }
 
-        // =========================================================
-        // PRODUCT DETAILS
-        // =========================================================
         VBox detailsBox = new VBox();
         detailsBox.setSpacing(4);
         detailsBox.setAlignment(Pos.CENTER_LEFT);
@@ -654,9 +650,6 @@ public class SmartAssistantUI {
         Region productSpacer = new Region();
         HBox.setHgrow(productSpacer, Priority.ALWAYS);
 
-        // =========================================================
-        // ADD TO CART BUTTON
-        // =========================================================
         Button addToCartButton = new Button("Add to Cart");
         addToCartButton.setPrefWidth(86);
         addToCartButton.setPrefHeight(31);
@@ -727,9 +720,6 @@ public class SmartAssistantUI {
         scrollToBottom();
     }
 
-    // =============================================================
-    // AUTO SCROLL TO LATEST MESSAGE
-    // =============================================================
     private void scrollToBottom() {
 
         if (chatScrollPane == null) {
@@ -741,9 +731,6 @@ public class SmartAssistantUI {
         );
     }
 
-    // =============================================================
-    // RIGHT CAPABILITY CARD
-    // =============================================================
     private VBox capabilityCard(
             String iconText,
             String titleText,

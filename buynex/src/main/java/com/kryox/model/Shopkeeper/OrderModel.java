@@ -1,232 +1,203 @@
 package com.kryox.model.Shopkeeper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderModel {
 
     private String orderId;
-
-    private String customerId;
-
+    private String userId;
     private String customerName;
-
     private String customerPhone;
 
-    private ArrayList<OrderItemModel> products;
+    private String shopkeeperUid;
+    private String shopName;
 
-    private double subtotal;
-
-    private double discount;
-
-    private double tax;
+    private String orderDate;
+    private String orderStatus;
 
     private double totalAmount;
 
-    private String orderStatus;
+    private List<OrderItemModel> products =
+            new ArrayList<>();
 
-    private String paymentMethod;
-
+    private String riderName;
+    private String riderPhone;
+    private String riderDistance;
+    private double shopLat = 18.5204;
+    private double shopLng = 73.8567;
     private String paymentStatus;
-
-    private String orderDate;
-
-    private String deliveryAddress;
-
-
-    // ============================================================
-    // EMPTY CONSTRUCTOR
-    // REQUIRED FOR FIRESTORE
-    // ============================================================
+    private double subtotal;
+    private double platformFee;
+    private double tax;
+    private double deliveryFee;
+    private double discount;
+    private String promoCode;
+    private boolean stockDeducted;
 
     public OrderModel() {
     }
 
-
-    // ============================================================
-    // CONSTRUCTOR
-    // ============================================================
-
-    public OrderModel(
-            String orderId,
-            String customerId,
-            String customerName,
-            String customerPhone,
-            ArrayList<OrderItemModel> products,
-            double subtotal,
-            double discount,
-            double tax,
-            double totalAmount,
-            String orderStatus,
-            String paymentMethod,
-            String paymentStatus,
-            String orderDate,
-            String deliveryAddress) {
-
-        this.orderId = orderId;
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.customerPhone = customerPhone;
-        this.products = products;
-        this.subtotal = subtotal;
-        this.discount = discount;
-        this.tax = tax;
-        this.totalAmount = totalAmount;
-        this.orderStatus = orderStatus;
-        this.paymentMethod = paymentMethod;
-        this.paymentStatus = paymentStatus;
-        this.orderDate = orderDate;
-        this.deliveryAddress = deliveryAddress;
-    }
-
-
-    // ============================================================
-    // ORDER ID
-    // ============================================================
-
     public String getOrderId() {
         return orderId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getCustomerId() {
+        if (userId != null && !userId.isBlank()) {
+            return userId;
+        }
+        return customerName;
+    }
+
+    public String getCustomerName() {
+        if (customerName != null && !customerName.isBlank()) {
+            return customerName;
+        }
+        if (userId != null && !userId.isBlank()) {
+            return userId;
+        }
+        return "Customer";
+    }
+
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public String getShopkeeperUid() {
+        return shopkeeperUid;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public List<OrderItemModel> getProducts() {
+        return products;
     }
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 
-
-    // ============================================================
-    // CUSTOMER ID
-    // ============================================================
-
-    public String getCustomerId() {
-        return customerId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-
-    // ============================================================
-    // CUSTOMER NAME
-    // ============================================================
-
-    public String getCustomerName() {
-        return customerName;
+        this.userId = customerId;
+        if (this.customerName == null || this.customerName.isBlank()) {
+            this.customerName = customerId;
+        }
     }
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
 
-
-    // ============================================================
-    // CUSTOMER PHONE
-    // ============================================================
-
-    public String getCustomerPhone() {
-        return customerPhone;
-    }
-
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
     }
 
-
-    // ============================================================
-    // PRODUCTS
-    // ============================================================
-
-    public ArrayList<OrderItemModel> getProducts() {
-        return products;
+    public void setShopkeeperUid(String shopkeeperUid) {
+        this.shopkeeperUid = shopkeeperUid;
     }
 
-    public void setProducts(
-            ArrayList<OrderItemModel> products) {
-
-        this.products = products;
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
-
-    // ============================================================
-    // SUBTOTAL
-    // ============================================================
-
-    public double getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
-    }
-
-
-    // ============================================================
-    // DISCOUNT
-    // ============================================================
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
-
-    // ============================================================
-    // TAX
-    // ============================================================
-
-    public double getTax() {
-        return tax;
-    }
-
-    public void setTax(double tax) {
-        this.tax = tax;
-    }
-
-
-    // ============================================================
-    // TOTAL AMOUNT
-    // ============================================================
-
-    public double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-
-    // ============================================================
-    // ORDER STATUS
-    // ============================================================
-
-    public String getOrderStatus() {
-        return orderStatus;
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
     }
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
 
-
-    // ============================================================
-    // PAYMENT METHOD
-    // ============================================================
-
-    public String getPaymentMethod() {
-        return paymentMethod;
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setProducts(List<OrderItemModel> products) {
+
+        if (products == null) {
+            this.products = new ArrayList<>();
+        } else {
+            this.products = products;
+        }
     }
 
+    public void addProduct(OrderItemModel item) {
 
-    // ============================================================
-    // PAYMENT STATUS
-    // ============================================================
+        if (item != null) {
+            products.add(item);
+        }
+    }
+
+    public String getRiderName() {
+        if (riderName != null && !riderName.isBlank()) {
+            return riderName;
+        }
+        return "Rahul Sharma";
+    }
+
+    public void setRiderName(String riderName) {
+        this.riderName = riderName;
+    }
+
+    public String getRiderPhone() {
+        if (riderPhone != null && !riderPhone.isBlank()) {
+            return riderPhone;
+        }
+        return "+91 98765 43210";
+    }
+
+    public void setRiderPhone(String riderPhone) {
+        this.riderPhone = riderPhone;
+    }
+
+    public String getRiderDistance() {
+        if (riderDistance != null && !riderDistance.isBlank()) {
+            return riderDistance;
+        }
+        return "0.8 km away (within 1.5km radius)";
+    }
+
+    public void setRiderDistance(String riderDistance) {
+        this.riderDistance = riderDistance;
+    }
+
+    public double getShopLat() {
+        return shopLat;
+    }
+
+    public void setShopLat(double shopLat) {
+        this.shopLat = shopLat;
+    }
+
+    public double getShopLng() {
+        return shopLng;
+    }
+
+    public void setShopLng(double shopLng) {
+        this.shopLng = shopLng;
+    }
 
     public String getPaymentStatus() {
         return paymentStatus;
@@ -236,31 +207,59 @@ public class OrderModel {
         this.paymentStatus = paymentStatus;
     }
 
-
-    // ============================================================
-    // ORDER DATE
-    // ============================================================
-
-    public String getOrderDate() {
-        return orderDate;
+    public double getSubtotal() {
+        return subtotal;
     }
 
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
     }
 
-
-    // ============================================================
-    // DELIVERY ADDRESS
-    // ============================================================
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
+    public double getPlatformFee() {
+        return platformFee;
     }
 
-    public void setDeliveryAddress(
-            String deliveryAddress) {
+    public void setPlatformFee(double platformFee) {
+        this.platformFee = platformFee;
+    }
 
-        this.deliveryAddress = deliveryAddress;
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+    public double getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(double deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public String getPromoCode() {
+        return promoCode;
+    }
+
+    public void setPromoCode(String promoCode) {
+        this.promoCode = promoCode;
+    }
+
+    public boolean isStockDeducted() {
+        return stockDeducted;
+    }
+
+    public void setStockDeducted(boolean stockDeducted) {
+        this.stockDeducted = stockDeducted;
     }
 }

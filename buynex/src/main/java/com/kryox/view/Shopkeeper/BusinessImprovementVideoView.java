@@ -1,8 +1,6 @@
 package com.kryox.view.Shopkeeper;
 
-import java.net.URI;
 
-import com.google.firebase.database.core.Platform;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -34,17 +32,15 @@ public class BusinessImprovementVideoView {
     private static Button stopButton;
 
 
-    // ============================================================
-    // PRIVATE CONSTRUCTOR
-    // ============================================================
+    // Private Constructor
 
     private BusinessImprovementVideoView() {
     }
 
 
-    // ============================================================
-    // GENERATION SCREEN
-    // ============================================================
+    private static javafx.scene.control.ProgressBar progressBar;
+
+    // Generation Screen
 
     public static Scene createGenerationScene() {
 
@@ -56,19 +52,17 @@ public class BusinessImprovementVideoView {
         );
 
 
-        // ========================================================
-        // TOP
-        // ========================================================
+        // Top
 
         HBox topBar =
                 new HBox();
 
         topBar.setPadding(
                 new Insets(
-                        20,
-                        28,
-                        20,
-                        28
+                        24,
+                        36,
+                        24,
+                        36
                 )
         );
 
@@ -79,11 +73,11 @@ public class BusinessImprovementVideoView {
 
         Text title =
                 new Text(
-                        "Business Improvement"
+                        "AI Business Improvement Video"
                 );
 
         title.setStyle(
-                "-fx-font-size: 24px;" +
+                "-fx-font-size: 26px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-fill: #222222;"
         );
@@ -99,9 +93,7 @@ public class BusinessImprovementVideoView {
         );
 
 
-        // ========================================================
-        // CENTER
-        // ========================================================
+        // Center
 
         StackPane center =
                 new StackPane();
@@ -111,19 +103,34 @@ public class BusinessImprovementVideoView {
         );
 
 
-        VBox loadingBox =
+        VBox loadingCard =
                 new VBox(
-                        18
+                        20
                 );
 
-        loadingBox.setAlignment(
+        loadingCard.setMaxWidth(
+                650
+        );
+
+        loadingCard.setMaxHeight(
+                360
+        );
+
+        loadingCard.setAlignment(
                 Pos.CENTER
+        );
+
+        loadingCard.setStyle(
+                "-fx-background-color: #FFFFFF;" +
+                "-fx-background-radius: 18px;" +
+                "-fx-padding: 36px 45px;" +
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 24, 0, 0, 8);"
         );
 
 
         Circle loadingCircle =
                 new Circle(
-                        28
+                        32
                 );
 
         loadingCircle.setFill(
@@ -137,7 +144,7 @@ public class BusinessImprovementVideoView {
                 );
 
         loadingIcon.setStyle(
-                "-fx-font-size: 15px;" +
+                "-fx-font-size: 16px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-fill: white;"
         );
@@ -156,7 +163,7 @@ public class BusinessImprovementVideoView {
                 );
 
         heading.setStyle(
-                "-fx-font-size: 20px;" +
+                "-fx-font-size: 22px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #222222;"
         );
@@ -168,20 +175,51 @@ public class BusinessImprovementVideoView {
                 );
 
         statusLabel.setStyle(
-                "-fx-font-size: 14px;" +
-                "-fx-text-fill: #666666;"
+                "-fx-font-size: 15px;" +
+                "-fx-text-fill: #555555;" +
+                "-fx-font-weight: 500;"
+        );
+
+        progressBar =
+                new javafx.scene.control.ProgressBar(
+                        0.25
+                );
+
+        progressBar.setPrefWidth(
+                480
+        );
+
+        progressBar.setPrefHeight(
+                12
+        );
+
+        progressBar.setStyle(
+                "-fx-accent: #A94A18;" +
+                "-fx-background-radius: 6px;"
+        );
+
+        Label subNotice =
+                new Label(
+                        "⚡ Optimized with high-speed AI analysis and instant video synthesis"
+                );
+
+        subNotice.setStyle(
+                "-fx-font-size: 12px;" +
+                "-fx-text-fill: #888888;"
         );
 
 
-        loadingBox.getChildren().addAll(
+        loadingCard.getChildren().addAll(
                 loadingIconPane,
                 heading,
-                statusLabel
+                statusLabel,
+                progressBar,
+                subNotice
         );
 
 
         center.getChildren().add(
-                loadingBox
+                loadingCard
         );
 
 
@@ -190,15 +228,13 @@ public class BusinessImprovementVideoView {
         );
 
 
-        // ========================================================
-        // BOTTOM
-        // ========================================================
+        // Bottom
 
         HBox bottom =
                 new HBox();
 
         bottom.setPadding(
-                new Insets(20)
+                new Insets(24)
         );
 
         bottom.setAlignment(
@@ -214,10 +250,12 @@ public class BusinessImprovementVideoView {
         backButton.setStyle(
                 "-fx-background-color: #FFFFFF;" +
                 "-fx-text-fill: #444444;" +
-                "-fx-font-size: 13px;" +
+                "-fx-font-size: 14px;" +
+                "-fx-font-weight: bold;" +
                 "-fx-background-radius: 10px;" +
-                "-fx-padding: 10px 18px;" +
-                "-fx-cursor: hand;"
+                "-fx-padding: 12px 24px;" +
+                "-fx-cursor: hand;" +
+                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 10, 0, 0, 3);"
         );
 
 
@@ -242,6 +280,9 @@ public class BusinessImprovementVideoView {
                             ShopkeeperDashboard
                                     .dashboardScene()
                     );
+                    stage.setWidth(1550);
+                    stage.setHeight(850);
+                    stage.centerOnScreen();
                 }
         );
 
@@ -258,15 +299,13 @@ public class BusinessImprovementVideoView {
 
         return new Scene(
                 root,
-                1100,
-                700
+                1550,
+                840
         );
     }
 
 
-    // ============================================================
-    // VIDEO SCENE
-    // ============================================================
+    // Video Scene
 
     public static Scene createVideoScene(
             String videoUrl) {
@@ -279,9 +318,7 @@ public class BusinessImprovementVideoView {
         );
 
 
-        // ========================================================
-        // TOP BAR
-        // ========================================================
+        // Top Bar
 
         HBox topBar =
                 new HBox();
@@ -322,9 +359,7 @@ public class BusinessImprovementVideoView {
         );
 
 
-        // ========================================================
-        // VIDEO
-        // ========================================================
+        // Video
 
         StackPane videoContainer =
                 new StackPane();
@@ -369,12 +404,12 @@ public class BusinessImprovementVideoView {
 
 
             mediaView.setFitWidth(
-                    950
+                    1260
             );
 
 
             mediaView.setFitHeight(
-                    540
+                    620
             );
 
 
@@ -480,9 +515,7 @@ public class BusinessImprovementVideoView {
         
 
 
-        // ========================================================
-        // CONTROLS
-        // ========================================================
+        // Controls
 
         VBox controlsBox =
                 new VBox(
@@ -585,6 +618,9 @@ public class BusinessImprovementVideoView {
                             ShopkeeperDashboard
                                     .dashboardScene()
                     );
+                    stage.setWidth(1550);
+                    stage.setHeight(850);
+                    stage.centerOnScreen();
                 }
         );
 
@@ -626,15 +662,13 @@ public class BusinessImprovementVideoView {
 
         return new Scene(
                 root,
-                1100,
-                700
+                1550,
+                840
         );
     }
 
 
-    // ============================================================
-    // PLAY / PAUSE
-    // ============================================================
+    // Play / Pause
 
     private static void togglePlayPause() {
 
@@ -667,9 +701,7 @@ public class BusinessImprovementVideoView {
     }
 
 
-    // ============================================================
-    // BUTTON STYLE
-    // ============================================================
+    // Button Style
 
     private static void styleControlButton(
             Button button) {
@@ -684,22 +716,33 @@ public class BusinessImprovementVideoView {
                 "-fx-cursor: hand;"
         );
     }
-    // ============================================================
-// UPDATE GENERATION STATUS
-// ============================================================
+    // Update Generation Status
 
 public static void updateStatus(
         String message) {
 
-    if (statusLabel == null) {
-        return;
-    }
-
     javafx.application.Platform.runLater(() -> {
 
-        statusLabel.setText(
-                message
-        );
+        if (statusLabel != null) {
+            statusLabel.setText(
+                    message
+            );
+        }
+
+        if (progressBar != null && message != null) {
+            String lower = message.toLowerCase();
+            if (lower.contains("reading") || lower.contains("information")) {
+                progressBar.setProgress(0.20);
+            } else if (lower.contains("research") || lower.contains("online")) {
+                progressBar.setProgress(0.45);
+            } else if (lower.contains("comparing") || lower.contains("analys")) {
+                progressBar.setProgress(0.70);
+            } else if (lower.contains("creating") || lower.contains("video")) {
+                progressBar.setProgress(0.90);
+            } else if (lower.contains("ready")) {
+                progressBar.setProgress(1.00);
+            }
+        }
     });
 }
 

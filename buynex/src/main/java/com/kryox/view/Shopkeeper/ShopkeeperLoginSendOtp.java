@@ -32,26 +32,20 @@ public class ShopkeeperLoginSendOtp {
 
         public static Scene sendOtpScene() {
 
-                // =========================================================
-                // MAIN BORDERPANE
-                // =========================================================
+                // Main BorderPane
 
                 BorderPane borderPane = new BorderPane();
 
                 borderPane.setStyle(
                                 "-fx-background-color: #F8FBF8;");
 
-                // =========================================================
-                // HEADER
-                // =========================================================
+                // Header
 
                 HBox headerBox = ViewConstants.loginHeader();
 
                 borderPane.setTop(headerBox);
 
-                // =========================================================
-                // CENTER BACKGROUND
-                // =========================================================
+                // Center Background
 
                 StackPane centerPane = new StackPane();
 
@@ -64,10 +58,7 @@ public class ShopkeeperLoginSendOtp {
                 centerPane.setStyle(
                                 "-fx-background-color: #F8FBF8;");
 
-                // =========================================================
-                // MAIN CARD
-                // COMPRESSED OVERALL
-                // =========================================================
+                // Main Card
 
                 HBox mainCard = new HBox();
 
@@ -84,9 +75,7 @@ public class ShopkeeperLoginSendOtp {
                                 "-fx-background-color: white;" +
                                                 "-fx-background-radius: 18;");
 
-                // =========================================================
-                // CARD SHADOW
-                // =========================================================
+                // Card Shadow
 
                 DropShadow cardShadow = new DropShadow();
 
@@ -104,9 +93,7 @@ public class ShopkeeperLoginSendOtp {
                 mainCard.setEffect(
                                 cardShadow);
 
-                // =========================================================
-                // LEFT SECTION
-                // =========================================================
+                // Left Section
 
                 VBox leftBox = new VBox();
 
@@ -134,9 +121,7 @@ public class ShopkeeperLoginSendOtp {
                                 "-fx-background-color: white;" +
                                                 "-fx-background-radius: 18 0 0 18;");
 
-                // =========================================================
-                // INNER FORM
-                // =========================================================
+                // Inner Form
 
                 VBox formBox = new VBox();
 
@@ -151,9 +136,7 @@ public class ShopkeeperLoginSendOtp {
 
                 formBox.setMaxWidth(380);
 
-                // =========================================================
-                // LOGO
-                // =========================================================
+                // Logo
 
                 Label logoIcon = new Label("✦");
 
@@ -203,9 +186,7 @@ public class ShopkeeperLoginSendOtp {
                                 logoIconBox,
                                 logoText);
 
-                // =========================================================
-                // TITLE
-                // =========================================================
+                // Title
 
                 Label resetPasswordLabel = new Label("Reset Password");
 
@@ -221,9 +202,7 @@ public class ShopkeeperLoginSendOtp {
                 resetPasswordLabel.setPadding(
                                 new Insets(31, 0, 8, 0));
 
-                // =========================================================
-                // DESCRIPTION
-                // =========================================================
+                // Description
 
                 Label description = new Label(
                                 "Enter your registered email address and we'll send you an\n" +
@@ -242,9 +221,7 @@ public class ShopkeeperLoginSendOtp {
                 description.setPadding(
                                 new Insets(0, 0, 17, 0));
 
-                // =========================================================
-                // EMAIL ADDRESS LABEL
-                // =========================================================
+                // Email Address Label
 
                 Label mobileLabel = new Label("EMAIL ADDRESS");
 
@@ -260,9 +237,7 @@ public class ShopkeeperLoginSendOtp {
                 mobileLabel.setPadding(
                                 new Insets(0, 0, 4, 2));
 
-                // =========================================================
-                // PHONE ICON
-                // =========================================================
+                // Phone Icon
 
                 Label phoneIcon = new Label("📧");
 
@@ -275,9 +250,7 @@ public class ShopkeeperLoginSendOtp {
                 phoneIcon.setTextFill(
                                 Color.web("#806F67"));
 
-                // =========================================================
-                // MOBILE TEXT FIELD
-                // =========================================================
+                // Mobile Text Field
 
                 TextField emailField = new TextField();
 
@@ -304,9 +277,7 @@ public class ShopkeeperLoginSendOtp {
                                 emailField,
                                 Priority.ALWAYS);
 
-                // =========================================================
-                // MOBILE FIELD BOX
-                // =========================================================
+                // Mobile Field Box
 
                 HBox mobileBox = new HBox(8);
 
@@ -335,9 +306,7 @@ public class ShopkeeperLoginSendOtp {
                                                 "-fx-border-radius: 8;" +
                                                 "-fx-background-radius: 8;");
 
-                // =========================================================
-                // FIELD SHADOW
-                // =========================================================
+                // Field Shadow
 
                 DropShadow fieldShadow = new DropShadow();
 
@@ -357,9 +326,7 @@ public class ShopkeeperLoginSendOtp {
                                 phoneIcon,
                                 emailField);
 
-                // =========================================================
-                // SEND OTP BUTTON
-                // =========================================================
+                // Send OTP Button
 
                 Button sendOtpButton = new Button(
                                 "Send Link     →");
@@ -391,9 +358,7 @@ public class ShopkeeperLoginSendOtp {
                                                 "-fx-border-radius: 8;" +
                                                 "-fx-cursor: hand;");
 
-                // =========================================================
-                // BUTTON SHADOW
-                // =========================================================
+                // Button Shadow
 
                 DropShadow buttonShadow = new DropShadow();
 
@@ -409,9 +374,7 @@ public class ShopkeeperLoginSendOtp {
                 sendOtpButton.setEffect(
                                 buttonShadow);
 
-                // =========================================================
-                // BUTTON HOVER
-                // =========================================================
+                // Button Hover
 
                 sendOtpButton.setOnMouseEntered(e -> {
 
@@ -433,9 +396,7 @@ public class ShopkeeperLoginSendOtp {
 
                 });
 
-                // =========================================================
-                // SEND OTP ACTION
-                // =========================================================
+                // Send OTP Action
 
                 sendOtpButton.setOnAction(e -> {
 
@@ -468,9 +429,7 @@ public class ShopkeeperLoginSendOtp {
                                 sendOtpButton,
                                 new Insets(12, 0, 0, 0));
 
-                // =========================================================
-                // BACK TO LOGIN
-                // =========================================================
+                // Back To Login
 
                 Button backToLogin = new Button(
                                 "←  Back to Login");
@@ -519,9 +478,7 @@ public class ShopkeeperLoginSendOtp {
                 backBox.getChildren().add(
                                 backToLogin);
 
-                // =========================================================
-                // ADD CONTENT TO FORM
-                // =========================================================
+                // Add Content To Form
 
                 formBox.getChildren().addAll(
                                 logoBox,
@@ -532,16 +489,12 @@ public class ShopkeeperLoginSendOtp {
                                 sendOtpButton,
                                 backBox);
 
-                // =========================================================
-                // ADD FORM TO LEFT SECTION
-                // =========================================================
+                // Add Form To Left Section
 
                 leftBox.getChildren().add(
                                 formBox);
 
-                // =========================================================
-                // RIGHT IMAGE SECTION
-                // =========================================================
+                // Right Image Section
 
                 StackPane rightPane = new StackPane();
 
@@ -557,9 +510,7 @@ public class ShopkeeperLoginSendOtp {
 
                 rightPane.setMaxHeight(440);
 
-                // =========================================================
-                // IMAGE
-                // =========================================================
+                // Image
 
                 Image image = new Image(
                                 "/assets/images/Login.png");
@@ -574,9 +525,7 @@ public class ShopkeeperLoginSendOtp {
 
                 imageView.setSmooth(true);
 
-                // =========================================================
-                // IMAGE CLIP
-                // =========================================================
+                // Image Clip
 
                 Rectangle imageClip = new Rectangle(
                                 390,
@@ -589,9 +538,7 @@ public class ShopkeeperLoginSendOtp {
                 imageView.setClip(
                                 imageClip);
 
-                // =========================================================
-                // DARK OVERLAY
-                // =========================================================
+                // Dark Overlay
 
                 Rectangle darkOverlay = new Rectangle(
                                 390,
@@ -604,9 +551,7 @@ public class ShopkeeperLoginSendOtp {
 
                 darkOverlay.setArcHeight(28);
 
-                // =========================================================
-                // RIGHT CONTENT
-                // =========================================================
+                // Right Content
 
                 VBox rightContent = new VBox();
 
@@ -622,9 +567,7 @@ public class ShopkeeperLoginSendOtp {
                 rightContent.setPadding(
                                 new Insets(0, 32, 38, 32));
 
-                // =========================================================
-                // MERCHANT PORTAL BADGE
-                // =========================================================
+                // Merchant Portal Badge
 
                 Label badgeDot = new Label("●");
 
@@ -666,9 +609,7 @@ public class ShopkeeperLoginSendOtp {
                                 badgeDot,
                                 badgeText);
 
-                // =========================================================
-                // BUSINESS TITLE
-                // =========================================================
+                // Business Title
 
                 Label businessTitle = new Label(
                                 "Empower Your Business.");
@@ -687,9 +628,7 @@ public class ShopkeeperLoginSendOtp {
                 businessTitle.setPadding(
                                 new Insets(18, 0, 11, 0));
 
-                // =========================================================
-                // BUSINESS DESCRIPTION
-                // =========================================================
+                // Business Description
 
                 Label businessDescription = new Label(
                                 "Secure, seamless access to your hyperlocal shopping\n" +
@@ -710,35 +649,27 @@ public class ShopkeeperLoginSendOtp {
                 businessDescription.setTextAlignment(
                                 TextAlignment.LEFT);
 
-                // =========================================================
-                // ADD RIGHT CONTENT
-                // =========================================================
+                // Add Right Content
 
                 rightContent.getChildren().addAll(
                                 badge,
                                 businessTitle,
                                 businessDescription);
 
-                // =========================================================
-                // RIGHT LAYERS
-                // =========================================================
+                // Right Layers
 
                 rightPane.getChildren().addAll(
                                 imageView,
                                 darkOverlay,
                                 rightContent);
 
-                // =========================================================
-                // ADD LEFT + RIGHT
-                // =========================================================
+                // Add Left + Right
 
                 mainCard.getChildren().addAll(
                                 leftBox,
                                 rightPane);
 
-                // =========================================================
-                // ADD CARD TO CENTER
-                // =========================================================
+                // Add Card To Center
 
                 centerPane.getChildren().add(
                                 mainCard);
@@ -746,24 +677,19 @@ public class ShopkeeperLoginSendOtp {
                 borderPane.setCenter(
                                 centerPane);
 
-                // =========================================================
-                // FOOTER
-                // SAME AS EXISTING CODE
-                // =========================================================
+                // Footer
 
                 VBox footerBox = ViewConstants.loginFooter();
 
                 borderPane.setBottom(
                                 footerBox);
 
-                // =========================================================
-                // SCENE
-                // =========================================================
+                // Scene
 
                 sendOtpScene = new Scene(
                                 borderPane,
-                                1280,
-                                650);
+                                1550,
+                                850);
 
                 sendOtpScene.setFill(
                                 Color.web("#F8FBF8"));

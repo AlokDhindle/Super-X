@@ -1,17 +1,23 @@
 package com.kryox.view.Shopkeeper;
 
 import com.kryox.Main;
+import com.kryox.controller.Shopkeeper.OrderController;
+import com.kryox.model.Shopkeeper.OrderModel;
 import com.kryox.view.Customer.Homepage;
+
+import java.util.ArrayList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -20,45 +26,29 @@ public class ShopkeeperOrderReady {
 
         public static Scene ordersScene() {
 
-                // ============================================================
-                // BORDER PANE
-                // ============================================================
+                // Border Pane
 
                 BorderPane borderPane = new BorderPane();
 
                 borderPane.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F8F7FC;");
-=======
                                 "-fx-background-color: #EEE5DF;");
->>>>>>> Sayali
 
-                // ============================================================
-                // HEADER
-                // ============================================================
+                // Header
 
                 HBox headerMainBox = ViewConstants.header();
 
-<<<<<<< HEAD
-=======
                 // Header background
                 headerMainBox.setStyle(
                                 "-fx-background-color: #EBCCB7;");
 
->>>>>>> Sayali
                 borderPane.setTop(headerMainBox);
 
-                // ============================================================
-                // SIDEBAR
-                // ============================================================
+                // Sidebar
 
-                VBox sidebar =createSidebar();
+                VBox sidebar = createSidebar();
                 borderPane.setLeft(sidebar);
 
-                // ============================================================
-                // CENTER
-                // ACTIVE ORDERS
-                // ============================================================
+                // Center - Active Orders
 
                 VBox centerMain = new VBox();
 
@@ -68,15 +58,9 @@ public class ShopkeeperOrderReady {
                 centerMain.setSpacing(15);
 
                 centerMain.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F8F7FC;");
-=======
                                 "-fx-background-color: #EEE5DF;");
->>>>>>> Sayali
 
-                // ============================================================
-                // TITLE
-                // ============================================================
+                // Title
 
                 Text pageTitle = new Text("Orders Management");
 
@@ -106,9 +90,7 @@ public class ShopkeeperOrderReady {
                                 titleBox,
                                 Priority.ALWAYS);
 
-                // ============================================================
-                // STATUS BUTTONS
-                // ============================================================
+                // Status Buttons
 
                 HBox statusBar = new HBox();
 
@@ -119,44 +101,32 @@ public class ShopkeeperOrderReady {
 
                 statusBar.setSpacing(0);
 
-                // ------------------------------------------------------------
-                // NEW ORDER
-                // ------------------------------------------------------------
+                // New Order
 
                 Button newOrderButton = ViewConstants.createStatusButton(
                                 "New Order");
 
-                // ------------------------------------------------------------
-                // PREPARING
-                // ------------------------------------------------------------
+                // Preparing
 
                 Button preparingButton = ViewConstants.createStatusButton(
                                 "Preparing");
 
-                // ------------------------------------------------------------
-                // READY
-                // ------------------------------------------------------------
+                // Ready
 
                 Button readyButton = ViewConstants.createStatusButton(
                                 "✓ Ready");
 
-                // ------------------------------------------------------------
-                // OUT FOR DELIVERY
-                // ------------------------------------------------------------
+                // Out for Delivery
 
                 Button deliveryButton = ViewConstants.createStatusButton(
                                 "Out for Delivery");
 
-                // ------------------------------------------------------------
-                // COMPLETED
-                // ------------------------------------------------------------
+                // Completed
 
                 Button completedButton = ViewConstants.createStatusButton(
                                 "✓ Completed");
 
-                // ------------------------------------------------------------
-                // BUTTON WIDTHS
-                // ------------------------------------------------------------
+                // Button Widths
 
                 HBox.setHgrow(
                                 newOrderButton,
@@ -178,9 +148,7 @@ public class ShopkeeperOrderReady {
                                 completedButton,
                                 Priority.ALWAYS);
 
-                // ------------------------------------------------------------
-                // ADD STATUS BUTTONS
-                // ------------------------------------------------------------
+                // Add Status Buttons
 
                 statusBar.getChildren().addAll(
                                 newOrderButton,
@@ -189,16 +157,12 @@ public class ShopkeeperOrderReady {
                                 deliveryButton,
                                 completedButton);
 
-                // ============================================================
-                // READY SELECTED BY DEFAULT
-                // ============================================================
+                // Ready Selected By Default
 
                 ViewConstants.setSelectedStatusButton(
                                 readyButton);
 
-                // ============================================================
-                // STATUS BUTTON ACTIONS
-                // ============================================================
+                // Status Button Actions
 
                 newOrderButton.setOnAction(e -> {
 
@@ -229,57 +193,56 @@ public class ShopkeeperOrderReady {
                         Homepage.HomepageStage.setScene(ShopkeeperOrderCompleted.ordersScene());
                 });
 
-                // ============================================================
-                // ORDER LIST
-                // ============================================================
+                // Order List
 
                 VBox orderList = new VBox(20);
 
                 orderList.setPadding(
                                 new Insets(10, 0, 20, 0));
 
-                // ============================================================
-                // ORDER #4592
-                // ============================================================
+                ArrayList<OrderModel> readyOrders = OrderController.getReadyOrders();
 
-                VBox order4592 = createOrderCard(
-                                "#4592",
-                                "Sarah Jenkins",
-                                "2.4 km away",
-                                "2x",
-                                "Organic Avocado Toast",
-                                "$24.00",
-                                "1x",
-                                "Cold Brew Coffee",
-                                "$5.50",
-                                "Special Note: No cilantro please!",
-                                "$29.50");
+                if (readyOrders == null || readyOrders.isEmpty()) {
+                        Label noOrdersLabel = new Label("No orders currently marked as ready.");
+                        noOrdersLabel.setStyle("-fx-font-size: 17px; -fx-text-fill: #777777; -fx-padding: 50 0 0 0;");
+                        orderList.getChildren().add(noOrdersLabel);
+                } else {
+                        for (OrderModel order : readyOrders) {
+                                if (order == null) continue;
 
-                // ============================================================
-                // ORDER #4593
-                // ============================================================
+                                String p1Name = "", p1Qty = "", p1Price = "";
+                                String p2Name = "", p2Qty = "", p2Price = "";
 
-                VBox order4593 = createOrderCard(
-                                "#4593",
-                                "Michael Chen",
-                                "1.1 km away",
-                                "1x",
-                                "Sourdough Loaf",
-                                "$8.00",
-                                "1x",
-                                "Artisanal Butter",
-                                "$6.50",
-                                "",
-                                "$14.50");
+                                if (order.getProducts() != null && !order.getProducts().isEmpty()) {
+                                        var p1 = order.getProducts().get(0);
+                                        p1Name = p1.getProductName() != null ? p1.getProductName() : "";
+                                        p1Qty = p1.getQuantity() + "x";
+                                        p1Price = String.format("₹%.2f", p1.getTotalPrice());
 
-                orderList.getChildren().addAll(
-                                order4592,
-                                order4593);
+                                        if (order.getProducts().size() > 1) {
+                                                var p2 = order.getProducts().get(1);
+                                                p2Name = p2.getProductName() != null ? p2.getProductName() : "";
+                                                p2Qty = p2.getQuantity() + "x";
+                                                p2Price = String.format("₹%.2f", p2.getTotalPrice());
+                                        }
+                                }
 
-                // ============================================================
-                // SCROLL PANE
-                // ONLY ORDER LIST SCROLLS
-                // ============================================================
+                                VBox orderCard = createOrderCard(
+                                                order,
+                                                "#" + (order.getOrderId() != null ? order.getOrderId() : ""),
+                                                order.getCustomerName() != null ? order.getCustomerName() : "Customer",
+                                                "",
+                                                p1Qty, p1Name, p1Price,
+                                                p2Qty, p2Name, p2Price,
+                                                "",
+                                                String.format("₹%.2f", order.getTotalAmount())
+                                );
+
+                                orderList.getChildren().add(orderCard);
+                        }
+                }
+
+                // Scroll Pane (Only order list scrolls)
 
                 ScrollPane orderScrollPane = new ScrollPane(
                                 orderList);
@@ -302,55 +265,42 @@ public class ShopkeeperOrderReady {
                                 orderScrollPane,
                                 Priority.ALWAYS);
 
-                // ============================================================
-                // ADD CENTER CONTENT
-                // ============================================================
+                // Add Center Content
 
                 centerMain.getChildren().addAll(
                                 titleRow,
                                 statusBar,
                                 orderScrollPane);
 
-                // ============================================================
-                // SET CENTER
-                // ============================================================
+                // Set Center
 
                 borderPane.setCenter(
                                 centerMain);
 
-                // ============================================================
-                // FOOTER
-                // ============================================================
+                // Footer
 
                 VBox footerBox = ViewConstants.footer();
 
                 borderPane.setBottom(
                                 footerBox);
 
-                // ============================================================
-                // SCENE
-                // ============================================================
+                // Scene
 
                 Scene ordersScene = new Scene(
                                 borderPane,
-                                1280,
-                                650);
+                                1550,
+                                850);
 
                 ordersScene.setFill(
-<<<<<<< HEAD
-                                Color.web("#F8F7FC"));
-=======
                                 Color.web("#EEE5DF"));
->>>>>>> Sayali
 
                 return ordersScene;
         }
 
-        // ================================================================
-        // CREATE ORDER CARD ONLY FOR READY PAGE
-        // ================================================================
+        // Create Order Card only for Ready page
 
         private static VBox createOrderCard(
+                        OrderModel order,
                         String orderNumber,
                         String customerName,
                         String distance,
@@ -363,9 +313,7 @@ public class ShopkeeperOrderReady {
                         String specialNote,
                         String totalAmount) {
 
-                // ============================================================
-                // MAIN CARD
-                // ============================================================
+                // Main Card
 
                 HBox card = new HBox();
 
@@ -397,9 +345,7 @@ public class ShopkeeperOrderReady {
                 card.setEffect(
                                 shadow);
 
-                // ============================================================
-                // ORANGE LEFT BORDER
-                // ============================================================
+                // Orange Left Border
 
                 VBox orangeBorder = new VBox();
 
@@ -409,9 +355,7 @@ public class ShopkeeperOrderReady {
                                 "-fx-background-color: #B94F00;" +
                                                 "-fx-background-radius: 12px 0 0 12px;");
 
-                // ============================================================
-                // LEFT CONTENT
-                // ============================================================
+                // Left Content
 
                 VBox leftContent = new VBox(10);
 
@@ -422,9 +366,9 @@ public class ShopkeeperOrderReady {
                                                 18,
                                                 20));
 
-                // ============================================================
-                // ORDER NUMBER + STATUS
-                // ============================================================
+                // Order Number + Status
+
+                boolean isBroadcasted = order != null && "REQUESTING_DELIVERY".equalsIgnoreCase(order.getOrderStatus());
 
                 Text orderText = new Text(orderNumber);
 
@@ -434,13 +378,12 @@ public class ShopkeeperOrderReady {
                                                 "-fx-fill: #202027;");
 
                 Text pickupText = new Text(
-                                "READY FOR PICKUP");
+                                isBroadcasted ? "REQUEST BROADCASTED" : "READY FOR PICKUP");
 
                 pickupText.setStyle(
                                 "-fx-font-size: 10px;" +
                                                 "-fx-font-weight: bold;" +
-                                                "-fx-fill: #303039;" +
-                                                "-fx-background-color: #E3E2E8;" +
+                                                (isBroadcasted ? "-fx-fill: #B94F00; -fx-background-color: #FFF0E6;" : "-fx-fill: #303039; -fx-background-color: #E3E2E8;") +
                                                 "-fx-background-radius: 6px;" +
                                                 "-fx-padding: 9px 10px;");
 
@@ -452,9 +395,7 @@ public class ShopkeeperOrderReady {
                 orderHeader.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                // ============================================================
-                // CUSTOMER INFORMATION
-                // ============================================================
+                // Customer Information
 
                 Text customerIcon = new Text("♙");
 
@@ -497,9 +438,7 @@ public class ShopkeeperOrderReady {
                 customerRow.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                // ============================================================
-                // PRODUCTS BOX
-                // ============================================================
+                // Products Box
 
                 VBox productsBox = new VBox(7);
 
@@ -514,9 +453,7 @@ public class ShopkeeperOrderReady {
                                 "-fx-background-color: #F2F1F6;" +
                                                 "-fx-background-radius: 8px;");
 
-                // ============================================================
-                // PRODUCT 1
-                // ============================================================
+                // Product 1
 
                 HBox productRow1 = new HBox();
 
@@ -550,9 +487,7 @@ public class ShopkeeperOrderReady {
                                 productName1,
                                 productPrice1);
 
-                // ============================================================
-                // PRODUCT 2
-                // ============================================================
+                // Product 2
 
                 HBox productRow2 = new HBox();
 
@@ -590,9 +525,7 @@ public class ShopkeeperOrderReady {
                                 productRow1,
                                 productRow2);
 
-                // ============================================================
-                // SPECIAL NOTE
-                // ============================================================
+                // Special Note
 
                 if (!specialNote.isEmpty()) {
 
@@ -615,9 +548,7 @@ public class ShopkeeperOrderReady {
                                 leftContent,
                                 Priority.ALWAYS);
 
-                // ============================================================
-                // RIGHT CONTENT
-                // ============================================================
+                // Right Content
 
                 VBox rightContent = new VBox();
 
@@ -641,9 +572,7 @@ public class ShopkeeperOrderReady {
                                 "-fx-border-color: #E1DFE4;" +
                                                 "-fx-border-width: 0 0 0 1px;");
 
-                // ============================================================
-                // TOTAL AMOUNT
-                // ============================================================
+                // Total Amount
 
                 Text totalLabel = new Text("Total Amount");
 
@@ -665,11 +594,8 @@ public class ShopkeeperOrderReady {
                 amountBox.setAlignment(
                                 Pos.CENTER_RIGHT);
 
-                // ============================================================
-                // DISPATCH BUTTON
-                // ============================================================
-
-                Button dispatchButton = new Button("▣  Dispatch");
+                // Dispatch & Assign Nearby Delivery Partner Button
+                Button dispatchButton = new Button(isBroadcasted ? "✓ Request Sent" : "📡 Assign Delivery Partner");
 
                 dispatchButton.setPrefWidth(
                                 170);
@@ -677,43 +603,38 @@ public class ShopkeeperOrderReady {
                 dispatchButton.setPrefHeight(
                                 45);
 
-                dispatchButton.setStyle(
-                                "-fx-background-color: #B94F00;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 15px;" +
-                                                "-fx-background-radius: 7px;" +
-                                                "-fx-cursor: hand;");
+                String dispatchBaseStyle = isBroadcasted
+                                ? "-fx-background-color: #FFF0E6; -fx-text-fill: #B94F00; -fx-border-color: #B94F00; -fx-border-radius: 7px; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 7px; -fx-cursor: hand;"
+                                : "-fx-background-color: #B94F00; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 7px; -fx-cursor: hand;";
+
+                String dispatchHoverStyle = isBroadcasted
+                                ? "-fx-background-color: #FFE6D6; -fx-text-fill: #963F00; -fx-border-color: #963F00; -fx-border-radius: 7px; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 7px; -fx-cursor: hand;"
+                                : "-fx-background-color: #963F00; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 7px; -fx-cursor: hand;";
+
+                dispatchButton.setStyle(dispatchBaseStyle);
 
                 dispatchButton.setOnMouseEntered(e -> {
-
-                        dispatchButton.setStyle(
-                                        "-fx-background-color: #963F00;" +
-                                                        "-fx-text-fill: white;" +
-                                                        "-fx-font-size: 15px;" +
-                                                        "-fx-background-radius: 7px;" +
-                                                        "-fx-cursor: hand;");
+                        dispatchButton.setStyle(dispatchHoverStyle);
                 });
 
                 dispatchButton.setOnMouseExited(e -> {
-
-                        dispatchButton.setStyle(
-                                        "-fx-background-color: #B94F00;" +
-                                                        "-fx-text-fill: white;" +
-                                                        "-fx-font-size: 15px;" +
-                                                        "-fx-background-radius: 7px;" +
-                                                        "-fx-cursor: hand;");
+                        dispatchButton.setStyle(dispatchBaseStyle);
                 });
 
                 dispatchButton.setOnAction(e -> {
-
-                        System.out.println(
-                                        orderNumber +
-                                                        " - Dispatch clicked");
+                        if (isBroadcasted) {
+                                showBroadcastSuccessAlert(order, true);
+                        } else {
+                                boolean ok = OrderController.requestDeliveryPartner(order);
+                                if (ok && order != null) {
+                                        order.setOrderStatus("REQUESTING_DELIVERY");
+                                }
+                                showBroadcastSuccessAlert(order, false);
+                                Homepage.HomepageStage.setScene(ShopkeeperOrderReady.ordersScene());
+                        }
                 });
 
-                // ============================================================
-                // CANCEL BUTTON
-                // ============================================================
+                // Cancel Button
 
                 Button cancelButton = new Button("×  Cancel Order");
 
@@ -757,15 +678,14 @@ public class ShopkeeperOrderReady {
                 });
 
                 cancelButton.setOnAction(e -> {
-
-                        System.out.println(
-                                        orderNumber +
-                                                        " - Cancel Order clicked");
+                        boolean updated = OrderController.declineOrder(order);
+                        if (updated) {
+                                System.out.println(orderNumber + " - Cancel Order clicked & updated to DECLINED in Firestore");
+                                Homepage.HomepageStage.setScene(ShopkeeperOrderReady.ordersScene());
+                        }
                 });
 
-                // ============================================================
-                // BUTTON BOX
-                // ============================================================
+                // Button Box
 
                 VBox buttonsBox = new VBox(
                                 10,
@@ -775,9 +695,7 @@ public class ShopkeeperOrderReady {
                 buttonsBox.setAlignment(
                                 Pos.CENTER);
 
-                // ============================================================
-                // RIGHT CONTENT
-                // ============================================================
+                // Right Content
 
                 rightContent.getChildren().addAll(
                                 amountBox,
@@ -787,18 +705,14 @@ public class ShopkeeperOrderReady {
                                 amountBox,
                                 Priority.ALWAYS);
 
-                // ============================================================
-                // ADD EVERYTHING TO CARD
-                // ============================================================
+                // Add everything to card
 
                 card.getChildren().addAll(
                                 orangeBorder,
                                 leftContent,
                                 rightContent);
 
-                // ============================================================
-                // WRAPPER
-                // ============================================================
+                // Wrapper
 
                 VBox wrapper = new VBox(card);
 
@@ -815,11 +729,7 @@ public class ShopkeeperOrderReady {
                                 ViewConstants.SIDEBAR_WIDTH);
 
                 sidebar.setStyle(
-<<<<<<< HEAD
-                                "-fx-background-color: #F5F4F9;" +
-=======
                                 "-fx-background-color: #EBCCB7;" +
->>>>>>> Sayali
                                                 "-fx-border-color: #E3C7BA;" +
                                                 "-fx-border-width: 0 1px 0 0;");
 
@@ -928,5 +838,48 @@ public class ShopkeeperOrderReady {
                                                                 .supportScene()));
 
                 return sidebar;
+        }
+
+        // Broadcast confirmation popup (Without redirecting to Delivery Portal)
+        public static void showBroadcastSuccessAlert(OrderModel order, boolean alreadyBroadcasted) {
+                String oid = order != null && order.getOrderId() != null ? order.getOrderId() : "";
+                javafx.stage.Stage popup = new javafx.stage.Stage();
+                popup.initOwner(Homepage.HomepageStage);
+                popup.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+                popup.setTitle("📡 Delivery Partner Request Status");
+
+                VBox content = new VBox(14);
+                content.setAlignment(Pos.CENTER);
+                content.setPadding(new Insets(24, 28, 24, 28));
+                content.setStyle("-fx-background-color: #ffffff; -fx-border-color: #B94F00; -fx-border-width: 2; -fx-border-radius: 12; -fx-background-radius: 12;");
+
+                Label icon = new Label("📡");
+                icon.setStyle("-fx-font-size: 34px;");
+
+                Label title = new Label(alreadyBroadcasted ? "Request Already Active!" : "Delivery Request Broadcasted!");
+                title.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1E1E24;");
+
+                Label msg = new Label(alreadyBroadcasted
+                                ? "Order #" + oid + " ki request pehle se hi Delivery Portal par live hai.\n1.5 km radius ke sabhi riders ko broadcast ho chuki hai. Rider ke accept karte hi ye order 'Out for Delivery' me update ho jayega."
+                                : "Order #" + oid + " ki delivery request Delivery Portal par successfully bhej di gayi hai!\n1.5 km radius ke sabhi active delivery partners ko ye request dikhayi degi.\nJaise hi koi rider request accept karega, order automatically 'Out for Delivery' me move ho jayega.");
+                msg.setStyle("-fx-font-size: 12px; -fx-text-fill: #604D43; -fx-text-alignment: center;");
+                msg.setWrapText(true);
+
+                Button closeBtn = new Button("Theek Hai");
+                closeBtn.setStyle("-fx-background-color: #B94F00; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px; -fx-background-radius: 7; -fx-padding: 8 28; -fx-cursor: hand;");
+                closeBtn.setOnAction(evt -> popup.close());
+
+                content.getChildren().addAll(icon, title, msg, closeBtn);
+
+                Scene popupScene = new Scene(content, 480, 240);
+                popup.setScene(popupScene);
+                popup.show();
+        }
+
+        public static void showRiderAssignmentPopup(OrderModel order) {
+                if (order != null) {
+                        OrderController.requestDeliveryPartner(order);
+                }
+                showBroadcastSuccessAlert(order, false);
         }
 }

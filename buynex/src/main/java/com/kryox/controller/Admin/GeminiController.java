@@ -17,7 +17,7 @@ import com.kryox.config.GeminiConfig;
 public class GeminiController {
 
     private final HttpClient client = HttpClient.newHttpClient();
-
+        
     public String sendMessage(String userText) {
 
         try {

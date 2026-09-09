@@ -1,16 +1,23 @@
 package com.kryox.view.Customer;
 
+import com.kryox.controller.Shopkeeper.OfferController;
+import com.kryox.model.Shopkeeper.OfferModel;
+
+import java.util.List;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -21,12 +28,195 @@ import javafx.stage.Stage;
 
 public class Notifications extends Application {
 
+    public String userId;
+
+    public Notifications() {
+    }
+
+    public Notifications(String userId) {
+        this.userId = userId;
+    }
+
+    public Scene getNotificationscene(Runnable callback) {
+        BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-color: #EEE5DF;");
+
+        VBox sidebar = CustomerSidebar.createSidebar(userId, "Deals");
+        borderPane.setLeft(sidebar);
+
+        HBox topNav = CustomerSidebar.createTopNav(userId, "NOTIFICATIONS", null, () -> CustomerNavigation.navigateToNotifications(userId));
+        borderPane.setTop(topNav);
+
+        // Header bar inside content area
+        HBox header = new HBox(15);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.setPadding(new Insets(10, 0, 10, 0));
+
+        Button backBtn = new Button("← Back to Dashboard");
+        backBtn.setStyle(
+                "-fx-background-color: #FF6900;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-weight: bold;" +
+                "-fx-font-size: 12px;" +
+                "-fx-background-radius: 8;" +
+                "-fx-cursor: hand;"
+        );
+        backBtn.setOnAction(e -> {
+            if (callback != null) {
+                callback.run();
+            } else {
+                CustomerNavigation.navigateToDashboard(userId);
+            }
+        });
+
+        Label title = new Label("Notifications & Shopkeeper Offers");
+        title.setStyle("-fx-font-family: 'Montserrat'; -fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #9C3700;");
+
+        header.getChildren().addAll(backBtn, title);
+
+        VBox centerBox = new VBox(18);
+        centerBox.setPadding(new Insets(20, 30, 30, 30));
+        centerBox.setAlignment(Pos.TOP_LEFT);
+        centerBox.getChildren().add(header);
+
+        Label subHeading = new Label("🏷️ Active Shopkeeper Offers & Latest Alerts");
+        subHeading.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #222222;");
+
+        VBox notifList = new VBox(14);
+        notifList.setMaxWidth(1000);
+
+        // Standard notification cards
+        notifList.getChildren().addAll(
+            createNotificationCard("📦 Order Status Update", "Your order has been confirmed by shopkeeper.", "Just now"),
+            createNotificationCard("🚚 Delivery Partner Assigned", "Rider is heading to pickup your items.", "1 hour ago")
+        );
+
+        Label loadingLabel = new Label("⏳ Loading Shopkeeper Offers...");
+        loadingLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #FF6900; -fx-font-weight: bold;");
+        notifList.getChildren().add(loadingLabel);
+
+        // Fetch Shopkeeper Offers dynamically from database
+        new Thread(() -> {
+            List<OfferModel> shopkeeperOffers = null;
+            try {
+                shopkeeperOffers = OfferController.getAllOffersForAdmin();
+            } catch (Exception ex) {
+                System.err.println("Error fetching shopkeeper offers: " + ex.getMessage());
+            }
+
+            final List<OfferModel> finalOffers = shopkeeperOffers;
+
+            Platform.runLater(() -> {
+                notifList.getChildren().remove(loadingLabel);
+
+                if (finalOffers != null && !finalOffers.isEmpty()) {
+                    for (OfferModel offer : finalOffers) {
+                        if (offer == null) continue;
+
+                        String offerTitle = "🎉 " + (offer.getOfferName() == null ? "Shopkeeper Special Offer" : offer.getOfferName());
+                        if (offer.getPromoCode() != null && !offer.getPromoCode().isBlank()) {
+                            offerTitle += " (Code: " + offer.getPromoCode() + ")";
+                        }
+
+                        String discInfo = "";
+                        if (offer.getDiscountValue() > 0) {
+                            discInfo = "Get " + String.format("%.0f", offer.getDiscountValue()) +
+                                    (offer.getDiscountType() != null && offer.getDiscountType().contains("Percent") ? "%" : "₹") + " OFF! ";
+                        }
+
+                        String desc = discInfo + (offer.getDescription() == null ? "Exclusive shopkeeper promotion." : offer.getDescription());
+                        String categoryTime = "Category: " + (offer.getCategory() == null ? "General" : offer.getCategory()) +
+                                (offer.getEndDate() != null ? " | Valid till: " + offer.getEndDate() : "");
+
+                        VBox offerCard = createShopkeeperOfferCard(offerTitle, desc, categoryTime, offer.getPromoCode());
+                        notifList.getChildren().add(0, offerCard);
+                    }
+                } else {
+                    VBox fallback1 = createShopkeeperOfferCard("🎉 Special Grocery Deal (Code: GROCERY20)", "Get 20% OFF on all fresh fruits & organic groceries above ₹30!", "Category: Grocery | Valid till Today", "GROCERY20");
+                    VBox fallback2 = createShopkeeperOfferCard("⚡ Super Tech Discount (Code: TECH50)", "Flat ₹50 OFF on premium wireless headphones & smart gear!", "Category: Electronics | Valid till Weekend", "TECH50");
+                    notifList.getChildren().addAll(0, List.of(fallback1, fallback2));
+                }
+            });
+        }).start();
+
+        centerBox.getChildren().addAll(subHeading, notifList);
+
+        ScrollPane scrollPane = new ScrollPane(centerBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+
+        borderPane.setCenter(scrollPane);
+
+        return new Scene(borderPane, 1530, 850);
+    }
+
+    private VBox createShopkeeperOfferCard(String titleText, String descText, String timeText, String promoCode) {
+        VBox card = new VBox(8);
+        card.setPadding(new Insets(16, 22, 16, 22));
+        card.setStyle(
+                "-fx-background-color: #FFF8F3;" +
+                "-fx-background-radius: 14;" +
+                "-fx-border-color: #FFB889;" +
+                "-fx-border-radius: 14;" +
+                "-fx-border-width: 1.5;" +
+                "-fx-effect: dropshadow(gaussian, rgba(255, 105, 0, 0.12), 10, 0, 0, 3);"
+        );
+
+        Label badge = new Label("OFFER FROM SHOPKEEPER");
+        badge.setStyle("-fx-background-color: #FF6900; -fx-text-fill: white; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 3 8; -fx-background-radius: 6;");
+
+        Label t = new Label(titleText);
+        t.setStyle("-fx-font-family: 'Montserrat'; -fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #D94F0B;");
+
+        Label d = new Label(descText);
+        d.setStyle("-fx-font-family: 'Montserrat'; -fx-font-size: 12px; -fx-text-fill: #444444;");
+
+        Label time = new Label("⏰ " + timeText);
+        time.setStyle("-fx-font-family: 'Montserrat'; -fx-font-size: 10px; -fx-text-fill: #888888;");
+
+        Button shopNowBtn = new Button("Shop Offer Deals →");
+        shopNowBtn.setStyle(
+                "-fx-background-color: #FF6900;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 11px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 8;" +
+                "-fx-padding: 5 12;" +
+                "-fx-cursor: hand;"
+        );
+        shopNowBtn.setOnAction(e -> CustomerNavigation.navigateToDeals(userId));
+
+        Region sp = new Region();
+        HBox.setHgrow(sp, Priority.ALWAYS);
+
+        HBox actionRow = new HBox(10, time, sp, shopNowBtn);
+        actionRow.setAlignment(Pos.CENTER_LEFT);
+
+        card.getChildren().addAll(badge, t, d, actionRow);
+        return card;
+    }
+
+    private VBox createNotificationCard(String titleText, String descText, String timeText) {
+        VBox card = new VBox(6);
+        card.setPadding(new Insets(15, 20, 15, 20));
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E0D5CE; -fx-border-radius: 12;");
+
+        Label t = new Label(titleText);
+        t.setStyle("-fx-font-family: 'Montserrat'; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+
+        Label d = new Label(descText);
+        d.setStyle("-fx-font-family: 'Montserrat'; -fx-font-size: 12px; -fx-text-fill: #666666;");
+
+        Label time = new Label(timeText);
+        time.setStyle("-fx-font-family: 'Montserrat'; -fx-font-size: 10px; -fx-text-fill: #999999;");
+
+        card.getChildren().addAll(t, d, time);
+        return card;
+    }
+
     @Override
     public void start(Stage myStage) throws Exception {
 
-        // =====================================================
-        // VBOX 1 - LEFT SIDEBAR
-        // =====================================================
 
         Text logo = new Text("BuyNeX");
         logo.setStyle(
@@ -277,9 +467,6 @@ public class Notifications extends Application {
         );
 
 
-        // =====================================================
-        // VBOX 2 - NOTIFICATIONS
-        // =====================================================
 
         Text notificationTitle =
                 new Text("Notifications");
@@ -522,9 +709,6 @@ public class Notifications extends Application {
         );
 
 
-        // =====================================================
-        // VBOX 3 - ACCOUNT VERIFIED
-        // =====================================================
 
         Circle verifyCircle =
                 new Circle(16);
@@ -626,9 +810,6 @@ public class Notifications extends Application {
         );
 
 
-        // =====================================================
-        // 3 VBOX -> ONE HBOX
-        // =====================================================
 
         HBox center =
                 new HBox(
@@ -643,9 +824,6 @@ public class Notifications extends Application {
         );
 
 
-        // =====================================================
-        // BORDER PANE
-        // =====================================================
 
         BorderPane bp =
                 new BorderPane();
@@ -657,15 +835,12 @@ public class Notifications extends Application {
         );
 
 
-        // =====================================================
-        // SCENE SIZE
-        // =====================================================
 
         Scene scene =
                 new Scene(
                         bp,
-                        700,
-                        720
+                        1550,
+                        850
                 );
 
 
@@ -683,9 +858,6 @@ public class Notifications extends Application {
     }
 
 
-    // =========================================================
-    // NOTIFICATION ROW
-    // =========================================================
 
     public void addNotification(
             VBox parent,
@@ -763,9 +935,6 @@ public class Notifications extends Application {
     }
 
 
-    // =========================================================
-    // CUSTOM TOGGLE BUTTON
-    // =========================================================
 
     public Button createToggle(
             boolean selected

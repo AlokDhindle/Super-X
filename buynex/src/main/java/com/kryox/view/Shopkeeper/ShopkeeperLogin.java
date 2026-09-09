@@ -35,27 +35,64 @@ public class ShopkeeperLogin {
 
         public static Scene loginscene() {
 
-                // =========================================================
-                // MAIN BORDERPANE
-                // =========================================================
+                // Main BorderPane
 
                 BorderPane borderPane = new BorderPane();
 
                 borderPane.setStyle(
                                 "-fx-background-color: #F8FBF8;");
 
-                // =========================================================
-                // HEADER
-                // =========================================================
+                // Header with back button
 
                 HBox headerBox = ViewConstants.loginHeader();
+
+                Button backToHome = new Button("← Back to Home");
+                backToHome.setPrefHeight(36);
+                backToHome.setStyle(
+                                "-fx-background-color: white;" +
+                                "-fx-text-fill: #A62B0A;" +
+                                "-fx-font-size: 12px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 18;" +
+                                "-fx-border-color: #A62B0A;" +
+                                "-fx-border-radius: 18;" +
+                                "-fx-border-width: 1.2;" +
+                                "-fx-padding: 6 16 6 16;" +
+                                "-fx-cursor: hand;");
+
+                backToHome.setOnMouseEntered(e -> backToHome.setStyle(
+                                "-fx-background-color: #A62B0A;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-size: 12px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 18;" +
+                                "-fx-border-color: #A62B0A;" +
+                                "-fx-border-radius: 18;" +
+                                "-fx-border-width: 1.2;" +
+                                "-fx-padding: 6 16 6 16;" +
+                                "-fx-cursor: hand;"));
+
+                backToHome.setOnMouseExited(e -> backToHome.setStyle(
+                                "-fx-background-color: white;" +
+                                "-fx-text-fill: #A62B0A;" +
+                                "-fx-font-size: 12px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 18;" +
+                                "-fx-border-color: #A62B0A;" +
+                                "-fx-border-radius: 18;" +
+                                "-fx-border-width: 1.2;" +
+                                "-fx-padding: 6 16 6 16;" +
+                                "-fx-cursor: hand;"));
+
+                backToHome.setOnAction(e -> Homepage.showHomepage());
+
+                headerBox.getChildren().add(backToHome);
+                headerBox.setPadding(new Insets(0, 30, 0, 0));
 
                 borderPane.setTop(
                                 headerBox);
 
-                // =========================================================
-                // CENTER BACKGROUND
-                // =========================================================
+                // Center background
 
                 StackPane centerPane = new StackPane();
 
@@ -72,9 +109,7 @@ public class ShopkeeperLogin {
                 centerPane.setStyle(
                                 "-fx-background-color: #F8FBF8;");
 
-                // =========================================================
-                // MAIN LOGIN CARD
-                // =========================================================
+                // Main login card
 
                 HBox loginCard = new HBox();
 
@@ -97,9 +132,7 @@ public class ShopkeeperLogin {
                                 "-fx-background-color: white;" +
                                                 "-fx-background-radius: 18;");
 
-                // =========================================================
-                // CARD SHADOW
-                // =========================================================
+                // Card shadow
 
                 DropShadow cardShadow = new DropShadow();
 
@@ -121,9 +154,7 @@ public class ShopkeeperLogin {
                 loginCard.setEffect(
                                 cardShadow);
 
-                // =========================================================
-                // LEFT LOGIN SECTION
-                // =========================================================
+                // Left login section
 
                 VBox leftBox = new VBox();
 
@@ -155,9 +186,7 @@ public class ShopkeeperLogin {
                                 "-fx-background-color: white;" +
                                                 "-fx-background-radius: 18 0 0 18;");
 
-                // =========================================================
-                // INNER LOGIN CONTENT
-                // =========================================================
+                // Inner login content
 
                 VBox loginContent = new VBox();
 
@@ -172,9 +201,7 @@ public class ShopkeeperLogin {
 
                 loginContent.setMaxWidth(434);
 
-                // =========================================================
-                // LOGO
-                // =========================================================
+                // Logo
 
                 Label logoIcon = new Label("✦");
 
@@ -207,9 +234,7 @@ public class ShopkeeperLogin {
                                 logoIcon,
                                 logoText);
 
-                // =========================================================
-                // WELCOME BACK
-                // =========================================================
+                // Welcome back
 
                 Label welcomeLabel = new Label("Welcome Back");
 
@@ -229,9 +254,7 @@ public class ShopkeeperLogin {
                                                 2,
                                                 0));
 
-                // =========================================================
-                // SUBTITLE
-                // =========================================================
+                // Subtitle
 
                 Label subtitle = new Label(
                                 "Log in to manage your store and orders.");
@@ -251,9 +274,7 @@ public class ShopkeeperLogin {
                                                 14,
                                                 0));
 
-                // =========================================================
-                // EMAIL ADDRESS LABEL
-                // =========================================================
+                // Email address label
 
                 Label emailLabel = new Label("EMAIL ADDRESS");
 
@@ -266,9 +287,7 @@ public class ShopkeeperLogin {
                 emailLabel.setTextFill(
                                 Color.web("#55433B"));
 
-                // =========================================================
-                // EMAIL ICON
-                // =========================================================
+                // Email icon
 
                 Label emailIcon = new Label("📧");
 
@@ -280,9 +299,7 @@ public class ShopkeeperLogin {
                 emailIcon.setTextFill(
                                 Color.web("#806F67"));
 
-                // =========================================================
-                // EMAIL FIELD
-                // =========================================================
+                // Email field
 
                 TextField emailField = new TextField();
 
@@ -309,9 +326,7 @@ public class ShopkeeperLogin {
                                 emailField,
                                 Priority.ALWAYS);
 
-                // =========================================================
-                // EMAIL BOX
-                // =========================================================
+                // Email box
 
                 HBox emailBox = new HBox(8);
 
@@ -344,9 +359,7 @@ public class ShopkeeperLogin {
                                                 "-fx-border-radius: 8;" +
                                                 "-fx-background-radius: 8;");
 
-                // =========================================================
-                // FIELD SHADOW
-                // =========================================================
+                // Field shadow
 
                 DropShadow fieldShadow = new DropShadow();
 
@@ -370,9 +383,7 @@ public class ShopkeeperLogin {
                                 emailIcon,
                                 emailField);
 
-                // =========================================================
-                // PASSWORD TITLE
-                // =========================================================
+                // Password title
 
                 Label passwordLabel = new Label("PASSWORD");
 
@@ -385,9 +396,7 @@ public class ShopkeeperLogin {
                 passwordLabel.setTextFill(
                                 Color.web("#55433B"));
 
-                // =========================================================
-                // FORGOT PASSWORD
-                // =========================================================
+                // Forgot password
 
                 Button forgotPassword = new Button(
                                 "Forgot Password?");
@@ -439,9 +448,7 @@ public class ShopkeeperLogin {
                                 passwordSpacer,
                                 forgotPassword);
 
-                // =========================================================
-                // PASSWORD ICON
-                // =========================================================
+                // Password icon
 
                 Label lockIcon = new Label("🔐");
 
@@ -453,38 +460,52 @@ public class ShopkeeperLogin {
                 lockIcon.setTextFill(
                                 Color.web("#806F67"));
 
-                // =========================================================
-                // PASSWORD FIELD
-                // =========================================================
+                // Password field
 
                 PasswordField passwordField = new PasswordField();
-
-                passwordField.setPromptText(
-                                "Password");
-
-                passwordField.setFont(
-                                Font.font(
-                                                "Arial",
-                                                12));
-
+                passwordField.setPromptText("Password");
+                passwordField.setFont(Font.font("Arial", 12));
                 passwordField.setPrefHeight(38);
-
                 passwordField.setMinHeight(38);
-
                 passwordField.setMaxHeight(38);
+                passwordField.setStyle("-fx-background-color: transparent;-fx-border-color: transparent;-fx-padding: 0;");
 
-                passwordField.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-border-color: transparent;" +
-                                                "-fx-padding: 0;");
+                TextField plainPasswordField = new TextField();
+                plainPasswordField.setPromptText("Password");
+                plainPasswordField.setFont(Font.font("Arial", 12));
+                plainPasswordField.setPrefHeight(38);
+                plainPasswordField.setMinHeight(38);
+                plainPasswordField.setMaxHeight(38);
+                plainPasswordField.setStyle("-fx-background-color: transparent;-fx-border-color: transparent;-fx-padding: 0;");
+                plainPasswordField.setManaged(false);
+                plainPasswordField.setVisible(false);
+                plainPasswordField.textProperty().bindBidirectional(passwordField.textProperty());
 
-                HBox.setHgrow(
-                                passwordField,
-                                Priority.ALWAYS);
+                StackPane passwordStack = new StackPane(passwordField, plainPasswordField);
+                HBox.setHgrow(passwordStack, Priority.ALWAYS);
 
-                // =========================================================
-                // PASSWORD BOX
-                // =========================================================
+                Label showPasswordIcon = new Label("👁");
+                showPasswordIcon.setFont(Font.font("Arial", 15));
+                showPasswordIcon.setTextFill(Color.web("#806F67"));
+                showPasswordIcon.setStyle("-fx-cursor: hand;");
+                showPasswordIcon.setOnMouseClicked(e -> {
+                    if (passwordField.isVisible()) {
+                        passwordField.setVisible(false);
+                        passwordField.setManaged(false);
+                        plainPasswordField.setVisible(true);
+                        plainPasswordField.setManaged(true);
+                        showPasswordIcon.setText("🔒");
+                    } else {
+                        plainPasswordField.setVisible(false);
+                        plainPasswordField.setManaged(false);
+                        passwordField.setVisible(true);
+                        passwordField.setManaged(true);
+                        showPasswordIcon.setText("👁");
+                    }
+                });
+
+
+                // Password box
 
                 HBox passwordBox = new HBox(8);
 
@@ -522,11 +543,10 @@ public class ShopkeeperLogin {
 
                 passwordBox.getChildren().addAll(
                                 lockIcon,
-                                passwordField);
+                                passwordStack,
+                                showPasswordIcon);
 
-                // =========================================================
-                // LOGIN BUTTON
-                // =========================================================
+                // Login button
 
                 Button loginButton = new Button(
                                 "Login to Dashboard  →");
@@ -558,9 +578,7 @@ public class ShopkeeperLogin {
                                                 "-fx-border-radius: 8;" +
                                                 "-fx-cursor: hand;");
 
-                // =========================================================
-                // LOGIN BUTTON SHADOW
-                // =========================================================
+                // Login button shadow
 
                 DropShadow buttonShadow = new DropShadow();
 
@@ -598,9 +616,7 @@ public class ShopkeeperLogin {
                                                         "-fx-cursor: hand;");
                 });
 
-                // =========================================================
-                // LOGIN ACTION
-                // =========================================================
+                // Login action
 
                 loginButton.setOnAction(e -> {
                         System.out.println(
@@ -662,11 +678,7 @@ public class ShopkeeperLogin {
                                                 ViewConstants.shopkeeperModel = shopkeeperModel;
                                                 Homepage.HomepageStage.setScene(ShopkeeperDashboard.dashboardScene());
                                         }else{
-<<<<<<< HEAD
-                                                Homepage.HomepageStage.setScene(ShopkeeperRegisterSucess.registeredScene());                                }
-=======
                                                 Homepage.HomepageStage.setScene(ShopkeeperRegisterSucess.regaisteredScene());                                }
->>>>>>> Sayali
                                 } else {
                                         ConstantsMethods.showAlert(
                                                         Alert.AlertType.ERROR,
@@ -688,9 +700,7 @@ public class ShopkeeperLogin {
                                                 0,
                                                 0));
 
-                // =========================================================
-                // OR
-                // =========================================================
+                // OR divider
 
                 Label orLabel = new Label("OR");
 
@@ -722,9 +732,7 @@ public class ShopkeeperLogin {
 
 
 
-                // =========================================================
-                // REGISTER TEXT
-                // =========================================================
+                // Register text
 
                 Label accountText = new Label(
                                 "Don't have an account?");
@@ -737,9 +745,7 @@ public class ShopkeeperLogin {
                 accountText.setTextFill(
                                 Color.web("#59483F"));
 
-                // =========================================================
-                // REGISTER BUTTON
-                // =========================================================
+                // Register button
 
                 Button registerButton = new Button(
                                 "Register");
@@ -792,9 +798,7 @@ public class ShopkeeperLogin {
                                 accountText,
                                 registerButton);
 
-                // =========================================================
-                // ADD LOGIN CONTENT
-                // =========================================================
+                // Add login content
 
                 loginContent.getChildren().addAll(
                                 logoBox,
@@ -811,9 +815,7 @@ public class ShopkeeperLogin {
                 leftBox.getChildren().add(
                                 loginContent);
 
-                // =========================================================
-                // RIGHT SECTION
-                // =========================================================
+                // Right section
 
                 VBox rightBox = new VBox();
 
@@ -845,9 +847,7 @@ public class ShopkeeperLogin {
                                 "-fx-background-color: #FFF0E8;" +
                                                 "-fx-background-radius: 0 18 18 0;");
 
-                // =========================================================
-                // IMAGE
-                // =========================================================
+                // Image
 
                 Image image = new Image(
                                 "/assets/images/Login.png");
@@ -862,9 +862,7 @@ public class ShopkeeperLogin {
 
                 imageView.setSmooth(true);
 
-                // =========================================================
-                // IMAGE ROUNDED CORNERS
-                // =========================================================
+                // Image rounded corners
 
                 Rectangle imageClip = new Rectangle(
                                 300,
@@ -877,9 +875,7 @@ public class ShopkeeperLogin {
                 imageView.setClip(
                                 imageClip);
 
-                // =========================================================
-                // IMAGE CARD
-                // =========================================================
+                // Image card
 
                 StackPane imageCard = new StackPane();
 
@@ -895,9 +891,7 @@ public class ShopkeeperLogin {
                                 "-fx-background-color: white;" +
                                                 "-fx-background-radius: 15;");
 
-                // =========================================================
-                // IMAGE SHADOW
-                // =========================================================
+                // Image shadow
 
                 DropShadow imageShadow = new DropShadow();
 
@@ -920,9 +914,7 @@ public class ShopkeeperLogin {
                 imageCard.getChildren().add(
                                 imageView);
 
-                // =========================================================
-                // RIGHT TITLE
-                // =========================================================
+                // Right title
 
                 Label businessTitle = new Label(
                                 "Back to Business");
@@ -949,9 +941,7 @@ public class ShopkeeperLogin {
                                                 3,
                                                 0));
 
-                // =========================================================
-                // RIGHT DESCRIPTION
-                // =========================================================
+                // Right description
 
                 Label businessDescription = new Label(
                                 "Access your real-time analytics, manage inventory,\n" +
@@ -971,26 +961,20 @@ public class ShopkeeperLogin {
                 businessDescription.setAlignment(
                                 Pos.CENTER);
 
-                // =========================================================
-                // ADD RIGHT CONTENT
-                // =========================================================
+                // Add right content
 
                 rightBox.getChildren().addAll(
                                 imageCard,
                                 businessTitle,
                                 businessDescription);
 
-                // =========================================================
-                // ADD LEFT + RIGHT
-                // =========================================================
+                // Add left + right
 
                 loginCard.getChildren().addAll(
                                 leftBox,
                                 rightBox);
 
-                // =========================================================
-                // ADD CARD TO CENTER
-                // =========================================================
+                // Add card to center
 
                 centerPane.getChildren().add(
                                 loginCard);
@@ -998,23 +982,19 @@ public class ShopkeeperLogin {
                 borderPane.setCenter(
                                 centerPane);
 
-                // =========================================================
-                // FOOTER
-                // =========================================================
+                // Footer
 
                 VBox footerBox = ViewConstants.loginFooter();
 
                 borderPane.setBottom(
                                 footerBox);
 
-                // =========================================================
-                // SCENE
-                // =========================================================
+                // Scene
 
                 loginScene = new Scene(
                                 borderPane,
-                                1280,
-                                650);
+                                1550,
+                                850);
 
                 loginScene.setFill(
                                 Color.web("#F8FBF8"));

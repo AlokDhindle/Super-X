@@ -1,7 +1,5 @@
 package com.kryox.model.Customer;
 
-import javafx.scene.control.TextField;
-
 public class User {
 
     private String name;
@@ -10,18 +8,21 @@ public class User {
     private String dateOfBirth;
     private String role;
 
-    public User(){
-
+    public User() {
     }
 
-    public User(String name, String email, String mobile,String  role) {
+    public User(
+            String name,
+            String email,
+            String mobile,
+            String role
+    ) {
+
         this.name = name;
         this.email = email;
         this.mobile = mobile;
-        
         this.role = role;
     }
-
 
     public String getRole() {
         return role;

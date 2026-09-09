@@ -14,6 +14,15 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
+
+import com.kryox.controller.Customer.CARTcontroller;
+import com.kryox.model.Customer.Productcart;
+import com.kryox.dao.Customer.OrderDAO;
+import com.kryox.model.Shopkeeper.OrderModel;
+import com.kryox.model.Shopkeeper.OrderItemModel;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -31,47 +40,44 @@ public class Analytics {
 
         DropShadow cardShadow = new DropShadow();
 
-        // =====================================================
-        // SUMMARY CARD HELPER
-        // =====================================================
-
         public VBox createSummaryCard(String label, String value, String icon) {
-                VBox card = new VBox(4);
-                card.setPadding(new Insets(18, 20, 18, 20));
+                VBox card = new VBox(6);
+                card.setPrefWidth(240);
+                card.setMinWidth(220);
+                card.setPrefHeight(130);
+                card.setMinHeight(120);
+                card.setPadding(new Insets(18, 22, 18, 22));
                 card.setAlignment(Pos.CENTER_LEFT);
-                card.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 14;" +
-                                                "-fx-border-color: #E9E2EA;" +
-                                                "-fx-border-radius: 14;" +
-                                                "-fx-border-width: 1;");
+                card.setStyle("-fx-background-color: white;-fx-background-radius: 14;-fx-border-color: #E9E2EA;-fx-border-radius: 14;-fx-border-width: 1;");
                 card.setEffect(cardShadow);
 
                 Label iconLabel = new Label(icon);
-                iconLabel.setStyle("-fx-font-size: 18px;");
+                iconLabel.setStyle("-fx-font-size: 20px;");
 
                 Label valueLabel = new Label(value);
                 valueLabel.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 20px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #222222;");
+                                "-fx-font-family: 'Montserrat';-fx-font-size: 22px;-fx-font-weight: bold;-fx-text-fill: #222222;");
 
                 Label descLabel = new Label(label);
-                descLabel.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-text-fill: #888888;");
+                descLabel.setStyle("-fx-font-family: 'Montserrat';-fx-font-size: 11px;-fx-font-weight: 500;-fx-text-fill: #888888;");
 
                 card.getChildren().addAll(iconLabel, valueLabel, descLabel);
                 return card;
         }
 
-        public Scene getAnalyticscene(Runnable callbacktodashboard) {
+        public Scene getAnalyticsScene() {
+                return getAnalyticscene(() -> CustomerNavigation.navigateToDashboard(userId));
+        }
 
-                // =====================================================
-                // SHADOWS
-                // =====================================================
+        public Scene getAnalyticsScene(Runnable callback) {
+                return getAnalyticscene(callback);
+        }
+
+        public Scene getAnalyticscene() {
+                return getAnalyticsScene();
+        }
+
+        public Scene getAnalyticscene(Runnable callbacktodashboard) {
 
                 DropShadow shadow = new DropShadow();
                 shadow.setRadius(18);
@@ -80,20 +86,8 @@ public class Analytics {
                 shadow.setOffsetY(0);
                 shadow.setColor(Color.rgb(0, 0, 0, 0.14));
 
-                // =====================================================
-                // LOGO
-                // =====================================================
-
                 Label name = new Label("BuyNeX");
-                name.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 28px;" +
-                                                "-fx-font-weight: 900;" +
-                                                "-fx-text-fill: #E87500;");
-
-                // =====================================================
-                // PREMIUM SHOPPER
-                // =====================================================
+                name.setStyle("-fx-font-family: 'Montserrat';-fx-font-size: 28px;-fx-font-weight: 900;-fx-text-fill: #E87500;");
 
                 HBox premiumBox = new HBox(9);
                 premiumBox.setPrefSize(223, 66);
@@ -102,34 +96,19 @@ public class Analytics {
                 premiumBox.setAlignment(Pos.CENTER_LEFT);
                 premiumBox.setPadding(new Insets(8, 13, 8, 13));
                 premiumBox.setStyle(
-                                "-fx-background-color: #FFFFFF;" +
-                                                "-fx-background-radius: 15;" +
-                                                "-fx-border-color: #E9E2EA;" +
-                                                "-fx-border-width: 1;" +
-                                                "-fx-border-radius: 15;");
+                                "-fx-background-color: #FFFFFF;-fx-background-radius: 15;-fx-border-color: #E9E2EA;-fx-border-width: 1;-fx-border-radius: 15;");
                 premiumBox.setEffect(cardShadow);
 
                 VBox textBox = new VBox(3);
                 Label title = new Label("Premium Shopper");
-                title.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #222222;");
+                title.setStyle("-fx-font-family: 'Montserrat';-fx-font-size: 12px;-fx-font-weight: bold;-fx-text-fill: #222222;");
 
                 Label subtitle = new Label("● AI Assistant Active");
                 subtitle.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 9px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #FF6900;");
+                                "-fx-font-family: 'Montserrat';-fx-font-size: 9px;-fx-font-weight: bold;-fx-text-fill: #FF6900;");
 
                 textBox.getChildren().addAll(title, subtitle);
                 premiumBox.getChildren().add(textBox);
-
-                // =====================================================
-                // DASHBOARD
-                // =====================================================
 
                 Image di = new Image("/assets/images/Dashbord/dashboard.png");
                 ImageView div = new ImageView(di);
@@ -141,15 +120,7 @@ public class Analytics {
                 lefButton1.setPrefWidth(125);
                 lefButton1.setPrefHeight(38);
                 lefButton1.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #333333;" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-weight: 500;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-padding: 0;" +
-                                                "-fx-alignment: CENTER_LEFT;" +
-                                                "-fx-cursor: hand;");
+                                "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 lefButton1.setOnAction(event -> {
                         backtodashbord();
 
@@ -164,39 +135,19 @@ public class Analytics {
                 hbInDashboard.setMaxHeight(42);
                 hbInDashboard.setPadding(new Insets(2, 8, 2, 13));
                 hbInDashboard.setAlignment(Pos.CENTER_LEFT);
-                hbInDashboard.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                hbInDashboard.setStyle("-fx-background-color: transparent;-fx-background-radius: 12;");
 
                 hbInDashboard.setOnMouseEntered(e -> {
-                        hbInDashboard.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
+                        hbInDashboard.setStyle("-fx-background-color: #FF6900;-fx-background-radius: 12;");
                         lefButton1.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: white;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: bold;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: white;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: bold;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
 
                 hbInDashboard.setOnMouseExited(e -> {
-                        hbInDashboard.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                        hbInDashboard.setStyle("-fx-background-color: transparent;-fx-background-radius: 12;");
                         lefButton1.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: #333333;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: 500;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
-
-                // =====================================================
-                // NEARBY SHOPS
-                // =====================================================
 
                 Image di2 = new Image("/assets/images/store.png");
                 ImageView div2 = new ImageView(di2);
@@ -208,15 +159,7 @@ public class Analytics {
                 lefButton2.setPrefWidth(125);
                 lefButton2.setPrefHeight(38);
                 lefButton2.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #333333;" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-weight: 500;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-padding: 0;" +
-                                                "-fx-alignment: CENTER_LEFT;" +
-                                                "-fx-cursor: hand;");
+                                "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 lefButton2.setOnAction(event -> {
                         neaby_shope ns = new neaby_shope(userId);
                         Runnable ra = new Runnable() {
@@ -236,39 +179,19 @@ public class Analytics {
                 hbInDashboard2.setMaxHeight(42);
                 hbInDashboard2.setPadding(new Insets(2, 8, 2, 13));
                 hbInDashboard2.setAlignment(Pos.CENTER_LEFT);
-                hbInDashboard2.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                hbInDashboard2.setStyle("-fx-background-color: transparent;-fx-background-radius: 12;");
 
                 hbInDashboard2.setOnMouseEntered(e -> {
-                        hbInDashboard2.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
+                        hbInDashboard2.setStyle("-fx-background-color: #FF6900;-fx-background-radius: 12;");
                         lefButton2.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: white;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: bold;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: white;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: bold;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
 
                 hbInDashboard2.setOnMouseExited(e -> {
-                        hbInDashboard2.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                        hbInDashboard2.setStyle("-fx-background-color: transparent;-fx-background-radius: 12;");
                         lefButton2.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: #333333;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: 500;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
-
-                // =====================================================
-                // DEALS
-                // =====================================================
 
                 Image di3 = new Image("/assets/images/Dashbord/hot-sale.png");
                 ImageView div3 = new ImageView(di3);
@@ -280,15 +203,7 @@ public class Analytics {
                 lefButton3.setPrefWidth(125);
                 lefButton3.setPrefHeight(38);
                 lefButton3.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #333333;" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-weight: 500;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-padding: 0;" +
-                                                "-fx-alignment: CENTER_LEFT;" +
-                                                "-fx-cursor: hand;");
+                                "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
 
                 HBox hbInDashboard3 = new HBox(17, div3, lefButton3);
                 hbInDashboard3.setPrefWidth(223);
@@ -299,39 +214,19 @@ public class Analytics {
                 hbInDashboard3.setMaxHeight(42);
                 hbInDashboard3.setPadding(new Insets(2, 8, 2, 13));
                 hbInDashboard3.setAlignment(Pos.CENTER_LEFT);
-                hbInDashboard3.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                hbInDashboard3.setStyle("-fx-background-color: transparent;-fx-background-radius: 12;");
 
                 hbInDashboard3.setOnMouseEntered(e -> {
-                        hbInDashboard3.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
+                        hbInDashboard3.setStyle("-fx-background-color: #FF6900;-fx-background-radius: 12;");
                         lefButton3.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: white;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: bold;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: white;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: bold;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
 
                 hbInDashboard3.setOnMouseExited(e -> {
-                        hbInDashboard3.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                        hbInDashboard3.setStyle("-fx-background-color: transparent;-fx-background-radius: 12;");
                         lefButton3.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: #333333;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: 500;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
-
-                // =====================================================
-                // MY ORDERS
-                // =====================================================
 
                 Image di4 = new Image("/assets/images/Dashbord/package.png");
                 ImageView div4 = new ImageView(di4);
@@ -343,15 +238,7 @@ public class Analytics {
                 lefButton4.setPrefWidth(125);
                 lefButton4.setPrefHeight(38);
                 lefButton4.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #333333;" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-weight: 500;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-padding: 0;" +
-                                                "-fx-alignment: CENTER_LEFT;" +
-                                                "-fx-cursor: hand;");
+                                "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 lefButton4.setOnAction(event -> {
                         My_orderAllorder moa = new My_orderAllorder(userId);
                         Homepage.HomepageStage.setScene(moa.getAllorderScene());
@@ -366,39 +253,19 @@ public class Analytics {
                 hbInDashboard4.setMaxHeight(42);
                 hbInDashboard4.setPadding(new Insets(2, 8, 2, 13));
                 hbInDashboard4.setAlignment(Pos.CENTER_LEFT);
-                hbInDashboard4.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                hbInDashboard4.setStyle("-fx-background-color: transparent;-fx-background-radius: 12;");
 
                 hbInDashboard4.setOnMouseEntered(e -> {
-                        hbInDashboard4.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
+                        hbInDashboard4.setStyle("-fx-background-color: #FF6900;-fx-background-radius: 12;");
                         lefButton4.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: white;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: bold;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: white;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: bold;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
 
                 hbInDashboard4.setOnMouseExited(e -> {
-                        hbInDashboard4.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                        hbInDashboard4.setStyle("-fx-background-color: transparent;-fx-background-radius: 12;");
                         lefButton4.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: #333333;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: 500;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
-
-                // =====================================================
-                // ANALYTICS
-                // =====================================================
 
                 Image di5 = new Image("/assets/images/Dashbord/line-chart.png");
                 ImageView div5 = new ImageView(di5);
@@ -410,15 +277,7 @@ public class Analytics {
                 lefButton5.setPrefWidth(125);
                 lefButton5.setPrefHeight(38);
                 lefButton5.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #333333;" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-weight: 500;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-padding: 0;" +
-                                                "-fx-alignment: CENTER_LEFT;" +
-                                                "-fx-cursor: hand;");
+                                "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
 
                 HBox hbInDashboard5 = new HBox(17, div5, lefButton5);
                 hbInDashboard5.setPrefWidth(223);
@@ -429,98 +288,23 @@ public class Analytics {
                 hbInDashboard5.setMaxHeight(42);
                 hbInDashboard5.setPadding(new Insets(2, 8, 2, 13));
                 hbInDashboard5.setAlignment(Pos.CENTER_LEFT);
-                hbInDashboard5.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
+                hbInDashboard5.setStyle("-fx-background-color: #FF6900;-fx-background-radius: 12;");
                 lefButton5.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-padding: 0;" +
-                                                "-fx-alignment: CENTER_LEFT;" +
-                                                "-fx-cursor: hand;");
+                                "-fx-background-color: transparent;-fx-text-fill: white;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: bold;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
 
                 hbInDashboard5.setOnMouseEntered(e -> {
-                        hbInDashboard5.setStyle("-fx-background-color: #FF6900;" + "-fx-background-radius: 12;");
+                        hbInDashboard5.setStyle("-fx-background-color: #FF6900;-fx-background-radius: 12;");
                         lefButton5.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: white;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: bold;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: white;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: bold;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
 
                 hbInDashboard5.setOnMouseExited(e -> {
-                        hbInDashboard5.setStyle("-fx-background-color: transparent;" + "-fx-background-radius: 12;");
+                        hbInDashboard5.setStyle("-fx-background-color: transparent;-fx-background-radius: 12;");
                         lefButton5.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: #333333;" +
-                                                        "-fx-font-size: 12px;" +
-                                                        "-fx-font-family: 'Montserrat';" +
-                                                        "-fx-font-weight: 500;" +
-                                                        "-fx-border-width: 0;" +
-                                                        "-fx-padding: 0;" +
-                                                        "-fx-alignment: CENTER_LEFT;" +
-                                                        "-fx-cursor: hand;");
+                                        "-fx-background-color: transparent;-fx-text-fill: #333333;-fx-font-size: 12px;-fx-font-family: 'Montserrat';-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 });
 
-                // =====================================================
-                // UPGRADE CARD
-                // =====================================================
-
-                VBox upgradeCard = new VBox(7);
-                upgradeCard.setPrefWidth(223);
-                upgradeCard.setMinWidth(223);
-                upgradeCard.setMaxWidth(223);
-                upgradeCard.setPrefHeight(123);
-                upgradeCard.setPadding(new Insets(15));
-                upgradeCard.setAlignment(Pos.CENTER_LEFT);
-
-                LinearGradient upgradeGradient = new LinearGradient(
-                                0, 0, 1, 1, true,
-                                CycleMethod.NO_CYCLE,
-                                new Stop(0, Color.web("#25262A")),
-                                new Stop(1, Color.web("#45474D")));
-
-                upgradeCard.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                upgradeGradient,
-                                                                new CornerRadii(17),
-                                                                Insets.EMPTY)));
-
-                Label upgradeTitle = new Label("Unlock Gold");
-                upgradeTitle.setStyle(
-                                "-fx-font-size: 12px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: white;");
-
-                Label upgradeText = new Label("Smarter deals & exclusive rewards");
-                upgradeText.setStyle(
-                                "-fx-font-size: 8px;" +
-                                                "-fx-text-fill: #BEBFC3;");
-
-                Button upgradeGold = new Button("Upgrade to Gold");
-                upgradeGold.setPrefWidth(193);
-                upgradeGold.setPrefHeight(30);
-                upgradeGold.setStyle(
-                                "-fx-background-color: linear-gradient(to right, #FF6900, #FF9B5C);" +
-                                                "-fx-text-fill: white;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-background-radius: 10;" +
-                                                "-fx-cursor: hand;");
-
-                upgradeCard.getChildren().addAll(upgradeTitle, upgradeText, upgradeGold);
-
-                // =====================================================
-                // SETTINGS
-                // =====================================================
+                VBox upgradeCard = CustomerPlanUpgradeCard.createUpgradeCard(userId);
 
                 Image di6 = new Image("/assets/images/Dashbord/category.png");
                 ImageView div6 = new ImageView(di6);
@@ -532,14 +316,7 @@ public class Analytics {
                 lefButton6.setPrefWidth(135);
                 lefButton6.setPrefHeight(34);
                 lefButton6.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #666666;" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: 500;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-padding: 0;" +
-                                                "-fx-alignment: CENTER_LEFT;" +
-                                                "-fx-cursor: hand;");
+                                "-fx-background-color: transparent;-fx-text-fill: #666666;-fx-font-size: 11px;-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
                 lefButton6.setOnAction(event -> {
                         Seting seting = new Seting(userId);
                         Runnable rn = new Runnable() {
@@ -559,10 +336,6 @@ public class Analytics {
                 hbInDashboard6.setAlignment(Pos.CENTER_LEFT);
                 hbInDashboard6.setPadding(new Insets(0, 8, 0, 18));
 
-                // =====================================================
-                // HELP
-                // =====================================================
-
                 Image di7 = new Image("/assets/images/Dashbord/question.png");
                 ImageView div7 = new ImageView(di7);
                 div7.setFitHeight(19);
@@ -573,14 +346,7 @@ public class Analytics {
                 lefButton7.setPrefWidth(135);
                 lefButton7.setPrefHeight(34);
                 lefButton7.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #666666;" +
-                                                "-fx-font-size: 11px;" +
-                                                "-fx-font-weight: 500;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-padding: 0;" +
-                                                "-fx-alignment: CENTER_LEFT;" +
-                                                "-fx-cursor: hand;");
+                                "-fx-background-color: transparent;-fx-text-fill: #666666;-fx-font-size: 11px;-fx-font-weight: 500;-fx-border-width: 0;-fx-padding: 0;-fx-alignment: CENTER_LEFT;-fx-cursor: hand;");
 
                 HBox hbInDashboard7 = new HBox(10, div7, lefButton7);
                 hbInDashboard7.setPrefWidth(223);
@@ -589,10 +355,6 @@ public class Analytics {
                 hbInDashboard7.setPrefHeight(34);
                 hbInDashboard7.setAlignment(Pos.CENTER_LEFT);
                 hbInDashboard7.setPadding(new Insets(0, 8, 0, 18));
-
-                // =====================================================
-                // LEFT BOX
-                // =====================================================
 
                 VBox leftBox = new VBox(14);
                 leftBox.setPrefWidth(267);
@@ -620,10 +382,6 @@ public class Analytics {
                                 hbInDashboard6,
                                 hbInDashboard7);
 
-                // =====================================================
-                // TOP NAVIGATION
-                // =====================================================
-
                 Button t1 = new Button("Offers");
                 Button t2 = new Button("Shops");
                 Button t3 = new Button("Support");
@@ -641,77 +399,33 @@ public class Analytics {
                 t3.setStyle(topButtonStyle);
 
                 t1.setOnMouseEntered(e -> t1.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #FF6900;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-padding: 6 8 6 8;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-cursor: hand;"));
+                                "-fx-background-color: transparent;-fx-text-fill: #FF6900;-fx-font-size: 10px;-fx-font-weight: bold;-fx-padding: 6 8 6 8;-fx-border-width: 0;-fx-cursor: hand;"));
 
                 t1.setOnMouseExited(e -> t1.setStyle(topButtonStyle));
 
                 t2.setOnMouseEntered(e -> t2.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #FF6900;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-padding: 6 8 6 8;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-cursor: hand;"));
+                                "-fx-background-color: transparent;-fx-text-fill: #FF6900;-fx-font-size: 10px;-fx-font-weight: bold;-fx-padding: 6 8 6 8;-fx-border-width: 0;-fx-cursor: hand;"));
 
                 t2.setOnMouseExited(e -> t2.setStyle(topButtonStyle));
 
                 t3.setOnMouseEntered(e -> t3.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #FF6900;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-padding: 6 8 6 8;" +
-                                                "-fx-border-width: 0;" +
-                                                "-fx-cursor: hand;"));
+                                "-fx-background-color: transparent;-fx-text-fill: #FF6900;-fx-font-size: 10px;-fx-font-weight: bold;-fx-padding: 6 8 6 8;-fx-border-width: 0;-fx-cursor: hand;"));
 
-                t3.setOnMouseExited(e -> t3.setStyle(topButtonStyle));
+                t1.setOnAction(e -> CustomerNavigation.navigateToDeals(userId));
+                t2.setOnAction(e -> CustomerNavigation.navigateToNearbyShops(userId));
+                t3.setOnAction(e -> CustomerNavigation.navigateToHelp(userId));
 
                 HBox topLinks = new HBox(6, t1, t2, t3);
                 topLinks.setAlignment(Pos.CENTER_LEFT);
 
-                // =====================================================
-                // SEARCH
-                // =====================================================
-
-                TextField searchBox = new TextField();
-                searchBox.setPromptText("Search products, shops or deals with AI...");
-                searchBox.setPrefWidth(340);
-                searchBox.setPrefHeight(40);
-                searchBox.setStyle(
-                                "-fx-background-color: #F8F7FA;" +
-                                                "-fx-background-radius: 20;" +
-                                                "-fx-border-color: #E5E1E8;" +
-                                                "-fx-border-radius: 20;" +
-                                                "-fx-border-width: 1;" +
-                                                "-fx-padding: 0 16 0 16;" +
-                                                "-fx-font-size: 10px;" +
-                                                "-fx-text-fill: #444444;" +
-                                                "-fx-prompt-text-fill: #999999;");
-
-                // =====================================================
-                // LOCATION
-                // =====================================================
-
                 Label locationIcon = new Label("📍");
                 Label locationText = new Label("Downtown Manhattan⌄");
-                locationText.setStyle(
-                                "-fx-font-size: 10px;" +
-                                                "-fx-font-weight: bold;" +
-                                                "-fx-text-fill: #555555;");
+                locationText.setStyle("-fx-font-size: 10px;-fx-font-weight: bold;-fx-text-fill: #555555;");
 
                 HBox locationBox = new HBox(4, locationIcon, locationText);
                 locationBox.setAlignment(Pos.CENTER_LEFT);
-
-                // =====================================================
-                // ACTIONS
-                // =====================================================
+                locationBox.setStyle("-fx-cursor: hand;");
+                locationBox.setOnMouseClicked(e -> CustomerNavigation.navigateToNearbyShops(userId));
 
                 Button b1 = new Button("🔔");
                 Button b2 = new Button("🛒");
@@ -754,29 +468,21 @@ public class Analytics {
                 b3.setOnMouseEntered(e -> b3.setStyle(actionHoverStyle));
                 b3.setOnMouseExited(e -> b3.setStyle(actionStyle));
 
+                b1.setOnAction(e -> CustomerNavigation.navigateToNotifications(userId));
+                b2.setOnAction(e -> CustomerNavigation.navigateToCart(userId));
+                b3.setOnAction(e -> CustomerNavigation.navigateToSettings(userId));
+
                 HBox actionBox = new HBox(7, b1, b2, b3);
                 actionBox.setTranslateX(0);
                 actionBox.setAlignment(Pos.CENTER_RIGHT);
 
-                // =====================================================
-                // NAVIGATION SPACERS
-                // =====================================================
-
-                Region navSpacer1 = new Region();
-                HBox.setHgrow(navSpacer1, Priority.ALWAYS);
-                Region navSpacer2 = new Region();
-                HBox.setHgrow(navSpacer2, Priority.ALWAYS);
-
-                // =====================================================
-                // NAV BOX
-                // =====================================================
+                Region navSpacer = new Region();
+                HBox.setHgrow(navSpacer, Priority.ALWAYS);
 
                 HBox navBox = new HBox(
                                 12,
                                 topLinks,
-                                navSpacer1,
-                                searchBox,
-                                navSpacer2,
+                                navSpacer,
                                 locationBox,
                                 actionBox);
 
@@ -791,109 +497,161 @@ public class Analytics {
                 navBox.setAlignment(Pos.CENTER_LEFT);
                 navBox.setFillHeight(true);
 
-                navBox.setStyle(
-                                "-fx-background-color: #ebccb7;" +
-                                                "-fx-border-width: 0 0 1 0;");
+                navBox.setStyle("-fx-background-color: #ebccb7;-fx-border-width: 0 0 1 0;");
 
-                // =====================================================
-                // ANALYTICS CONTENT (NEW)
-                // =====================================================
-
-                // Header
                 Label analyticsTitle = new Label("Analytics");
                 analyticsTitle.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 24px;" +
-                                                "-fx-font-weight: 700;" +
-                                                "-fx-text-fill: #222222;");
+                                "-fx-font-family: 'Montserrat';-fx-font-size: 24px;-fx-font-weight: 700;-fx-text-fill: #222222;");
 
                 Label analyticsSubtitle = new Label("Track your spending, savings, and shopping habits.");
-                analyticsSubtitle.setStyle(
-                                "-fx-font-family: 'Montserrat';" +
-                                                "-fx-font-size: 12px;" +
-                                                "-fx-text-fill: #666666;");
+                analyticsSubtitle.setStyle("-fx-font-family: 'Montserrat';-fx-font-size: 12px;-fx-text-fill: #666666;");
 
                 VBox headerBox = new VBox(4, analyticsTitle, analyticsSubtitle);
                 headerBox.setPadding(new Insets(0, 0, 4, 0));
 
-                // Summary Cards (static data)
-
-                HBox summaryCards = new HBox(18);
+                HBox summaryCards = new HBox(28);
                 summaryCards.setAlignment(Pos.CENTER_LEFT);
                 summaryCards.setFillHeight(true);
-                summaryCards.getChildren().addAll(
-                                createSummaryCard("TOTAL SPENDING", "\u20B92,450.80", "💰"),
-                                createSummaryCard("ORDERS", "18", "📦"),
-                                createSummaryCard("AVG. ORDER VALUE", "\u20B9136.15", "📊"),
-                                createSummaryCard("REFUNDS", "\u20B945.00", "↩️"));
 
-                // Spending Trends Chart - FIXED VERSION
+                String effectiveUserId = this.userId;
+                if (effectiveUserId == null || effectiveUserId.isBlank() || "guest".equalsIgnoreCase(effectiveUserId)) {
+                        if (com.kryox.view.Customer.CustomerLogin.loggedInUserId != null && !com.kryox.view.Customer.CustomerLogin.loggedInUserId.isBlank()) {
+                                effectiveUserId = com.kryox.view.Customer.CustomerLogin.loggedInUserId;
+                        }
+                }
+
+                double totalSpending = 0.0;
+                int totalOrders = 0;
+                double refunds = 0.0;
+                Map<String, Double> productSpendingMap = new LinkedHashMap<>();
+
+                try {
+                        OrderDAO orderDAO = new OrderDAO();
+                        List<OrderModel> orders = orderDAO.getCustomerOrders(effectiveUserId);
+
+                        if (orders != null && !orders.isEmpty()) {
+                                for (OrderModel order : orders) {
+                                        if (order == null) continue;
+
+                                        String status = order.getOrderStatus() != null ? order.getOrderStatus().trim().toUpperCase() : "";
+                                        double amount = order.getTotalAmount();
+
+                                        if ("CANCELLED".equals(status) || "REFUNDED".equals(status)) {
+                                                refunds += amount;
+                                        } else {
+                                                totalSpending += amount;
+                                                totalOrders++;
+
+                                                if (order.getProducts() != null) {
+                                                        for (OrderItemModel item : order.getProducts()) {
+                                                                if (item == null) continue;
+                                                                String pName = item.getProductName();
+                                                                if (pName == null || pName.isBlank()) pName = "Product";
+                                                                double itemTotal = item.getTotalPrice();
+                                                                if (itemTotal <= 0) {
+                                                                        itemTotal = item.getPrice() * (item.getQuantity() > 0 ? item.getQuantity() : 1);
+                                                                }
+                                                                productSpendingMap.put(pName, productSpendingMap.getOrDefault(pName, 0.0) + itemTotal);
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+
+                        // Fallback if no placed orders found yet (e.g. guest or only cart items)
+                        if (totalOrders == 0 && productSpendingMap.isEmpty()) {
+                                CARTcontroller cartController = new CARTcontroller();
+                                List<Productcart> products = cartController.getCart(effectiveUserId != null ? effectiveUserId : userId);
+                                if (products != null) {
+                                        for (Productcart product : products) {
+                                                if (product == null) continue;
+                                                double price = product.getPrice();
+                                                int quantity = product.getQuantity() <= 0 ? 1 : product.getQuantity();
+                                                double pTotal = price * quantity;
+                                                totalSpending += pTotal;
+                                                totalOrders++;
+                                                String pName = product.getName() != null ? product.getName() : "Item";
+                                                productSpendingMap.put(pName, productSpendingMap.getOrDefault(pName, 0.0) + pTotal);
+                                        }
+                                }
+                        }
+
+                } catch (Exception e) {
+                        System.out.println("Error calculating customer analytics: " + e.getMessage());
+                        e.printStackTrace();
+                }
+
+                // Average Order Value
+                double averageOrderValue = 0.0;
+
+                if (totalOrders > 0) {
+                        averageOrderValue = totalSpending / totalOrders;
+                }
+
+                summaryCards.getChildren().addAll(
+
+                                createSummaryCard(
+                                                "TOTAL SPENDING",
+                                                String.format("₹%.2f", totalSpending),
+                                                "💰"),
+
+                                createSummaryCard(
+                                                "ORDERS",
+                                                String.valueOf(totalOrders),
+                                                "📦"),
+
+                                createSummaryCard(
+                                                "AVG. ORDER VALUE",
+                                                String.format("₹%.2f", averageOrderValue),
+                                                "📊"),
+
+                                createSummaryCard(
+                                                "REFUNDS",
+                                                String.format("₹%.2f", refunds),
+                                                "↩️"));
+
                 CategoryAxis xAxis = new CategoryAxis();
-                xAxis.setLabel("Week");
-                xAxis.getCategories().addAll("Week 1", "Week 2", "Week 3", "Week 4");
+                xAxis.setLabel("Products");
 
                 NumberAxis yAxis = new NumberAxis();
                 yAxis.setLabel("Spending (\u20B9)");
-                yAxis.setAutoRanging(false);
-                yAxis.setLowerBound(0);
-                yAxis.setUpperBound(2500);
-                yAxis.setTickUnit(500);
+                yAxis.setAutoRanging(true);
 
                 LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
-                lineChart.setTitle("Spending Trends");
+                lineChart.setTitle("Spending by Product");
                 lineChart.setPrefHeight(380);
                 lineChart.setPrefWidth(1000);
                 lineChart.setAnimated(false);
-
-                // Apply CSS styling to the chart
                 lineChart.setStyle("-fx-background-color: transparent;");
 
                 XYChart.Series<String, Number> series = new XYChart.Series<>();
-                series.setName("Weekly Spending");
-                series.getData().add(new XYChart.Data<>("Week 1", 1200));
-                series.getData().add(new XYChart.Data<>("Week 2", 1500));
-                series.getData().add(new XYChart.Data<>("Week 3", 2000));
-                series.getData().add(new XYChart.Data<>("Week 4", 1800));
+                series.setName("Product Spending");
+
+                for (Map.Entry<String, Double> entry : productSpendingMap.entrySet()) {
+                        series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+                }
 
                 lineChart.getData().add(series);
 
-                // FIX: Apply chart styling using a Platform.runLater or after scene is shown
-                // Or simply use inline styling that works without lookups
-                lineChart.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-legend-visible: true;");
+                lineChart.setStyle("-fx-background-color: transparent;-fx-legend-visible: true;");
 
-                // Create a container for the chart with proper background
                 StackPane chartContainer = new StackPane(lineChart);
                 chartContainer.setStyle(
-                                "-fx-background-color: white;" +
-                                                "-fx-background-radius: 14;" +
-                                                "-fx-border-color: #E9E2EA;" +
-                                                "-fx-border-radius: 14;" +
-                                                "-fx-border-width: 1;");
+                                "-fx-background-color: white;-fx-background-radius: 14;-fx-border-color: #E9E2EA;-fx-border-radius: 14;-fx-border-width: 1;");
                 chartContainer.setPadding(new Insets(22));
                 chartContainer.setEffect(cardShadow);
 
                 VBox chartBox = new VBox(chartContainer);
                 chartBox.setPadding(new Insets(20, 0, 0, 0));
 
-                // Combine all analytics content
                 VBox analyticsContent = new VBox(18, headerBox, summaryCards, chartBox);
                 analyticsContent.setPadding(new Insets(30, 25, 30, 25));
-
-                // =====================================================
-                // RIGHT BOX (Center)
-                // =====================================================
 
                 VBox Rightvbox = new VBox(22, navBox, analyticsContent);
 
                 Rightvbox.setFillWidth(true);
                 Rightvbox.setPadding(new Insets(0, 0, 20, 0));
                 Rightvbox.setStyle("-fx-background-color: #eee5df");
-
-                // =====================================================
-                // SUBTLE ORANGE BACKGROUND GLOW
-                // =====================================================
 
                 RadialGradient orangeGlow1 = new RadialGradient(
                                 0, 0, 0.84, 0.16, 0.42, true,
@@ -909,18 +667,10 @@ public class Analytics {
                                                                 CornerRadii.EMPTY,
                                                                 Insets.EMPTY)));
 
-                // =====================================================
-                // BORDER PANE
-                // =====================================================
-
                 BorderPane mainBox = new BorderPane();
                 mainBox.setLeft(leftBox);
                 mainBox.setCenter(Rightvbox);
                 mainBox.setStyle("-fx-background-color: #eee5df");
-
-                // =====================================================
-                // SCENE
-                // =====================================================
 
                 Scene sc = new Scene(mainBox, 1550, 850);
                 Analyticscene = sc;
